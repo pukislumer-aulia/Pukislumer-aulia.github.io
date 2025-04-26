@@ -18,11 +18,22 @@
   <style>
     body {
       font-family: 'Chewy', cursive;
-      background-color: #fff5f7;
-      padding: 20px;
-      text-align: center;
+      background: url('bingkai-ceria.png') repeat;
+      background-size: 400px;
+      background-attachment: fixed;
+      animation: moveBackground 40s linear infinite, pulseBackground 6s ease-in-out infinite;
+      margin: 0;
+      padding: 0;
       scroll-behavior: smooth;
       transition: all 0.4s ease;
+    }
+    .page-wrapper {
+      max-width: 1000px;
+      margin: auto;
+      background-color: #fff5f7;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
     h1 {
       font-family: 'Oswald', sans-serif;
@@ -92,6 +103,7 @@
       margin-bottom: 20px;
       white-space: nowrap;
       overflow: hidden;
+      border-radius: 10px;
     }
     @keyframes slide {
       0% {transform: translateX(100%);}
@@ -161,70 +173,83 @@
     .top-link:hover {
       background-color: #fb8c00;
     }
+
+    /* Animasi background */
+    @keyframes moveBackground {
+      0% { background-position: 0 0; }
+      100% { background-position: -400px 0; }
+    }
+    @keyframes pulseBackground {
+      0% { background-size: 400px; }
+      50% { background-size: 420px; }
+      100% { background-size: 400px; }
+    }
   </style>
 </head>
+
 <body id="top">
-  
-  <!-- Promo Banner -->
-  <div class="promo-banner">
-    GUNTING DAN KUMPULKAN KUPON DI BOX BESAR, TUKARKAN DENGAN 1 BOX KECIL SINGLE TOPPING
+  <div class="page-wrapper">
+    <!-- Promo Banner -->
+    <div class="promo-banner">
+      GUNTING DAN KUMPULKAN KUPON DI BOX BESAR, TUKARKAN DENGAN 1 BOX KECIL SINGLE TOPPING
+    </div>
+
+    <!-- Header -->
+    <img class="header-img" src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" />
+
+    <!-- Judul -->
+    <h1>PUKIS LUMER AULIA</h1>
+    <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
+    <p>Dimanapun kamu, insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin.</p>
+    <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
+    <p>Kalau Sanak mampir ke Pasar Kuliner Padang Panjang, jangan lupa mampir ke:</p>
+    <h2>PUKIS LUMER AULIA</h2>
+    <p>Pukis kita sudah ready! Cobain berbagai varian topping yang bisa di-mix. <strong>Harga mulai dari 10K aja!</strong></p>
+    <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB</p>
+    <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang – dekat roti Tenonk</p>
+    <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
+    <p><em>Belum nemu? Cari aja Gerobak Pink seberang Aquarium!</em></p>
+    <p><strong>Pesan lewat:</strong> Maxim Food, Grab Food, dan Go Food</p>
+
+    <!-- Tombol -->
+    <a class="btn-wa" href="https://wa.me/6281296668670" target="_blank">Order via WhatsApp</a>
+    <a class="btn-share" href="https://api.whatsapp.com/send?text=Yuk%20cobain%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Pasar%20Kuliner%20Padang%20Panjang!%20https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank">Ajak Teman!</a>
+
+    <p>IG: @pukis.lumer_aulia | TikTok & FB: Pukis Lumer Aulia</p>
+
+    <!-- Galeri -->
+    <h2>Galeri Pukis</h2>
+    <img class="gallery-img" src="Pukis1.jpg" alt="Pukis 1">
+    <img class="gallery-img" src="pukis2.jpg" alt="Pukis 2">
+    <img class="gallery-img" src="pukis3.jpg" alt="Pukis 3">
+    <img class="gallery-img" src="Pukis4.jpg" alt="Pukis 4">
+    <img class="gallery-img" src="Pukis5.jpg" alt="Pukis 5">
+
+    <!-- Form -->
+    <div class="form-order">
+      <h2>Form Pemesanan Langsung</h2>
+      <form action="https://formsubmit.co/your-email@example.com" method="POST">
+        <input type="text" name="Nama" placeholder="Nama Lengkap" required>
+        <input type="tel" name="Nomor" placeholder="Nomor WhatsApp" required>
+        <select name="Varian" required>
+          <option value="">Pilih Varian</option>
+          <option value="Oreo Vanilla">Oreo Vanilla</option>
+          <option value="Coklat Kacang">Coklat Kacang</option>
+          <option value="Mix Topping">Mix Topping</option>
+        </select>
+        <textarea name="Catatan" placeholder="Catatan Tambahan"></textarea>
+        <button type="submit">Kirim Pesanan</button>
+      </form>
+    </div>
+
+    <!-- Lokasi -->
+    <h2>Lokasi Kami</h2>
+    <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
+
+    <!-- Tombol Melayang -->
+    <a class="floating-wa" href="https://wa.me/6281296668670" target="_blank">Chat Kami</a>
+    <a href="#top" class="top-link">&#8679;</a>
+
   </div>
-
-  <!-- Header -->
-  <img class="header-img" src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" />
-
-  <!-- Judul -->
-  <h1>PUKIS LUMER AULIA</h1>
-  <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
-  <p>Dimanapun kamu, insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin.</p>
-  <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
-  <p>Kalau Sanak mampir ke Pasar Kuliner Padang Panjang, jangan lupa mampir ke:</p>
-  <h2>PUKIS LUMER AULIA</h2>
-  <p>Pukis kita sudah ready! Cobain berbagai varian topping yang bisa di-mix. <strong>Harga mulai dari 10K aja!</strong></p>
-  <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB</p>
-  <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang – dekat roti Tenonk</p>
-  <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
-  <p><em>Belum nemu? Cari aja Gerobak Pink seberang Aquarium!</em></p>
-  <p><strong>Pesan lewat:</strong> Maxim Food, Grab Food, dan Go Food</p>
-
-  <!-- Tombol -->
-  <a class="btn-wa" href="https://wa.me/6281296668670" target="_blank">Order via WhatsApp</a>
-  <a class="btn-share" href="https://api.whatsapp.com/send?text=Yuk%20cobain%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Pasar%20Kuliner%20Padang%20Panjang!%20https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank">Ajak Teman!</a>
-
-  <p>IG: @pukis.lumer_aulia | TikTok & FB: Pukis Lumer Aulia</p>
-
-  <!-- Galeri -->
-  <h2>Galeri Pukis</h2>
-  <img class="gallery-img" src="Pukis1.jpg" alt="Pukis 1">
-  <img class="gallery-img" src="pukis2.jpg" alt="Pukis 2">
-  <img class="gallery-img" src="pukis3.jpg" alt="Pukis 3">
-  <img class="gallery-img" src="Pukis4.jpg" alt="Pukis 4">
-  <img class="gallery-img" src="pukis5.jpg" alt="Pukis 5">
-
-  <!-- Form -->
-  <div class="form-order">
-    <h2>Form Pemesanan Langsung</h2>
-    <form action="https://formsubmit.co/your-email@example.com" method="POST">
-      <input type="text" name="Nama" placeholder="Nama Lengkap" required>
-      <input type="tel" name="Nomor" placeholder="Nomor WhatsApp" required>
-      <select name="Varian" required>
-        <option value="">Pilih Varian</option>
-        <option value="Oreo Vanilla">Oreo Vanilla</option>
-        <option value="Coklat Kacang">Coklat Kacang</option>
-        <option value="Mix Topping">Mix Topping</option>
-      </select>
-      <textarea name="Catatan" placeholder="Catatan Tambahan"></textarea>
-      <button type="submit">Kirim Pesanan</button>
-    </form>
-  </div>
-
-  <!-- Lokasi -->
-  <h2>Lokasi Kami</h2>
-  <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
-
-  <!-- Tombol Melayang -->
-  <a class="floating-wa" href="https://wa.me/6281296668670" target="_blank">Chat Kami</a>
-  <a href="#top" class="top-link">&#8679;</a>
-
 </body>
 </html>
