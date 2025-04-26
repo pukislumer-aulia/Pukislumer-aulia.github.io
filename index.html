@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -42,29 +43,55 @@
       margin: 30px auto;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .btn-wa, .btn-share {
-      display: inline-block;
-      margin: 10px;
-      padding: 15px 25px;
+    /* Tombol melayang */
+    .whatsapp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 20px;
+      right: 20px;
       background-color: #25D366;
-      color: white;
-      font-size: 18px;
-      text-decoration: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: background-color 0.3s ease;
+      color: #fff;
+      border-radius: 50px;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 2px 2px 3px #999;
+      z-index: 100;
+      transition: all 0.3s ease;
     }
-    .btn-wa:hover, .btn-share:hover {
+    .whatsapp-float:hover {
       background-color: #1ebe5c;
     }
-    .qr-section {
-      margin-top: 40px;
+    .whatsapp-float i {
+      margin-top: 15px;
     }
-    .qr-section img {
-      width: 180px;
-      margin: 10px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    /* Animasi text berjalan */
+    .marquee {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+      background: #e67e22;
+      color: white;
+      padding: 10px 0;
+      font-size: 20px;
+      font-weight: bold;
+      animation: marquee 15s linear infinite;
+    }
+    @keyframes marquee {
+      0%   {transform: translateX(100%)}
+      100% {transform: translateX(-100%)}
+    }
+    /* Progress bar */
+    #progress-bar {
+      width: 0;
+      height: 5px;
+      background: #e67e22;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      transition: 0.4s;
     }
     iframe {
       margin-top: 30px;
@@ -73,37 +100,111 @@
     }
   </style>
 </head>
-<body>  <!-- Gambar Header -->  <img class="header-img" src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" />  <!-- Judul & Deskripsi -->  <h1>PUKIS LUMER AULIA</h1>
-  <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
-  <p>Dimanapun kamu, insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin.</p>
-  <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
-  <p>Kalau Sanak mampir ke Pasar Kuliner Padang Panjang, jangan lupa mampir ke:</p>  <h2>PUKIS LUMER AULIA</h2>
-  <p>Pukis kita sudah ready! Cobain berbagai varian topping yang bisa di-mix. <strong>Harga mulai dari 10K aja!</strong></p>
-  <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)</p>
-  <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang – dekat roti Tenonk, depan Aquarium</p>
-  <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
-  <p><strong>Satu porsi bisa mix topping ya!</strong></p>
-  <p><em>Belum nemu gerainya? Cari aja Gerobak Pink seberang Aquarium!</em></p>  <p><strong>Pesan juga lewat:</strong> Maxim Food, Grab Food, dan Go Food</p>  <!-- Tombol WA --><a class="btn-wa" href="https://wa.me/6281296668670" target="_blank">Order via WhatsApp</a>
 
-  <!-- Tombol Ajak Teman --><a class="btn-share" href="https://api.whatsapp.com/send?text=Yuk%20cobain%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Pasar%20Kuliner%20Padang%20Panjang!%20https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank">Ajak Teman!</a>
+<body>
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
 
-  <p style="margin-top:30px;">IG: @pukis.lumer_aulia | TikTok & FB: Pukis Lumer Aulia</p>  <!-- Galeri Foto -->  <h2>Galeri Pukis</h2>
-  <img class="gallery-img" src="Pukis1.jpg" alt="Pukis 1">
-  <img class="gallery-img" src="pukis2.jpg" alt="Pukis 2">
-  <img class="gallery-img" src="pukis3.jpg" alt="Pukis 3">
-  <img class="gallery-img" src="Pukis4.jpg" alt="Pukis 4">
-  <img class="gallery-img" src="pukis5.jpg" alt="Pukis 5">  <!-- QR Code Section -->  <div class="qr-section">
-    <h2>Scan QR Code untuk Order</h2>
-    <img src="qr-maxim.png" alt="QR Maxim">
-    <img src="qr-grab.png" alt="QR Grab">
-    <img src="qr-gofood.png" alt="QR GoFood">
-  </div>  <!-- Lokasi Google Maps -->  <h2>Lokasi Kami</h2>
-  <iframe 
+<!-- Text Berjalan -->
+<div class="marquee">PROMO TERBATAS! Dapatkan Pukis Lumer Varian Topping MIX hanya 10K! Yuk buruan ke Pasar Kuliner Padang Panjang!</div>
+
+<!-- Gambar Header -->
+<img class="header-img" src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" />
+
+<!-- Judul & Deskripsi -->
+<h1>PUKIS LUMER AULIA</h1>
+<p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
+<p>Dimanapun kamu, insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin.</p>
+<p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
+<p>Kalau Sanak mampir ke Pasar Kuliner Padang Panjang, jangan lupa mampir ke:</p>
+<h2>PUKIS LUMER AULIA</h2>
+<p>Pukis kita sudah ready! Cobain berbagai varian topping yang bisa di-mix. <strong>Harga mulai dari 10K aja!</strong></p>
+<p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)</p>
+<p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang – dekat roti Tenonk, depan Aquarium</p>
+<p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
+<p><em>Belum nemu gerainya? Cari aja Gerobak Pink seberang Aquarium!</em></p>
+<p><strong>Pesan juga lewat:</strong> Maxim Food, Grab Food, dan Go Food</p>
+
+<!-- Galeri Foto -->
+<h2>Galeri Pukis</h2>
+<img class="gallery-img" src="Pukis1.jpg" alt="Pukis 1">
+<img class="gallery-img" src="pukis2.jpg" alt="Pukis 2">
+<img class="gallery-img" src="pukis3.jpg" alt="Pukis 3">
+<img class="gallery-img" src="Pukis4.jpg" alt="Pukis 4">
+<img class="gallery-img" src="pukis5.jpg" alt="Pukis 5">
+
+<!-- Form Pemesanan Langsung -->
+<h2>Form Pemesanan Pukis</h2>
+<form id="orderForm" style="max-width:500px; margin:0 auto; background:#fff3f6; padding:20px; border-radius:15px; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+  <input type="text" id="nama" placeholder="Nama Pemesan" required style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; margin-bottom:10px;">
+  <input type="tel" id="wa" placeholder="No WhatsApp" required style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; margin-bottom:10px;">
+  <select id="topping" required style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; margin-bottom:10px;">
+    <option value="">-- Pilih Topping --</option>
+    <option>Vanilla Oreo</option>
+    <option>Coklat Kacang</option>
+    <option>Matcha Almond</option>
+    <option>Tiramisu Choco</option>
+    <option>Mix Bebas</option>
+  </select>
+  <input type="number" id="jumlah" placeholder="Jumlah Porsi" min="1" required style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; margin-bottom:10px;">
+  <textarea id="catatan" placeholder="Catatan (opsional)" rows="3" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; margin-bottom:10px;"></textarea>
+  <button type="submit" id="submitBtn" style="background-color:#e67e22; color:white; font-size:18px; padding:10px 20px; border:none; border-radius:10px; cursor:pointer;">Pesan Sekarang</button>
+</form>
+
+<!-- Lokasi Google Maps -->
+<h2>Lokasi Kami</h2>
+<iframe 
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15949.070903096892!2d100.4025798!3d-0.4704826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2fd531b53e9ec2c9%3A0xfab0d12e871389fd!2sPasar%20Kuliner%20Padang%20Panjang!5e0!3m2!1sid!2sid!4v1714033279877!5m2!1sid!2sid" 
     width="100%" 
     height="350" 
     allowfullscreen="" 
     loading="lazy" 
     referrerpolicy="no-referrer-when-downgrade">
-  </iframe></body>
+</iframe>
+
+<!-- Tombol WhatsApp Melayang -->
+<a href="https://wa.me/6281296668670" class="whatsapp-float" target="_blank">
+  <i>🟢</i>
+</a>
+
+<script>
+document.getElementById('orderForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  
+  var nama = document.getElementById('nama').value.trim();
+  var wa = document.getElementById('wa').value.trim();
+  var topping = document.getElementById('topping').value.trim();
+  var jumlah = document.getElementById('jumlah').value.trim();
+  var catatan = document.getElementById('catatan').value.trim();
+  
+  if (!nama || !wa || !topping || !jumlah) {
+    alert("Semua data wajib diisi, sayangkuu!");
+    return;
+  }
+  
+  var pesan = `Halo Pukis Lumer Aulia,%0ASaya mau pesan:%0A- Nama: ${nama}%0A- No WA: ${wa}%0A- Varian: ${topping}%0A- Jumlah: ${jumlah} porsi%0A- Catatan: ${catatan}`;
+
+  if (confirm("Yakin mau kirim pesanan ini ke WhatsApp?")) {
+    // Progress Bar jalan
+    var bar = document.getElementById('progress-bar');
+    bar.style.width = "100%";
+
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerText = "Mengirim...";
+    
+    setTimeout(function(){
+      window.open(`https://wa.me/6281296668670?text=${pesan}`, '_blank');
+      alert("Pesanan kamu berhasil dikirim sayangkuu!");
+
+      btn.disabled = false;
+      btn.innerText = "Pesan Sekarang";
+      bar.style.width = "0%";
+      document.getElementById('orderForm').reset();
+    }, 1500);
+  }
+});
+</script>
+
+</body>
 </html>
