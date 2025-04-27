@@ -163,14 +163,9 @@
       background: #f9f9f9;
       border-radius: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      overflow: hidden;
     }
     .testimonial {
-      animation: fade 15s infinite;
-    }
-    @keyframes fade {
-      0%, 20% {opacity: 1;}
-      25%, 100% {opacity: 0;}
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -178,11 +173,12 @@
 <body id="top">
   <div class="page-wrapper">
 
-    <!-- Banner Promo -->
+    <!-- Banner Kupon -->
     <div class="promo-image">
       <img src="kupon1.jpeg" alt="Promo Kupon Pukis Lumer Aulia">
     </div>
 
+    <!-- Banner Tulisan -->
     <div class="promo-banner">
       <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
     </div>
@@ -194,18 +190,12 @@
     <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
     <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
     <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
-    <p>Jika Sanak mampir ke Pasar Kuliner Padang Panjang, Jangan lupa mampir ke:</p>
+    <p>Kalau mampir ke Pasar Kuliner Padang Panjang, jangan lupa mampir ke:</p>
     <h2>PUKIS LUMER AULIA</h2>
-    <p>Pukis kita udah ready! Coba icip-icip Pukis kita dengan berbagai varian topping yang bisa di-mix. <strong>Harga mulai dari 10K aja!</strong></p>
-    <p><strong>Jam Operasional:</strong> 16.00pm - 23.59pm (selama persediaan masih ada)</p>
-    <p><strong>Location:</strong> Pasar Kuliner Padang Panjang dekat Roti Tenonk, Depan Aquarium</p>
-    <p>Kita belum bisa delivery ya kak, tapi kita ada di aplikasi Maxim Food, Grab Food, dan Go Food.</p>
-    <p>Yang masih belum nemu Pukis Lumer Aulia dimana? Cari aja gerobak pink seberang Aquarium.</p>
+    <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)</p>
     <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
-    <p><strong>Satu porsi bisa di-mix topping-nya!</strong></p>
-    <p>Mau jajan manis, enak, kenyang, ramah dan irit di kantong? Yuk jajan di Pukis Lumer Aulia aja! <strong>PORISI BESAR ADA DISKONNYA LOH!</strong></p>
-    <p>Ditunggu yah! Terimakasih</p>
-    <p><strong>IG:</strong> Pukis.Lumer_aulia | <strong>FB:</strong> Pukis Lumer Aulia | <strong>Tiktok:</strong> Pukis Lumer Aulia | <strong>WA:</strong> 0812 9666 8670</p>
+    <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
+    <p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
 
     <!-- Galeri -->
     <h2>Galeri Pukis</h2>
@@ -225,14 +215,14 @@
         <input type="text" name="Nama" placeholder="Nama Lengkap" required>
         <input type="tel" name="Nomor" placeholder="Nomor WhatsApp" required>
 
-        <label>Pilih Jenis:</label>
-        <select name="Jenis" required>
-          <option value="">Pilih Jenis</option>
-          <option value="Single Topping">Single Topping</option>
-          <option value="Double Topping">Double Topping</option>
+        <label>Pilih Ukuran Box:</label>
+        <select name="Box" required>
+          <option value="">Pilih Box</option>
+          <option value="Box Kecil (isi 5)">Box Kecil (isi 5 rasa bebas)</option>
+          <option value="Box Besar (isi 10)">Box Besar (isi semua rasa)</option>
         </select>
 
-        <label>Topping Bawah:</label>
+        <label>Pilih Topping Bawah:</label>
         <div class="checkbox-group">
           <input type="checkbox" name="Topping Bawah" value="Coklat"> Coklat<br>
           <input type="checkbox" name="Topping Bawah" value="Tiramisu"> Tiramisu<br>
@@ -243,7 +233,7 @@
           <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
         </div>
 
-        <label>Topping Atas (Untuk Double Topping):</label>
+        <label>Pilih Topping Atas (Untuk Double Topping):</label>
         <div class="checkbox-group">
           <input type="checkbox" name="Topping Atas" value="Meses"> Meses<br>
           <input type="checkbox" name="Topping Atas" value="Keju"> Keju<br>
@@ -252,7 +242,7 @@
           <input type="checkbox" name="Topping Atas" value="Oreo"> Oreo<br>
         </div>
 
-        <textarea name="Catatan" placeholder="Catatan tambahan (misal: tanpa kacang, tambah keju, dll)"></textarea>
+        <textarea name="Catatan" placeholder="Catatan Tambahan (contoh: tanpa kacang, tambah keju, dll)"></textarea>
 
         <button type="submit">Pesan Sekarang</button>
       </form>
@@ -278,10 +268,9 @@
 
   </div>
 
-  <!-- Tombol Ajak Teman dan WhatsApp -->
+  <!-- Tombol Ajak Teman & WhatsApp -->
   <a class="floating-invite" href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumerauliasite.com" target="_blank">Undang Teman</a>
 
   <a class="floating-wa" href="https://wa.me/6281296668670" target="_blank">Chat WhatsApp</a>
-
 </body>
-                                                                                    </html>
+</html>
