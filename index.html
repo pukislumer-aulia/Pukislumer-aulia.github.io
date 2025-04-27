@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pukis Lumer Aulia</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
-
   <style>
     body {
       font-family: 'Chewy', cursive;
@@ -68,20 +67,18 @@
       100% {transform: scale(1.02);}
     }
     .gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
       margin-top: 30px;
     }
-    .gallery-item img {
+    .gallery img {
       width: 100%;
       height: auto;
-      border-radius: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      border-radius: 15px;
       transition: transform 0.3s ease;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    .gallery-item img:hover {
-      transform: scale(1.03);
+    .gallery img:hover {
+      transform: scale(1.05);
     }
     .form-order {
       background: #fff0f5;
@@ -163,28 +160,17 @@
     <!-- Galeri -->
     <h2>Galeri Pukis</h2>
     <div class="gallery">
-      <div class="gallery-item">
-        <img src="Pukis1.jpg" alt="Pukis 1">
-      </div>
-      <div class="gallery-item">
-        <img src="pukis2.jpg" alt="Pukis 2">
-      </div>
-      <div class="gallery-item">
-        <img src="pukis3.jpg" alt="Pukis 3">
-      </div>
-      <div class="gallery-item">
-        <img src="Pukis4.jpg" alt="Pukis 4">
-      </div>
-      <div class="gallery-item">
-        <img src="pukis5.jpg" alt="Pukis 5">
-      </div>
+      <img src="Pukis1.jpg" alt="Pukis 1">
+      <img src="pukis2.jpg" alt="Pukis 2">
+      <img src="pukis3.jpg" alt="Pukis 3">
+      <img src="Pukis4.jpg" alt="Pukis 4">
+      <img src="pukis5.jpg" alt="Pukis 5">
     </div>
 
     <!-- Form Order -->
     <h2>Form Pemesanan</h2>
     <div class="form-order">
       <form action="https://formsubmit.co/your-email@example.com" method="POST">
-
         <input type="text" name="Nama" placeholder="Nama Lengkap" required>
         <input type="tel" name="Nomor" placeholder="Nomor WhatsApp" required>
 
@@ -195,35 +181,30 @@
           <option value="Box Besar (isi 10)">Box Besar (isi semua rasa)</option>
         </select>
 
-        <label>Pilih Varian Single Topping:</label>
+        <label>Pilih Jenis Topping:</label>
         <div class="checkbox-group">
-          <input type="checkbox" name="Single Topping[]" value="Coklat"> Coklat<br>
-          <input type="checkbox" name="Single Topping[]" value="Tiramisu"> Tiramisu<br>
-          <input type="checkbox" name="Single Topping[]" value="Vanilla"> Vanilla<br>
-          <input type="checkbox" name="Single Topping[]" value="Stroberi"> Stroberi<br>
-          <input type="checkbox" name="Single Topping[]" value="Cappucino"> Cappucino<br>
-          <input type="checkbox" name="Single Topping[]" value="Taro"> Taro<br>
-          <input type="checkbox" name="Single Topping[]" value="Matcha"> Matcha<br>
+          <input type="radio" name="Jenis Topping" value="Single Topping" required> Single Topping<br>
+          <input type="radio" name="Jenis Topping" value="Double Topping" required> Double Topping<br>
         </div>
 
-        <label>Pilih Varian Double Topping:</label>
+        <label>Pilih Rasa:</label>
         <div class="checkbox-group">
-          <input type="checkbox" name="Double Topping[]" value="Coklat"> Coklat<br>
-          <input type="checkbox" name="Double Topping[]" value="Tiramisu"> Tiramisu<br>
-          <input type="checkbox" name="Double Topping[]" value="Vanilla"> Vanilla<br>
-          <input type="checkbox" name="Double Topping[]" value="Stroberi"> Stroberi<br>
-          <input type="checkbox" name="Double Topping[]" value="Cappucino"> Cappucino<br>
-          <input type="checkbox" name="Double Topping[]" value="Taro"> Taro<br>
-          <input type="checkbox" name="Double Topping[]" value="Matcha"> Matcha<br>
+          <input type="checkbox" name="Rasa[]" value="Coklat"> Coklat<br>
+          <input type="checkbox" name="Rasa[]" value="Tiramisu"> Tiramisu<br>
+          <input type="checkbox" name="Rasa[]" value="Vanilla"> Vanilla<br>
+          <input type="checkbox" name="Rasa[]" value="Stroberi"> Stroberi<br>
+          <input type="checkbox" name="Rasa[]" value="Cappucino"> Cappucino<br>
+          <input type="checkbox" name="Rasa[]" value="Taro"> Taro<br>
+          <input type="checkbox" name="Rasa[]" value="Matcha"> Matcha<br>
         </div>
 
-        <label>Pilihan Bebas Topping:</label>
+        <label>Pilihan Topping Bebas:</label>
         <div class="checkbox-group">
-          <input type="checkbox" name="Topping Pilihan[]" value="Meses"> Meses<br>
-          <input type="checkbox" name="Topping Pilihan[]" value="Kacang"> Kacang<br>
-          <input type="checkbox" name="Topping Pilihan[]" value="Keju"> Keju<br>
-          <input type="checkbox" name="Topping Pilihan[]" value="Choco Chips"> Choco Chips<br>
-          <input type="checkbox" name="Topping Pilihan[]" value="Oreo"> Oreo<br>
+          <input type="checkbox" name="Topping Tambahan[]" value="Meses"> Meses<br>
+          <input type="checkbox" name="Topping Tambahan[]" value="Kacang"> Kacang<br>
+          <input type="checkbox" name="Topping Tambahan[]" value="Keju"> Keju<br>
+          <input type="checkbox" name="Topping Tambahan[]" value="Choco Chips"> Choco Chips<br>
+          <input type="checkbox" name="Topping Tambahan[]" value="Oreo"> Oreo<br>
         </div>
 
         <textarea name="Catatan" placeholder="Catatan Tambahan (misal: tanpa kacang, tambah keju, dll)"></textarea>
