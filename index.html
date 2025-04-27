@@ -11,7 +11,145 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
 
   <style>
-    /* Tambahkan CSS sesuai kebutuhan */
+    body {
+      font-family: 'Chewy', cursive;
+      margin: 0;
+      padding: 0;
+      background: #ffe6f0; /* background pink lembut */
+      color: #333;
+    }
+    .page-wrapper {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1, h2 {
+      font-family: 'TanggoStdregular', 'Oswald', sans-serif;
+      text-align: center;
+      color: #e67e22;
+    }
+    p {
+      font-family: 'Chewy', cursive;
+      font-size: 18px;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .promo-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: auto;
+    }
+    .promo-banner {
+      background-color: #f39c12;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+    .header-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      border-radius: 15px;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .gallery img {
+      width: calc(50% - 10px);
+      height: auto;
+      border-radius: 10px;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    form label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    form button {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .checkbox-group input {
+      margin-right: 8px;
+    }
+    .testimonials {
+      margin-top: 30px;
+    }
+    .testimonial {
+      background: #ffe9d6;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+    .form-testimonial {
+      margin-top: 30px;
+    }
+    .floating-invite, .floating-wa {
+      position: fixed;
+      bottom: 70px;
+      right: 20px;
+      background: #ff69b4; /* pink untuk ajak teman */
+      color: white;
+      padding: 12px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: block;
+      margin-top: 10px;
+      z-index: 999;
+    }
+    .floating-wa {
+      bottom: 20px;
+      background: #d63384; /* pink gelap untuk tombol WA */
+    }
+
+    @media (max-width: 768px) {
+      h1, h2 {
+        font-size: 26px;
+      }
+      p {
+        font-size: 16px;
+      }
+      .gallery img {
+        width: 100%;
+      }
+      .floating-invite, .floating-wa {
+        right: 15px;
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+    }
   </style>
 </head>
 
@@ -23,7 +161,7 @@
       <img src="kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
     </div>
     <div class="promo-banner">
-      <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
+      GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!
     </div>
 
     <!-- Header -->
