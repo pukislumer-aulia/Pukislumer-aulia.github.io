@@ -3,72 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pukis Lumer Aulia | Pasar Kuliner Padang Panjang</title>
-  <meta name="description" content="Pukis Lumer Aulia - Pukis lumer lezat dengan varian topping istimewa. Pesan sekarang di Pasar Kuliner Padang Panjang!">
-  <meta name="keywords" content="pukis lumer, jajanan padang panjang, pasar kuliner, pukis enak, topping pukis">
+  <meta name="description" content="Pukis Lumer Aulia - Pukis Lembut Topping Melimpah di Pasar Kuliner Padang Panjang. Pesan sekarang via Maxim, GrabFood, GoFood!">
+  <meta name="keywords" content="Pukis, Pukis Lumer, Pukis Padang Panjang, Pasar Kuliner, Maxim Food, Grab Food, Go Food">
   <meta name="author" content="Pukis Lumer Aulia">
-
+  <title>Pukis Lumer Aulia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&family=Tangerine&display=swap" rel="stylesheet">
   <style>
-    body {font-family: Arial, sans-serif; margin:0; padding:0; background:#fff;}
-    header {background: #e67e22; color: white; padding: 20px; text-align: center;}
-    .gallery {display: flex; flex-direction: column; align-items: center; margin: 20px 0;}
-    .gallery img {width: 90%; max-width: 600px; margin: 20px 0; border-radius: 15px;}
-    .form-order {padding: 20px;}
-    .form-order h2 {text-align: center; margin-bottom: 20px;}
-    .form-order form {display: flex; flex-direction: column; max-width: 500px; margin: auto;}
-    .form-order select, .form-order button {margin: 10px 0; padding: 10px; border-radius: 5px; border: 1px solid #ccc;}
-    .running-text {background: #f39c12; color: white; padding: 10px; text-align: center; position: relative; overflow: hidden;}
-    .running-text span {position: absolute; white-space: nowrap; will-change: transform; animation: running 15s linear infinite;}
-    @keyframes running {0%{transform:translateX(100%);}100%{transform:translateX(-100%);}}
-    .coupon-bar {overflow: hidden; position: relative; height: 100px; background: #f1c40f;}
-    .coupon-bar img {height: 100px; animation: scrollLeft 20s linear infinite;}
-    @keyframes scrollLeft {0%{transform:translateX(100%);}100%{transform:translateX(-100%);}}
-    .testimonials {background: #f9f9f9; padding: 20px;}
-    .testimonial {margin-bottom: 20px; font-style: italic;}
-    footer {background: #e67e22; color: white; text-align: center; padding: 10px;}
-    #toTopBtn {display:none;position:fixed;bottom:80px;right:20px;z-index:99;font-size:18px;border:none;outline:none;background-color:#e67e22;color:white;cursor:pointer;padding:15px;border-radius:10px;}
-    .floating-btns {position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000;}
-    .floating-btns a {background: #25d366; color: white; padding: 12px; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.2);}
-    .floating-btns .invite {background: #3498db;}
+    body {
+      margin: 0;
+      font-family: 'Chewy', cursive;
+      background: #fff7f0;
+      color: #333;
+    }
+    header {
+      background-image: url('Picsart_24-05-23_22-54-20-428.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 5px #000;
+      font-size: 2.5em;
+      text-align: center;
+    }
+    nav {
+      background: #ffa07a;
+      padding: 1em;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      padding: 3em 1em;
+      text-align: center;
+    }
+    .galeri {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .galeri img {
+      width: 90%;
+      margin-bottom: 2em;
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+    .galeri img:hover {
+      transform: scale(1.05);
+    }
+    .form-order {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 2em;
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      text-align: left;
+      font-size: 1.2em;
+    }
+    .form-order label, .form-order select, .form-order input {
+      width: 100%;
+      margin-bottom: 1em;
+    }
+    .form-order input[type="submit"] {
+      background: #ffa07a;
+      border: none;
+      padding: 0.5em;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    .form-order input[type="submit"]:hover {
+      background: #ff7f50;
+    }
+    .running-text {
+      background: #ffe4b5;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+    .running-text p {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 15s linear infinite;
+      font-weight: bold;
+    }
+    @keyframes marquee {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+    .testimoni {
+      background: #ffe4e1;
+      padding: 2em;
+      border-radius: 20px;
+      margin: 2em 0;
+    }
+    .testimoni p {
+      font-style: italic;
+      font-size: 1.1em;
+    }
+    footer {
+      background: #ffa07a;
+      color: white;
+      text-align: center;
+      padding: 2em;
+      font-size: 1em;
+    }
+    .floating-whatsapp, .floating-invite {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+    .floating-invite {
+      right: 80px;
+    }
+    .floating-whatsapp img, .floating-invite img {
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+    }
   </style>
 </head>
 
 <body>
 
-<div class="page-wrapper">
+<audio autoplay loop>
+  <source src="backsound.mp3" type="audio/mpeg">
+</audio>
 
-  <header>
-    <h1>Pukis Lumer Aulia</h1>
-    <p>Pasar Kuliner Padang Panjang</p>
-  </header>
-
-  <div class="coupon-bar">
-    <img src="kupon1.jpeg" alt="Kupon Pukis Lumer">
+<header>
+  <div>
+    <h1 style="font-family: 'Tangerine', cursive; font-size: 4em;">Pukis Lumer Aulia</h1>
+    <p>Pukis lembut, topping melimpah, bikin nagih!</p>
   </div>
+</header>
 
-  <div class="running-text">
-    <span>Kumpulkan 15 kupon, tukarkan 1 box kecil gratis!</span>
-  </div>
+<nav>
+  <a href="#galeri">Galeri</a>
+  <a href="#order">Order</a>
+  <a href="#testimoni">Testimoni</a>
+</nav>
 
-  <section class="gallery">
-    <img src="Pukis1.jpg" alt="Pukis Lezat">
-    <img src="pukis2.jpg" alt="Pukis Lumer">
-    <img src="pukis3.jpg" alt="Pukis Variasi">
-    <img src="Pukis4.jpg" alt="Pukis Special">
-    <img src="pukis5.jpg" alt="Pukis Topping">
-  </section>
+<section class="running-text">
+  <p>Kumpulkan 15 kupon, tukarkan dengan 1 Box Kecil GRATIS! Jangan lupa ajak temanmu ya!</p>
+</section>
 
-  <section class="form-order">
-    <h2>Order Sekarang</h2>
+<section id="galeri" class="galeri">
+  <h2>Galeri Pukis Lumer</h2>
+  <img src="Pukis1.jpg" alt="Pukis1">
+  <img src="pukis2.jpg" alt="Pukis2">
+  <img src="pukis3.jpg" alt="Pukis3">
+  <img src="Pukis4.jpg" alt="Pukis4">
+  <img src="pukis5.jpg" alt="Pukis5">
+</section>
+
+<section id="order">
+  <h2>Order Pukis Sekarang!</h2>
+  <div class="form-order">
     <form id="orderForm">
-      <label>Pilih Jenis:</label>
-      <select id="jenis" onchange="toggleTopping()">
-        <option value="single">Single Topping</option>
-        <option value="double">Double Topping</option>
-      </select>
-
-      <label>Topping Bawah (Bisa Campur):</label>
-      <select id="toppingBawah" multiple>
+      <label for="pilihTopping">Topping Bawah (boleh campur):</label>
+      <select id="pilihTopping" name="toppingBawah" multiple required>
         <option value="Coklat">Coklat</option>
         <option value="Tiramisu">Tiramisu</option>
         <option value="Vanilla">Vanilla</option>
@@ -78,8 +181,12 @@
         <option value="Matcha">Matcha</option>
       </select>
 
-      <label>Topping Atas (Untuk Double Topping):</label>
-      <select id="toppingAtas" multiple disabled>
+      <label>Pilih Paket:</label>
+      <input type="radio" name="paket" value="single" id="single" checked> Single Topping
+      <input type="radio" name="paket" value="double" id="double"> Double Topping
+
+      <label for="pilihTaburan">Topping Atas (pilih kalau Double Topping):</label>
+      <select id="pilihTaburan" name="toppingAtas" multiple disabled>
         <option value="Meses">Meses</option>
         <option value="Keju">Keju</option>
         <option value="Kacang">Kacang</option>
@@ -87,68 +194,55 @@
         <option value="Oreo">Oreo</option>
       </select>
 
-      <button type="submit">Pesan Sekarang</button>
+      <input type="submit" value="Pesan Sekarang!">
     </form>
-  </section>
+  </div>
+</section>
 
-  <section class="testimonials">
-    <h2 style="text-align:center;">Testimoni Pelanggan</h2>
-    <div class="testimonial">
-      "Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak di rumah pada suka semua. Bakal langganan terus nih!"<br>— Maya, Padang Panjang
-    </div>
-    <div class="testimonial">
-      "Top banget! Gak rugi jauh-jauh mampir ke Pasar Kuliner. Paling suka varian Double Topping Vanilla + Oreo!"<br>— Andi, Bukittinggi
-    </div>
-    <div class="testimonial">
-      "Pukis lumeran di mulut! Beli satu box malah ketagihan nambah lagi. Ownernya ramah juga."<br>— Rina, Padang
-    </div>
-  </section>
-
-  <footer>
-    &copy; 2025 Pukis Lumer Aulia. All rights reserved.
-  </footer>
-
-  <div class="floating-btns">
-    <a href="https://wa.me/6281296668670" target="_blank">Chat WhatsApp</a>
-    <a href="https://api.whatsapp.com/send?text=Yuk cobain Pukis Lumer Aulia di Pasar Kuliner Padang Panjang! Enak banget!" class="invite" target="_blank">Undang Teman</a>
+<section id="testimoni">
+  <h2>Testimoni Pelanggan</h2>
+  <div class="testimoni">
+    <p>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak di rumah pada suka semua. Bakal langganan terus nih!"<br><b>— Maya, Padang Panjang</b></p>
+    <p>"Top banget! Gak rugi jauh-jauh mampir ke Pasar Kuliner. Paling suka varian Double Topping Vanilla + Oreo!"<br><b>— Andi, Bukittinggi</b></p>
+    <p>"Pukis lumeran di mulut! Beli satu box malah ketagihan nambah lagi. Ownernya ramah juga."<br><b>— Rina, Padang</b></p>
   </div>
 
-</div>
+  <h3>Kirim Testimoni Kamu:</h3>
+  <form id="testiForm">
+    <input type="text" placeholder="Nama" required><br>
+    <input type="text" placeholder="Daerah" required><br>
+    <textarea placeholder="Testimoni" required></textarea><br>
+    <input type="submit" value="Kirim Testimoni">
+  </form>
+</section>
 
-<!-- Backsound Audio -->
-<audio id="backsound" autoplay loop muted>
-  <source src="backsound.mp3" type="audio/mpeg">
-</audio>
-<button onclick="toggleAudio()" style="position:fixed;top:20px;right:20px;padding:10px 20px;background:#e67e22;color:white;border:none;border-radius:10px;z-index:999;cursor:pointer;">Play/Pause Musik</button>
+<footer>
+  &copy; 2025 Pukis Lumer Aulia - Pasar Kuliner Padang Panjang
+</footer>
 
-<!-- Tombol ke atas -->
-<button onclick="scrollToTop()" id="toTopBtn" title="Kembali ke Atas">↑</button>
+<a href="https://wa.me/6281296668670" class="floating-whatsapp">
+  <img src="wa-icon.png" alt="WhatsApp Chat">
+</a>
+<a href="#" onclick="inviteFriends()" class="floating-invite">
+  <img src="invite-icon.png" alt="Undang Teman">
+</a>
 
 <script>
-  function toggleTopping() {
-    var jenis = document.getElementById('jenis').value;
-    var toppingAtas = document.getElementById('toppingAtas');
-    toppingAtas.disabled = (jenis === 'single');
-  }
+  document.querySelectorAll('input[name="paket"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.getElementById('pilihTaburan').disabled = (this.value !== 'double');
+    });
+  });
 
-  var toTopBtn = document.getElementById("toTopBtn");
-  window.onscroll = function() {
-    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-      toTopBtn.style.display = "block";
+  function inviteFriends() {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Pukis Lumer Aulia',
+        text: 'Yuk pesan Pukis Lumer Aulia, enak banget!',
+        url: window.location.href
+      });
     } else {
-      toTopBtn.style.display = "none";
-    }
-  };
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function toggleAudio() {
-    var audio = document.getElementById("backsound");
-    if (audio.paused) {
-      audio.play();
-    } else {
-      audio.pause();
+      alert('Fitur berbagi tidak tersedia di browser kamu.');
     }
   }
 </script>
