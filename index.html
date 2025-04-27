@@ -86,15 +86,15 @@
       background: #d81b60;
     }
 
+    /* Tombol mengambang di kanan */
     .floating-buttons {
       position: fixed;
-      top: 50%;
-      right: -120px;
+      top: 45%;
+      right: 0;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      transform: translateY(-50%);
-      z-index: 999;
+      z-index: 1000;
     }
     .floating-buttons a {
       text-decoration: none;
@@ -102,13 +102,13 @@
       border-radius: 50px 0 0 50px;
       font-size: 16px;
       font-weight: bold;
-      display: block;
-      transform: translateX(100px);
+      transform: translateX(90px); /* Posisi agak keluar */
       transition: all 0.3s ease;
       box-shadow: 0 0 10px white;
+      white-space: nowrap;
     }
     .floating-buttons a:hover {
-      transform: translateX(0);
+      transform: translateX(0); /* Masuk ke dalam pas hover */
       box-shadow: 0 0 20px white;
     }
     .wa-button { background: #075e54; color: #fff; }
@@ -232,7 +232,7 @@
 
   </div>
 
-  <!-- Tombol Mengapung -->
+  <!-- Tombol Floating -->
   <div class="floating-buttons">
     <a class="wa-button" href="https://wa.me/6281296668670" target="_blank">Chat WhatsApp</a>
     <a class="invite-button" href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumerauliasite.com" target="_blank">Undang Teman</a>
