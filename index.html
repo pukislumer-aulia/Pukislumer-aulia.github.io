@@ -12,142 +12,124 @@
 
   <style>
     body {
-      margin: 0;
       font-family: 'Chewy', cursive;
-      background: linear-gradient(135deg, #ffc0cb, #ffe6f0);
-      background-size: 400% 400%;
-      animation: gradientBG 10s ease infinite;
+      background-color: pink;
+      margin: 0;
+      padding: 0;
     }
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
     .page-wrapper {
-      padding: 20px;
-    }
-    .promo-image img, .header-img {
-      width: 100%;
-      border-radius: 12px;
+      padding: 10px;
     }
     .promo-image img {
       width: 50%;
       display: block;
       margin: 0 auto;
     }
-    h1, h2 {
-      font-family: 'Oswald', sans-serif;
-      text-align: center;
-      color: #e91e63;
-    }
-    p, label, input, select, textarea {
-      font-family: 'Chewy', cursive;
-      font-size: 18px;
-      color: #333;
-    }
-    .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    .gallery img {
-      width: 45%;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: transform 0.3s;
-    }
-    .gallery img:hover {
-      transform: scale(1.05);
-    }
-    .form-order, .form-testimonial {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin: 20px 0;
-    }
-    input, select, textarea {
-      width: 100%;
-      margin-bottom: 15px;
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    button {
-      width: 100%;
-      background: #e91e63;
+    .promo-banner {
+      background-color: #e67e22;
       color: white;
       padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #e91e63;
-    }
-    button:hover {
-      background: #d81b60;
-    }
-    .promo-banner {
-      width: 100%;
+      text-align: center;
       overflow: hidden;
       white-space: nowrap;
-      box-sizing: border-box;
-      background: #f8bbd0;
-      padding: 10px 0;
-      margin: 20px 0;
-      border-radius: 12px;
-      position: relative;
     }
     .promo-banner span {
       display: inline-block;
       padding-left: 100%;
-      animation: marquee 20s linear infinite;
-      font-size: 20px;
-      font-weight: bold;
-      color: #c2185b;
+      animation: scrollText 15s linear infinite;
     }
-    @keyframes marquee {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(-100%, 0); }
+    @keyframes scrollText {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    h1, h2 {
+      font-family: 'Kanit', sans-serif;
+      text-align: center;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .gallery img {
+      width: 45%;
+      border-radius: 10px;
+    }
+    form {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #e67e22;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .testimonials {
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .testimonial {
+      margin-bottom: 15px;
     }
     .floating-buttons {
       position: fixed;
       top: 45%;
-      right: 0;
+      right: -5px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       z-index: 1000;
     }
     .floating-buttons a {
+      padding: 10px 15px;
+      border-radius: 25px 0 0 25px;
       text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 50px 0 0 50px;
-      font-size: 16px;
+      color: white;
       font-weight: bold;
-      transform: translateX(90px);
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px white;
-      white-space: nowrap;
+      box-shadow: 0 0 10px #000;
+      transform: translateX(50%);
+      transition: transform 0.3s, background-color 0.3s;
     }
     .floating-buttons a:hover {
       transform: translateX(0);
-      box-shadow: 0 0 20px white;
     }
-    .wa-button { background: #075e54; color: #fff; }
-    .invite-button { background: #25d366; color: #fff; }
-    .shopee-button { background: #ff5722; color: #fff; }
-    .maxim-button { background: #ffffff; color: #ff0000; }
-
-    .testimonials .testimonial {
-      background: #fff;
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    .wa-btn { background-color: #075e54; }
+    .invite-btn { background-color: #25D366; }
+    .shopee-btn { background-color: #f1582c; }
+    .maxim-btn { background-color: white; color: red; }
+    /* Tombol Glow */
+    .floating-buttons a {
+      animation: glow 1.5s infinite alternate;
+    }
+    @keyframes glow {
+      from { box-shadow: 0 0 5px #fff; }
+      to { box-shadow: 0 0 15px #ff9; }
+    }
+    /* Link Owner Only */
+    #ownerLink {
+      position: fixed;
+      bottom: 5px;
+      right: 5px;
+      font-size: 10px;
+      color: transparent;
+      z-index: 999;
+      cursor: pointer;
+    }
+    #ownerLink:hover {
+      color: black;
     }
   </style>
 </head>
@@ -158,7 +140,6 @@
     <div class="promo-image">
       <img src="kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
     </div>
-
     <div class="promo-banner">
       <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
     </div>
@@ -168,7 +149,8 @@
     <h1>PUKIS LUMER AULIA</h1>
     <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
     <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
-    <p>Padang Panjang kota kuliner<br>Serambi Mekkah orang Mengenalnya<br>Kalo mampir ke Pasar Kuliner<br>Wajib mampir ke PUKIS LUMER AULIA</p>
+    <p>Padang Panjang kota kuliner<br>Serambi Mekkah orang mengenalnya<br>Kalo mampir ke Pasar Kuliner<br>Wajib mampir ke PUKIS LUMER AULIA</p>
+
     <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)</p>
     <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
     <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
@@ -227,17 +209,7 @@
     <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
 
     <h2>Testimoni Pelanggan</h2>
-    <div class="testimonials" id="testimonialsList">
-      <div class="testimonial">
-        <p><em>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak suka semua!"</em><br><strong>— Maya, Padang Panjang</strong></p>
-      </div>
-      <div class="testimonial">
-        <p><em>"Top banget! Varian Vanilla + Oreo favoritku!"</em><br><strong>— Andi, Bukittinggi</strong></p>
-      </div>
-      <div class="testimonial">
-        <p><em>"Pukis lumer di mulut, ketagihan nambah lagi!"</em><br><strong>— Rina, Padang</strong></p>
-      </div>
-    </div>
+    <div class="testimonials" id="testimonialsList"></div>
 
     <div class="form-testimonial">
       <h2>Tulis Testimoni Kamu</h2>
@@ -253,11 +225,13 @@
   </div>
 
   <div class="floating-buttons">
-    <a class="wa-button" href="https://wa.me/6281296668670" target="_blank">Chat WhatsApp</a>
-    <a class="invite-button" href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumerauliasite.com" target="_blank">Undang Teman</a>
-    <a class="shopee-button" href="https://shopee.co.id" target="_blank">Shopee</a>
-    <a class="maxim-button" href="https://food.maxim.mobi" target="_blank">Maxim</a>
+    <a href="https://wa.me/6281296668670" class="wa-btn" target="_blank">Chat WhatsApp</a>
+    <a href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumerauliasite.com" class="invite-btn" target="_blank">Undang Teman</a>
+    <a href="#" class="shopee-btn" target="_blank">Shopee</a>
+    <a href="#" class="maxim-btn" target="_blank">Maxim</a>
   </div>
+
+  <div id="ownerLink" onclick="ownerAccess()">.</div>
 
   <script>
     function toggleToppingAtas() {
@@ -270,37 +244,43 @@
       loadTestimonials();
     }
 
-    function loadTestimonials() {
-      const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-      testimonials.forEach(item => {
-        addTestimonial(item.name, item.text);
-      });
-    }
-
-    function addTestimonial(name, text) {
-      const testimonialList = document.getElementById('testimonialsList');
-      const newTestimonial = document.createElement('div');
-      newTestimonial.classList.add('testimonial');
-      newTestimonial.innerHTML = `<p><em>"${text}"</em><br><strong>— ${name}</strong></p>`;
-      testimonialList.appendChild(newTestimonial);
-    }
-
     document.getElementById('testimonialForm').addEventListener('submit', function(event) {
       event.preventDefault();
       const name = document.getElementById('nameInput').value.trim();
       const testimonial = document.getElementById('testimonialInput').value.trim();
       if (name && testimonial) {
-        addTestimonial(name, testimonial);
-
-        const stored = JSON.parse(localStorage.getItem('testimonials')) || [];
-        stored.push({ name: name, text: testimonial });
-        localStorage.setItem('testimonials', JSON.stringify(stored));
-
+        let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+        testimonials.push({name, testimonial});
+        localStorage.setItem('testimonials', JSON.stringify(testimonials));
+        displayTestimonial(name, testimonial);
         document.getElementById('testimonialForm').reset();
         alert('Terima kasih atas testimoni Anda!');
       }
     });
-  </script>
 
+    function displayTestimonial(name, testimonial) {
+      const testimonialList = document.getElementById('testimonialsList');
+      const newTestimonial = document.createElement('div');
+      newTestimonial.classList.add('testimonial');
+      newTestimonial.innerHTML = `<p><em>"${testimonial}"</em><br><strong>— ${name}</strong></p>`;
+      testimonialList.appendChild(newTestimonial);
+    }
+
+    function loadTestimonials() {
+      const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+      testimonials.forEach(t => {
+        displayTestimonial(t.name, t.testimonial);
+      });
+    }
+
+    function ownerAccess() {
+      const password = prompt('Masukkan password admin:');
+      if (password === 'pukisowner') {
+        window.location.href = 'admin.html';
+      } else {
+        alert('Password salah!');
+      }
+    }
+  </script>
 </body>
 </html>
