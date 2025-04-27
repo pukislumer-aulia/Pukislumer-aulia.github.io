@@ -1,201 +1,189 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pukis Lumer Aulia - Pasar Kuliner Padang Panjang</title>
-  <meta name="description" content="Pukis Lumer Aulia - Pukis lembut, topping melimpah di Pasar Kuliner Padang Panjang. Pesan via GrabFood, GoFood, Maxim Food.">
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Tango&family=Kanit:wght@900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pukis Lumer Aulia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RFX5H2BER"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4RFX5H2BER');
+  </script>
+
   <style>
     body {
-      margin: 0;
       font-family: 'Chewy', cursive;
-      background: #fff8f0;
-      color: #5a3e36;
+      background-color: #fff5f7;
+      padding: 20px;
+      scroll-behavior: smooth;
+      transition: all 0.4s ease;
     }
-    header {
-      text-align: center;
-      padding: 2em;
-      background: #ffe0cc;
+    .page-wrapper {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+      border: 15px solid #ffcccb;
+      border-radius: 30px;
+      background-color: #ffffff;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
-    header img {
-      max-width: 100%;
-      height: auto;
+    h1, h2 {
+      font-family: 'Oswald', sans-serif;
+      color: #e67e22;
     }
-    marquee {
-      font-weight: bold;
-      background: #ffd9b3;
-      padding: 0.5em;
-      font-size: 1.2em;
+    h1 {
+      font-size: 42px;
+      margin-top: 20px;
     }
-    section {
-      padding: 2em;
-    }
-    .gallery img {
-      width: 100%;
-      height: auto;
-      margin-bottom: 2em;
-      border-radius: 15px;
-      box-shadow: 2px 2px 10px #aaa;
-    }
-    .order-form {
-      background: #fff0e0;
-      padding: 2em;
-      border-radius: 20px;
-      box-shadow: 2px 2px 10px #ccc;
-      margin-bottom: 2em;
-    }
-    .order-form h2 {
+    h2 {
       font-family: 'Kanit', sans-serif;
+      font-size: 28px;
+      color: #c0392b;
+      margin-top: 30px;
     }
-    .order-form label {
+    p {
+      font-size: 18px;
+      color: #444;
+      text-align: center;
+    }
+    img.header-img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      animation: melt 3s infinite alternate;
+    }
+    @keyframes melt {
+      0% {transform: scale(1);}
+      100% {transform: scale(1.02);}
+    }
+    .promo-banner {
+      background-color: #ff4081;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      animation: slide 15s linear infinite;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    @keyframes slide {
+      0% {transform: translateX(100%);}
+      100% {transform: translateX(-100%);}
+    }
+    .btn-wa, .btn-share {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 25px;
+      background-color: #25D366;
+      color: white;
+      font-size: 18px;
+      text-decoration: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background-color 0.3s;
+    }
+    .btn-wa:hover, .btn-share:hover {
+      background-color: #1ebd5a;
+    }
+    .gallery-img {
+      width: 95%;
+      max-width: 1000px;
+      border-radius: 15px;
+      margin: 20px auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
       display: block;
-      margin-top: 1em;
+    }
+    .gallery-img:hover {
+      transform: scale(1.03);
+    }
+    .form-order {
+      margin-top: 40px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-family: 'Chewy', cursive;
+      font-size: 16px;
+    }
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #d35400;
+    }
+    .floating-wa, .top-link {
+      position: fixed;
+      right: 25px;
+      text-decoration: none;
+      color: white;
       font-weight: bold;
     }
-    .order-form input[type="checkbox"] {
-      margin-right: 8px;
+    .floating-wa {
+      bottom: 25px;
+      background-color: #25D366;
+      padding: 14px 20px;
+      border-radius: 50px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
-    .button {
-      background: #ff9966;
-      color: white;
-      padding: 1em;
-      display: block;
-      text-align: center;
-      margin: 2em auto;
-      width: 80%;
-      border-radius: 20px;
-      text-decoration: none;
-      font-size: 1.2em;
+    .floating-wa:hover {
+      background-color: #1ebd5a;
     }
-    .testimoni {
-      background: #fff5ee;
-      padding: 2em;
-      border-radius: 20px;
-      margin-top: 2em;
+    .top-link {
+      bottom: 90px;
+      background-color: #ff9800;
+      padding: 12px 16px;
+      border-radius: 50%;
+      font-size: 22px;
     }
-    .testimoni p {
-      font-style: italic;
-      margin-bottom: 1em;
-    }
-    .testimoni strong {
-      display: block;
-      margin-top: -0.5em;
-    }
-    footer {
-      text-align: center;
-      font-size: 0.8em;
-      padding: 2em;
-      background: #ffe6cc;
-      margin-top: 2em;
+    .top-link:hover {
+      background-color: #fb8c00;
     }
   </style>
 </head>
-<body>
 
-<!-- Audio Backsound -->
-<audio autoplay loop hidden>
-  <source src="backsound.mp3" type="audio/mpeg">
-</audio>
+<body id="top">
+  <div class="page-wrapper">
 
-<!-- Sambutan Awal -->
-<section>
-  <p>Assalamu'alaikum</p>
-  <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah<br><strong>Aamiin Allahumma Aamiin</strong></p>
-  <p><strong>Padang Panjang Kota Kuliner</strong><br>Serambi Mekkah orang mengenalnya</p>
-  <p>Jika Sanak mampir ke Pasar Kuliner Padang Panjang,<br>Jangan lupa mampir ke</p>
-  <h1 style="color:#e67300;">PUKIS LUMER AULIA</h1>
-  <p>Pukis kita udah ready</p>
-  <p>Coba icip" Pukis kita dgn berbagai varian Topping yang bisa di mix<br><u><strong>HARGA MULAI DARI 10K</strong></u> aja</p>
-  <p><strong>OPERASIONAL HOUR:</strong> 16.00pm - 23.59pm (selama persediaan masih ada)</p>
-  <p><strong>Location:</strong> Pasar Kuliner Padang Panjang deket roti TENONK Depan Aquarium</p>
-  <p>Kita belom bisa delivery ya kk, tapi kita ada di aplikasi:<br>- Maxim Food<br>- Grab Food<br>- Go Food</p>
-  <p>Yang masih belum nemu Pukis Lumer Aulia dimana.. Cari aja <strong>GEROBAK PINK</strong> seberang Aquarium</p>
-  <p><strong>BEST SELLER :</strong> DOUBLETOPING VANILLA OREO VS COKLAT KACANG</p>
-  <p><strong>SATU PORSI bisa di mix</strong> ya topingnya..</p>
-  <p>Mau jajan manis, enak, KENYANG, ramah dan irit dikantong? Yuk jajan <strong>PUKIS LUMER AULIA</strong> aja..<br><strong>PORSI BESAR ADA DISKONYAHH LOH</strong></p>
-  <p>Ditunggu yah</p>
-  <p>Terimakasih</p>
-  <p><strong>IG :</strong> Pukis.Lumer_aulia<br><strong>FB :</strong> Pukis Lumer Aulia<br><strong>Tiktok :</strong> Pukis Lumer Aulia<br><strong>WA :</strong> 0812 9666 8670</p>
-</section>
+    <!-- Promo -->
+    <div class="promo-banner">
+      GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!
+    </div>
 
-<!-- Kupon Berjalan -->
-<marquee behavior="scroll" direction="left">
-  Kumpulkan 15 Kupon, tukarkan 1 Box Kecil Gratis! - Pukis Lumer Aulia Pasar Kuliner Padang Panjang
-</marquee>
+    <!-- Header -->
+    <img class="header-img" src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" />
 
-<!-- Kupon Gambar Berjalan -->
-<marquee behavior="scroll" direction="right" scrollamount="6">
-  <img src="kupon1.jpeg" height="80">
-</marquee>
+    <h1>PUKIS LUMER AULIA</h1>
+    <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
+    <p>Dimanapun kamu, insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin.</p>
+    <p>Kalau Sanak mampir ke Pasar Kuliner Padang Panjang, jangan lupa mampir ke:</p>
+    <h2>PUKIS LUMER AULIA</h2>
+    <p>Pukis kita sudah ready! Cobain berbagai varian topping yang bisa di-mix bebas!</p>
+    <p><strong>Harga mulai dari 10K saja!</strong></p>
+    <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB</p>
+    <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang – dekat roti Tenonk</p>
 
-<!-- Galeri -->
-<section class="gallery">
-  <img src="pukis1.jpg" alt="Pukis Lumer Aulia">
-  <img src="pukis2.jpg" alt="Pukis Lumer Aulia">
-  <img src="pukis3.jpg" alt="Pukis Lumer Aulia">
-  <img src="pukis4.jpg" alt="Pukis Lumer Aulia">
-  <img src="pukis5.jpg" alt="Pukis Lumer Aulia">
-</section>
-
-<!-- Form Pesan -->
-<section class="order-form">
-  <h2>Pesan Sekarang</h2>
-
-  <label>Topping Bawah (pilih bebas, bisa campur):</label>
-  <input type="checkbox" name="topping_bawah" value="Coklat">Coklat
-  <input type="checkbox" name="topping_bawah" value="Tiramisu">Tiramisu
-  <input type="checkbox" name="topping_bawah" value="Vanilla">Vanilla
-  <input type="checkbox" name="topping_bawah" value="Stroberi">Stroberi
-  <input type="checkbox" name="topping_bawah" value="Cappucino">Cappucino
-  <input type="checkbox" name="topping_bawah" value="Taro">Taro
-  <input type="checkbox" name="topping_bawah" value="Matcha">Matcha
-
-  <label>Jenis Topping:</label>
-  <input type="radio" name="jenis_topping" value="Single" onclick="disableTaburan(false)">Single Topping
-  <input type="radio" name="jenis_topping" value="Double" onclick="disableTaburan(true)">Double Topping
-
-  <div id="taburan">
-    <label>Topping Atas (untuk Double Topping saja, bisa campur):</label>
-    <input type="checkbox" name="taburan" value="Meses">Meses
-    <input type="checkbox" name="taburan" value="Keju">Keju
-    <input type="checkbox" name="taburan" value="Kacang">Kacang
-    <input type="checkbox" name="taburan" value="Choco Chips">Choco Chips
-    <input type="checkbox" name="taburan" value="Oreo">Oreo
-  </div>
-
-  <a href="https://wa.me/6281296668670" class="button">Pesan Sekarang via WhatsApp</a>
-</section>
-
-<!-- Testimoni -->
-<section class="testimoni">
-  <h2>Testimoni Pelanggan</h2>
-
-  <p>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak di rumah pada suka semua. Bakal langganan terus nih!"<br>
-  <strong>— Maya, Padang Panjang</strong></p>
-
-  <p>"Top banget! Gak rugi jauh-jauh mampir ke Pasar Kuliner. Paling suka varian Double Topping Vanilla + Oreo!"<br>
-  <strong>— Andi, Bukittinggi</strong></p>
-
-  <p>"Pukis lumeran di mulut! Beli satu box malah ketagihan nambah lagi. Ownernya ramah juga."<br>
-  <strong>— Rina, Padang</strong></p>
-</section>
-
-<!-- Tombol Ajak Teman -->
-<a href="https://wa.me/?text=Yuk%20coba%20Pukis%20Lumer%20Aulia%20di%20Pasar%20Kuliner%20Padang%20Panjang!%20Enak%20dan%20Bisa%20Mix%20Topping!%20%0A%20IG:%20@Pukis.Lumer_aulia" class="button" style="background: #ff6600;">Ajak Teman!</a>
-
-<footer>
-  &copy; 2025 Pukis Lumer Aulia. All rights reserved.
-</footer>
-
-<script>
-function disableTaburan(enable) {
-  document.querySelectorAll('#taburan input').forEach(el => {
-    el.disabled = !enable;
-  });
-}
-disableTaburan(false);
-</script>
-
-</body>
-</html>
+    <!-- Tombol Order -->
+    <a class="btn-wa" href="h
