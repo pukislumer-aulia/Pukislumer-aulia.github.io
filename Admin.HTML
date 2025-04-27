@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Testimoni - Pukis Lumer Aulia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #ffdde1, #ee9ca7);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #c0392b;
+      margin-bottom: 10px;
+    }
+    .home-button {
+      display: block;
+      width: fit-content;
+      margin: 0 auto 20px auto;
+      padding: 10px 20px;
+      background-color: #27ae60;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .home-button:hover {
+      background-color: #1e8449;
+    }
+    .testimonial-list {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .testimonial-item {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+    .testimonial-item:last-child {
+      border-bottom: none;
+    }
+    .testimonial-name {
+      font-weight: bold;
+      color: #d35400;
+    }
+    .testimonial-text {
+      font-style: italic;
+      margin: 5px 0 10px 0;
+    }
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Admin Testimoni</h1>
+
+  <!-- Tombol Kembali ke Website -->
+  <a class="home-button" href="index.html">Kembali ke Home</a>
+
+  <div class="testimonial-list" id="testimonialList">
+    <!-- Testimoni pelanggan akan muncul di sini -->
+  </div>
+
+  <script>
+    function loadTestimonials() {
+      const testimonialList = document.getElementById('testimonialList');
+      testimonialList.innerHTML = '';
+
+      let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+
+      testimonials.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'testimonial-item';
+        div.innerHTML = `
+          <div class="testimonial-name">${item.name}</div>
+          <div class="testimonial-text">"${item.testimonial}"</div>
+          <button class="delete-btn" onclick="deleteTestimonial(${index})">Hapus</button>
+        `;
+        testimonialList.appendChild(div);
+      });
+
+      if (testimonials.length === 0) {
+        testimonialList.innerHTML = '<p>Belum ada testimoni pelanggan.</p>';
+      }
+    }
+
+    function deleteTestimonial(index) {
+      let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+      if (confirm('Apakah yakin ingin menghapus testimoni ini?')) {
+        testimonials.splice(index, 1);
+        localStorage.setItem('testimonials', JSON.stringify(testimonials));
+        loadTestimonials();
+      }
+    }
+
+    // Load saat pertama kali buka halaman
+    window.onload = loadTestimonials;
+  </script>
+
+</body>
+</html>
