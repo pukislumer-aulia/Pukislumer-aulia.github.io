@@ -3,248 +3,198 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Pukis Lumer Aulia - Pukis Lembut Topping Melimpah di Pasar Kuliner Padang Panjang. Pesan sekarang via Maxim, GrabFood, GoFood!">
-  <meta name="keywords" content="Pukis, Pukis Lumer, Pukis Padang Panjang, Pasar Kuliner, Maxim Food, Grab Food, Go Food">
-  <meta name="author" content="Pukis Lumer Aulia">
-  <title>Pukis Lumer Aulia</title>
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&family=Tangerine&display=swap" rel="stylesheet">
+  <title>Pukis Lumer Aulia - Pasar Kuliner Padang Panjang</title>
+  <meta name="description" content="Pukis Lumer Aulia - Pukis lembut, topping melimpah di Pasar Kuliner Padang Panjang. Pesan via GrabFood, GoFood, Maxim Food.">
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Tango&family=Kanit:wght@900&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Chewy', cursive;
-      background: #fff7f0;
-      color: #333;
+      background: #fff8f0;
+      color: #5a3e36;
     }
     header {
-      background-image: url('Picsart_24-05-23_22-54-20-428.jpg');
-      background-size: cover;
-      background-position: center;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-shadow: 2px 2px 5px #000;
-      font-size: 2.5em;
       text-align: center;
-    }
-    nav {
-      background: #ffa07a;
-      padding: 1em;
-      text-align: center;
-    }
-    nav a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    section {
-      padding: 3em 1em;
-      text-align: center;
-    }
-    .galeri {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .galeri img {
-      width: 90%;
-      margin-bottom: 2em;
-      border-radius: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: 0.3s;
-    }
-    .galeri img:hover {
-      transform: scale(1.05);
-    }
-    .form-order {
-      max-width: 500px;
-      margin: auto;
-      background: #fff;
       padding: 2em;
-      border-radius: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      text-align: left;
+      background: #ffe0cc;
+    }
+    header img {
+      max-width: 100%;
+      height: auto;
+    }
+    marquee {
+      font-weight: bold;
+      background: #ffd9b3;
+      padding: 0.5em;
       font-size: 1.2em;
     }
-    .form-order label, .form-order select, .form-order input {
+    section {
+      padding: 2em;
+    }
+    .gallery img {
       width: 100%;
-      margin-bottom: 1em;
+      height: auto;
+      margin-bottom: 2em;
+      border-radius: 15px;
+      box-shadow: 2px 2px 10px #aaa;
     }
-    .form-order input[type="submit"] {
-      background: #ffa07a;
-      border: none;
-      padding: 0.5em;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 10px;
-    }
-    .form-order input[type="submit"]:hover {
-      background: #ff7f50;
-    }
-    .running-text {
-      background: #ffe4b5;
-      overflow: hidden;
-      white-space: nowrap;
-      box-sizing: border-box;
-    }
-    .running-text p {
-      display: inline-block;
-      padding-left: 100%;
-      animation: marquee 15s linear infinite;
-      font-weight: bold;
-    }
-    @keyframes marquee {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(-100%, 0); }
-    }
-    .testimoni {
-      background: #ffe4e1;
+    .order-form {
+      background: #fff0e0;
       padding: 2em;
       border-radius: 20px;
-      margin: 2em 0;
+      box-shadow: 2px 2px 10px #ccc;
+      margin-bottom: 2em;
+    }
+    .order-form h2 {
+      font-family: 'Kanit', sans-serif;
+    }
+    .order-form label {
+      display: block;
+      margin-top: 1em;
+      font-weight: bold;
+    }
+    .order-form input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    .button {
+      background: #ff9966;
+      color: white;
+      padding: 1em;
+      display: block;
+      text-align: center;
+      margin: 2em auto;
+      width: 80%;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 1.2em;
+    }
+    .testimoni {
+      background: #fff5ee;
+      padding: 2em;
+      border-radius: 20px;
+      margin-top: 2em;
     }
     .testimoni p {
       font-style: italic;
-      font-size: 1.1em;
+      margin-bottom: 1em;
+    }
+    .testimoni strong {
+      display: block;
+      margin-top: -0.5em;
     }
     footer {
-      background: #ffa07a;
-      color: white;
       text-align: center;
+      font-size: 0.8em;
       padding: 2em;
-      font-size: 1em;
-    }
-    .floating-whatsapp, .floating-invite {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 999;
-    }
-    .floating-invite {
-      right: 80px;
-    }
-    .floating-whatsapp img, .floating-invite img {
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
+      background: #ffe6cc;
+      margin-top: 2em;
     }
   </style>
 </head>
-
 <body>
 
-<audio autoplay loop>
+<!-- Audio Backsound -->
+<audio autoplay loop hidden>
   <source src="backsound.mp3" type="audio/mpeg">
 </audio>
 
-<header>
-  <div>
-    <h1 style="font-family: 'Tangerine', cursive; font-size: 4em;">Pukis Lumer Aulia</h1>
-    <p>Pukis lembut, topping melimpah, bikin nagih!</p>
+<!-- Sambutan Awal -->
+<section>
+  <p>Assalamu'alaikum</p>
+  <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah<br><strong>Aamiin Allahumma Aamiin</strong></p>
+  <p><strong>Padang Panjang Kota Kuliner</strong><br>Serambi Mekkah orang mengenalnya</p>
+  <p>Jika Sanak mampir ke Pasar Kuliner Padang Panjang,<br>Jangan lupa mampir ke</p>
+  <h1 style="color:#e67300;">PUKIS LUMER AULIA</h1>
+  <p>Pukis kita udah ready</p>
+  <p>Coba icip" Pukis kita dgn berbagai varian Topping yang bisa di mix<br><u><strong>HARGA MULAI DARI 10K</strong></u> aja</p>
+  <p><strong>OPERASIONAL HOUR:</strong> 16.00pm - 23.59pm (selama persediaan masih ada)</p>
+  <p><strong>Location:</strong> Pasar Kuliner Padang Panjang deket roti TENONK Depan Aquarium</p>
+  <p>Kita belom bisa delivery ya kk, tapi kita ada di aplikasi:<br>- Maxim Food<br>- Grab Food<br>- Go Food</p>
+  <p>Yang masih belum nemu Pukis Lumer Aulia dimana.. Cari aja <strong>GEROBAK PINK</strong> seberang Aquarium</p>
+  <p><strong>BEST SELLER :</strong> DOUBLETOPING VANILLA OREO VS COKLAT KACANG</p>
+  <p><strong>SATU PORSI bisa di mix</strong> ya topingnya..</p>
+  <p>Mau jajan manis, enak, KENYANG, ramah dan irit dikantong? Yuk jajan <strong>PUKIS LUMER AULIA</strong> aja..<br><strong>PORSI BESAR ADA DISKONYAHH LOH</strong></p>
+  <p>Ditunggu yah</p>
+  <p>Terimakasih</p>
+  <p><strong>IG :</strong> Pukis.Lumer_aulia<br><strong>FB :</strong> Pukis Lumer Aulia<br><strong>Tiktok :</strong> Pukis Lumer Aulia<br><strong>WA :</strong> 0812 9666 8670</p>
+</section>
+
+<!-- Kupon Berjalan -->
+<marquee behavior="scroll" direction="left">
+  Kumpulkan 15 Kupon, tukarkan 1 Box Kecil Gratis! - Pukis Lumer Aulia Pasar Kuliner Padang Panjang
+</marquee>
+
+<!-- Kupon Gambar Berjalan -->
+<marquee behavior="scroll" direction="right" scrollamount="6">
+  <img src="kupon1.jpeg" height="80">
+</marquee>
+
+<!-- Galeri -->
+<section class="gallery">
+  <img src="pukis1.jpg" alt="Pukis Lumer Aulia">
+  <img src="pukis2.jpg" alt="Pukis Lumer Aulia">
+  <img src="pukis3.jpg" alt="Pukis Lumer Aulia">
+  <img src="pukis4.jpg" alt="Pukis Lumer Aulia">
+  <img src="pukis5.jpg" alt="Pukis Lumer Aulia">
+</section>
+
+<!-- Form Pesan -->
+<section class="order-form">
+  <h2>Pesan Sekarang</h2>
+
+  <label>Topping Bawah (pilih bebas, bisa campur):</label>
+  <input type="checkbox" name="topping_bawah" value="Coklat">Coklat
+  <input type="checkbox" name="topping_bawah" value="Tiramisu">Tiramisu
+  <input type="checkbox" name="topping_bawah" value="Vanilla">Vanilla
+  <input type="checkbox" name="topping_bawah" value="Stroberi">Stroberi
+  <input type="checkbox" name="topping_bawah" value="Cappucino">Cappucino
+  <input type="checkbox" name="topping_bawah" value="Taro">Taro
+  <input type="checkbox" name="topping_bawah" value="Matcha">Matcha
+
+  <label>Jenis Topping:</label>
+  <input type="radio" name="jenis_topping" value="Single" onclick="disableTaburan(false)">Single Topping
+  <input type="radio" name="jenis_topping" value="Double" onclick="disableTaburan(true)">Double Topping
+
+  <div id="taburan">
+    <label>Topping Atas (untuk Double Topping saja, bisa campur):</label>
+    <input type="checkbox" name="taburan" value="Meses">Meses
+    <input type="checkbox" name="taburan" value="Keju">Keju
+    <input type="checkbox" name="taburan" value="Kacang">Kacang
+    <input type="checkbox" name="taburan" value="Choco Chips">Choco Chips
+    <input type="checkbox" name="taburan" value="Oreo">Oreo
   </div>
-</header>
 
-<nav>
-  <a href="#galeri">Galeri</a>
-  <a href="#order">Order</a>
-  <a href="#testimoni">Testimoni</a>
-</nav>
-
-<section class="running-text">
-  <p>Kumpulkan 15 kupon, tukarkan dengan 1 Box Kecil GRATIS! Jangan lupa ajak temanmu ya!</p>
+  <a href="https://wa.me/6281296668670" class="button">Pesan Sekarang via WhatsApp</a>
 </section>
 
-<section id="galeri" class="galeri">
-  <h2>Galeri Pukis Lumer</h2>
-  <img src="Pukis1.jpg" alt="Pukis1">
-  <img src="pukis2.jpg" alt="Pukis2">
-  <img src="pukis3.jpg" alt="Pukis3">
-  <img src="Pukis4.jpg" alt="Pukis4">
-  <img src="pukis5.jpg" alt="Pukis5">
-</section>
-
-<section id="order">
-  <h2>Order Pukis Sekarang!</h2>
-  <div class="form-order">
-    <form id="orderForm">
-      <label for="pilihTopping">Topping Bawah (boleh campur):</label>
-      <select id="pilihTopping" name="toppingBawah" multiple required>
-        <option value="Coklat">Coklat</option>
-        <option value="Tiramisu">Tiramisu</option>
-        <option value="Vanilla">Vanilla</option>
-        <option value="Stroberi">Stroberi</option>
-        <option value="Cappucino">Cappucino</option>
-        <option value="Taro">Taro</option>
-        <option value="Matcha">Matcha</option>
-      </select>
-
-      <label>Pilih Paket:</label>
-      <input type="radio" name="paket" value="single" id="single" checked> Single Topping
-      <input type="radio" name="paket" value="double" id="double"> Double Topping
-
-      <label for="pilihTaburan">Topping Atas (pilih kalau Double Topping):</label>
-      <select id="pilihTaburan" name="toppingAtas" multiple disabled>
-        <option value="Meses">Meses</option>
-        <option value="Keju">Keju</option>
-        <option value="Kacang">Kacang</option>
-        <option value="Choco Chips">Choco Chips</option>
-        <option value="Oreo">Oreo</option>
-      </select>
-
-      <input type="submit" value="Pesan Sekarang!">
-    </form>
-  </div>
-</section>
-
-<section id="testimoni">
+<!-- Testimoni -->
+<section class="testimoni">
   <h2>Testimoni Pelanggan</h2>
-  <div class="testimoni">
-    <p>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak di rumah pada suka semua. Bakal langganan terus nih!"<br><b>— Maya, Padang Panjang</b></p>
-    <p>"Top banget! Gak rugi jauh-jauh mampir ke Pasar Kuliner. Paling suka varian Double Topping Vanilla + Oreo!"<br><b>— Andi, Bukittinggi</b></p>
-    <p>"Pukis lumeran di mulut! Beli satu box malah ketagihan nambah lagi. Ownernya ramah juga."<br><b>— Rina, Padang</b></p>
-  </div>
 
-  <h3>Kirim Testimoni Kamu:</h3>
-  <form id="testiForm">
-    <input type="text" placeholder="Nama" required><br>
-    <input type="text" placeholder="Daerah" required><br>
-    <textarea placeholder="Testimoni" required></textarea><br>
-    <input type="submit" value="Kirim Testimoni">
-  </form>
+  <p>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak di rumah pada suka semua. Bakal langganan terus nih!"<br>
+  <strong>— Maya, Padang Panjang</strong></p>
+
+  <p>"Top banget! Gak rugi jauh-jauh mampir ke Pasar Kuliner. Paling suka varian Double Topping Vanilla + Oreo!"<br>
+  <strong>— Andi, Bukittinggi</strong></p>
+
+  <p>"Pukis lumeran di mulut! Beli satu box malah ketagihan nambah lagi. Ownernya ramah juga."<br>
+  <strong>— Rina, Padang</strong></p>
 </section>
+
+<!-- Tombol Ajak Teman -->
+<a href="https://wa.me/?text=Yuk%20coba%20Pukis%20Lumer%20Aulia%20di%20Pasar%20Kuliner%20Padang%20Panjang!%20Enak%20dan%20Bisa%20Mix%20Topping!%20%0A%20IG:%20@Pukis.Lumer_aulia" class="button" style="background: #ff6600;">Ajak Teman!</a>
 
 <footer>
-  &copy; 2025 Pukis Lumer Aulia - Pasar Kuliner Padang Panjang
+  &copy; 2025 Pukis Lumer Aulia. All rights reserved.
 </footer>
 
-<a href="https://wa.me/6281296668670" class="floating-whatsapp">
-  <img src="wa-icon.png" alt="WhatsApp Chat">
-</a>
-<a href="#" onclick="inviteFriends()" class="floating-invite">
-  <img src="invite-icon.png" alt="Undang Teman">
-</a>
-
 <script>
-  document.querySelectorAll('input[name="paket"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-      document.getElementById('pilihTaburan').disabled = (this.value !== 'double');
-    });
+function disableTaburan(enable) {
+  document.querySelectorAll('#taburan input').forEach(el => {
+    el.disabled = !enable;
   });
-
-  function inviteFriends() {
-    if (navigator.share) {
-      navigator.share({
-        title: 'Pukis Lumer Aulia',
-        text: 'Yuk pesan Pukis Lumer Aulia, enak banget!',
-        url: window.location.href
-      });
-    } else {
-      alert('Fitur berbagi tidak tersedia di browser kamu.');
-    }
-  }
+}
+disableTaburan(false);
 </script>
 
 </body>
