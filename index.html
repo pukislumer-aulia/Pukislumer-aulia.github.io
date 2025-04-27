@@ -2,159 +2,233 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pukis Lumer Aulia - Pilihan Varian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pukis Lumer Aulia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
+
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 20px;
+      font-family: 'Chewy', cursive;
       background-color: #fff8f0;
+      margin: 0;
+      padding: 0;
     }
     .page-wrapper {
-      max-width: 900px;
+      max-width: 1200px;
       margin: auto;
-      background: #fff;
       padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border: 10px solid #ffb347;
+      border-radius: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
-    h1, h2, h3 {
+    h1, h2 {
       text-align: center;
-      color: #ff6f00;
+      color: #e67e22;
+    }
+    h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 42px;
+    }
+    h2 {
+      font-family: 'Kanit', sans-serif;
+      font-size: 32px;
+      margin-top: 40px;
+    }
+    p {
+      text-align: center;
+      font-size: 18px;
+      color: #333;
     }
     .promo-banner {
-      background-color: #ffcc80;
-      padding: 10px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      text-align: center;
+      background-color: #ff4081;
+      color: white;
+      padding: 12px;
+      font-size: 20px;
       font-weight: bold;
+      animation: slide 15s linear infinite;
+      margin-bottom: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-align: center;
     }
-    .form-section {
-      margin-top: 20px;
+    @keyframes slide {
+      0% {transform: translateX(100%);}
+      100% {transform: translateX(-100%);}
     }
-    select, input[type="checkbox"] {
-      margin: 5px 0;
+    img.header-img {
+      width: 100%;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      animation: melt 3s infinite alternate;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .checkbox-group {
+    @keyframes melt {
+      0% {transform: scale(1);}
+      100% {transform: scale(1.02);}
+    }
+    .gallery {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      justify-content: center;
+      gap: 20px;
     }
-    .checkbox-group label {
-      background: #ffe0b2;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      user-select: none;
+    .gallery img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 15px;
+      transition: transform 0.3s ease;
     }
-    .box-info {
-      margin-top: 30px;
-      background: #fff3e0;
-      padding: 15px;
-      border-radius: 10px;
+    .gallery img:hover {
+      transform: scale(1.05);
     }
-    .submit-btn {
-      margin-top: 20px;
+    .form-order {
+      background: #fff0f5;
+      padding: 20px;
+      margin-top: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select, textarea {
       width: 100%;
       padding: 12px;
-      background: #ff9800;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-family: 'Chewy', cursive;
+      font-size: 16px;
+    }
+    button {
+      background-color: #e67e22;
       color: white;
       border: none;
-      border-radius: 10px;
+      padding: 14px 30px;
       font-size: 18px;
+      border-radius: 10px;
+      margin-top: 20px;
       cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
     }
-    .submit-btn:hover {
-      background: #fb8c00;
+    button:hover {
+      background-color: #d35400;
+    }
+    .floating-wa {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .floating-wa:hover {
+      background-color: #1ebe5b;
+    }
+    label {
+      font-size: 18px;
+      display: block;
+      margin-top: 10px;
+    }
+    .checkbox-group {
+      text-align: left;
     }
   </style>
 </head>
 
 <body id="top">
   <div class="page-wrapper">
-    
+
+    <!-- Promo -->
     <div class="promo-banner">
-      Gunting dan Kumpulkan 15 Kupon, Tukarkan dengan 1 Box Kecil Gratis!
+      GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!
     </div>
-    
-    <h1>Pukis Lumer Aulia</h1>
-    <h2>Varian Topping</h2>
 
-    <form id="varianForm">
-      
-      <div class="form-section">
-        <h3>Pilih Varian Topping</h3>
-        <select name="varian" id="varian" required>
-          <option value="">-- Pilih Varian --</option>
-          <optgroup label="Single Topping">
-            <option value="Single - Coklat">Coklat</option>
-            <option value="Single - Tiramisu">Tiramisu</option>
-            <option value="Single - Vanilla">Vanilla</option>
-            <option value="Single - Stroberi">Stroberi</option>
-            <option value="Single - Cappucino">Cappucino</option>
-            <option value="Single - Taro">Taro</option>
-            <option value="Single - Matcha">Matcha</option>
-          </optgroup>
-          <optgroup label="Double Topping">
-            <option value="Double - Coklat">Coklat</option>
-            <option value="Double - Tiramisu">Tiramisu</option>
-            <option value="Double - Vanilla">Vanilla</option>
-            <option value="Double - Stroberi">Stroberi</option>
-            <option value="Double - Cappucino">Cappucino</option>
-            <option value="Double - Taro">Taro</option>
-            <option value="Double - Matcha">Matcha</option>
-          </optgroup>
+    <!-- Header -->
+    <img src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" class="header-img">
+
+    <h1>PUKIS LUMER AULIA</h1>
+    <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
+    <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
+    <p>Kalau mampir ke Pasar Kuliner Padang Panjang, jangan lupa mampir ke:</p>
+    <h2>PUKIS LUMER AULIA</h2>
+    <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB</p>
+    <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
+
+    <!-- Galeri -->
+    <h2>Galeri Pukis</h2>
+    <div class="gallery">
+      <img src="Pukis1.jpg" alt="Pukis 1">
+      <img src="pukis2.jpg" alt="Pukis 2">
+      <img src="pukis3.jpg" alt="Pukis 3">
+      <img src="Pukis4.jpg" alt="Pukis 4">
+      <img src="pukis5.jpg" alt="Pukis 5">
+    </div>
+
+    <!-- Form Order -->
+    <h2>Form Pemesanan</h2>
+    <div class="form-order">
+      <form action="https://formsubmit.co/your-email@example.com" method="POST">
+
+        <input type="text" name="Nama" placeholder="Nama Lengkap" required>
+        <input type="tel" name="Nomor" placeholder="Nomor WhatsApp" required>
+
+        <label>Pilih Ukuran Box:</label>
+        <select name="Box" required>
+          <option value="">Pilih Box</option>
+          <option value="Box Kecil (isi 5)">Box Kecil (isi 5 rasa bebas)</option>
+          <option value="Box Besar (isi 10)">Box Besar (isi semua rasa)</option>
         </select>
-      </div>
 
-      <div class="form-section">
-        <h3>Pilih Topping Tambahan</h3>
+        <label>Pilih Varian Single Topping:</label>
+        <select name="Single Topping">
+          <option value="">Pilih Single Topping</option>
+          <option value="Coklat">Coklat</option>
+          <option value="Tiramisu">Tiramisu</option>
+          <option value="Vanilla">Vanilla</option>
+          <option value="Stroberi">Stroberi</option>
+          <option value="Cappucino">Cappucino</option>
+          <option value="Taro">Taro</option>
+          <option value="Matcha">Matcha</option>
+        </select>
+
+        <label>Pilih Varian Double Topping:</label>
+        <select name="Double Topping">
+          <option value="">Pilih Double Topping</option>
+          <option value="Coklat">Coklat</option>
+          <option value="Tiramisu">Tiramisu</option>
+          <option value="Vanilla">Vanilla</option>
+          <option value="Stroberi">Stroberi</option>
+          <option value="Cappucino">Cappucino</option>
+          <option value="Taro">Taro</option>
+          <option value="Matcha">Matcha</option>
+        </select>
+
+        <label>Pilihan Bebas Topping:</label>
         <div class="checkbox-group">
-          <label><input type="checkbox" name="Topping[]" value="Meses"> Meses</label>
-          <label><input type="checkbox" name="Topping[]" value="Kacang"> Kacang</label>
-          <label><input type="checkbox" name="Topping[]" value="Keju"> Keju</label>
-          <label><input type="checkbox" name="Topping[]" value="Choco Chips"> Choco Chips</label>
-          <label><input type="checkbox" name="Topping[]" value="Oreo"> Oreo</label>
+          <input type="checkbox" name="Topping Pilihan" value="Meses"> Meses<br>
+          <input type="checkbox" name="Topping Pilihan" value="Kacang"> Kacang<br>
+          <input type="checkbox" name="Topping Pilihan" value="Keju"> Keju<br>
+          <input type="checkbox" name="Topping Pilihan" value="Choco Chips"> Choco Chips<br>
+          <input type="checkbox" name="Topping Pilihan" value="Oreo"> Oreo<br>
         </div>
-      </div>
 
-      <div class="form-section box-info">
-        <h3>Pilihan Box</h3>
-        <ul>
-          <li><strong>Box Kecil (Isi 5)</strong>: Bebas pilih 5 rasa dari varian yang tersedia.</li>
-          <li><strong>Box Besar (Isi 10)</strong>: Bisa pilih semua rasa dari varian yang tersedia.</li>
-        </ul>
-      </div>
+        <textarea name="Catatan" placeholder="Catatan Tambahan (misal: tanpa kacang, tambah keju, dll)"></textarea>
 
-      <button type="submit" class="submit-btn">Kirim Pesanan</button>
+        <button type="submit">Kirim Pesanan</button>
+      </form>
+    </div>
 
-    </form>
+    <!-- Lokasi -->
+    <h2>Lokasi Kami</h2>
+    <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
 
   </div>
 
-  <script>
-    document.getElementById('varianForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const varian = document.getElementById('varian').value;
-      const toppingList = Array.from(document.querySelectorAll('input[name="Topping[]"]:checked')).map(el => el.value);
-      
-      if (!varian) {
-        alert('Pilih varian dulu ya!');
-        return;
-      }
-
-      let pesan = 'Varian yang dipilih: ' + varian + '\\n';
-      if (toppingList.length > 0) {
-        pesan += 'Topping tambahan: ' + toppingList.join(', ');
-      } else {
-        pesan += 'Tidak memilih topping tambahan.';
-      }
-
-      alert(pesan);
-    });
-  </script>
-
+  <!-- Tombol WA -->
+  <a class="floating-wa" href="https://wa.me/6281296668670" target="_blank">Chat Kami di WhatsApp</a>
 </body>
 </html>
