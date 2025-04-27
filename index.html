@@ -32,7 +32,7 @@
       border-radius: 12px;
     }
     .promo-image img {
-      width: 50%; /* ukuran kupon diperkecil */
+      width: 50%; /* ukuran kupon kecil */
       display: block;
       margin: 0 auto;
     }
@@ -91,7 +91,32 @@
       background: #d81b60;
     }
 
-    /* Tombol mengambang di kanan */
+    /* Promo Banner berjalan */
+    .promo-banner {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+      background: #f8bbd0;
+      padding: 10px 0;
+      margin: 20px 0;
+      border-radius: 12px;
+      position: relative;
+    }
+    .promo-banner span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 20s linear infinite;
+      font-size: 20px;
+      font-weight: bold;
+      color: #c2185b;
+    }
+    @keyframes marquee {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+
+    /* Tombol Floating */
     .floating-buttons {
       position: fixed;
       top: 45%;
@@ -138,6 +163,8 @@
     <div class="promo-image">
       <img src="kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
     </div>
+
+    <!-- Promo berjalan -->
     <div class="promo-banner">
       <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
     </div>
