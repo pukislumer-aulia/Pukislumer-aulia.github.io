@@ -167,18 +167,23 @@
     .testimonial {
       margin-bottom: 20px;
     }
+    .form-testimonial {
+      background: #fff0f5;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 
 <body id="top">
   <div class="page-wrapper">
 
-    <!-- Banner Kupon -->
+    <!-- Banner -->
     <div class="promo-image">
       <img src="kupon1.jpeg" alt="Promo Kupon Pukis Lumer Aulia">
     </div>
-
-    <!-- Banner Tulisan -->
     <div class="promo-banner">
       <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
     </div>
@@ -210,7 +215,6 @@
     <!-- Form Order -->
     <h2>Order Pukis Lumer Aulia</h2>
     <form action="https://wa.me/6281296668670" method="GET" target="_blank" class="form-order">
-      
       <label>Nama:</label>
       <input type="text" name="Nama" placeholder="Masukkan nama Anda" required>
 
@@ -247,7 +251,6 @@
       </div>
 
       <button type="submit">Kirim Pesanan</button>
-
     </form>
 
     <!-- Lokasi -->
@@ -256,16 +259,28 @@
 
     <!-- Testimoni -->
     <h2>Testimoni Pelanggan</h2>
-    <div class="testimonials">
+    <div class="testimonials" id="testimonialsList">
       <div class="testimonial">
-        <p><em>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak di rumah pada suka semua. Bakal langganan terus nih!"</em><br><strong>— Maya, Padang Panjang</strong></p>
+        <p><em>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak suka semua!"</em><br><strong>— Maya, Padang Panjang</strong></p>
       </div>
       <div class="testimonial">
-        <p><em>"Top banget! Gak rugi jauh-jauh mampir ke Pasar Kuliner. Paling suka varian Double Topping Vanilla + Oreo!"</em><br><strong>— Andi, Bukittinggi</strong></p>
+        <p><em>"Top banget! Varian Vanilla + Oreo favoritku!"</em><br><strong>— Andi, Bukittinggi</strong></p>
       </div>
       <div class="testimonial">
-        <p><em>"Pukis lumeran di mulut! Beli satu box malah ketagihan nambah lagi. Ownernya ramah juga."</em><br><strong>— Rina, Padang</strong></p>
+        <p><em>"Pukis lumer di mulut, ketagihan nambah lagi!"</em><br><strong>— Rina, Padang</strong></p>
       </div>
+    </div>
+
+    <!-- Form Testimoni -->
+    <div class="form-testimonial">
+      <h2>Tulis Testimoni Kamu</h2>
+      <form id="testimonialForm">
+        <label>Nama:</label>
+        <input type="text" id="nameInput" placeholder="Nama Kamu" required>
+        <label>Testimoni:</label>
+        <textarea id="testimonialInput" placeholder="Tulis testimoni di sini..." required></textarea>
+        <button type="submit">Kirim Testimoni</button>
+      </form>
     </div>
 
   </div>
@@ -278,15 +293,26 @@
     function toggleToppingAtas() {
       var tipe = document.getElementById('tipeTopping').value;
       var toppingAtas = document.getElementById('toppingAtasSection');
-      if (tipe === 'Single') {
-        toppingAtas.style.display = 'none';
-      } else {
-        toppingAtas.style.display = 'block';
-      }
+      toppingAtas.style.display = (tipe === 'Single') ? 'none' : 'block';
     }
     window.onload = function() {
       toggleToppingAtas();
     }
+
+    document.getElementById('testimonialForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = document.getElementById('nameInput').value.trim();
+      const testimonial = document.getElementById('testimonialInput').value.trim();
+      if (name && testimonial) {
+        const testimonialList = document.getElementById('testimonialsList');
+        const newTestimonial = document.createElement('div');
+        newTestimonial.classList.add('testimonial');
+        newTestimonial.innerHTML = `<p><em>"${testimonial}"</em><br><strong>— ${name}</strong></p>`;
+        testimonialList.appendChild(newTestimonial);
+        document.getElementById('testimonialForm').reset();
+        alert('Terima kasih atas testimoni Anda!');
+      }
+    });
   </script>
 
 </body>
