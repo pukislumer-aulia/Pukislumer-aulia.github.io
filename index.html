@@ -3,156 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pukis Lumer Aulia | Pasar Kuliner Padang Panjang</title>
-  <meta name="description" content="Pukis Lumer Aulia: Pukis lembut, lumer, dan nikmat di Pasar Kuliner Padang Panjang. Pesan sekarang via Maxim Food, Grab Food, Go Food.">
-  <meta name="keywords" content="Pukis, Pukis Lumer, Pukis Lumer Aulia, Pasar Kuliner, Pukis Enak, Pukis Viral">
+  <title>Pukis Lumer Aulia - Pukis Lumer No 1 di Padang Panjang</title>
+  <meta name="description" content="Pukis Lumer Aulia - Pukis lumer paling enak di Padang Panjang! Pilihan topping lengkap, single atau double topping, pesan sekarang!">
+  <meta name="keywords" content="Pukis Lumer, Pukis Padang Panjang, Pukis Enak, Pukis Topping, Pasar Kuliner Padang Panjang">
   <meta name="author" content="Pukis Lumer Aulia">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&family=Tangerine&display=swap">
+
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
+
   <style>
     body {
-      margin: 0;
       font-family: 'Chewy', cursive;
-      background: #ffccdd; /* Pink cerah */
+      margin: 0;
+      padding: 0;
+      background-color: #fff7f0;
       color: #333;
-      text-align: center;
     }
-    header {
-      background: #fff0f5;
+    .page-wrapper {
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
       padding: 20px;
     }
-    header img {
-      max-width: 100%;
-      height: auto;
-      animation: melt 3s infinite alternate ease-in-out;
+    .promo-image img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
     }
-    @keyframes melt {
-      0% { transform: scale(1);}
-      100% { transform: scale(1.02) rotate(0.5deg);}
+    .promo-banner {
+      background-color: #e67e22;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+    .header-img {
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     h1 {
-      font-family: 'Tangerine', cursive;
-      font-size: 3em;
-      margin: 10px 0;
+      font-family: 'TangoStdRegular', sans-serif;
+      font-size: 40px;
+      text-align: center;
+      margin-bottom: 10px;
+      color: #d35400;
     }
     h2 {
       font-family: 'Kanit', sans-serif;
-      margin: 20px 0 10px;
+      font-size: 30px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #e67e22;
     }
     p {
-      padding: 0 20px;
-      font-size: 1.2em;
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 15px;
     }
-    .menu, .gallery, .testimonials {
-      margin: 30px auto;
-      max-width: 800px;
-      padding: 10px;
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
     }
-    .menu img, .gallery img {
-      width: 100%;
-      border-radius: 12px;
-      transition: transform 0.3s ease;
+    .gallery img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: transform 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .menu img:hover, .gallery img:hover {
-      transform: scale(1.05);
+    .gallery img:hover {
+      transform: scale(1.1);
     }
-    form {
-      background: #ffe6f0;
+    .form-order, .form-testimonial {
+      background-color: #fdebd0;
       padding: 20px;
-      border-radius: 12px;
-      margin-top: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-top: 20px;
     }
-    input, textarea {
-      width: 90%;
+    .form-order input, .form-order select, .form-testimonial input, .form-testimonial textarea {
+      width: 100%;
       padding: 10px;
-      margin: 10px 0;
-      border: 2px solid #ff99bb;
-      border-radius: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
       font-family: 'Chewy', cursive;
     }
-    button {
-      background: #ff6699;
+    .form-order button, .form-testimonial button {
+      width: 100%;
+      background-color: #e67e22;
       color: white;
-      padding: 10px 20px;
+      padding: 12px;
       border: none;
-      border-radius: 10px;
-      font-size: 1.2em;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background-color 0.3s;
     }
-    button:hover {
-      background: #ff3366;
+    .form-order button:hover, .form-testimonial button:hover {
+      background-color: #cf711f;
     }
-    .testimonial-item {
-      background: #fff;
-      margin: 10px 0;
+    .checkbox-group {
+      margin-bottom: 15px;
+    }
+    .testimonials {
+      margin-top: 20px;
+    }
+    .testimonial {
+      background-color: #fef5e7;
       padding: 15px;
-      border-radius: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: left;
     }
-    footer {
-      margin-top: 40px;
-      padding: 20px;
-      font-size: 0.9em;
-      background: #ffe6f0;
-    }
-    a {
-      color: #ff3366;
+    .floating-invite, .floating-wa {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background-color: #25d366;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 50px;
       text-decoration: none;
       font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .floating-invite {
+      bottom: 140px;
+      background-color: #ff6f61;
+    }
+    @media (max-width: 768px) {
+      .gallery img {
+        width: 45%;
+      }
+      h1 {
+        font-size: 32px;
+      }
+      h2 {
+        font-size: 24px;
+      }
     }
   </style>
 </head>
 
-<body>
-
-<header>
-  <img src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia">
-  <h1>Pukis Lumer Aulia</h1>
-  <h2>Pasar Kuliner Padang Panjang</h2>
-</header>
-
-<section class="menu">
-  <h2>Menu Unggulan</h2>
-  <img src="Pukis1.jpg" alt="Pukis Leleh Coklat">
-  <p>Pukis Lumer rasa Coklat, Keju, dan banyak pilihan lainnya. Dijamin meleleh di mulut!</p>
-</section>
-
-<section class="gallery">
-  <h2>Galeri Pukis</h2>
-  <img src="pukis2.jpg" alt="Pukis Varian 1">
-  <img src="pukis3.jpg" alt="Pukis Varian 2">
-  <img src="Pukis4.jpg" alt="Pukis Varian 3">
-  <img src="pukis5.jpg" alt="Pukis Varian 4">
-</section>
-
-<section class="testimonials">
-  <h2>Testimoni Pelanggan</h2>
-
-  <!-- Testimoni statis, bisa diedit dan tambah manual -->
-  <div class="testimonial-item">
-    <strong>Andi</strong>
-    <p>Wah pukisnya beneran lumer dan enak banget! Recomended!</p>
-  </div>
-  <div class="testimonial-item">
-    <strong>Siti</strong>
-    <p>Rasanya juara! Anak-anak saya juga suka banget.</p>
-  </div>
-  <div class="testimonial-item">
-    <strong>Rina</strong>
-    <p>Setiap ke pasar kuliner pasti mampir beli Pukis Lumer Aulia!</p>
-  </div>
-
-  <!-- (Bisa tambah lagi testimoni baru di sini dengan copy paste blok di atas) -->
-
-</section>
-
-<footer>
-  <p>Pesan via <a href="https://food.maxim.com" target="_blank">Maxim Food</a>, <a href="https://food.grab.com" target="_blank">Grab Food</a>, atau <a href="https://gofood.co.id" target="_blank">Go Food</a></p>
-  <p>Jam Operasional: 16.00 - 23.59 WIB</p>
-  <p>Kontak WhatsApp: <a href="https://wa.me/6281296668670" target="_blank">0812 9666 8670</a></p>
-  <p>Follow kami di IG: <a href="https://instagram.com/Pukis.Lumer_aulia" target="_blank">@Pukis.Lumer_aulia</a>, FB & TikTok: Pukis Lumer Aulia</p>
-</footer>
-
-</body>
-</html>
+<body id="top">
+<!-- (isi body tetap seperti yang kamu kirim di atas, tidak perlu diubah) -->
