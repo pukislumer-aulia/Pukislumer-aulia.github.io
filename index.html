@@ -44,44 +44,31 @@
       font-size: 18px;
       color: #333;
     }
-    /* Banner Promo */
-    .promo-wrapper {
+    .promo-banner, .promo-image {
       position: relative;
-      height: 70px;
       overflow: hidden;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      height: 60px;
+      margin-bottom: 10px;
+    }
+    .promo-banner span, .promo-image img {
+      position: absolute;
+      white-space: nowrap;
+      animation: slide 20s linear infinite;
     }
     .promo-banner {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: #ff4081;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-    }
-    .promo-banner span {
-      white-space: nowrap;
-      display: inline-block;
-      padding-left: 100%;
-      animation: marquee 15s linear infinite;
+      background-color: #ff4081;
+      color: white;
       font-size: 20px;
       font-weight: bold;
-      color: white;
-    }
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+      padding: 12px;
     }
     .promo-image img {
-      width: 100%;
-      height: 70px;
-      object-fit: cover;
+      height: 100%;
     }
-    /* End Banner Promo */
-
+    @keyframes slide {
+      0% {transform: translateX(100%);}
+      100% {transform: translateX(-100%);}
+    }
     img.header-img {
       width: 100%;
       border-radius: 20px;
@@ -193,14 +180,12 @@
 <body id="top">
   <div class="page-wrapper">
 
-    <!-- Promo -->
-    <div class="promo-wrapper">
-      <div class="promo-image">
-        <img src="kupon1.jpeg" alt="Promo Kupon Pukis Lumer Aulia">
-      </div>
-      <div class="promo-banner">
-        <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
-      </div>
+    <!-- Banner -->
+    <div class="promo-image">
+      <img src="kupon1.jpeg" alt="Promo Kupon Pukis Lumer Aulia">
+    </div>
+    <div class="promo-banner">
+      <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
     </div>
 
     <!-- Header -->
@@ -227,7 +212,76 @@
       <img src="pukis5.jpg" alt="Pukis 5">
     </div>
 
-    <!-- Order dan Testimoni, Lokasi, dst Lanjutkan aja dari file kamu tadi -->
+    <!-- Form Order -->
+    <h2>Order Pukis Lumer Aulia</h2>
+    <form action="https://wa.me/6281296668670" method="GET" target="_blank" class="form-order">
+      <label>Nama:</label>
+      <input type="text" name="Nama" placeholder="Masukkan nama Anda" required>
+
+      <label>Jumlah Pesanan:</label>
+      <input type="number" name="Jumlah" min="1" placeholder="Contoh: 2" required>
+
+      <label>Pilih Tipe Topping:</label>
+      <select id="tipeTopping" name="Tipe Topping" required onchange="toggleToppingAtas()">
+        <option value="">Pilih Tipe Topping</option>
+        <option value="Single">Single Topping</option>
+        <option value="Double">Double Topping</option>
+      </select>
+
+      <label>Pilih Topping Bawah:</label>
+      <div class="checkbox-group">
+        <input type="checkbox" name="Topping Bawah" value="Coklat"> Coklat<br>
+        <input type="checkbox" name="Topping Bawah" value="Tiramisu"> Tiramisu<br>
+        <input type="checkbox" name="Topping Bawah" value="Vanilla"> Vanilla<br>
+        <input type="checkbox" name="Topping Bawah" value="Stroberi"> Stroberi<br>
+        <input type="checkbox" name="Topping Bawah" value="Cappucino"> Cappucino<br>
+        <input type="checkbox" name="Topping Bawah" value="Taro"> Taro<br>
+        <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
+      </div>
+
+      <div id="toppingAtasSection">
+        <label>Pilih Topping Atas (Untuk Double Topping):</label>
+        <div class="checkbox-group">
+          <input type="checkbox" name="Topping Atas" value="Meses"> Meses<br>
+          <input type="checkbox" name="Topping Atas" value="Keju"> Keju<br>
+          <input type="checkbox" name="Topping Atas" value="Kacang"> Kacang<br>
+          <input type="checkbox" name="Topping Atas" value="Choco Chips"> Choco Chips<br>
+          <input type="checkbox" name="Topping Atas" value="Oreo"> Oreo<br>
+        </div>
+      </div>
+
+      <button type="submit">Kirim Pesanan</button>
+    </form>
+
+    <!-- Lokasi -->
+    <h2>Lokasi Kami</h2>
+    <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
+
+    <!-- Testimoni -->
+    <h2>Testimoni Pelanggan</h2>
+    <div class="testimonials" id="testimonialsList">
+      <div class="testimonial">
+        <p><em>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak suka semua!"</em><br><strong>— Maya, Padang Panjang</strong></p>
+      </div>
+      <div class="testimonial">
+        <p><em>"Top banget! Varian Vanilla + Oreo favoritku!"</em><br><strong>— Andi, Bukittinggi</strong></p>
+      </div>
+      <div class="testimonial">
+        <p><em>"Pukis lumer di mulut, ketagihan nambah lagi!"</em><br><strong>— Rina, Padang</strong></p>
+      </div>
+    </div>
+
+    <!-- Form Testimoni -->
+    <div class="form-testimonial">
+      <h2>Tulis Testimoni Kamu</h2>
+      <form id="testimonialForm">
+        <label>Nama:</label>
+        <input type="text" id="nameInput" placeholder="Nama Kamu" required>
+        <label>Testimoni:</label>
+        <textarea id="testimonialInput" placeholder="Tulis testimoni di sini..." required></textarea>
+        <button type="submit">Kirim Testimoni</button>
+      </form>
+    </div>
 
   </div>
 
