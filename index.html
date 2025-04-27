@@ -2,13 +2,12 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pukis Lumer Aulia - Pukis Lumer No.1 di Padang Panjang</title>
-  <meta name="description" content="Pukis Lumer Aulia - Pukis kekinian dengan topping lumer di Pasar Kuliner Padang Panjang. Tersedia varian Single dan Double Topping.">
-  <meta name="keywords" content="Pukis Lumer, Pukis Padang Panjang, Kuliner Padang Panjang, Pukis Kekinian, Pukis Leleh, jajanan pasar, makanan manis, Pukis Lumer Aulia">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pukis Lumer Aulia - Pukis Lezat Kota Kuliner Padang Panjang</title>
+  <meta name="description" content="Pukis Lumer Aulia di Pasar Kuliner Padang Panjang. Pukis lembut dengan berbagai topping menggoda. Coklat, Tiramisu, Vanilla, dan lainnya!">
+  <meta name="keywords" content="Pukis, Pukis Lumer, Pasar Kuliner Padang Panjang, Pukis Kota Kuliner, Jajanan Padang Panjang">
   <meta name="author" content="Pukis Lumer Aulia">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
-
   <style>
     body {
       font-family: 'Chewy', cursive;
@@ -43,33 +42,33 @@
       font-size: 18px;
       color: #333;
     }
-    .promo-text {
+    .promo-banner {
+      position: relative;
       background-color: #ff4081;
       color: white;
-      padding: 12px;
       font-size: 20px;
       font-weight: bold;
-      margin-bottom: 20px;
       overflow: hidden;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .promo-text {
+      position: absolute;
+      animation: slide 20s linear infinite;
       white-space: nowrap;
-      animation: slide 15s linear infinite;
     }
     @keyframes slide {
-      0% {transform: translateX(100%);}
-      100% {transform: translateX(-100%);}
+      0% {left: 100%;}
+      100% {left: -100%;}
     }
     .promo-kupon {
-      margin: 20px 0;
-      text-align: center;
-      overflow: hidden;
-    }
-    .promo-kupon img {
-      width: 200px;
-      animation: kuponMove 10s linear infinite;
-    }
-    @keyframes kuponMove {
-      0% { transform: translateX(100%);}
-      100% { transform: translateX(-100%);}
+      width: 100%;
+      height: 50px;
+      object-fit: contain;
+      margin-top: 5px;
     }
     img.header-img {
       width: 100%;
@@ -83,15 +82,17 @@
       100% {transform: scale(1.02);}
     }
     .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
       margin-top: 30px;
     }
     .gallery img {
       width: 100%;
       height: auto;
-      margin-bottom: 20px;
       border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       transition: transform 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .gallery img:hover {
       transform: scale(1.05);
@@ -150,8 +151,15 @@
     .checkbox-group {
       text-align: left;
     }
-    .checkbox-group input {
-      margin-right: 10px;
+    .testi-slider {
+      margin-top: 40px;
+    }
+    .testi-item {
+      background: #ffe0b2;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
   </style>
 </head>
@@ -159,15 +167,11 @@
 <body id="top">
   <div class="page-wrapper">
 
-    <!-- Promo Text Berjalan -->
-    <div class="promo-text">
-      GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!
+    <!-- Promo -->
+    <div class="promo-banner">
+      <div class="promo-text">GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</div>
     </div>
-
-    <!-- Gambar Kupon Berjalan -->
-    <div class="promo-kupon">
-      <img src="kupon1.jpeg" alt="Kupon Promo">
-    </div>
+    <img src="kupon1.jpeg" alt="Promo Kupon" class="promo-kupon">
 
     <!-- Header -->
     <img src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" class="header-img">
@@ -193,8 +197,7 @@
     <!-- Form Order -->
     <h2>Form Pemesanan</h2>
     <div class="form-order">
-      <form action="https://formsubmit.co/your-email@example.com" method="POST">
-
+      <form id="orderForm" action="https://formsubmit.co/your-email@example.com" method="POST">
         <input type="text" name="Nama" placeholder="Nama Lengkap" required>
         <input type="tel" name="Nomor" placeholder="Nomor WhatsApp" required>
 
@@ -207,28 +210,45 @@
 
         <label>Pilih Topping Bawah:</label>
         <div class="checkbox-group">
-          <input type="checkbox" name="Topping Bawah" value="Coklat">Coklat<br>
-          <input type="checkbox" name="Topping Bawah" value="Tiramisu">Tiramisu<br>
-          <input type="checkbox" name="Topping Bawah" value="Vanilla">Vanilla<br>
-          <input type="checkbox" name="Topping Bawah" value="Stroberi">Stroberi<br>
-          <input type="checkbox" name="Topping Bawah" value="Cappucino">Cappucino<br>
-          <input type="checkbox" name="Topping Bawah" value="Taro">Taro<br>
-          <input type="checkbox" name="Topping Bawah" value="Matcha">Matcha<br>
+          <input type="checkbox" name="Topping Bawah" value="Coklat"> Coklat<br>
+          <input type="checkbox" name="Topping Bawah" value="Tiramisu"> Tiramisu<br>
+          <input type="checkbox" name="Topping Bawah" value="Vanilla"> Vanilla<br>
+          <input type="checkbox" name="Topping Bawah" value="Stroberi"> Stroberi<br>
+          <input type="checkbox" name="Topping Bawah" value="Cappucino"> Cappucino<br>
+          <input type="checkbox" name="Topping Bawah" value="Taro"> Taro<br>
+          <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
         </div>
 
-        <label>Tambah Double Topping?</label>
-        <div class="checkbox-group">
-          <input type="checkbox" name="Taburan Atas" value="Meses">Meses<br>
-          <input type="checkbox" name="Taburan Atas" value="Keju">Keju<br>
-          <input type="checkbox" name="Taburan Atas" value="Kacang">Kacang<br>
-          <input type="checkbox" name="Taburan Atas" value="Choco Chips">Choco Chips<br>
-          <input type="checkbox" name="Taburan Atas" value="Oreo">Oreo<br>
+        <label>Pilih Jenis Pesanan:</label>
+        <select id="jenisPesanan" name="Jenis Pesanan" required onchange="toggleTaburan()">
+          <option value="">Pilih Jenis</option>
+          <option value="Single Topping">Single Topping</option>
+          <option value="Double Topping">Double Topping</option>
+        </select>
+
+        <div id="taburanSection" style="display:none;">
+          <label>Pilih Taburan Atas (khusus Double Topping):</label>
+          <div class="checkbox-group">
+            <input type="checkbox" name="Taburan" value="Meses"> Meses<br>
+            <input type="checkbox" name="Taburan" value="Keju"> Keju<br>
+            <input type="checkbox" name="Taburan" value="Kacang"> Kacang<br>
+            <input type="checkbox" name="Taburan" value="Choco Chips"> Choco Chips<br>
+            <input type="checkbox" name="Taburan" value="Oreo"> Oreo<br>
+          </div>
         </div>
 
-        <textarea name="Catatan" placeholder="Catatan Tambahan (contoh: tanpa kacang, ekstra keju, dll)"></textarea>
+        <textarea name="Catatan" placeholder="Catatan Tambahan (misal: tanpa kacang, tambah keju, dll)"></textarea>
 
         <button type="submit">Kirim Pesanan</button>
       </form>
+    </div>
+
+    <!-- Testimoni -->
+    <h2>Testimoni Pelanggan</h2>
+    <div class="testi-slider">
+      <div class="testi-item">"Pukisnya lembut banget, rasa toppingnya juga melimpah! Mantap deh!!"</div>
+      <div class="testi-item">"Anak-anak suka banget Pukis Lumer Aulia, topping double-nya luar biasa!"</div>
+      <div class="testi-item">"Sudah repeat order 3x! Top banget, wajib coba kalau ke Padang Panjang!"</div>
     </div>
 
     <!-- Lokasi -->
@@ -239,5 +259,17 @@
 
   <!-- Tombol WA -->
   <a class="floating-wa" href="https://wa.me/6281296668670" target="_blank">Chat Kami di WhatsApp</a>
+
+  <script>
+    function toggleTaburan() {
+      const jenis = document.getElementById('jenisPesanan').value;
+      const taburan = document.getElementById('taburanSection');
+      if (jenis === "Double Topping") {
+        taburan.style.display = "block";
+      } else {
+        taburan.style.display = "none";
+      }
+    }
+  </script>
 </body>
 </html>
