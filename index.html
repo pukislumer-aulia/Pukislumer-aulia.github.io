@@ -68,20 +68,20 @@
       100% {transform: scale(1.02);}
     }
     .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
       margin-top: 30px;
     }
-    .gallery img {
+    .gallery-item img {
       width: 100%;
       height: auto;
-      border-radius: 15px;
-      transition: transform 0.3s ease;
+      border-radius: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
     }
-    .gallery img:hover {
-      transform: scale(1.05);
+    .gallery-item img:hover {
+      transform: scale(1.03);
     }
     .form-order {
       background: #fff0f5;
@@ -136,6 +136,7 @@
     }
     .checkbox-group {
       text-align: left;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -162,17 +163,28 @@
     <!-- Galeri -->
     <h2>Galeri Pukis</h2>
     <div class="gallery">
-      <img src="Pukis1.jpg" alt="Pukis 1">
-      <img src="pukis2.jpg" alt="Pukis 2">
-      <img src="pukis3.jpg" alt="Pukis 3">
-      <img src="Pukis4.jpg" alt="Pukis 4">
-      <img src="pukis5.jpg" alt="Pukis 5">
+      <div class="gallery-item">
+        <img src="Pukis1.jpg" alt="Pukis 1">
+      </div>
+      <div class="gallery-item">
+        <img src="pukis2.jpg" alt="Pukis 2">
+      </div>
+      <div class="gallery-item">
+        <img src="pukis3.jpg" alt="Pukis 3">
+      </div>
+      <div class="gallery-item">
+        <img src="Pukis4.jpg" alt="Pukis 4">
+      </div>
+      <div class="gallery-item">
+        <img src="pukis5.jpg" alt="Pukis 5">
+      </div>
     </div>
 
     <!-- Form Order -->
     <h2>Form Pemesanan</h2>
     <div class="form-order">
       <form action="https://formsubmit.co/your-email@example.com" method="POST">
+
         <input type="text" name="Nama" placeholder="Nama Lengkap" required>
         <input type="tel" name="Nomor" placeholder="Nomor WhatsApp" required>
 
@@ -184,36 +196,34 @@
         </select>
 
         <label>Pilih Varian Single Topping:</label>
-        <select name="Single Topping">
-          <option value="">Pilih Single Topping</option>
-          <option value="Coklat">Coklat</option>
-          <option value="Tiramisu">Tiramisu</option>
-          <option value="Vanilla">Vanilla</option>
-          <option value="Stroberi">Stroberi</option>
-          <option value="Cappucino">Cappucino</option>
-          <option value="Taro">Taro</option>
-          <option value="Matcha">Matcha</option>
-        </select>
+        <div class="checkbox-group">
+          <input type="checkbox" name="Single Topping[]" value="Coklat"> Coklat<br>
+          <input type="checkbox" name="Single Topping[]" value="Tiramisu"> Tiramisu<br>
+          <input type="checkbox" name="Single Topping[]" value="Vanilla"> Vanilla<br>
+          <input type="checkbox" name="Single Topping[]" value="Stroberi"> Stroberi<br>
+          <input type="checkbox" name="Single Topping[]" value="Cappucino"> Cappucino<br>
+          <input type="checkbox" name="Single Topping[]" value="Taro"> Taro<br>
+          <input type="checkbox" name="Single Topping[]" value="Matcha"> Matcha<br>
+        </div>
 
         <label>Pilih Varian Double Topping:</label>
-        <select name="Double Topping">
-          <option value="">Pilih Double Topping</option>
-          <option value="Coklat">Coklat</option>
-          <option value="Tiramisu">Tiramisu</option>
-          <option value="Vanilla">Vanilla</option>
-          <option value="Stroberi">Stroberi</option>
-          <option value="Cappucino">Cappucino</option>
-          <option value="Taro">Taro</option>
-          <option value="Matcha">Matcha</option>
-        </select>
+        <div class="checkbox-group">
+          <input type="checkbox" name="Double Topping[]" value="Coklat"> Coklat<br>
+          <input type="checkbox" name="Double Topping[]" value="Tiramisu"> Tiramisu<br>
+          <input type="checkbox" name="Double Topping[]" value="Vanilla"> Vanilla<br>
+          <input type="checkbox" name="Double Topping[]" value="Stroberi"> Stroberi<br>
+          <input type="checkbox" name="Double Topping[]" value="Cappucino"> Cappucino<br>
+          <input type="checkbox" name="Double Topping[]" value="Taro"> Taro<br>
+          <input type="checkbox" name="Double Topping[]" value="Matcha"> Matcha<br>
+        </div>
 
         <label>Pilihan Bebas Topping:</label>
         <div class="checkbox-group">
-          <input type="checkbox" name="Topping Pilihan" value="Meses"> Meses<br>
-          <input type="checkbox" name="Topping Pilihan" value="Kacang"> Kacang<br>
-          <input type="checkbox" name="Topping Pilihan" value="Keju"> Keju<br>
-          <input type="checkbox" name="Topping Pilihan" value="Choco Chips"> Choco Chips<br>
-          <input type="checkbox" name="Topping Pilihan" value="Oreo"> Oreo<br>
+          <input type="checkbox" name="Topping Pilihan[]" value="Meses"> Meses<br>
+          <input type="checkbox" name="Topping Pilihan[]" value="Kacang"> Kacang<br>
+          <input type="checkbox" name="Topping Pilihan[]" value="Keju"> Keju<br>
+          <input type="checkbox" name="Topping Pilihan[]" value="Choco Chips"> Choco Chips<br>
+          <input type="checkbox" name="Topping Pilihan[]" value="Oreo"> Oreo<br>
         </div>
 
         <textarea name="Catatan" placeholder="Catatan Tambahan (misal: tanpa kacang, tambah keju, dll)"></textarea>
