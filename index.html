@@ -32,7 +32,7 @@
       border-radius: 12px;
     }
     .promo-image img {
-      width: 50%; /* ukuran kupon kecil */
+      width: 50%;
       display: block;
       margin: 0 auto;
     }
@@ -90,8 +90,6 @@
     button:hover {
       background: #d81b60;
     }
-
-    /* Promo Banner berjalan */
     .promo-banner {
       width: 100%;
       overflow: hidden;
@@ -115,8 +113,6 @@
       0% { transform: translate(0, 0); }
       100% { transform: translate(-100%, 0); }
     }
-
-    /* Tombol Floating */
     .floating-buttons {
       position: fixed;
       top: 45%;
@@ -159,17 +155,14 @@
 <body id="top">
   <div class="page-wrapper">
 
-    <!-- Banner -->
     <div class="promo-image">
       <img src="kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
     </div>
 
-    <!-- Promo berjalan -->
     <div class="promo-banner">
       <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
     </div>
 
-    <!-- Header -->
     <img src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" class="header-img">
 
     <h1>PUKIS LUMER AULIA</h1>
@@ -181,7 +174,6 @@
     <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
     <p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
 
-    <!-- Galeri -->
     <h2>Galeri Pukis</h2>
     <div class="gallery">
       <img src="Pukis1.jpg" alt="Pukis 1">
@@ -191,7 +183,6 @@
       <img src="pukis5.jpg" alt="Pukis 5">
     </div>
 
-    <!-- Form Order -->
     <h2>Order Pukis Lumer Aulia</h2>
     <form action="https://wa.me/6281296668670" method="GET" target="_blank" class="form-order">
       <label>Nama:</label>
@@ -232,11 +223,9 @@
       <button type="submit">Kirim Pesanan</button>
     </form>
 
-    <!-- Lokasi -->
     <h2>Lokasi Kami</h2>
     <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
 
-    <!-- Testimoni -->
     <h2>Testimoni Pelanggan</h2>
     <div class="testimonials" id="testimonialsList">
       <div class="testimonial">
@@ -250,7 +239,6 @@
       </div>
     </div>
 
-    <!-- Form Testimoni -->
     <div class="form-testimonial">
       <h2>Tulis Testimoni Kamu</h2>
       <form id="testimonialForm">
@@ -264,7 +252,6 @@
 
   </div>
 
-  <!-- Tombol Floating -->
   <div class="floating-buttons">
     <a class="wa-button" href="https://wa.me/6281296668670" target="_blank">Chat WhatsApp</a>
     <a class="invite-button" href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumerauliasite.com" target="_blank">Undang Teman</a>
@@ -280,6 +267,22 @@
     }
     window.onload = function() {
       toggleToppingAtas();
+      loadTestimonials();
+    }
+
+    function loadTestimonials() {
+      const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+      testimonials.forEach(item => {
+        addTestimonial(item.name, item.text);
+      });
+    }
+
+    function addTestimonial(name, text) {
+      const testimonialList = document.getElementById('testimonialsList');
+      const newTestimonial = document.createElement('div');
+      newTestimonial.classList.add('testimonial');
+      newTestimonial.innerHTML = `<p><em>"${text}"</em><br><strong>— ${name}</strong></p>`;
+      testimonialList.appendChild(newTestimonial);
     }
 
     document.getElementById('testimonialForm').addEventListener('submit', function(event) {
@@ -287,11 +290,12 @@
       const name = document.getElementById('nameInput').value.trim();
       const testimonial = document.getElementById('testimonialInput').value.trim();
       if (name && testimonial) {
-        const testimonialList = document.getElementById('testimonialsList');
-        const newTestimonial = document.createElement('div');
-        newTestimonial.classList.add('testimonial');
-        newTestimonial.innerHTML = `<p><em>"${testimonial}"</em><br><strong>— ${name}</strong></p>`;
-        testimonialList.appendChild(newTestimonial);
+        addTestimonial(name, testimonial);
+
+        const stored = JSON.parse(localStorage.getItem('testimonials')) || [];
+        stored.push({ name: name, text: testimonial });
+        localStorage.setItem('testimonials', JSON.stringify(stored));
+
         document.getElementById('testimonialForm').reset();
         alert('Terima kasih atas testimoni Anda!');
       }
