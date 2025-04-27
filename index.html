@@ -168,6 +168,18 @@
     <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
     <p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
 
+    <h2>Kenapa Harus Pukis Lumer Aulia?</h2>
+    <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa yang luar biasa. Tersedia dalam berbagai rasa favorit semua umur!</p>
+
+    <h2>Fakta Unik Tentang Kami</h2>
+    <ul>
+      <li>Adonan spesial rahasia keluarga sejak 2023-an!</li>
+      <li>Lembut sempurna karena teknik pemanggangan tradisional.</li>
+      <li>Lebih dari 10+ varian topping setiap harinya selalu Ready.</li>
+      <li>Memakai 100% bahan premium tanpa pengawet.</li>
+      <li>Jadi jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
+    </ul>
+
     <h2>Galeri Pukis</h2>
     <div class="gallery">
       <img src="Pukis1.jpg" alt="Pukis 1">
@@ -266,7 +278,12 @@ document.getElementById('testimonialForm').addEventListener('submit', function(e
   }
 });
 function loadTestimonials() {
-  const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+  const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [
+    {name: "Dina", testimonial: "Pukisnya super lembut, topping oreo favorit anak saya!"},
+    {name: "Rahmat", testimonial: "Belum pernah makan pukis selembut ini. Wajib coba!"},
+    {name: "Sari", testimonial: "Top banget, selalu fresh dan lumer di mulut!"},
+    {name: "Andi", testimonial: "Double toppingnya bikin nagih. Pelayanan juga ramah."}
+  ];
   testimonials.forEach(({name, testimonial}) => displayTestimonial(name, testimonial));
 }
 function displayTestimonial(name, testimonial) {
