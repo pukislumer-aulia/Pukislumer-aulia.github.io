@@ -5,213 +5,229 @@
   <title>Pukis Lumer Aulia - Pukis Lumer No 1 di Padang Panjang</title>
   <meta name="description" content="Pukis Lumer Aulia - Pukis lumer paling enak di Padang Panjang! Pilihan topping lengkap, single atau double topping, pesan sekarang!">
   <meta name="keywords" content="Pukis Lumer, Pukis Padang Panjang, Pukis Enak, Pukis Topping, Pasar Kuliner Padang Panjang">
-  <meta name="author" content="Pukis Lumer Aulia">  <!-- SEO Structured Data -->  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Restaurant",
-    "name": "Pukis Lumer Aulia",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Padang Panjang",
-      "addressRegion": "Sumatera Barat",
-      "streetAddress": "Pasar Kuliner Padang Panjang"
-    },
-    "servesCuisine": "Dessert",
-    "priceRange": "$",
-    "url": "https://pukislumerauliasite.com",
-    "telephone": "+6281296668670"
-  }
-  </script>  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">  <style>
+  <meta name="author" content="Pukis Lumer Aulia">  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">  <style>
     body {
-      background: #ffe4e1;
-      font-family: 'Chewy', cursive;
       margin: 0;
-      padding: 0;
-      color: #333;
+      font-family: 'Chewy', cursive;
+      background-color: #ffc0cb;
+      transition: background 0.3s, color 0.3s;
     }
     .page-wrapper {
+      padding: 20px;
       max-width: 800px;
       margin: auto;
-      padding: 20px;
+    }
+    h1, h2 {
+      font-family: 'Kanit', sans-serif;
     }
     .header-img {
       width: 100%;
-      animation: melt 3s infinite alternate;
+      border-radius: 10px;
+      animation: fadeIn 2s ease-in-out;
     }
-    @keyframes melt {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(10px); }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
-    .gallery img:hover {
-      transform: scale(1.05);
-      transition: transform 0.3s ease;
-      border: 2px solid #ff69b4;
+    .gallery img {
+      width: 48%;
+      margin: 1%;
+      border-radius: 10px;
     }
-    .testimonial.new {
-      background-color: #fff8dc;
+    .form-order, .form-testimonial {
+      margin-top: 20px;
+    }
+    input, select, textarea, button {
+      width: 100%;
       padding: 10px;
-      border-radius: 8px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 5px;
     }
-    .floating-wa, .floating-invite {
+    button {
+      background-color: #e67e22;
+      color: white;
+      font-weight: bold;
+    }
+    .floating-buttons {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      margin-top: 10px;
-      padding: 10px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .floating-buttons a {
       background: #e67e22;
       color: white;
-      text-decoration: none;
+      padding: 10px;
       border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .promo-image img, .promo-banner span {
+      width: 100%;
       display: block;
+      margin-bottom: 10px;
     }
-    .floating-invite {
-      right: 130px;
+    .promo-banner {
+      text-align: center;
       background: #ff69b4;
+      color: white;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 10px;
     }
-    /* Dark mode toggle */
     .dark-mode {
-      background: #333;
-      color: #eee;
+      background-color: #333;
+      color: #fff;
+    }
+    .dark-mode .promo-banner {
+      background: #555;
     }
     .dark-toggle {
       position: fixed;
-      top: 10px;
-      right: 10px;
-      background: #ff69b4;
-      padding: 8px 12px;
-      border-radius: 10px;
+      top: 20px;
+      right: 20px;
+      background: #555;
       color: white;
+      padding: 10px;
+      border-radius: 50px;
       cursor: pointer;
-      font-size: 14px;
-      z-index: 1000;
-    }
-    .rating {
-      color: gold;
-      font-size: 18px;
+      font-weight: bold;
+      z-index: 999;
     }
   </style></head><body id="top">
-<div class="page-wrapper">
-  <div class="dark-toggle" onclick="toggleDarkMode()">Toggle Mode</div>  <!-- Banner -->  <div class="promo-image">
-    <img src="kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia" style="width:100%;">
-  </div>
-  <div class="promo-banner">
-    <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
-  </div>  <!-- Header -->  <img src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" class="header-img">  <h1>PUKIS LUMER AULIA</h1>
-  <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
-  <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
-  <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
-  <p>Kalo mampir ke Pasar Kuliner wajib mampir ke PUKIS LUMER AULIA</p>
-  <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)</p>
-  <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
-  <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
-  <p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>  <!-- Galeri -->  <h2>Galeri Pukis</h2>
-  <div class="gallery">
-    <img src="Pukis1.jpg" alt="Pukis 1" style="width: 100%;">
-    <img src="pukis2.jpg" alt="Pukis 2" style="width: 100%;">
-    <img src="pukis3.jpg" alt="Pukis 3" style="width: 100%;">
-    <img src="Pukis4.jpg" alt="Pukis 4" style="width: 100%;">
-    <img src="pukis5.jpg" alt="Pukis 5" style="width: 100%;">
-  </div>  <!-- Form Order -->  <h2>Order Pukis Lumer Aulia</h2>
-  <form action="https://wa.me/6281296668670" method="GET" target="_blank" class="form-order">
-    <label>Nama:</label>
-    <input type="text" name="Nama" placeholder="Masukkan nama Anda" required><label>Jumlah Pesanan:</label>
-<input type="number" name="Jumlah" min="1" placeholder="Contoh: 2" required>
-
-<label>Pilih Tipe Topping:</label>
-<select id="tipeTopping" name="Tipe Topping" required onchange="toggleToppingAtas()">
-  <option value="">Pilih Tipe Topping</option>
-  <option value="Single">Single Topping</option>
-  <option value="Double">Double Topping</option>
-</select>
-
-<label>Pilih Topping Bawah:</label>
-<div class="checkbox-group">
-  <input type="checkbox" name="Topping Bawah" value="Coklat"> Coklat<br>
-  <input type="checkbox" name="Topping Bawah" value="Tiramisu"> Tiramisu<br>
-  <input type="checkbox" name="Topping Bawah" value="Vanilla"> Vanilla<br>
-  <input type="checkbox" name="Topping Bawah" value="Stroberi"> Stroberi<br>
-  <input type="checkbox" name="Topping Bawah" value="Cappucino"> Cappucino<br>
-  <input type="checkbox" name="Topping Bawah" value="Taro"> Taro<br>
-  <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
+  <div class="dark-toggle" onclick="toggleDarkMode()">Mode</div>
+  <div class="page-wrapper"><div class="promo-image">
+  <img src="kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
+</div>
+<div class="promo-banner">
+  <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
 </div>
 
-<div id="toppingAtasSection">
-  <label>Pilih Topping Atas (Untuk Double Topping):</label>
+<img src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" class="header-img">
+
+<h1>PUKIS LUMER AULIA</h1>
+<p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
+<p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
+<p>Padang Panjang kota kuliner<br>Serambi Mekkah orang Mengenalnya<br>Kalo mampir ke Pasar Kuliner<br>Wajib mampir ke PUKIS LUMER AULIA</p>
+<p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)</p>
+<p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
+<p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
+<p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
+
+<h2>Galeri Pukis</h2>
+<div class="gallery">
+  <img src="Pukis1.jpg" alt="Pukis 1">
+  <img src="pukis2.jpg" alt="Pukis 2">
+  <img src="pukis3.jpg" alt="Pukis 3">
+  <img src="Pukis4.jpg" alt="Pukis 4">
+  <img src="pukis5.jpg" alt="Pukis 5">
+</div>
+
+<h2>Order Pukis Lumer Aulia</h2>
+<form action="https://wa.me/6281296668670" method="GET" target="_blank" class="form-order">
+  <label>Nama:</label>
+  <input type="text" name="Nama" placeholder="Masukkan nama Anda" required>
+
+  <label>Jumlah Pesanan:</label>
+  <input type="number" name="Jumlah" min="1" placeholder="Contoh: 2" required>
+
+  <label>Pilih Tipe Topping:</label>
+  <select id="tipeTopping" name="Tipe Topping" required onchange="toggleToppingAtas()">
+    <option value="">Pilih Tipe Topping</option>
+    <option value="Single">Single Topping</option>
+    <option value="Double">Double Topping</option>
+  </select>
+
+  <label>Pilih Topping Bawah:</label>
   <div class="checkbox-group">
-    <input type="checkbox" name="Topping Atas" value="Meses"> Meses<br>
-    <input type="checkbox" name="Topping Atas" value="Keju"> Keju<br>
-    <input type="checkbox" name="Topping Atas" value="Kacang"> Kacang<br>
-    <input type="checkbox" name="Topping Atas" value="Choco Chips"> Choco Chips<br>
-    <input type="checkbox" name="Topping Atas" value="Oreo"> Oreo<br>
+    <input type="checkbox" name="Topping Bawah" value="Coklat"> Coklat<br>
+    <input type="checkbox" name="Topping Bawah" value="Tiramisu"> Tiramisu<br>
+    <input type="checkbox" name="Topping Bawah" value="Vanilla"> Vanilla<br>
+    <input type="checkbox" name="Topping Bawah" value="Stroberi"> Stroberi<br>
+    <input type="checkbox" name="Topping Bawah" value="Cappucino"> Cappucino<br>
+    <input type="checkbox" name="Topping Bawah" value="Taro"> Taro<br>
+    <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
+  </div>
+
+  <div id="toppingAtasSection">
+    <label>Pilih Topping Atas (Untuk Double Topping):</label>
+    <div class="checkbox-group">
+      <input type="checkbox" name="Topping Atas" value="Meses"> Meses<br>
+      <input type="checkbox" name="Topping Atas" value="Keju"> Keju<br>
+      <input type="checkbox" name="Topping Atas" value="Kacang"> Kacang<br>
+      <input type="checkbox" name="Topping Atas" value="Choco Chips"> Choco Chips<br>
+      <input type="checkbox" name="Topping Atas" value="Oreo"> Oreo<br>
+    </div>
+  </div>
+
+  <button type="submit">Kirim Pesanan</button>
+</form>
+
+<h2>Lokasi Kami</h2>
+<p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
+
+<h2>Testimoni Pelanggan</h2>
+<div class="testimonials" id="testimonialsList">
+  <div class="testimonial">
+    <p><em>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak suka semua!"</em><br><strong>— Maya, Padang Panjang</strong></p>
+  </div>
+  <div class="testimonial">
+    <p><em>"Top banget! Varian Vanilla + Oreo favoritku!"</em><br><strong>— Andi, Bukittinggi</strong></p>
+  </div>
+  <div class="testimonial">
+    <p><em>"Pukis lumer di mulut, ketagihan nambah lagi!"</em><br><strong>— Rina, Padang</strong></p>
   </div>
 </div>
 
-<button type="submit">Kirim Pesanan</button>
+<div class="form-testimonial">
+  <h2>Tulis Testimoni Kamu</h2>
+  <form id="testimonialForm">
+    <label>Nama:</label>
+    <input type="text" id="nameInput" placeholder="Nama Kamu" required>
+    <label>Testimoni:</label>
+    <textarea id="testimonialInput" placeholder="Tulis testimoni di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>
+</div>
 
-  </form>  <!-- Lokasi -->  <h2>Lokasi Kami</h2>
-  <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>  <!-- Testimoni -->  <h2>Testimoni Pelanggan</h2>
-  <div class="testimonials" id="testimonialsList">
-    <div class="testimonial">
-      <p><em>"Pukis Lumer Aulia enak banget! Pukisnya lembut, toppingnya banyak, anak-anak suka semua!"</em><br><strong>— Maya, Padang Panjang</strong></p>
-    </div>
-    <div class="testimonial">
-      <p><em>"Top banget! Varian Vanilla + Oreo favoritku!"</em><br><strong>— Andi, Bukittinggi</strong></p>
-    </div>
-    <div class="testimonial">
-      <p><em>"Pukis lumer di mulut, ketagihan nambah lagi!"</em><br><strong>— Rina, Padang</strong></p>
-    </div>
-  </div>  <!-- Form Testimoni -->  <div class="form-testimonial">
-    <h2>Tulis Testimoni Kamu</h2>
-    <form id="testimonialForm">
-      <label>Nama:</label>
-      <input type="text" id="nameInput" placeholder="Nama Kamu" required>
-      <label>Testimoni:</label>
-      <textarea id="testimonialInput" placeholder="Tulis testimoni di sini..." required></textarea>
-      <label>Rating:</label>
-      <select id="ratingInput" required>
-        <option value="">Pilih Rating</option>
-        <option value="1">1 Bintang</option>
-        <option value="2">2 Bintang</option>
-        <option value="3">3 Bintang</option>
-        <option value="4">4 Bintang</option>
-        <option value="5">5 Bintang</option>
-      </select>
-      <button type="submit">Kirim Testimoni</button>
-    </form>
-  </div></div><a class="floating-invite" href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumerauliasite.com" target="_blank">Undang Teman</a> <a class="floating-wa" href="https://wa.me/6281296668670" target="_blank">Chat WhatsApp</a>
+  </div>  <div class="floating-buttons">
+    <a href="https://wa.me/6281296668670" target="_blank">Chat WhatsApp</a>
+    <a href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumerauliasite.com" target="_blank">Undang Teman</a>
+    <a href="#" target="_blank">Shopee (Coming Soon)</a>
+    <a href="#" target="_blank">Maxim Food</a>
+  </div>  <script>
+    function toggleToppingAtas() {
+      var tipe = document.getElementById('tipeTopping').value;
+      var toppingAtas = document.getElementById('toppingAtasSection');
+      toppingAtas.style.display = (tipe === 'Single') ? 'none' : 'block';
+    }
+    window.onload = function() {
+      toggleToppingAtas();
+    }
 
-<script>
-function toggleToppingAtas() {
-  var tipe = document.getElementById('tipeTopping').value;
-  var toppingAtas = document.getElementById('toppingAtasSection');
-  toppingAtas.style.display = (tipe === 'Single') ? 'none' : 'block';
-}
-window.onload = function() {
-  toggleToppingAtas();
-};
+    document.getElementById('testimonialForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = document.getElementById('nameInput').value.trim();
+      const testimonial = document.getElementById('testimonialInput').value.trim();
+      if (name && testimonial) {
+        const testimonialList = document.getElementById('testimonialsList');
+        const newTestimonial = document.createElement('div');
+        newTestimonial.classList.add('testimonial');
+        newTestimonial.innerHTML = `<p><em>"${testimonial}"</em><br><strong>— ${name}</strong></p>`;
+        testimonialList.appendChild(newTestimonial);
+        document.getElementById('testimonialForm').reset();
+        alert('Terima kasih atas testimoni Anda!');
+      }
+    });
 
-function toggleDarkMode() {
-  document.body.classList.toggle('dark-mode');
-}
-
-// Testimoni Form
-const testimonialForm = document.getElementById('testimonialForm');
-const testimonialsList = document.getElementById('testimonialsList');
-
-testimonialForm.addEventListener('submit', function(event) {
-  event.preventDefault();
-  const name = document.getElementById('nameInput').value.trim();
-  const testimonial = document.getElementById('testimonialInput').value.trim();
-  const rating = document.getElementById('ratingInput').value;
-
-  if (name && testimonial && rating) {
-    const newTestimonial = document.createElement('div');
-    newTestimonial.classList.add('testimonial', 'new');
-    newTestimonial.innerHTML = `<p><em>\"${testimonial}\"</em> <span class='rating'>${'&#9733;'.repeat(rating)}</span><br><strong>— ${name}</strong></p>`;
-    testimonialsList.appendChild(newTestimonial);
-    testimonialForm.reset();
-    alert('Terima kasih atas testimoni dan rating Anda!');
-  }
-});
-</script></body>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script></body>
 </html>
