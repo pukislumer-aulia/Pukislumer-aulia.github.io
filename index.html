@@ -12,10 +12,18 @@
 
   <style>
     body {
-      background-color: pink;
+      background: linear-gradient(-45deg, #ffdde1, #ff99cc, #ffdde1, #ff99cc);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
       font-family: 'Chewy', cursive;
       margin: 0;
       padding: 0;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .page-wrapper {
@@ -56,6 +64,11 @@
     .gallery img {
       width: 48%;
       border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
     }
 
     .form-order, .form-testimonial {
@@ -63,6 +76,7 @@
       padding: 20px;
       border-radius: 10px;
       margin-top: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     label {
@@ -89,6 +103,12 @@
       border-radius: 5px;
       font-size: 18px;
       cursor: pointer;
+      box-shadow: 0 0 10px #e67e22;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      box-shadow: 0 0 20px #e67e22;
     }
 
     .testimonials {
@@ -103,15 +123,15 @@
       border-radius: 5px;
     }
 
+    /* Floating Buttons */
     .floating-buttons {
       position: fixed;
-      left: 50%;
-      bottom: 30px;
-      transform: translateX(-50%);
+      top: 40%;
+      right: 10px;
+      transform: translateY(-50%);
       display: flex;
       flex-direction: column;
       gap: 10px;
-      align-items: center;
       z-index: 999;
     }
 
@@ -121,37 +141,48 @@
       border-radius: 30px;
       font-weight: bold;
       font-size: 16px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 0 10px #999;
       animation: shake 2s infinite;
+      display: inline-block;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .floating-buttons a:hover {
+      box-shadow: 0 0 20px #999;
     }
 
     .wa-btn {
       background-color: #128C7E;
       color: white;
+      box-shadow: 0 0 10px #128C7E;
     }
 
     .invite-btn {
       background-color: #25D366;
       color: white;
+      box-shadow: 0 0 10px #25D366;
     }
 
     .shopee-btn {
       background-color: #FF5722;
       color: white;
+      box-shadow: 0 0 10px #FF5722;
     }
 
     .maxim-btn {
       background-color: white;
       color: red;
       border: 2px solid red;
+      box-shadow: 0 0 10px red;
     }
 
     @keyframes shake {
-      0% { transform: translateX(-50%) translateY(0); }
-      25% { transform: translateX(-50%) translateY(-2px); }
-      50% { transform: translateX(-50%) translateY(2px); }
-      75% { transform: translateX(-50%) translateY(-2px); }
-      100% { transform: translateX(-50%) translateY(0); }
+      0% { transform: translateY(0); }
+      25% { transform: translateY(-2px); }
+      50% { transform: translateY(2px); }
+      75% { transform: translateY(-2px); }
+      100% { transform: translateY(0); }
     }
   </style>
 </head>
@@ -260,6 +291,7 @@
 
   </div>
 
+  <!-- Floating Buttons -->
   <div class="floating-buttons">
     <a class="wa-btn" href="https://wa.me/6281296668670" target="_blank">Chat WhatsApp</a>
     <a class="invite-btn" href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumerauliasite.com" target="_blank">Undang Teman</a>
