@@ -17,6 +17,7 @@
       padding: 0;
       background: #fff;
       color: #333;
+      transition: background 0.4s, color 0.4s;
     }
     .page-wrapper {
       max-width: 1000px;
@@ -74,6 +75,7 @@
       border: 1px solid #ccc;
       border-radius: 5px;
       font-size: 16px;
+      transition: background 0.4s, color 0.4s, border 0.4s;
     }
     .checkbox-group {
       margin-bottom: 15px;
@@ -86,6 +88,7 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 18px;
+      transition: background 0.4s;
     }
     button:hover {
       background: #d35400;
@@ -98,6 +101,7 @@
       padding: 15px;
       border-radius: 5px;
       margin-bottom: 15px;
+      transition: background 0.4s, color 0.4s;
     }
     .floating-invite, .floating-wa {
       position: fixed;
@@ -117,6 +121,24 @@
       bottom: 20px;
       background: #25D366;
     }
+    /* Tombol Dark Mode */
+    .dark-mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #e67e22;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      z-index: 999;
+      font-size: 20px;
+      transition: background 0.4s;
+    }
+    .dark-mode-toggle:hover {
+      background: #d35400;
+    }
 
     /* Responsive */
     @media (max-width: 768px) {
@@ -135,61 +157,51 @@
       }
     }
 
-    /* Dark Mode Otomatis */
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: #121212;
-        color: #e0e0e0;
-      }
-      .page-wrapper {
-        background: #1e1e1e;
-      }
-      h1, h2 {
-        color: #ffa726;
-      }
-      p, label, input, select, textarea {
-        color: #e0e0e0;
-      }
-      .promo-banner {
-        background: #ff9800;
-        color: #212121;
-      }
-      .gallery img {
-        border: 2px solid #333;
-      }
-      .form-order, .form-testimonial {
-        background: #2c2c2c;
-      }
-      .testimonial {
-        background: #2c2c2c;
-        color: #e0e0e0;
-      }
-      .floating-invite {
-        background: #fb8c00;
-        color: #212121;
-      }
-      .floating-wa {
-        background: #25d366;
-      }
-      input, select, textarea {
-        background: #333;
-        border: 1px solid #555;
-      }
-      input::placeholder, textarea::placeholder {
-        color: #aaa;
-      }
-      button {
-        background: #fb8c00;
-        color: #212121;
-      }
-      button:hover {
-        background: #ffa726;
-      }
+    /* Dark Mode */
+    body.dark-mode {
+      background: #121212;
+      color: #e0e0e0;
+    }
+    body.dark-mode .page-wrapper {
+      background: #1e1e1e;
+    }
+    body.dark-mode h1, body.dark-mode h2 {
+      color: #ffa726;
+    }
+    body.dark-mode p, body.dark-mode label, body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
+      color: #e0e0e0;
+    }
+    body.dark-mode .promo-banner {
+      background: #ff9800;
+      color: #212121;
+    }
+    body.dark-mode .gallery img {
+      border: 2px solid #333;
+    }
+    body.dark-mode .testimonial, body.dark-mode .form-order, body.dark-mode .form-testimonial {
+      background: #2c2c2c;
+      color: #e0e0e0;
+    }
+    body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
+      background: #333;
+      border: 1px solid #555;
+    }
+    body.dark-mode input::placeholder, body.dark-mode textarea::placeholder {
+      color: #aaa;
+    }
+    body.dark-mode button {
+      background: #fb8c00;
+      color: #212121;
+    }
+    body.dark-mode button:hover {
+      background: #ffa726;
     }
   </style>
 </head>
 
 <body id="top">
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()">☀️</button>
+
   <div class="page-wrapper">
 
     <div class="promo-image">
@@ -316,6 +328,16 @@
         alert('Terima kasih atas testimoni Anda!');
       }
     });
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const toggleBtn = document.querySelector('.dark-mode-toggle');
+      if (document.body.classList.contains('dark-mode')) {
+        toggleBtn.innerHTML = '🌙';
+      } else {
+        toggleBtn.innerHTML = '☀️';
+      }
+    }
   </script>
 
 </body>
