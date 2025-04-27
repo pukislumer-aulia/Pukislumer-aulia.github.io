@@ -9,7 +9,6 @@
   <meta name="author" content="Pukis Lumer Aulia">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
   <style>
-    /* Semua CSS lengkap responsif */
     body {
       font-family: 'Chewy', cursive;
       margin: 0;
@@ -30,6 +29,11 @@
     .promo-image img {
       width: 50%;
       margin-bottom: 10px;
+      transition: transform 0.5s ease, filter 0.5s ease;
+    }
+    .promo-image img:hover {
+      transform: rotate(5deg) scale(1.05);
+      filter: brightness(1.1);
     }
     .promo-banner {
       width: 100%;
@@ -66,6 +70,11 @@
     }
     .gallery img {
       width: 45%;
+      transition: transform 0.5s ease, filter 0.5s ease;
+    }
+    .gallery img:hover {
+      transform: rotate(5deg) scale(1.05);
+      filter: brightness(1.1);
     }
     form {
       background: #fff;
@@ -81,12 +90,18 @@
       border-radius: 5px;
       border: 1px solid #ccc;
       font-size: 16px;
+      transition: all 0.3s ease;
     }
     button {
       background-color: #e67e22;
       color: white;
       font-weight: bold;
       cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #d35400;
+      transform: rotate(3deg) scale(1.05);
     }
     .checkbox-group {
       display: flex;
@@ -99,7 +114,6 @@
       margin: 10px 0;
       border-radius: 10px;
     }
-    /* Tombol mengambang */
     .floating-buttons {
       position: fixed;
       top: 50%;
@@ -121,19 +135,26 @@
       text-decoration: none;
       box-shadow: 0 4px 6px rgba(0,0,0,0.3);
       animation: wiggle 2s infinite;
+      transition: background-color 0.3s ease, transform 0.5s ease;
     }
     .floating-buttons:hover {
       right: 0;
     }
+    .floating-buttons a:hover {
+      transform: rotate(5deg) scale(1.05);
+    }
     .wa { background: #075e54; color: white; }
+    .wa:hover { background: #0b7e69; }
     .invite { background: #25d366; color: white; }
+    .invite:hover { background: #1ebe5d; }
     .shopee { background: #ff5722; color: white; }
+    .shopee:hover { background: #e64a19; }
     .maxim { background: white; color: red; border: 1px solid red; }
+    .maxim:hover { background: red; color: white; }
     @keyframes wiggle {
       0%, 100% { transform: translateY(-50%) rotate(-1deg); }
       50% { transform: translateY(-50%) rotate(1deg); }
     }
-    /* Admin Link */
     .admin-link {
       text-align: center;
       margin-top: 50px;
@@ -142,6 +163,10 @@
     .admin-link a {
       color: #999;
       text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .admin-link a:hover {
+      color: #e67e22;
     }
   </style>
 </head>
@@ -296,4 +321,4 @@ function displayTestimonial(name, testimonial) {
 }
 </script>
 </body>
-</html>
+      </html>
