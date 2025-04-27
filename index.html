@@ -5,85 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pukis Lumer Aulia</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
-
   <style>
     body {
       font-family: 'Chewy', cursive;
       background-color: #fff8f0;
       margin: 0;
       padding: 0;
+      transition: background-color 0.3s, color 0.3s;
     }
     .page-wrapper {
       max-width: 1200px;
       margin: auto;
       padding: 20px;
-      border: 10px solid #ffb347;
-      border-radius: 20px;
-      background-color: #ffffff;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      overflow: hidden;
     }
     h1, h2 {
       text-align: center;
       color: #e67e22;
     }
-    h1 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 42px;
-    }
-    h2 {
-      font-family: 'Kanit', sans-serif;
-      font-size: 32px;
-      margin-top: 40px;
-    }
-    p {
-      text-align: center;
-      font-size: 18px;
-      color: #333;
-    }
+    h1 { font-family: 'Oswald', sans-serif; font-size: 42px; }
+    h2 { font-family: 'Kanit', sans-serif; font-size: 32px; margin-top: 40px; }
+    p { text-align: center; font-size: 18px; color: #333; }
     .promo-banner {
       background-color: #ff4081;
       color: white;
       padding: 12px;
       font-size: 20px;
       font-weight: bold;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      white-space: nowrap;
-      animation: slideText 20s linear infinite;
-    }
-    .promo-banner img {
-      width: 40px;
-      margin-right: 10px;
-    }
-    @keyframes slideText {
-      0% {transform: translateX(100%);}
-      100% {transform: translateX(-100%);}
-    }
-
-    .kupon-run {
-      width: 100%;
-      overflow: hidden;
-      background: #ffe6e6;
-      padding: 10px 0;
+      animation: slide 15s linear infinite;
       margin-bottom: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-align: center;
     }
-    .kupon-container {
-      display: flex;
-      width: max-content;
-      animation: slideKupon 30s linear infinite;
-    }
-    .kupon-container img {
-      width: 100px;
-      height: auto;
-      margin: 0 20px;
-    }
-    @keyframes slideKupon {
+    @keyframes slide {
       0% {transform: translateX(100%);}
       100% {transform: translateX(-100%);}
     }
-
     img.header-img {
       width: 100%;
       border-radius: 20px;
@@ -95,7 +52,6 @@
       0% {transform: scale(1);}
       100% {transform: scale(1.02);}
     }
-
     .gallery {
       display: grid;
       grid-template-columns: 1fr;
@@ -138,10 +94,11 @@
       margin-top: 20px;
       cursor: pointer;
       width: 100%;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.2s;
     }
     button:hover {
       background-color: #d35400;
+      transform: scale(1.05);
     }
     .floating-wa {
       position: fixed;
@@ -158,6 +115,27 @@
     .floating-wa:hover {
       background-color: #1ebe5b;
     }
+    .floating-top {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background-color: #3498db;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 50%;
+      text-decoration: none;
+      font-size: 22px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .dark-mode {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+    }
+    .dark-mode input, .dark-mode select, .dark-mode textarea {
+      background-color: #34495e;
+      color: #ecf0f1;
+      border: 1px solid #7f8c8d;
+    }
     label {
       font-size: 18px;
       display: block;
@@ -166,27 +144,30 @@
     .checkbox-group {
       text-align: left;
     }
+    .mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #e67e22;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 1000;
+    }
   </style>
 </head>
 
 <body id="top">
+  <button class="mode-toggle" onclick="toggleMode()">Mode</button>
+
   <div class="page-wrapper">
 
-    <!-- Promo Banner -->
+    <!-- Promo Kupon -->
     <div class="promo-banner">
-      <img src="kupon-icon.png" alt="Kupon"> GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS! <img src="kupon-icon.png" alt="Kupon">
-    </div>
-
-    <!-- Kupon Berjalan -->
-    <div class="kupon-run">
-      <div class="kupon-container">
-        <img src="kupon1.png" alt="Kupon 1">
-        <img src="kupon2.png" alt="Kupon 2">
-        <img src="kupon3.png" alt="Kupon 3">
-        <img src="kupon1.png" alt="Kupon 1">
-        <img src="kupon2.png" alt="Kupon 2">
-        <img src="kupon3.png" alt="Kupon 3">
-      </div>
+      <img src="kupon1.jpeg" alt="Kupon Promo" style="height: 50px; vertical-align: middle;">
+      GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN 1 BOX KECIL GRATIS!
     </div>
 
     <!-- Header -->
@@ -210,10 +191,10 @@
       <img src="pukis5.jpg" alt="Pukis 5">
     </div>
 
-    <!-- Form Pemesanan -->
+    <!-- Form Order -->
     <h2>Form Pemesanan</h2>
     <div class="form-order">
-      <form action="https://formsubmit.co/your-email@example.com" method="POST">
+      <form id="orderForm">
 
         <input type="text" name="Nama" placeholder="Nama Lengkap" required>
         <input type="tel" name="Nomor" placeholder="Nomor WhatsApp" required>
@@ -221,34 +202,36 @@
         <label>Pilih Ukuran Box:</label>
         <select name="Box" required>
           <option value="">Pilih Box</option>
-          <option value="Box Kecil (isi 5)">Box Kecil (isi 5 rasa bebas)</option>
+          <option value="Box Kecil (isi 5)">Box Kecil (isi 5 rasa)</option>
           <option value="Box Besar (isi 10)">Box Besar (isi semua rasa)</option>
         </select>
 
-        <label>Pilih Jenis Topping:</label>
-        <select name="Jenis Topping" required>
-          <option value="">Pilih Jenis Topping</option>
-          <option value="Single Topping">Single Topping (Topping Bawah Saja)</option>
-          <option value="Double Topping">Double Topping (Topping Bawah + Taburan Atas)</option>
+        <label>Pilih Single / Double Topping:</label>
+        <select name="Tipe" id="tipeSelect" required onchange="toggleTopping()">
+          <option value="">Pilih Tipe</option>
+          <option value="Single">Single Topping</option>
+          <option value="Double">Double Topping</option>
         </select>
 
-        <label>Topping Bawah (boleh pilih lebih dari satu):</label>
+        <label>Pilih Topping Bawah (bisa pilih banyak):</label>
         <div class="checkbox-group">
-          <input type="checkbox" name="Topping Bawah[]" value="Coklat"> Coklat<br>
-          <input type="checkbox" name="Topping Bawah[]" value="Tiramisu"> Tiramisu<br>
-          <input type="checkbox" name="Topping Bawah[]" value="Vanilla"> Vanilla<br>
-          <input type="checkbox" name="Topping Bawah[]" value="Cappucino"> Cappucino<br>
-          <input type="checkbox" name="Topping Bawah[]" value="Taro"> Taro<br>
-          <input type="checkbox" name="Topping Bawah[]" value="Matcha"> Matcha<br>
+          <input type="checkbox" name="ToppingBawah" value="Coklat"> Coklat<br>
+          <input type="checkbox" name="ToppingBawah" value="Tiramisu"> Tiramisu<br>
+          <input type="checkbox" name="ToppingBawah" value="Vanilla"> Vanilla<br>
+          <input type="checkbox" name="ToppingBawah" value="Cappucino"> Cappucino<br>
+          <input type="checkbox" name="ToppingBawah" value="Taro"> Taro<br>
+          <input type="checkbox" name="ToppingBawah" value="Matcha"> Matcha<br>
         </div>
 
-        <label>Taburan Atas (khusus Double Topping):</label>
-        <div class="checkbox-group">
-          <input type="checkbox" name="Topping Atas[]" value="Meses"> Meses<br>
-          <input type="checkbox" name="Topping Atas[]" value="Keju"> Keju<br>
-          <input type="checkbox" name="Topping Atas[]" value="Kacang"> Kacang<br>
-          <input type="checkbox" name="Topping Atas[]" value="Choco Chips"> Choco Chips<br>
-          <input type="checkbox" name="Topping Atas[]" value="Oreo"> Oreo<br>
+        <div id="taburanAtas" style="display:none;">
+          <label>Pilih Topping Atas (taburan tambahan, bebas pilih):</label>
+          <div class="checkbox-group">
+            <input type="checkbox" name="ToppingAtas" value="Meses"> Meses<br>
+            <input type="checkbox" name="ToppingAtas" value="Keju"> Keju<br>
+            <input type="checkbox" name="ToppingAtas" value="Kacang"> Kacang<br>
+            <input type="checkbox" name="ToppingAtas" value="Choco Chips"> Choco Chips<br>
+            <input type="checkbox" name="ToppingAtas" value="Oreo"> Oreo<br>
+          </div>
         </div>
 
         <textarea name="Catatan" placeholder="Catatan Tambahan (misal: tanpa kacang, tambah keju, dll)"></textarea>
@@ -263,7 +246,46 @@
 
   </div>
 
-  <!-- Tombol WA -->
-  <a class="floating-wa" href="https://wa.me/6281296668670" target="_blank">Chat Kami di WhatsApp</a>
+  <!-- Tombol WA dan Scroll Top -->
+  <a class="floating-top" href="#top">&#8679;</a>
+  <a class="floating-wa" href="https://wa.me/6281296668670" target="_blank">Chat WhatsApp</a>
+
+  <script>
+    function toggleMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function toggleTopping() {
+      const tipe = document.getElementById('tipeSelect').value;
+      const taburan = document.getElementById('taburanAtas');
+      if (tipe === 'Double') {
+        taburan.style.display = 'block';
+      } else {
+        taburan.style.display = 'none';
+      }
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const nama = form.Nama.value;
+      const nomor = form.Nomor.value;
+      const box = form.Box.value;
+      const tipe = form.Tipe.value;
+      const toppingBawah = Array.from(form.querySelectorAll('input[name="ToppingBawah"]:checked')).map(cb => cb.value).join(', ');
+      const toppingAtas = Array.from(form.querySelectorAll('input[name="ToppingAtas"]:checked')).map(cb => cb.value).join(', ');
+      const catatan = form.Catatan.value;
+
+      let pesan = `Halo, saya mau pesan:\nNama: ${nama}\nBox: ${box}\nTipe: ${tipe}\nTopping Bawah: ${toppingBawah}`;
+      if (tipe === 'Double') {
+        pesan += `\nTopping Atas: ${toppingAtas}`;
+      }
+      if (catatan) {
+        pesan += `\nCatatan: ${catatan}`;
+      }
+
+      window.location.href = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
+    });
+  </script>
 </body>
 </html>
