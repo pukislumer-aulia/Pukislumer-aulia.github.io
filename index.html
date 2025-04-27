@@ -50,20 +50,24 @@
       height: 60px;
       margin-bottom: 10px;
     }
-    .promo-banner span, .promo-image img {
-      position: absolute;
-      white-space: nowrap;
-      animation: slide 20s linear infinite;
-    }
     .promo-banner {
       background-color: #ff4081;
       color: white;
-      font-size: 20px;
+      font-size: 24px; /* Diperbesar */
       font-weight: bold;
       padding: 12px;
+      text-align: center;
+      text-shadow: 0 0 5px rgba(255,255,255,0.8), 0 0 10px rgba(255,64,129,0.8); /* Efek glow */
     }
     .promo-image img {
+      position: absolute;
       height: 100%;
+      animation: slide 20s linear infinite;
+    }
+    .promo-banner span {
+      position: absolute;
+      white-space: nowrap;
+      animation: slide 20s linear infinite;
     }
     @keyframes slide {
       0% {transform: translateX(100%);}
