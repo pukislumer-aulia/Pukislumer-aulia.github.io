@@ -3,45 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin - Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="admin.css">
+  <title>Admin Testimoni - Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <h1>Admin Panel</h1>
-    <p>Kelola Website Pukis Lumer Aulia</p>
-  </header>
+<h1>Admin Testimoni</h1>
+<a class="home-button" href="index.html">Kembali ke Home</a>
 
-  <main>
-    <section class="testimoni-section">
-      <h2>Edit Testimoni</h2>
-      <form id="testimoniForm">
-        <textarea id="testimoniInput" placeholder="Tulis testimoni baru di sini..."></textarea>
-        <button type="submit">Simpan Testimoni</button>
-      </form>
+<div class="testimonial-list" id="testimonialList"></div>
 
-      <h3>Preview Testimoni:</h3>
-      <div id="testimoniPreview">
-        <p>Belum ada testimoni baru.</p>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    const form = document.getElementById('testimoniForm');
-    const input = document.getElementById('testimoniInput');
-    const preview = document.getElementById('testimoniPreview');
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const newTestimoni = input.value.trim();
-      if (newTestimoni) {
-        preview.innerHTML = `<p>${newTestimoni}</p>`;
-        input.value = '';
-      }
-    });
-  </script>
+<script src="admin.js"></script>
 
 </body>
 </html>
