@@ -1,0 +1,118 @@
+body {
+  font-family: 'Chewy', cursive;
+  background-color: #ffe4e1;
+  margin: 0;
+  padding: 0;
+}
+
+.page-wrapper {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1, h2 {
+  font-family: 'Kanit', sans-serif;
+  text-align: center;
+  color: #d63384;
+}
+
+.header-img {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.promo-banner {
+  background-color: #ff69b4;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.promo-image img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.form-order, .form-testimonial {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.form-order label, .form-testimonial label {
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+
+.form-order input, .form-order select, .form-order textarea,
+.form-testimonial input, .form-testimonial textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #ff69b4;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #d63384;
+}
+
+.floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.floating-buttons a {
+  background-color: #ff69b4;
+  color: white;
+  padding: 8px 15px;
+  text-align: center;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.floating-buttons a:hover {
+  background-color: #d63384;
+}
+
+.testimonial {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+}
