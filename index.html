@@ -1,61 +1,66 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pukis Lumer Aulia</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header>
-  <img src="images/Picsart_24-05-23_22-54-20-428.jpg" alt="Header Pukis Lumer Aulia">
+    <img src="images/Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia">
+    <h1>Pukis Lumer Aulia</h1>
+    <p>Lezat - Lumer - Nikmat</p>
 </header>
 
 <section class="about">
-  <h1>Pukis Lumer Aulia</h1>
-  <p>Rasakan sensasi pukis lumer terenak di Pasar Kuliner Padang Panjang! Tersedia di Maxim Food, Grab Food, dan Go Food. Jam buka: 16.00 - 23.59. Kontak WhatsApp: 0812 9666 8670. IG: @Pukis.Lumer_aulia</p>
+    <h2>Tentang Kami</h2>
+    <p>Pukis Lumer Aulia menghadirkan sensasi pukis yang lumer di mulut dengan berbagai varian rasa. Kami hadir di Pasar Kuliner Padang Panjang setiap hari!</p>
 </section>
 
 <section class="gallery">
-  <h2>Galeri</h2>
-  <div class="gallery-images">
-    <img src="images/Pukis1.jpg" alt="Pukis 1">
-    <img src="images/pukis2.jpg" alt="Pukis 2">
-    <img src="images/pukis3.jpg" alt="Pukis 3">
-    <img src="images/Pukis4.jpg" alt="Pukis 4">
-    <img src="images/pukis5.jpg" alt="Pukis 5">
-  </div>
+    <h2>Galeri</h2>
+    <div class="gallery-container">
+        <img src="images/Pukis1.jpg" alt="Pukis 1">
+        <img src="images/pukis2.jpg" alt="Pukis 2">
+        <img src="images/pukis3.jpg" alt="Pukis 3">
+        <img src="images/Pukis4.jpg" alt="Pukis 4">
+        <img src="images/pukis5.jpg" alt="Pukis 5">
+    </div>
 </section>
 
-<section class="promo">
-  <h2>Promo Spesial</h2>
-  <img src="images/kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
+<section class="order">
+    <h2>Order Sekarang!</h2>
+    <form id="orderForm">
+        <input type="text" id="name" name="name" placeholder="Nama Anda" required>
+        <input type="number" id="quantity" name="quantity" placeholder="Jumlah Pesanan" required>
+        <textarea id="address" name="address" placeholder="Alamat Lengkap" required></textarea>
+        <button type="submit">Pesan via WhatsApp</button>
+    </form>
 </section>
 
-<section class="order-form">
-  <h2>Order Sekarang</h2>
-  <form id="orderForm">
-    <input type="text" id="name" placeholder="Nama Anda" required>
-    <input type="text" id="order" placeholder="Pesanan Anda" required>
-    <button type="submit">Kirim Pesanan</button>
-  </form>
-</section>
-
-<section class="facts">
-  <h2>Fakta Unik Pukis</h2>
-  <ul>
-    <li>Pukis pertama kali dibuat di Indonesia!</li>
-    <li>Varian rasa Pukis Lumer Aulia lebih dari 10!</li>
-    <li>Pukis Aulia dibuat dari bahan premium.</li>
-  </ul>
+<section class="fun-facts">
+    <h2>Fakta Unik!</h2>
+    <ul>
+        <li>Pukis kami dibuat fresh setiap hari!</li>
+        <li>Menggunakan bahan premium tanpa pengawet.</li>
+        <li>Lebih dari 10 varian rasa favorit!</li>
+    </ul>
 </section>
 
 <section class="share">
-  <h2>Ajak Temanmu!</h2>
-  <button onclick="share()">Bagikan ke Teman</button>
+    <h2>Ajak Temanmu!</h2>
+    <button id="shareButton">Bagikan ke Teman</button>
 </section>
 
+<footer>
+    <p>© 2025 Pukis Lumer Aulia - Follow kami di Instagram: <a href="https://instagram.com/Pukis.Lumer_aulia" target="_blank">@Pukis.Lumer_aulia</a></p>
+</footer>
+
+<!-- Scripts -->
 <script src="js/script.js"></script>
+<script src="js/main.js"></script>
+
 </body>
 </html>
