@@ -1,56 +1,83 @@
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom right, #ffdde1, #ee9ca7);
   margin: 0;
   padding: 0;
+  background: linear-gradient(to bottom right, #ffdde1, #ee9ca7);
+  color: #333;
 }
 
-/* Tambahkan style gallery, button, dsb */
-header, section {
+header {
+  background: #c0392b;
+  color: white;
+  padding: 20px;
   text-align: center;
-  margin: 20px;
 }
 
-.gallery img {
-  width: 150px;
-  height: auto;
-  margin: 10px;
-  border-radius: 10px;
+main {
+  padding: 20px;
 }
 
-.floating-container {
+h2 {
+  color: #c0392b;
+}
+
+section {
+  margin-bottom: 30px;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+/* Tombol Mengapung */
+.floating-menu {
   position: fixed;
-  right: 20px;
   bottom: 20px;
-  z-index: 999;
+  right: 20px;
 }
 
-.floating-button {
+.main-btn {
   width: 60px;
   height: 60px;
-  background-color: #ff5722;
-  border: none;
   border-radius: 50%;
+  border: none;
+  background-color: #c0392b;
   color: white;
   font-size: 30px;
   cursor: pointer;
 }
 
-.floating-menu {
-  display: none;
+#menuOptions {
+  display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   margin-bottom: 10px;
 }
 
-.menu-item {
-  width: 50px;
-  height: 50px;
-  margin: 5px;
-  background-color: #4caf50;
+.menu-hidden {
+  display: none;
+}
+
+.menu-shown {
+  display: flex;
+}
+
+.action-btn {
+  margin: 5px 0;
+  padding: 10px 15px;
+  background-color: #e67e22;
   color: white;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 50px;
+  text-decoration: none;
+  border-radius: 8px;
   font-weight: bold;
 }
+
+.action-btn:hover {
+  background-color: #d35400;
+}
+
+.wa-btn { background-color: #25d366; }
+.shopee-btn { background-color: #ff5722; }
+.maxim-btn { background-color: #ffc107; color: black; }
+.invite-btn { background-color: #3498db; }
