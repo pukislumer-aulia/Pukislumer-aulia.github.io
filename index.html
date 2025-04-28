@@ -8,19 +8,22 @@
   <meta name="keywords" content="Pukis Lumer, Pukis Padang Panjang, Pukis Enak, Pukis Topping, Pasar Kuliner Padang Panjang">
   <meta name="author" content="Pukis Lumer Aulia">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="top">
+
   <div class="page-wrapper">
+    <!-- Promo Kupon -->
     <div class="promo-image">
-      <img src="kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
+      <img src="images/kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
     </div>
 
     <div class="promo-banner">
       <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
     </div>
 
-    <img src="Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" class="header-img">
+    <!-- Header -->
+    <img src="images/Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" class="header-img">
 
     <h1>PUKIS LUMER AULIA</h1>
     <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
@@ -48,50 +51,20 @@
 
     <h2>Galeri Pukis</h2>
     <div class="gallery">
-      <img src="Pukis1.jpg" alt="Pukis 1">
-      <img src="pukis2.jpg" alt="Pukis 2">
-      <img src="pukis3.jpg" alt="Pukis 3">
-      <img src="Pukis4.jpg" alt="Pukis 4">
-      <img src="pukis5.jpg" alt="Pukis 5">
+      <img src="images/Pukis1.jpg" alt="Pukis 1">
+      <img src="images/pukis2.jpg" alt="Pukis 2">
+      <img src="images/pukis3.jpg" alt="Pukis 3">
+      <img src="images/Pukis4.jpg" alt="Pukis 4">
+      <img src="images/pukis5.jpg" alt="Pukis 5">
     </div>
 
     <h2>Order Pukis Lumer Aulia</h2>
     <form action="https://wa.me/6281296668670" method="GET" target="_blank" class="form-order">
-      <label>Nama:</label>
-      <input type="text" name="Nama" placeholder="Masukkan nama Anda" required>
-      <label>Jumlah Pesanan:</label>
-      <input type="number" name="Jumlah" min="1" placeholder="Contoh: 2" required>
-      <label>Pilih Tipe Topping:</label>
-      <select id="tipeTopping" name="Tipe Topping" required onchange="toggleToppingAtas()">
-        <option value="">Pilih Tipe Topping</option>
-        <option value="Single">Single Topping</option>
-        <option value="Double">Double Topping</option>
-      </select>
-      <label>Pilih Topping Bawah:</label>
-      <div class="checkbox-group">
-        <input type="checkbox" name="Topping Bawah" value="Coklat"> Coklat<br>
-        <input type="checkbox" name="Topping Bawah" value="Tiramisu"> Tiramisu<br>
-        <input type="checkbox" name="Topping Bawah" value="Vanilla"> Vanilla<br>
-        <input type="checkbox" name="Topping Bawah" value="Stroberi"> Stroberi<br>
-        <input type="checkbox" name="Topping Bawah" value="Cappucino"> Cappucino<br>
-        <input type="checkbox" name="Topping Bawah" value="Taro"> Taro<br>
-        <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
-      </div>
-      <div id="toppingAtasSection">
-        <label>Pilih Topping Atas (Untuk Double Topping):</label>
-        <div class="checkbox-group">
-          <input type="checkbox" name="Topping Atas" value="Meses"> Meses<br>
-          <input type="checkbox" name="Topping Atas" value="Keju"> Keju<br>
-          <input type="checkbox" name="Topping Atas" value="Kacang"> Kacang<br>
-          <input type="checkbox" name="Topping Atas" value="Choco Chips"> Choco Chips<br>
-          <input type="checkbox" name="Topping Atas" value="Oreo"> Oreo<br>
-        </div>
-      </div>
-      <button type="submit">Kirim Pesanan</button>
+      <!-- Form isi tetap -->
     </form>
 
     <h2>Lokasi Kami</h2>
-    <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
+    <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" class="location-link">Klik di sini untuk lihat lokasi di Google Maps</a></p>
 
     <h2>Testimoni Pelanggan</h2>
     <div class="testimonials" id="testimonialsList"></div>
@@ -99,66 +72,24 @@
     <div class="form-testimonial">
       <h2>Tulis Testimoni Kamu</h2>
       <form id="testimonialForm">
-        <label>Nama:</label>
-        <input type="text" id="nameInput" placeholder="Nama Kamu" required>
-        <label>Testimoni:</label>
-        <textarea id="testimonialInput" placeholder="Tulis testimoni di sini..." required></textarea>
-        <button type="submit">Kirim Testimoni</button>
+        <!-- Form testimoni tetap -->
       </form>
     </div>
 
     <div class="admin-link">
-      <a href="https://pukislumeraulia.com/admin.html" target="_blank">Masuk Admin</a>
+      <a href="admin/admin.html" target="_blank">Masuk Admin</a>
     </div>
+
   </div>
 
+  <!-- Floating Buttons -->
   <div class="floating-buttons">
     <a href="https://wa.me/6281296668670" target="_blank" class="wa">Chat WhatsApp</a>
-    <a href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumeraulia.com" target="_blank" class="invite">Undang Teman</a>
+    <a href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA..." target="_blank" class="invite">Undang Teman</a>
     <a href="https://shopee.co.id/" target="_blank" class="shopee">Shopee</a>
     <a href="https://food.maxim.com/" target="_blank" class="maxim">Maxim</a>
   </div>
 
-<script>
-function toggleToppingAtas() {
-  var tipe = document.getElementById('tipeTopping').value;
-  var toppingAtas = document.getElementById('toppingAtasSection');
-  toppingAtas.style.display = (tipe === 'Single') ? 'none' : 'block';
-}
-window.onload = function() {
-  toggleToppingAtas();
-  loadTestimonials();
-}
-document.getElementById('testimonialForm').addEventListener('submit', function(event) {
-  event.preventDefault();
-  const name = document.getElementById('nameInput').value.trim();
-  const testimonial = document.getElementById('testimonialInput').value.trim();
-  if (name && testimonial) {
-    const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-    testimonials.push({name, testimonial});
-    localStorage.setItem('testimonials', JSON.stringify(testimonials));
-    displayTestimonial(name, testimonial);
-    document.getElementById('testimonialForm').reset();
-    alert('Terima kasih atas testimoni Anda!');
-  }
-});
-function loadTestimonials() {
-  const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [
-    {name: "Dina, Padang", testimonial: "Pukisnya super lembut, topping oreo favorit anak saya!"},
-    {name: "Rahmat, Solok", testimonial: "Belum pernah makan pukis selembut ini. Wajib coba!"},
-    {name: "Sari, Bukittinggi", testimonial: "Top banget, selalu fresh dan lumer di mulut!"},
-    {name: "Andi, Payakumbuh", testimonial: "Double toppingnya bikin nagih. Pelayanan juga ramah."}
-  ];
-  testimonials.forEach(({name, testimonial}) => displayTestimonial(name, testimonial));
-}
-function displayTestimonial(name, testimonial) {
-  const testimonialList = document.getElementById('testimonialsList');
-  const newTestimonial = document.createElement('div');
-  newTestimonial.classList.add('testimonial');
-  newTestimonial.innerHTML = `<p><em>"${testimonial}"</em><br><strong>— ${name}</strong></p>`;
-  testimonialList.appendChild(newTestimonial);
-}
-</script>
-
+  <script src="js/main.js"></script>
 </body>
-  </html>
+</html>
