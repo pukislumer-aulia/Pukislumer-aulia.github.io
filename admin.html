@@ -43,13 +43,6 @@
     .testimonial-item {
       border-bottom: 1px solid #eee;
       padding: 10px 0;
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .testimonial-item.hide {
-      opacity: 0;
-      transform: translateY(-20px);
     }
     .testimonial-item:last-child {
       border-bottom: none;
@@ -62,41 +55,27 @@
       font-style: italic;
       margin: 5px 0 10px 0;
     }
-    .delete-btn {
-      background-color: #e74c3c;
+    .button-group {
+      margin-top: 10px;
+    }
+    .edit-btn, .delete-btn {
+      background-color: #3498db;
       color: white;
       border: none;
       padding: 5px 10px;
       border-radius: 5px;
+      margin-right: 5px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      font-size: 14px;
+    }
+    .delete-btn {
+      background-color: #e74c3c;
+    }
+    .edit-btn:hover {
+      background-color: #2980b9;
     }
     .delete-btn:hover {
       background-color: #c0392b;
-    }
-    /* Toast Notification */
-    .toast {
-      visibility: hidden;
-      min-width: 250px;
-      background-color: #27ae60;
-      color: white;
-      text-align: center;
-      border-radius: 10px;
-      padding: 16px;
-      position: fixed;
-      z-index: 1;
-      left: 50%;
-      bottom: 30px;
-      transform: translateX(-50%);
-      font-weight: bold;
-      font-size: 14px;
-      opacity: 0;
-      transition: opacity 0.5s, bottom 0.5s;
-    }
-    .toast.show {
-      visibility: visible;
-      opacity: 1;
-      bottom: 50px;
     }
   </style>
 </head>
@@ -105,13 +84,12 @@
 
   <h1>Admin Testimoni</h1>
 
+  <!-- Tombol Kembali ke Website -->
   <a class="home-button" href="index.html">Kembali ke Home</a>
 
   <div class="testimonial-list" id="testimonialList">
     <!-- Testimoni pelanggan akan muncul di sini -->
   </div>
-
-  <div id="toast" class="toast">Testimoni berhasil dihapus!</div>
 
   <script>
     function loadTestimonials() {
@@ -123,11 +101,13 @@
       testimonials.forEach((item, index) => {
         const div = document.createElement('div');
         div.className = 'testimonial-item';
-        div.setAttribute('data-index', index);
         div.innerHTML = `
-          <div class="testimonial-name">${item.name}</div>
-          <div class="testimonial-text">"${item.testimonial}"</div>
-          <button class="delete-btn" onclick="deleteTestimonial(this)">Hapus</button>
+          <div class="testimonial-name" id="name-${index}">${item.name}</div>
+          <div class="testimonial-text" id="text-${index}">"${item.testimonial}"</div>
+          <div class="button-group">
+            <button class="edit-btn" onclick="editTestimonial(${index})">Edit</button>
+            <button class="delete-btn" onclick="deleteTestimonial(${index})">Hapus</button>
+          </div>
         `;
         testimonialList.appendChild(div);
       });
@@ -137,30 +117,29 @@
       }
     }
 
-    function deleteTestimonial(button) {
-      const div = button.parentElement;
-      const index = parseInt(div.getAttribute('data-index'));
-
+    function deleteTestimonial(index) {
+      let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
       if (confirm('Apakah yakin ingin menghapus testimoni ini?')) {
-        div.classList.add('hide');
-        setTimeout(() => {
-          let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-          testimonials.splice(index, 1);
-          localStorage.setItem('testimonials', JSON.stringify(testimonials));
-          loadTestimonials();
-          showToast();
-        }, 500);
+        testimonials.splice(index, 1);
+        localStorage.setItem('testimonials', JSON.stringify(testimonials));
+        loadTestimonials();
       }
     }
 
-    function showToast() {
-      const toast = document.getElementById('toast');
-      toast.className = "toast show";
-      setTimeout(() => {
-        toast.className = toast.className.replace("show", "");
-      }, 2500);
+    function editTestimonial(index) {
+      let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+      let newName = prompt("Edit nama pelanggan:", testimonials[index].name);
+      let newTestimonial = prompt("Edit isi testimoni:", testimonials[index].testimonial);
+
+      if (newName !== null && newTestimonial !== null) {
+        testimonials[index].name = newName.trim() || testimonials[index].name;
+        testimonials[index].testimonial = newTestimonial.trim() || testimonials[index].testimonial;
+        localStorage.setItem('testimonials', JSON.stringify(testimonials));
+        loadTestimonials();
+      }
     }
 
+    // Load saat pertama kali buka halaman
     window.onload = loadTestimonials;
   </script>
 
