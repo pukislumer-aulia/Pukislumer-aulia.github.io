@@ -8,8 +8,9 @@
   <meta name="keywords" content="Pukis Lumer, Pukis Padang Panjang, Pukis Enak, Pukis Topping, Pasar Kuliner Padang Panjang">
   <meta name="author" content="Pukis Lumer Aulia">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body id="top">
   <div class="page-wrapper">
     <div class="promo-image">
@@ -46,13 +47,14 @@
       <li>Jadi jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
     </ul>
 
-    <section class="gallery">
-  <img src="images/Pukis1.jpg" alt="Pukis 1">
-  <img src="images/pukis2.jpg" alt="Pukis 2">
-  <img src="images/pukis3.jpg" alt="Pukis 3">
-  <img src="images/Pukis4.jpg" alt="Pukis 4">
-  <img src="images/pukis5.jpg" alt="Pukis 5">
-    </section>
+    <h2>Galeri Pukis</h2>
+    <div class="gallery">
+      <img src="images/Pukis1.jpg" alt="Pukis 1">
+      <img src="images/pukis2.jpg" alt="Pukis 2">
+      <img src="images/pukis3.jpg" alt="Pukis 3">
+      <img src="images/Pukis4.jpg" alt="Pukis 4">
+      <img src="images/pukis5.jpg" alt="Pukis 5">
+    </div>
 
     <h2>Order Pukis Lumer Aulia</h2>
     <form action="https://wa.me/6281296668670" method="GET" target="_blank" class="form-order">
@@ -68,29 +70,29 @@
       </select>
       <label>Pilih Topping Bawah:</label>
       <div class="checkbox-group">
-        <input type="checkbox" name="Topping Bawah" value="Coklat"> Coklat<br>
-        <input type="checkbox" name="Topping Bawah" value="Tiramisu"> Tiramisu<br>
-        <input type="checkbox" name="Topping Bawah" value="Vanilla"> Vanilla<br>
-        <input type="checkbox" name="Topping Bawah" value="Stroberi"> Stroberi<br>
-        <input type="checkbox" name="Topping Bawah" value="Cappucino"> Cappucino<br>
-        <input type="checkbox" name="Topping Bawah" value="Taro"> Taro<br>
-        <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
+        <label><input type="checkbox" name="Topping Bawah" value="Coklat"> Coklat</label>
+        <label><input type="checkbox" name="Topping Bawah" value="Tiramisu"> Tiramisu</label>
+        <label><input type="checkbox" name="Topping Bawah" value="Vanilla"> Vanilla</label>
+        <label><input type="checkbox" name="Topping Bawah" value="Stroberi"> Stroberi</label>
+        <label><input type="checkbox" name="Topping Bawah" value="Cappucino"> Cappucino</label>
+        <label><input type="checkbox" name="Topping Bawah" value="Taro"> Taro</label>
+        <label><input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha</label>
       </div>
       <div id="toppingAtasSection">
         <label>Pilih Topping Atas (Untuk Double Topping):</label>
         <div class="checkbox-group">
-          <input type="checkbox" name="Topping Atas" value="Meses"> Meses<br>
-          <input type="checkbox" name="Topping Atas" value="Keju"> Keju<br>
-          <input type="checkbox" name="Topping Atas" value="Kacang"> Kacang<br>
-          <input type="checkbox" name="Topping Atas" value="Choco Chips"> Choco Chips<br>
-          <input type="checkbox" name="Topping Atas" value="Oreo"> Oreo<br>
+          <label><input type="checkbox" name="Topping Atas" value="Meses"> Meses</label>
+          <label><input type="checkbox" name="Topping Atas" value="Keju"> Keju</label>
+          <label><input type="checkbox" name="Topping Atas" value="Kacang"> Kacang</label>
+          <label><input type="checkbox" name="Topping Atas" value="Choco Chips"> Choco Chips</label>
+          <label><input type="checkbox" name="Topping Atas" value="Oreo"> Oreo</label>
         </div>
       </div>
       <button type="submit">Kirim Pesanan</button>
     </form>
 
     <h2>Lokasi Kami</h2>
-    <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
+    <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" class="maps-link">Klik di sini untuk lihat lokasi di Google Maps</a></p>
 
     <h2>Testimoni Pelanggan</h2>
     <div class="testimonials" id="testimonialsList"></div>
@@ -107,24 +109,19 @@
     </div>
 
     <div class="admin-link">
-      <a href="admin.html" target="_blank">Masuk Admin</a>
+      <a href="https://pukislumeraulia.com/admin.html" target="_blank">Masuk Admin</a>
     </div>
 
   </div>
 
   <div class="floating-buttons">
-  <a href="https://wa.me/6281296668670" target="_blank" class="wa">Chat WhatsApp</a>
-  <a href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumeraulia.com" target="_blank" class="invite">Undang Teman</a>
-  <a href="https://shopee.co.id/" target="_blank" class="shopee">Shopee</a>
-  <a href="https://food.maxim.com/" target="_blank" class="maxim">Maxim</a>
-</div>
-<div class="button-container">
-  <a href="https://wa.me/6281296668670" class="button" target="_blank">Chat WhatsApp</a>
-  <a href="https://shopee.co.id" class="button" target="_blank">Beli di Shopee</a>
-  <a href="https://food.maxim.com" class="button" target="_blank">Pesan via Maxim</a>
-  <a href="https://wa.me/?text=Yuk%20coba%20Pukis%20Lumer%20Aulia%20di%20Pasar%20Kuliner%20Padang%20Panjang!%20" class="button" target="_blank">Undang Teman</a>
-</div>
-  
-<script src="main.js"></script>
+    <a href="https://wa.me/6281296668670" target="_blank" class="wa">Chat WhatsApp</a>
+    <a href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumeraulia.com" target="_blank" class="invite">Undang Teman</a>
+    <a href="https://shopee.co.id/" target="_blank" class="shopee">Shopee</a>
+    <a href="https://food.maxim.com/" target="_blank" class="maxim">Maxim</a>
+  </div>
+
+<script src="js/main.js"></script>
+
 </body>
 </html>
