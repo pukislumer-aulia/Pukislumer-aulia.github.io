@@ -73,3 +73,7 @@ function openShopee() {
 function openMaxim() {
   window.open('https://taximaxim.com/id', '_blank');
 }
+// Script utama
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Website loaded');
+});
