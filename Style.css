@@ -1,82 +1,103 @@
 body {
   font-family: 'Chewy', cursive;
   margin: 0;
-  background: pink;
-  padding-bottom: 100px;
+  background: #ffe4e1;
+}
+
+#loader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader-img {
+  width: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
 }
 
 .page-wrapper {
-  max-width: 800px;
+  max-width: 700px;
   margin: auto;
   padding: 20px;
 }
 
 img {
-  display: block;
-  margin: auto;
-  max-width: 90%;
+  width: 100%;
   height: auto;
-  transition: all 0.3s ease;
+  border-radius: 10px;
 }
 
-img:hover {
-  transform: rotate(2deg) scale(1.05);
-  filter: brightness(110%);
+.header-img {
+  width: 90%;
+  margin: 20px auto;
+  display: block;
 }
 
 .promo-banner {
-  width: 100%;
-  overflow: hidden;
   background: #f39c12;
   color: white;
-  font-weight: bold;
-  padding: 10px 0;
-  margin-bottom: 20px;
+  padding: 10px;
+  text-align: center;
+  overflow: hidden;
 }
 
-h1, h2 {
-  text-align: center;
-  font-family: 'Kanit', sans-serif;
+.promo-banner span {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: scrollBanner 10s linear infinite;
+}
+
+@keyframes scrollBanner {
+  0% { transform: translateX(0);}
+  100% { transform: translateX(-100%);}
 }
 
 .gallery {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: center;
 }
 
 .gallery img {
-  width: 45%;
+  width: 48%;
 }
 
 form {
   background: #fff;
   padding: 15px;
   border-radius: 10px;
-  margin-bottom: 20px;
 }
 
 input, select, textarea, button {
   width: 100%;
+  margin: 5px 0;
   padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 10px;
   border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
 }
 
-button {
+button.btn {
   background-color: #e67e22;
   color: white;
+  border: none;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: 0.3s;
 }
 
-button:hover {
+button.btn:hover {
   background-color: #d35400;
+  transform: rotate(-2deg) scale(1.05);
 }
 
 .checkbox-group {
@@ -86,5 +107,5 @@ button:hover {
 }
 
 .checkbox-group label {
-  flex: 1 0 45%;
+  flex: 0 0 48%;
 }
