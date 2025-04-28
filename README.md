@@ -27,4 +27,12 @@ Website official untuk Pukis Lumer Aulia, usaha pukis kekinian di Padang Panjang
 - Pastikan semua gambar sudah dimasukkan ke folder `images/`.
 - Upload ke hosting atau buka `index.html` di browser.
 
+## Penjelasan File
+
+- `index.html` - Halaman utama website.
+- `css/style.css` - File untuk semua style dan desain website.
+- `js/script.js` - File untuk semua animasi dan interaktivitas website.
+- `images/` - Folder untuk semua gambar (header, galeri, kupon).
+- `admin/admin.html` - Halaman admin untuk melihat dan menghapus testimoni pelanggan.
+- `README.md` - Dokumentasi project ini.
 ---
