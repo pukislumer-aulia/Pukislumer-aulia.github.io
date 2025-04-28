@@ -3,113 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Testimoni - Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <title>Admin Area</title>
   <style>
-    /* Tambahan khusus halaman admin */
-    .admin-container {
-      background: #fff;
-      max-width: 800px;
-      margin: 30px auto;
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: #fff8f0;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      color: #333;
     }
-    .admin-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .admin-header h1 {
-      color: #c0392b;
-    }
-    .home-button {
-      display: inline-block;
-      margin-bottom: 20px;
-      padding: 10px 20px;
-      background: #27ae60;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    .home-button:hover {
-      background: #1e8449;
-    }
-    .testimonial-item {
-      border-bottom: 1px solid #eee;
-      padding: 10px 0;
-    }
-    .testimonial-name {
-      font-weight: bold;
-      color: #d35400;
-    }
-    .testimonial-text {
-      font-style: italic;
-      margin: 5px 0;
-    }
-    .delete-btn {
-      background: #e74c3c;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 5px;
-    }
-    .delete-btn:hover {
-      background: #c0392b;
+    h1 {
+      color: #e67e22;
     }
   </style>
 </head>
-
 <body>
-
-  <div class="admin-container">
-    <div class="admin-header">
-      <h1>Admin Panel Testimoni</h1>
-      <a href="../index.html" class="home-button">Kembali ke Home</a>
-    </div>
-
-    <div id="testimonialList">
-      <!-- Daftar testimoni akan dimuat di sini -->
-    </div>
-  </div>
-
-  <script>
-    function loadTestimonials() {
-      const testimonialList = document.getElementById('testimonialList');
-      testimonialList.innerHTML = '';
-
-      let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-
-      testimonials.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'testimonial-item';
-        div.innerHTML = `
-          <div class="testimonial-name">${item.name}</div>
-          <div class="testimonial-text">"${item.testimonial}"</div>
-          <button class="delete-btn" onclick="deleteTestimonial(${index})">Hapus</button>
-        `;
-        testimonialList.appendChild(div);
-      });
-
-      if (testimonials.length === 0) {
-        testimonialList.innerHTML = '<p>Belum ada testimoni yang masuk.</p>';
-      }
-    }
-
-    function deleteTestimonial(index) {
-      let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-      if (confirm('Yakin ingin menghapus testimoni ini?')) {
-        testimonials.splice(index, 1);
-        localStorage.setItem('testimonials', JSON.stringify(testimonials));
-        loadTestimonials();
-      }
-    }
-
-    window.onload = loadTestimonials;
-  </script>
-
+  <h1>Halaman Admin Pukis Lumer Aulia</h1>
+  <p>Pengelolaan lebih lanjut segera hadir.</p>
 </body>
 </html>
