@@ -8,76 +8,51 @@
 </head>
 <body>
 
-  <header>
-    <h1>Pukis Lumer Aulia</h1>
-    <p>Rasakan Lelehan Manis di Setiap Gigitan!</p>
-  </header>
+<header>
+  <h1>Pukis Lumer Aulia</h1>
+  <p>Rasakan Lelehan Manis di Setiap Gigitan!</p>
+</header>
 
-  <main>
-    <section class="intro">
-      <h2>Selamat Datang!</h2>
-      <p>Assalamu'alaikum warahmatullahi wabarakatuh.  
-      Semoga kamu dilimpahkan berkah dan rezeki. Aamiin Allahumma Aamiin.</p>
-    </section>
+<section class="content">
+  <h2>Selamat Datang!</h2>
+  <p>Assalamu'alaikum warahmatullahi wabarakatuh. Semoga kamu dilimpahkan berkah dan rezeki. Aamiin Allahumma Aamiin.</p>
 
-    <section class="location">
-      <h2>Lokasi Kami</h2>
-      <p>Pasar Kuliner Padang Panjang — Cari Gerobak Pink!</p>
-    </section>
+  <h2>Lokasi Kami</h2>
+  <p>Pasar Kuliner Padang Panjang — Cari Gerobak Pink!</p>
 
-    <section class="bestseller">
-      <h2>Best Seller</h2>
-      <p>Double Topping Vanilla Oreo vs Coklat Keju!</p>
-    </section>
+  <h2>Best Seller</h2>
+  <p>Double Topping Vanilla Oreo vs Coklat Keju!</p>
 
-    <section class="order">
-      <h2>Order Via</h2>
-      <p>Tersedia di Maxim Food, GrabFood, dan GoFood!</p>
-    </section>
+  <h2>Order Via</h2>
+  <p>Tersedia di Maxim Food, GrabFood, dan GoFood!</p>
 
-    <section class="why-us">
-      <h2>Kenapa Harus Pukis Lumer Aulia?</h2>
-      <ul>
-        <li>Resep rahasia keluarga sejak 2023!</li>
-        <li>Adonan premium, super lembut, rasa juara.</li>
-        <li>100% tanpa pengawet.</li>
-      </ul>
-    </section>
+  <h2>Kenapa Harus Pukis Lumer Aulia?</h2>
+  <ul>
+    <li>Resep rahasia keluarga sejak 2023!</li>
+    <li>Adonan premium, super lembut, rasa juara.</li>
+    <li>100% tanpa pengawet.</li>
+  </ul>
 
-    <section class="facts">
-      <h2>Fakta Unik Tentang Kami</h2>
-      <ul>
-        <li>10+ varian topping fresh setiap hari.</li>
-        <li>Teknik pemanggangan rahasia menghasilkan tekstur luar biasa.</li>
-      </ul>
-    </section>
+  <h2>Fakta Unik Tentang Kami</h2>
+  <ul>
+    <li>10+ varian topping fresh setiap hari.</li>
+    <li>Teknik pemanggangan rahasia menghasilkan tekstur luar biasa.</li>
+  </ul>
 
-    <section class="kupon">
-      <h2>Free 1 Box!</h2>
-      <p>Kumpulkan 15 kupon, tukarkan dengan 1 box kecil GRATIS!</p>
-    </section>
+  <h2>Free 1 Box!</h2>
+  <p>Kumpulkan 15 kupon, tukarkan dengan 1 box kecil GRATIS!</p>
+</section>
 
-  </main>
+<!-- Tombol Melayang -->
+<div class="floating-button" onclick="toggleMenu()">+</div>
+<div class="menu-buttons" id="menuButtons">
+  <a href="https://wa.me/6281296668670" target="_blank" class="menu-btn whatsapp">WhatsApp</a>
+  <a href="https://shopee.co.id" target="_blank" class="menu-btn shopee">Shopee</a>
+  <a href="https://play.google.com/store/apps/details?id=com.taxsee.driver" target="_blank" class="menu-btn maxim">Maxim</a>
+  <a href="#" class="menu-btn invite" onclick="inviteFriend()">Undang Teman</a>
+</div>
 
-  <!-- Tombol Action Mengapung -->
-  <div class="floating-menu">
-    <button id="toggleMenu" class="main-btn">+</button>
-    <div id="menuOptions" class="menu-hidden">
-      <a href="https://wa.me/6281296668670" target="_blank" class="action-btn wa-btn">WhatsApp</a>
-      <a href="https://shopee.co.id/" target="_blank" class="action-btn shopee-btn">Shopee</a>
-      <a href="https://play.google.com/store/apps/details?id=com.taxsee.taxsee" target="_blank" class="action-btn maxim-btn">Maxim</a>
-      <a href="https://api.whatsapp.com/send?text=Yuk%20coba%20Pukis%20Lumer%20Aulia!" target="_blank" class="action-btn invite-btn">Undang Teman</a>
-    </div>
-  </div>
-
-  <script>
-    const toggleBtn = document.getElementById('toggleMenu');
-    const menuOptions = document.getElementById('menuOptions');
-
-    toggleBtn.addEventListener('click', () => {
-      menuOptions.classList.toggle('menu-shown');
-    });
-  </script>
+<script src="script.js"></script>
 
 </body>
 </html>
