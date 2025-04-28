@@ -3,103 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin - Pukis Lumer Aulia</title>
-  <meta name="description" content="Halaman Admin untuk mengelola Pukis Lumer Aulia.">
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
+  <title>Admin Testimoni - Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="../css/style.css">
   <style>
-    body {
-      font-family: 'Chewy', cursive;
-      background-color: #ffe6e6;
-      margin: 0;
+    /* Tambahan khusus halaman admin */
+    .admin-container {
+      background: #fff;
+      max-width: 800px;
+      margin: 30px auto;
       padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
-    .container {
-      max-width: 700px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-    h1 {
+    .admin-header {
       text-align: center;
-      font-family: 'Kanit', sans-serif;
-      color: #e67e22;
+      margin-bottom: 20px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
+    .admin-header h1 {
+      color: #c0392b;
     }
-    th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-    th {
-      background-color: #f39c12;
+    .home-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background: #27ae60;
       color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s;
     }
-    .btn-clear {
-      display: block;
-      margin: 20px auto;
-      background-color: #e74c3c;
+    .home-button:hover {
+      background: #1e8449;
+    }
+    .testimonial-item {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+    .testimonial-name {
+      font-weight: bold;
+      color: #d35400;
+    }
+    .testimonial-text {
+      font-style: italic;
+      margin: 5px 0;
+    }
+    .delete-btn {
+      background: #e74c3c;
       color: white;
       border: none;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 16px;
+      padding: 6px 12px;
+      border-radius: 6px;
       cursor: pointer;
+      margin-top: 5px;
     }
-    .btn-clear:hover {
-      background-color: #c0392b;
-    }
-    .back-link {
-      display: block;
-      margin-top: 20px;
-      text-align: center;
-      text-decoration: none;
-      color: #e67e22;
-      font-weight: bold;
+    .delete-btn:hover {
+      background: #c0392b;
     }
   </style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>Data Testimoni</h1>
-    <table id="testimonialTable">
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>Testimoni</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Testimoni akan dimuat di sini -->
-      </tbody>
-    </table>
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1>Admin Panel Testimoni</h1>
+      <a href="../index.html" class="home-button">Kembali ke Home</a>
+    </div>
 
-    <button class="btn-clear" onclick="clearTestimonials()">Hapus Semua Testimoni</button>
-
-    <a href="index.html" class="back-link">&larr; Kembali ke Beranda</a>
+    <div id="testimonialList">
+      <!-- Daftar testimoni akan dimuat di sini -->
+    </div>
   </div>
 
   <script>
     function loadTestimonials() {
-      const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-      const tbody = document.getElementById('testimonialTable').querySelector('tbody');
-      testimonials.forEach(({name, testimonial}) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${name}</td><td>${testimonial}</td>`;
-        tbody.appendChild(row);
+      const testimonialList = document.getElementById('testimonialList');
+      testimonialList.innerHTML = '';
+
+      let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+
+      testimonials.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'testimonial-item';
+        div.innerHTML = `
+          <div class="testimonial-name">${item.name}</div>
+          <div class="testimonial-text">"${item.testimonial}"</div>
+          <button class="delete-btn" onclick="deleteTestimonial(${index})">Hapus</button>
+        `;
+        testimonialList.appendChild(div);
       });
+
+      if (testimonials.length === 0) {
+        testimonialList.innerHTML = '<p>Belum ada testimoni yang masuk.</p>';
+      }
     }
 
-    function clearTestimonials() {
-      if (confirm('Apakah Anda yakin ingin menghapus semua testimoni?')) {
-        localStorage.removeItem('testimonials');
-        location.reload();
+    function deleteTestimonial(index) {
+      let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+      if (confirm('Yakin ingin menghapus testimoni ini?')) {
+        testimonials.splice(index, 1);
+        localStorage.setItem('testimonials', JSON.stringify(testimonials));
+        loadTestimonials();
       }
     }
 
