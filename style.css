@@ -63,11 +63,12 @@ button:hover {
 }
 .floating-buttons {
   position: fixed;
-  bottom: 10px;
+  top: 40%;
   right: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transform: translateY(-50%);
 }
 .floating-buttons a {
   text-decoration: none;
