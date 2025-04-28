@@ -1,223 +1,67 @@
-body {
-  font-family: 'Chewy', cursive;
+/* Reset default */
+* {
   margin: 0;
   padding: 0;
-  background: #fff5e1;
+  box-sizing: border-box;
+}
+
+/* Body umum */
+body {
+  font-family: 'Chewy', sans-serif;
+  padding: 16px;
+  line-height: 1.6;
+  background-color: #ffffff;
   color: #333;
 }
 
-h1 {
-  font-family: 'Oswald', sans-serif;
-  text-align: center;
-  color: #d35400;
-  margin-top: 20px;
+/* Header Judul */
+h1, h2, h3 {
+  font-family: 'TanggoStdregular', sans-serif;
+  margin-bottom: 12px;
 }
 
-h2 {
-  font-family: 'Kanit', sans-serif;
-  color: #e67e22;
-  margin-top: 40px;
-  text-align: center;
+/* Subjudul */
+h2, h3 {
+  font-family: 'Kanit Black', sans-serif;
 }
 
-p, ul {
-  font-family: 'Chewy', cursive;
-  padding: 0 20px;
-}
-
-.page-wrapper {
-  max-width: 900px;
-  margin: 0 auto;
-  padding-bottom: 100px;
-}
-
-.header-img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  padding: 20px;
-}
-
-.gallery img {
-  width: 180px;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 12px;
-  transition: transform 0.3s;
-}
-
-.gallery img:hover {
-  transform: scale(1.1);
-}
-
-.form-order, .form-testimonial {
-  background: #ffe0b2;
-  padding: 20px;
-  margin: 20px;
-  border-radius: 15px;
-}
-
-.form-order input, .form-order select, .form-testimonial input, .form-testimonial textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 8px;
+/* Paragraf */
+p {
   margin-bottom: 16px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  text-align: justify;
 }
 
-.form-order button, .form-testimonial button {
-  background: #e67e22;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.form-order button:hover, .form-testimonial button:hover {
-  background: #d35400;
-}
-
-.checkbox-group {
-  margin-bottom: 15px;
-}
-
-#toppingAtasSection {
-  display: none;
-}
-
-.testimonials {
-  margin: 20px;
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #eee;
-}
-
-.testimonials p {
-  border-bottom: 1px dashed #ccc;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-}
-
-.admin-link {
-  text-align: center;
-  margin-top: 30px;
-}
-
-.admin-link a {
-  text-decoration: none;
-  color: #d35400;
-  font-weight: bold;
-}
-
-.floating-buttons {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.floating-buttons a {
-  background: #e67e22;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 50px;
-  text-align: center;
-  font-size: 14px;
-  text-decoration: none;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-  transition: background 0.3s;
-}
-
-.floating-buttons a:hover {
-  background: #d35400;
-}
-
-.promo-banner {
-  background: #ff6347;
-  color: white;
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-}
-
-.promo-image img {
-  width: 100%;
-  display: block;
-  border-bottom: 5px solid #e67e22;
-}
-/* RESPONSIVE UNTUK TAMPILAN HP */
-@media screen and (max-width: 768px) {
-  .gallery {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 0 10px;
-  }
-
-  .gallery img {
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-}
-/* Floating Buttons */
-.floating-buttons {
-  position: fixed;
-  top: 50%;
-  right: -100px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transform: translateY(-50%);
-  transition: right 0.3s;
-  z-index: 9999;
-}
-
-.floating-buttons:hover {
-  right: 0;
-}
-
-.floating-buttons a {
-  display: block;
-  width: 140px;
-  padding: 10px;
-  text-align: center;
-  border-radius: 10px 0 0 10px;
-  font-weight: bold;
-  text-decoration: none;
-  color: white;
-  animation: wiggle 2s infinite;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
-
-.floating-buttons a.wa { background: #075e54; }
-.floating-buttons a.invite { background: #25d366; }
-.floating-buttons a.shopee { background: #ff5722; }
-.floating-buttons a.maxim { background: white; color: red; border: 1px solid red; }
-
-/* Efek wiggle */
-@keyframes wiggle {
-  0%, 100% { transform: translateY(-50%) rotate(-2deg); }
-  50% { transform: translateY(-50%) rotate(2deg); }
-}
-/* Responsive Gambar */
+/* Gambar Responsive */
 img {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto;
-  }
+  margin: 16px auto;
+  border-radius: 10px;
+}
+
+/* Tombol */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 8px 4px;
+  background-color: #ff9900;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.button:hover {
+  background-color: #ff6600;
+}
+
+/* Container tombol */
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
