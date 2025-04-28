@@ -174,3 +174,43 @@ p, ul {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   }
 }
+/* Floating Buttons */
+.floating-buttons {
+  position: fixed;
+  top: 50%;
+  right: -100px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transform: translateY(-50%);
+  transition: right 0.3s;
+  z-index: 9999;
+}
+
+.floating-buttons:hover {
+  right: 0;
+}
+
+.floating-buttons a {
+  display: block;
+  width: 140px;
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px 0 0 10px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  animation: wiggle 2s infinite;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.floating-buttons a.wa { background: #075e54; }
+.floating-buttons a.invite { background: #25d366; }
+.floating-buttons a.shopee { background: #ff5722; }
+.floating-buttons a.maxim { background: white; color: red; border: 1px solid red; }
+
+/* Efek wiggle */
+@keyframes wiggle {
+  0%, 100% { transform: translateY(-50%) rotate(-2deg); }
+  50% { transform: translateY(-50%) rotate(2deg); }
+}
