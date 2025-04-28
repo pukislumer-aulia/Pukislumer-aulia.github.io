@@ -1,112 +1,132 @@
-/* style.css */
-
-/* General Settings */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+  font-family: 'Chewy', cursive;
+  background: #fff8f0;
+  margin: 0;
+  padding: 0;
+  color: #333;
 }
 
-h1, h2 {
-    text-align: center;
+.page-wrapper {
+  max-width: 900px;
+  padding: 20px;
+  margin: auto;
 }
 
-p, ul {
-    padding: 0 20px;
-    text-align: center;
+.header-img {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
 }
 
-/* Header */
-.main-header {
-    text-align: center;
-    padding: 20px;
-    background-color: #fff8f0;
+h1 {
+  font-family: 'Oswald', sans-serif;
+  text-align: center;
+  color: #e67e22;
+  margin-top: 20px;
 }
 
-/* Responsive Image untuk semua gambar */
-.responsive-image {
-    width: 100%;
-    max-width: 600px;
-    height: auto;
-    display: block;
-    margin: 0 auto 20px;
-    border-radius: 10px;
+h2 {
+  font-family: 'Kanit', sans-serif;
+  color: #d35400;
+  margin-top: 30px;
 }
 
-/* Gallery */
-.gallery-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px;
+p {
+  font-size: 18px;
+  line-height: 1.6;
 }
 
-/* Gallery Images */
-.gallery-container img {
-    flex: 1 1 calc(45% - 10px);
-    max-width: 100%;
+.promo-banner {
+  background: #ff9f43;
+  padding: 15px;
+  text-align: center;
+  border-radius: 8px;
+  color: white;
+  margin-top: 20px;
 }
 
-/* Order Form */
-.order form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
 }
 
-.order input, .order textarea {
-    width: 90%;
-    max-width: 400px;
-    margin-bottom: 10px;
-    padding: 10px;
+.gallery-grid img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  transition: transform 0.3s;
 }
 
-.order button {
-    padding: 10px 20px;
-    background-color: #ff9900;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
+.gallery-grid img:hover {
+  transform: scale(1.05);
 }
 
-.order button:hover {
-    background-color: #e68a00;
+.form-order, .testimonials {
+  background: #ffe0b2;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
 }
 
-/* Fun Facts */
-.fun-facts ul {
-    list-style-type: none;
+input, select, textarea {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-/* Share Button */
-.share button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    margin: 20px;
+button {
+  background: #e67e22;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.share button:hover {
-    background-color: #45a049;
+button:hover {
+  background: #d35400;
 }
 
-/* Footer */
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 15px 0;
+.floating-buttons {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-footer a {
-    color: #ffcc00;
-    text-decoration: none;
+
+.floating-buttons a {
+  background: #ff6f00;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 25px;
+  text-align: center;
+  font-weight: bold;
+  transition: background 0.3s;
 }
-footer a:hover {
-    text-decoration: underline;
+
+.floating-buttons a:hover {
+  background: #e65100;
+}
+
+.admin-link {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.admin-link a {
+  color: #e67e22;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#toppingAtasSection {
+  display: none;
 }
