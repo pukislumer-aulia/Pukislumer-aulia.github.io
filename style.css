@@ -64,22 +64,42 @@ button:hover {
 .floating-buttons {
   position: fixed;
   top: 40%;
-  right: 10px;
+  right: -110px; /* posisi awal tersembunyi */
   display: flex;
   flex-direction: column;
   gap: 10px;
   transform: translateY(-50%);
+  z-index: 9999;
+  transition: right 0.5s ease;
+}
+.floating-buttons:hover {
+  right: 0; /* saat hover keluar */
 }
 .floating-buttons a {
-  text-decoration: none;
+  display: block;
+  width: 150px;
   padding: 10px;
-  background-color: #ff69b4;
-  color: white;
-  border-radius: 50px;
   text-align: center;
+  border-radius: 10px 0 0 10px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  color: white;
+  transition: background-color 0.3s;
 }
-.floating-buttons a:hover {
-  background-color: #ff1493;
+
+/* Warna-warna spesifik */
+.wa {
+  background-color: #075e54; /* hijau tua */
+}
+.invite {
+  background-color: #e91e63; /* pink */
+}
+.shopee {
+  background-color: #ff5722; /* orange */
+}
+.maxim {
+  background-color: #d32f2f; /* merah */
 }
 .promo-image img {
   width: 100%;
