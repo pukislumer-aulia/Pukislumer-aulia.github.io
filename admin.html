@@ -3,86 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Admin - Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="admin.css">
 </head>
-
 <body>
 
-<header>
-  <h1>Selamat Datang di Pukis Lumer Aulia</h1>
-  <p>Buka setiap hari jam 16.00 - 23.59 WIB</p>
-</header>
+  <header>
+    <h1>Admin Panel</h1>
+    <p>Kelola Website Pukis Lumer Aulia</p>
+  </header>
 
-<section id="best-seller">
-  <h2>Best Seller</h2>
-  <div class="gallery">
-    <img src="images/pukis1.jpg" alt="Pukis 1">
-    <img src="images/pukis2.jpg" alt="Pukis 2">
-    <img src="images/pukis3.jpg" alt="Pukis 3">
-    <img src="images/pukis4.jpg" alt="Pukis 4">
-    <img src="images/pukis5.jpg" alt="Pukis 5">
-  </div>
-</section>
+  <main>
+    <section class="testimoni-section">
+      <h2>Edit Testimoni</h2>
+      <form id="testimoniForm">
+        <textarea id="testimoniInput" placeholder="Tulis testimoni baru di sini..."></textarea>
+        <button type="submit">Simpan Testimoni</button>
+      </form>
 
-<section id="lokasi">
-  <h2>Lokasi</h2>
-  <p>Pasar Kuliner Padang Panjang</p>
-</section>
+      <h3>Preview Testimoni:</h3>
+      <div id="testimoniPreview">
+        <p>Belum ada testimoni baru.</p>
+      </div>
+    </section>
+  </main>
 
-<section id="pesan-layanan">
-  <h2>Pesan Via:</h2>
-  <ul>
-    <li><a href="https://food.maxim.co.id" target="_blank">Maxim Food</a></li>
-    <li><a href="https://grab.com/id/food" target="_blank">Grab Food</a></li>
-    <li><a href="https://gofood.co.id/" target="_blank">Go Food</a></li>
-  </ul>
-</section>
+  <script>
+    const form = document.getElementById('testimoniForm');
+    const input = document.getElementById('testimoniInput');
+    const preview = document.getElementById('testimoniPreview');
 
-<section id="kenapa-pilih">
-  <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
-  <p>Kualitas premium, rasa yang meleleh di mulut, harga terjangkau!</p>
-</section>
-
-<section id="fakta-unik">
-  <h2>Fakta Unik</h2>
-  <p>Pukis kami menggunakan resep rahasia turun-temurun dan 100% tanpa bahan pengawet!</p>
-</section>
-
-<!-- Floating Buttons -->
-<div class="floating-container">
-  <button class="floating-button" onclick="toggleButtons()">+</button>
-  <div class="floating-menu" id="floatingMenu">
-    <a href="https://wa.me/081296668670" target="_blank" class="menu-item" title="Chat WhatsApp">WA</a>
-    <a href="#" onclick="inviteFriend()" class="menu-item" title="Undang Teman">Invite</a>
-    <a href="https://shopee.co.id/" target="_blank" class="menu-item" title="Shopee">Shopee</a>
-    <a href="https://food.maxim.co.id/" target="_blank" class="menu-item" title="Maxim">Maxim</a>
-  </div>
-</div>
-
-<script src="js/main.js"></script>
-<script>
-function toggleButtons() {
-  var menu = document.getElementById('floatingMenu');
-  if (menu.style.display === 'flex') {
-    menu.style.display = 'none';
-  } else {
-    menu.style.display = 'flex';
-  }
-}
-
-function inviteFriend() {
-  if (navigator.share) {
-    navigator.share({
-      title: 'Pukis Lumer Aulia',
-      text: 'Cek Pukis Lumer Aulia, enak banget!',
-      url: window.location.href
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const newTestimoni = input.value.trim();
+      if (newTestimoni) {
+        preview.innerHTML = `<p>${newTestimoni}</p>`;
+        input.value = '';
+      }
     });
-  } else {
-    alert('Browser kamu tidak support berbagi.');
-  }
-}
-</script>
+  </script>
 
 </body>
 </html>
