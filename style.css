@@ -1,52 +1,112 @@
+/* style.css */
+
+/* General Settings */
 body {
-  font-family: 'Chewy', cursive;
-  margin: 0;
-  padding: 0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-header img {
-  width: 100%;
-  height: auto;
+h1, h2 {
+    text-align: center;
 }
 
-section {
-  padding: 20px;
-  text-align: center;
+p, ul {
+    padding: 0 20px;
+    text-align: center;
 }
 
-.gallery-images {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+/* Header */
+.main-header {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff8f0;
 }
 
-.gallery-images img {
-  width: 200px;
-  height: auto;
-  border-radius: 10px;
-  transition: transform 0.3s;
+/* Responsive Image untuk semua gambar */
+.responsive-image {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+    border-radius: 10px;
 }
 
-.gallery-images img:hover {
-  transform: scale(1.1);
+/* Gallery */
+.gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
 }
 
-.order-form input, .order-form button {
-  margin: 10px;
-  padding: 10px;
-  width: 80%;
-  max-width: 400px;
+/* Gallery Images */
+.gallery-container img {
+    flex: 1 1 calc(45% - 10px);
+    max-width: 100%;
 }
 
-.order-form button {
-  background-color: #ff9900;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-size: 16px;
+/* Order Form */
+.order form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 }
 
-.order-form button:hover {
-  background-color: #cc7a00;
+.order input, .order textarea {
+    width: 90%;
+    max-width: 400px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.order button {
+    padding: 10px 20px;
+    background-color: #ff9900;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.order button:hover {
+    background-color: #e68a00;
+}
+
+/* Fun Facts */
+.fun-facts ul {
+    list-style-type: none;
+}
+
+/* Share Button */
+.share button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+.share button:hover {
+    background-color: #45a049;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+}
+footer a {
+    color: #ffcc00;
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
 }
