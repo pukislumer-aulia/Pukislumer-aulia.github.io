@@ -12,6 +12,7 @@
 </head>
 <body id="top">
   <div class="page-wrapper">
+
     <div class="promo-image">
       <img src="images/kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
     </div>
@@ -77,7 +78,7 @@
         <input type="checkbox" name="Topping Bawah" value="Taro"> Taro<br>
         <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
       </div>
-      <div id="toppingAtasSection">
+      <div id="toppingAtasSection" style="display:none;">
         <label>Pilih Topping Atas (Untuk Double Topping):</label>
         <div class="checkbox-group">
           <input type="checkbox" name="Topping Atas" value="Meses"> Meses<br>
@@ -87,7 +88,7 @@
           <input type="checkbox" name="Topping Atas" value="Oreo"> Oreo<br>
         </div>
       </div>
-      <button type="submit">Kirim Pesanan</button>
+      <button type="submit" class="order-button">Kirim Pesanan</button>
     </form>
 
     <h2>Lokasi Kami</h2>
@@ -103,7 +104,7 @@
         <input type="text" id="nameInput" placeholder="Nama Kamu" required>
         <label>Testimoni:</label>
         <textarea id="testimonialInput" placeholder="Tulis testimoni di sini..." required></textarea>
-        <button type="submit">Kirim Testimoni</button>
+        <button type="submit" class="order-button">Kirim Testimoni</button>
       </form>
     </div>
 
@@ -122,4 +123,4 @@
 
 <script src="script.js"></script>
 </body>
-  </html>
+</html>
