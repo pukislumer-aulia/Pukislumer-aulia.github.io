@@ -1,8 +1,134 @@
-/* Semua CSS dipindah ke style.css */
+/* Global style */
 body {
   font-family: 'Chewy', cursive;
   margin: 0;
-  background: pink;
+  background-color: #ffe4e1;
   padding-bottom: 100px;
 }
-/* ... Semua style dari file HTML dimasukkan di sini ... */
+h1, h2 {
+  font-family: 'Oswald', sans-serif;
+  text-align: center;
+}
+.page-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.header-img {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+.gallery img:hover {
+  transform: scale(1.05);
+}
+form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+input[type="text"], input[type="number"], select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+button {
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+button:hover {
+  background-color: #ff1493;
+}
+.floating-buttons {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.floating-buttons a {
+  text-decoration: none;
+  padding: 10px;
+  background-color: #ff69b4;
+  color: white;
+  border-radius: 50px;
+  text-align: center;
+}
+.floating-buttons a:hover {
+  background-color: #ff1493;
+}
+.promo-image img {
+  width: 100%;
+  border-radius: 15px;
+}
+.promo-banner {
+  background-color: #ff69b4;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  font-family: 'Kanit', sans-serif;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+.checkbox-group {
+  margin-bottom: 15px;
+}
+.testimonials {
+  margin-top: 20px;
+}
+.testimonial {
+  background: #ffe4e1;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+}
+.maps-link {
+  display: inline-block;
+  margin: 10px 0;
+  padding: 10px 15px;
+  background: #ff69b4;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+}
+.maps-link:hover {
+  background: #ff1493;
+}
+.admin-link {
+  text-align: center;
+  margin-top: 20px;
+}
+.admin-link a {
+  background: #333;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 10px;
+  text-decoration: none;
+}
+.admin-link a:hover {
+  background: #555;
+}
