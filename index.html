@@ -1,76 +1,91 @@
 <!DOCTYPE html>
-<!--
-Website: Pukis Lumer Aulia
-Deskripsi: Website resmi untuk promosi produk Pukis Lumer Aulia yang berlokasi di Pasar Kuliner Padang Panjang.
-Struktur:
-- CSS: css/style.css
-- JavaScript: js/script.js dan js/main.js
-- Gambar: images/
-Tanggal Update: 2025
--->
-
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pukis Lumer Aulia</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&family=Oswald:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="page-wrapper">
 
-<header class="main-header">
-    <img src="images/Picsart_24-05-23_22-54-20-428.jpg" alt="Pukis Lumer Aulia" class="responsive-image">
-    <h1>Pukis Lumer Aulia</h1>
-    <p>Lezat - Lumer - Nikmat</p>
-</header>
+    <header>
+      <img src="gambar/header.jpg" alt="Pukis Lumer Aulia" class="header-img">
+      <h1>Pukis Lumer Aulia</h1>
+      <p>Nikmati sensasi manis, lumer, dan nikmat dari pukis terbaik di Padang Panjang!</p>
+    </header>
 
-<section class="about">
-    <h2>Tentang Kami</h2>
-    <p>Pukis Lumer Aulia menghadirkan sensasi pukis yang lumer di mulut dengan berbagai varian rasa. Kami hadir di Pasar Kuliner Padang Panjang setiap hari!</p>
-</section>
+    <section class="promo-banner">
+      Promo spesial! Dapatkan kupon GRATIS topping tambahan untuk pembelian pertama Anda!
+    </section>
 
-<section class="gallery">
-    <h2>Galeri</h2>
-    <div class="gallery-container">
-        <img src="images/Pukis1.jpg" alt="Pukis 1" class="responsive-image">
-        <img src="images/pukis2.jpg" alt="Pukis 2" class="responsive-image">
-        <img src="images/pukis3.jpg" alt="Pukis 3" class="responsive-image">
-        <img src="images/Pukis4.jpg" alt="Pukis 4" class="responsive-image">
-        <img src="images/pukis5.jpg" alt="Pukis 5" class="responsive-image">
+    <section class="info">
+      <h2>Jam Operasional & Lokasi</h2>
+      <p>Setiap Hari: 16.00 - 23.59 WIB<br>
+      Lokasi: Pasar Kuliner Padang Panjang</p>
+    </section>
+
+    <section class="gallery">
+      <h2>Galeri Produk</h2>
+      <div class="gallery-grid">
+        <img src="gambar/pukis1.jpg" alt="Pukis 1">
+        <img src="gambar/pukis2.jpg" alt="Pukis 2">
+        <img src="gambar/pukis3.jpg" alt="Pukis 3">
+        <img src="gambar/pukis4.jpg" alt="Pukis 4">
+        <img src="gambar/pukis5.jpg" alt="Pukis 5">
+      </div>
+    </section>
+
+    <section class="form-order">
+      <h2>Pesan Sekarang</h2>
+      <form id="orderForm" action="https://wa.me/6281296668670" method="get" target="_blank" onsubmit="return generateWhatsAppMessage()">
+        <label>Nama:</label>
+        <input type="text" id="nama" required>
+
+        <label>Jumlah Pukis:</label>
+        <input type="number" id="jumlah" required>
+
+        <label>Topping:</label>
+        <select id="tipeTopping" onchange="toggleToppingAtas()">
+          <option value="Single">Single Topping</option>
+          <option value="Double">Double Topping</option>
+        </select>
+
+        <div id="toppingAtasSection">
+          <label>Topping Atas (khusus Double):</label>
+          <input type="text" id="toppingAtas">
+        </div>
+
+        <button type="submit">Order via WhatsApp</button>
+      </form>
+    </section>
+
+    <section class="testimonials">
+      <h2>Testimoni Pelanggan</h2>
+      <div id="testimonialsList"></div>
+
+      <form id="testimonialForm">
+        <input type="text" id="nameInput" placeholder="Nama" required>
+        <textarea id="testimonialInput" placeholder="Tulis testimoni Anda..." required></textarea>
+        <button type="submit">Kirim Testimoni</button>
+      </form>
+    </section>
+
+    <div class="admin-link">
+      <a href="admin.html">Masuk Admin</a>
     </div>
-</section>
 
-<section class="order">
-    <h2>Order Sekarang!</h2>
-    <form id="orderForm">
-        <input type="text" id="name" name="name" placeholder="Nama Anda" required>
-        <input type="number" id="quantity" name="quantity" placeholder="Jumlah Pesanan" required>
-        <textarea id="address" name="address" placeholder="Alamat Lengkap" required></textarea>
-        <button type="submit">Pesan via WhatsApp</button>
-    </form>
-</section>
+    <div class="floating-buttons">
+      <a href="https://wa.me/6281296668670" target="_blank">WhatsApp</a>
+      <a href="#" onclick="sharePage()">Ajak Teman</a>
+      <a href="https://shopee.co.id" target="_blank">Shopee</a>
+      <a href="https://food.maxim.com" target="_blank">Maxim Food</a>
+    </div>
 
-<section class="fun-facts">
-    <h2>Fakta Unik!</h2>
-    <ul>
-        <li>Pukis kami dibuat fresh setiap hari!</li>
-        <li>Menggunakan bahan premium tanpa pengawet.</li>
-        <li>Lebih dari 10 varian rasa favorit!</li>
-    </ul>
-</section>
+  </div>
 
-<section class="share">
-    <h2>Ajak Temanmu!</h2>
-    <button id="shareButton">Bagikan ke Teman</button>
-</section>
-
-<footer>
-    <p>© 2025 Pukis Lumer Aulia - Follow kami di Instagram: <a href="https://instagram.com/Pukis.Lumer_aulia" target="_blank">@Pukis.Lumer_aulia</a></p>
-</footer>
-
-<!-- Scripts -->
-<script src="js/script.js"></script>
-<script src="js/main.js"></script>
-
+  <script src="main.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
