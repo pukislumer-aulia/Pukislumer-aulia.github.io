@@ -214,3 +214,10 @@ p, ul {
   0%, 100% { transform: translateY(-50%) rotate(-2deg); }
   50% { transform: translateY(-50%) rotate(2deg); }
 }
+/* Responsive Gambar */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  }
