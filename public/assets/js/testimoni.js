@@ -1,50 +1,55 @@
-// Muat testimoni dari localStorage saat halaman dimuat
-window.onload = function () {
-  tampilkanTestimoni();
-};
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("testimonial-form");
+  const nameInput = document.getElementById("name");
+  const testimonialInput = document.getElementById("testimonial");
+  const container = document.getElementById("testimonials-container");
 
-function tampilkanTestimoni() {
-  const container = document.getElementById('testimonials-container');
-  const data = JSON.parse(localStorage.getItem('testimonials')) || [];
+  function loadTestimonials() {
+    const testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
 
-  container.innerHTML = `
-    <h2>Daftar Testimoni</h2>
-    ${data.length === 0 ? '<p>Belum ada testimoni pelanggan.</p>' : ''}
-  `;
+    container.innerHTML = `<h2>Daftar Testimoni</h2>`;
+    if (testimonials.length === 0) {
+      container.innerHTML += `<p>Belum ada testimoni pelanggan.</p>`;
+      return;
+    }
 
-  data.forEach((item, index) => {
-    const div = document.createElement('div');
-    div.className = 'testimonial-item';
-    div.innerHTML = `
-      <p class="testimonial-name"><strong>${item.name}</strong></p>
-      <p class="testimonial-text">"${item.testimonial}"</p>
-      <button onclick="hapusTestimoni(${index})" class="delete-btn">Hapus</button>
-    `;
-    container.appendChild(div);
-  });
-}
-
-function hapusTestimoni(index) {
-  if (confirm('Yakin ingin menghapus testimoni ini?')) {
-    const data = JSON.parse(localStorage.getItem('testimonials')) || [];
-    data.splice(index, 1);
-    localStorage.setItem('testimonials', JSON.stringify(data));
-    tampilkanTestimoni();
+    testimonials.forEach(({ name, testimonial }, index) => {
+      const item = document.createElement("div");
+      item.classList.add("testimonial-item");
+      item.innerHTML = `
+        <p class="testimonial-name"><strong>${name}</strong></p>
+        <p class="testimonial-text">"${testimonial}"</p>
+        <button onclick="hapusTestimoni(${index})" class="delete-btn">Hapus</button>
+      `;
+      container.appendChild(item);
+    });
   }
-}
 
-document.getElementById('testimonial-form').addEventListener('submit', function (e) {
-  e.preventDefault();
+  window.hapusTestimoni = function (index) {
+    if (confirm("Yakin ingin menghapus testimoni ini?")) {
+      const data = JSON.parse(localStorage.getItem("testimonials")) || [];
+      data.splice(index, 1);
+      localStorage.setItem("testimonials", JSON.stringify(data));
+      loadTestimonials();
+    }
+  };
 
-  const name = document.getElementById('name').value.trim();
-  const testimonial = document.getElementById('testimonial').value.trim();
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
 
-  if (name && testimonial) {
-    const data = JSON.parse(localStorage.getItem('testimonials')) || [];
-    data.push({ name, testimonial });
-    localStorage.setItem('testimonials', JSON.stringify(data));
+      const name = nameInput.value.trim();
+      const testimonial = testimonialInput.value.trim();
 
-    this.reset();
-    tampilkanTestimoni();
+      if (name && testimonial) {
+        const testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
+        testimonials.push({ name, testimonial });
+        localStorage.setItem("testimonials", JSON.stringify(testimonials));
+        loadTestimonials();
+        form.reset();
+      }
+    });
   }
+
+  loadTestimonials();
 });
