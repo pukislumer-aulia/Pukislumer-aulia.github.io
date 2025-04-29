@@ -45,3 +45,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   loadTestimonials();
 });
+
+// Fungsi untuk tombol "Ajak Teman"
+function ajakTeman() {
+  const message = encodeURIComponent("Hai! Coba deh Pukis Lumer Aulia di Pasar Kuliner Padang Panjang. Enak banget! Bisa order di GrabFood, GoFood, atau Maxim Food. IG: @pukis.lumer_aulia");
+  const whatsappUrl = `https://wa.me/?text=${message}`;
+  window.open(whatsappUrl, '_blank');
+}
