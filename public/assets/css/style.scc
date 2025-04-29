@@ -62,7 +62,7 @@ h2 {
   margin: 20px auto;
   max-width: 500px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form-order label,
@@ -73,3 +73,58 @@ h2 {
 }
 
 .form-order input,
+.form-order textarea,
+.form-testimonial input,
+.form-testimonial textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-family: 'Chewy', cursive;
+}
+
+.form-order button,
+.form-testimonial button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #e67e22;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.form-order button:hover,
+.form-testimonial button:hover {
+  background-color: #d35400;
+}
+
+.fakta-unik {
+  background-color: #f6e58d;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 30px auto;
+  max-width: 600px;
+  font-style: italic;
+}
+
+.ajak-teman {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.ajak-teman button {
+  padding: 10px 20px;
+  background-color: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ajak-teman button:hover {
+  background-color: #341f97;
+}
