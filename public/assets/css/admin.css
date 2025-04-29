@@ -1,0 +1,70 @@
+body {
+  font-family: 'Chewy', cursive;
+  background-color: #fffefb;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #d35400;
+}
+
+.form-testimonial {
+  background-color: #fefae0;
+  padding: 20px;
+  max-width: 500px;
+  margin: 20px auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.form-testimonial label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.form-testimonial input,
+.form-testimonial textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #e67e22;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.testimonials {
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+.testimonial-item {
+  background-color: #ffefd5;
+  border-left: 5px solid #e67e22;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.testimonial-name {
+  font-weight: bold;
+  color: #d35400;
+}
+
+.testimonial-text {
+  font-style: italic;
+  margin-top: 5px;
+}
