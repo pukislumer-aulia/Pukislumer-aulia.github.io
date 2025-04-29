@@ -1,1 +1,57 @@
-nanti 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="../assets/css/form-style.css" />
+</head>
+<body>
+  <h1>Admin Panel</h1>
+
+  <section>
+    <h2>Tambah Menu</h2>
+    <form id="menuForm">
+      <label for="nama">Nama Menu:</label>
+      <input type="text" id="nama" name="nama" required>
+
+      <label for="harga">Harga:</label>
+      <input type="number" id="harga" name="harga" required>
+
+      <label for="deskripsi">Deskripsi:</label>
+      <textarea id="deskripsi" name="deskripsi" required></textarea>
+
+      <button type="submit">Tambah Menu</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Data Pesanan</h2>
+    <form id="admin-form">
+      <label for="name">Nama Pembeli:</label>
+      <input type="text" name="name" required>
+
+      <label for="quantity">Jumlah:</label>
+      <input type="number" name="quantity" required>
+
+      <label for="notes">Catatan:</label>
+      <input type="text" name="notes">
+
+      <button type="submit">Simpan Pesanan</button>
+    </form>
+
+    <table id="orders-table" border="1" style="margin-top:20px; width:100%; text-align:left;">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Jumlah</th>
+          <th>Catatan</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <script src="../assets/js/admin.js"></script>
+</body>
+</html>
