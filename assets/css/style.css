@@ -1,130 +1,190 @@
-body {
-  font-family: 'Chewy', cursive;
-  background: #fffefb;
-  margin: 0;
-  padding: 0;
-  color: #333;
+/* Reset dan body style */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffdde1;
 }
 
-h1 {
-  font-family: 'TanggoStdregular', sans-serif;
-  text-align: center;
-  font-size: 2.5em;
-  margin: 20px 0 10px 0;
-  color: #e67e22;
+/* Import font lokal Pacifico dan Roboto */
+@font-face {
+    font-family: 'Pacifico';
+    src: url('../fonts/pacifico.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/roboto.ttf') format('truetype');
 }
 
-h2 {
-  font-family: 'Kanit Black', sans-serif;
-  font-size: 1.8em;
-  color: #d35400;
-  margin-top: 40px;
+/* Header dengan gambar */
+header {
+    position: relative;
+    text-align: center;
+    color: #fff;
 }
-
 .header-img {
-  width: 100%;
-  height: auto;
-  display: block;
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
-.promo-banner {
-  background-color: #ffeaa7;
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-  color: #d35400;
-  font-size: 1.1em;
+/* Efek Neon untuk h1 (font Sofia dari Google) */
+.text-neon {
+    font-family: 'Sofia', cursive;
+    font-size: 3em;
+    margin: 20px 0;
+    color: #f0f;
+    text-shadow:
+        0 0 5px #f0f,
+        0 0 10px #f0f,
+        0 0 20px #f0f,
+        0 0 30px #ff00de,
+        0 0 40px #ff00de,
+        0 0 55px #ff00de,
+        0 0 75px #ff00de;
 }
 
+/* Semua <h2> menggunakan font Pacifico */
+h2 {
+    font-family: 'Pacifico', cursive;
+    font-size: 2em;
+    margin-top: 40px;
+    text-align: center;
+}
+
+/* Gaya Kupon Promo */
+#coupon {
+    background: #ff89ab;
+    margin: 20px auto;
+    padding: 20px;
+    width: 80%;
+    border: 3px dashed #ff1463;
+    border-radius: 10px;
+    text-align: center;
+}
+#coupon p {
+    font-size: 1.2em;
+}
+
+/* Galeri Produk (grid responsif) */
 .gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 0 10px;
 }
-
 .gallery img {
-  width: 180px;
-  height: auto;
-  border-radius: 10px;
-  transition: transform 0.3s;
+    width: 100%;
+    border-radius: 8px;
 }
 
-.gallery img:hover {
-  transform: scale(1.05);
+/* Form Pemesanan */
+#orderForm {
+    width: 80%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+#orderForm label {
+    display: block;
+    margin-bottom: 10px;
+    font-family: 'Roboto', sans-serif;
+}
+#orderForm input, #orderForm select, #orderForm button {
+    font-family: 'Roboto', sans-serif;
+    padding: 8px;
+    margin-top: 5px;
+}
+#orderForm button {
+    background: #ff1463;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
 }
 
-.form-order,
-.form-testimonial {
-  background-color: #fefae0;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 500px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+/* Tombol Mengambang (Floating Buttons) */
+.floating-buttons {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    text-align: right;
+}
+.float-button {
+    display: none;  /* tersembunyi default */
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+    color: #fff;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+#toggleFloat {
+    display: block;  /* tombol utama selalu tampil */
+    width: 50px;
+    height: 50px;
+    background: #555;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+/* Warna untuk setiap tombol */
+.whatsapp {
+    background: #25D366;
+}
+.invite {
+    background: #FF69B4;
+}
+.shopee {
+    background: #FF5722;
+}
+.maxim {
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
 }
 
-.form-order label,
-.form-testimonial label {
-  display: block;
-  margin-top: 10px;
-  font-weight: bold;
+/* Form dan daftar Testimoni */
+#testimonials {
+    width: 80%;
+    margin: 20px auto;
 }
-
-.form-order input,
-.form-order textarea,
-.form-testimonial input,
-.form-testimonial textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-family: 'Chewy', cursive;
+#testimonials form {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
 }
-
-.form-order button,
-.form-testimonial button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background-color: #e67e22;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
+#testimonials label {
+    display: block;
+    margin-bottom: 10px;
 }
-
-.form-order button:hover,
-.form-testimonial button:hover {
-  background-color: #d35400;
+#testimonials input, #testimonials textarea, #testimonials button {
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
 }
-
-.fakta-unik {
-  background-color: #f6e58d;
-  padding: 20px;
-  border-radius: 10px;
-  margin: 30px auto;
-  max-width: 600px;
-  font-style: italic;
+#testimonials button {
+    margin-top: 15px;
+    background: #25D366;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
 }
-
-.ajak-teman {
-  text-align: center;
-  margin: 30px 0;
+#testimonials-list {
+    margin-top: 20px;
 }
-
-.ajak-teman button {
-  padding: 10px 20px;
-  background-color: #6c5ce7;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.ajak-teman button:hover {
-  background-color: #341f97;
+.testimonial-item {
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
