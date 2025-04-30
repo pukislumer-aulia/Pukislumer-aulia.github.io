@@ -32,5 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const url = "https://wa.me/?text=" + encodeURIComponent(text);
       window.open(url, "_blank");
     });
+  });
+    document.getElementById("menuToggle").addEventListener("click", function () {
+  document.querySelector(".nav-links").classList.toggle("active");
+});
   }
 });
