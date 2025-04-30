@@ -46,3 +46,20 @@ footer {
   bottom: 0;
   width: 100%;
 }
+
+@media (max-width: 576px) {
+  .section-title {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .order-form,
+  .galeri-grid,
+  .testimoni-container {
+    padding: 10px;
+  }
+
+  .testimoni-card {
+    max-width: 100%;
+  }
+}
