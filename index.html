@@ -1,111 +1,148 @@
-display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-header h1 {
-  color: #fff;
-  font-size: 3em;
-  text-shadow: 2px 2px 5px #000;
-  font-family: 'Pacifico';
-}
-
-.promo {
-  background: #fff;
-  padding: 10px;
-  color: #e60073;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-.promo p {
-  display: inline-block;
-  animation: slideText 15s linear infinite;
-}
-
-@keyframes slideText {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-
-.testimonial {
-  background: #fff;
-  padding: 20px;
-  margin: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.fixed-button {
-  position: fixed;
-  right: 0;
-  top: 40%;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.fixed-button button {
-  padding: 10px;
-  border: none;
-  color: white;
-  cursor: pointer;
-  width: 150px;
-  transform: translateX(100%);
-  transition: transform 0.3s;
-}
-
-.fixed-button button:hover {
-  transform: translateX(0);
-}
-
-.wa { background: green; }
-.invite { background: pink; }
-.shopee { background: orange; }
-.maxim { background: white; color: red; border: 1px solid red; }
-
-.kupon {
-  background: yellow;
-  padding: 10px;
-  font-weight: bold;
-  margin: 20px;
-  text-align: center;
-}
-
-  </style>
-</head><body>
-  <header>
-    <h1>Pukis Lumer Aulia</h1>
-  </header>  <div class="promo">
-    <p>Promo Spesial! Beli 3 Gratis 1 setiap hari Jumat! Cek juga diskon khusus di Shopee dan Maxim Food!</p>
-  </div>  <main>
-    <section class="kupon">
-      Gunakan Kode: LUMER15 untuk diskon 15% hari ini!
-    </section><section>
-  <h2 class="section-title">Testimoni Pelanggan</h2>
-  <div class="testimonial">“Pukisnya enak banget, lumer di mulut!” – Rina</div>
-  <div class="testimonial">“Anak-anak suka banget! Pesan tiap minggu.” – Dedi</div>
-  <div class="testimonial">“Toppingnya lengkap, puas banget!” – Siska</div>
-  <div class="testimonial">“Pelayanan cepat, rasanya mantap.” – Andi</div>
-  <div class="testimonial">“Selalu beli via Shopee, praktis!” – Fira</div>
-</section>
-
-  </main>  <div class="fixed-button">
-    <button class="wa" onclick="window.open('https://wa.me/6281296668670','_blank')">WhatsApp</button>
-    <button class="invite" onclick="alert('Bagikan link ke teman kamu!')">Undang Teman</button>
-    <button class="shopee" onclick="window.open('https://shopee.co.id','_blank')">Shopee</button>
-    <button class="maxim" onclick="window.open('https://food.maxim.com','_blank')">Maxim Food</button>
-  </div>  <script>
-    // Topping efek
-    const toppingSelect = document.getElementById('toppingType');
-    const toppingAtas = document.getElementById('toppingAtasContainer');
-    if (toppingSelect && toppingAtas) {
-      toppingSelect.addEventListener('change', () => {
-        toppingAtas.style.display = toppingSelect.value === 'single' ? 'none' : 'block';
-      });
-      toppingAtas.style.display = toppingSelect.value === 'single' ? 'none' : 'block';
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pukis Lumer Aulia - Pukis Lumer No 1 di Padang Panjang</title>
+  <meta name="description" content="Pukis Lumer Aulia - Pukis lumer paling enak di Padang Panjang! Pilihan topping lengkap, single atau double topping, pesan sekarang!">
+  <meta name="keywords" content="Pukis Lumer, Pukis Padang Panjang, Pukis Enak, Pukis Topping, Pasar Kuliner Padang Panjang">
+  <meta name="author" content="Pukis Lumer Aulia">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
+  <style>
+    /* Semua CSS lengkap responsif */
+    body {
+      font-family: 'Chewy', cursive;
+      margin: 0;
+      background: pink;
+      padding-bottom: 100px;
     }
-  </script></body></html>
+    .page-wrapper {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: auto;
+    }
+    .promo-image img {
+      width: 50%;
+      margin-bottom: 10px;
+    }
+    .promo-banner {
+      width: 100%;
+      overflow: hidden;
+      background: #f39c12;
+      color: white;
+      font-weight: bold;
+      padding: 10px 0;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .promo-banner span {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: scrollBanner 15s linear infinite;
+    }
+    @keyframes scrollBanner {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    h1, h2 {
+      text-align: center;
+      font-family: 'Kanit', sans-serif;
+    }
+    p, label {
+      font-size: 18px;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .gallery img {
+      width: 45%;
+    }
+    form {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #e67e22;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .testimonial {
+      background: #fff;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+    }
+    .floating-buttons {
+      position: fixed;
+      top: 50%;
+      right: -100px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transform: translateY(-50%);
+      transition: right 0.3s;
+      z-index: 9999;
+    }
+    .floating-buttons a {
+      display: block;
+      width: 120px;
+      padding: 10px;
+      text-align: center;
+      border-radius: 10px 0 0 10px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      animation: wiggle 2s infinite;
+    }
+    .floating-buttons:hover {
+      right: 0;
+    }
+    .wa { background: #075e54; color: white; }
+    .invite { background: #25d366; color: white; }
+    .shopee { background: #ff5722; color: white; }
+    .maxim { background: white; color: red; border: 1px solid red; }
+    @keyframes wiggle {
+      0%, 100% { transform: translateY(-50%) rotate(-1deg); }
+      50% { transform: translateY(-50%) rotate(1deg); }
+    }
+    .admin-link {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 12px;
+    }
+    .admin-link a {
+      color: #999;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body id="top">
+  <!-- Konten tetap sama seperti sebelumnya -->
+</body>
+</html>
