@@ -1,20 +1,77 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pukis Lumer Aulia - Pukis Lumer No 1 di Padang Panjang</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia&effect=neon|outline">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="preload" href="assets/fonts/roboto.ttf" as="font" type="font/ttf" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia&effect=neon" />
+  <style>
+    @font-face {
+      font-family: 'Roboto';
+      src: url('assets/fonts/roboto.ttf') format('truetype');
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: pink;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font-family: 'Sofia', cursive;
+    }
+    h2 {
+      font-family: 'Pacifico', cursive;
+    }
+    .promo-banner {
+      background: #e74c3c;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      animation: slide 15s linear infinite;
+    }
+    @keyframes slide {
+      0% {transform: translateX(100%);}
+      100% {transform: translateX(-100%);}
+    }
+    .floating-btn {
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+    .floating-btn a {
+      display: none;
+      padding: 10px 15px;
+      color: white;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .floating-btn a.whatsapp { background: green; }
+    .floating-btn a.undang { background: deeppink; }
+    .floating-btn a.shopee { background: orange; }
+    .floating-btn a.maxim { background: white; color: red; border: 1px solid red; }
+
+    .floating-btn:hover a {
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
   <div class="promo-banner">
-    <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
+    GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!
   </div>
 
-  <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="header-img">
-  <h1 class="font-effect-neon" style="font-family: 'Sofia', sans-serif;">PUKIS LUMER AULIA</h1>
+  <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="header-img" style="width:100%; max-height:400px; object-fit:cover;">
+  <h1 class="font-effect-neon" style="text-align:center;">PUKIS LUMER AULIA</h1>
 
   <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
   <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
@@ -26,10 +83,10 @@
   <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
   <p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
 
-  <h2 class="font-effect-outline" style="font-family: 'Sofia', sans-serif;">Kenapa Harus Pukis Lumer Aulia?</h2>
+  <h2>Kenapa Harus Pukis Lumer Aulia?</h2>
   <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa yang luar biasa. Tersedia dalam berbagai rasa favorit semua umur!</p>
 
-  <h2 class="font-effect-outline" style="font-family: 'Sofia', sans-serif;">Fakta Unik Tentang Kami</h2>
+  <h2>Fakta Unik Tentang Kami</h2>
   <ul>
     <li>Adonan spesial rahasia keluarga sejak 2023-an!</li>
     <li>Pukis Lumer Kekinian pertama Hadir di Padang Panjang.</li>
@@ -39,7 +96,7 @@
     <li>Jadi jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
   </ul>
 
-  <h2 class="font-effect-outline" style="font-family: 'Sofia', sans-serif;">Galeri Pukis</h2>
+  <h2>Galeri Pukis</h2>
   <div class="gallery">
     <img src="assets/images/pukis1.jpg" alt="Pukis 1">
     <img src="assets/images/pukis2.jpg" alt="Pukis 2">
@@ -48,14 +105,14 @@
     <img src="assets/images/pukis5.jpg" alt="Pukis 5">
   </div>
 
-  <h2 class="font-effect-outline" style="font-family: 'Sofia', sans-serif;">Order Pukis Lumer Aulia</h2>
+  <h2>Order Pukis Lumer Aulia</h2>
   <form action="https://wa.me/6281296668670" method="GET" target="_blank" class="form-order">
     <label>Nama:</label>
-    <input type="text" name="Nama" placeholder="Masukkan nama Anda" required>
+    <input type="text" name="Nama" required>
     <label>Jumlah Pesanan:</label>
-    <input type="number" name="Jumlah" min="1" placeholder="Contoh: 2" required>
+    <input type="number" name="Jumlah" min="1" required>
     <label>Pilih Tipe Topping:</label>
-    <select id="tipeTopping" name="Tipe Topping" required onchange="toggleToppingAtas()">
+    <select id="tipeTopping" name="Tipe Topping" onchange="toggleToppingAtas()" required>
       <option value="">Pilih Tipe Topping</option>
       <option value="Single">Single Topping</option>
       <option value="Double">Double Topping</option>
@@ -72,7 +129,7 @@
       <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
     </div>
 
-    <div id="toppingAtasSection">
+    <div id="toppingAtasSection" style="display:none;">
       <label>Pilih Topping Atas (Untuk Double Topping):</label>
       <div class="checkbox-group">
         <input type="checkbox" name="Topping Atas" value="Meses"> Meses<br>
@@ -85,19 +142,19 @@
     <button type="submit">Kirim Pesanan</button>
   </form>
 
-  <h2 class="font-effect-outline" style="font-family: 'Sofia', sans-serif;">Lokasi Kami</h2>
+  <h2>Lokasi Kami</h2>
   <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
 
-  <h2 class="font-effect-outline" style="font-family: 'Sofia', sans-serif;">Testimoni Pelanggan</h2>
+  <h2>Testimoni Pelanggan</h2>
   <div class="testimonials" id="testimonialsList"></div>
 
   <div class="form-testimonial">
-    <h2 class="font-effect-outline" style="font-family: 'Sofia', sans-serif;">Tulis Testimoni Kamu</h2>
+    <h2>Tulis Testimoni Kamu</h2>
     <form id="testimonialForm">
       <label>Nama:</label>
-      <input type="text" id="nameInput" placeholder="Nama Kamu" required>
+      <input type="text" id="nameInput" required>
       <label>Testimoni:</label>
-      <textarea id="testimonialInput" placeholder="Tulis testimoni di sini..." required></textarea>
+      <textarea id="testimonialInput" required></textarea>
       <button type="submit">Kirim Testimoni</button>
     </form>
   </div>
@@ -106,13 +163,46 @@
     <a href="admin.html" target="_blank">Masuk Admin</a>
   </div>
 
-  <div class="cta-buttons">
-    <a href="https://wa.me/6281296668670">Chat WhatsApp</a>
-    <a href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumeraulia.com">Undang Teman</a>
-    <a href="https://shopee.co.id/">Shopee</a>
-    <a href="https://food.maxim.com/">Maxim</a>
+  <div class="floating-btn">
+    <a class="whatsapp" href="https://wa.me/6281296668670">Chat WhatsApp</a>
+    <a class="undang" href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral!">Undang Teman</a>
+    <a class="shopee" href="https://shopee.co.id/">Shopee</a>
+    <a class="maxim" href="https://food.maxim.com/">Maxim</a>
   </div>
 
-  <script src="assets/js/main.js"></script>
+  <script>
+    function toggleToppingAtas() {
+      const toppingType = document.getElementById('tipeTopping').value;
+      const section = document.getElementById('toppingAtasSection');
+      section.style.display = toppingType === 'Double' ? 'block' : 'none';
+    }
+
+    // Testimoni
+    const form = document.getElementById('testimonialForm');
+    const list = document.getElementById('testimonialsList');
+    const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+
+    function renderTestimonials() {
+      list.innerHTML = '';
+      testimonials.forEach(({ name, message }) => {
+        const el = document.createElement('div');
+        el.innerHTML = `<strong>${name}:</strong><p>${message}</p><hr>`;
+        list.appendChild(el);
+      });
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('nameInput').value;
+      const message = document.getElementById('testimonialInput').value;
+      testimonials.push({ name, message });
+      localStorage.setItem('testimonials', JSON.stringify(testimonials));
+      form.reset();
+      renderTestimonials();
+    });
+
+    renderTestimonials();
+  </script>
+
 </body>
 </html>
