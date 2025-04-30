@@ -2,61 +2,114 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel - Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="assets/css/form-style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Pukis</title>
+  <link rel="stylesheet" href="admin-style.css" />
+  <link rel="preload" href="fonts/roboto.ttf" as="font" type="font/ttf" crossorigin>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f8ff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #cc0066;
+    }
+
+    form {
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select, button {
+      padding: 8px;
+      margin-top: 5px;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h1>Admin Panel</h1>
 
-  <section>
-    <h2>Tambah Menu</h2>
-    <form id="menuForm">
-      <label for="nama">Nama Menu:</label>
-      <input type="text" id="nama" name="nama" required>
+  <h1>Halaman Admin Pukis</h1>
 
-      <label for="harga">Harga:</label>
-      <input type="number" id="harga" name="harga" required>
+  <!-- Form Tambah Menu -->
+  <form id="menuForm">
+    <h2>Tambah Menu Baru</h2>
+    <label for="menuName">Nama Menu:</label>
+    <input type="text" id="menuName" required />
+    <button type="submit">Simpan Menu</button>
+  </form>
 
-      <label for="deskripsi">Deskripsi:</label>
-      <textarea id="deskripsi" name="deskripsi" required></textarea>
+  <ul id="menuList"></ul>
 
-      <button type="submit">Tambah Menu</button>
-    </form>
-  </section>
+  <!-- Form Tambah Pesanan -->
+  <form id="orderFormAdmin">
+    <h2>Tambah Pesanan</h2>
 
-  <section>
-    <h2>Data Pesanan</h2>
-    <form id="admin-form">
-      <label for="name">Nama Pembeli:</label>
-      <input type="text" name="name" required>
+    <label for="orderNameAdmin">Nama Pemesan:</label>
+    <input type="text" id="orderNameAdmin" required />
 
-      <label for="quantity">Jumlah:</label>
-      <input type="number" name="quantity" required>
+    <label for="menuChoice">Pilih Menu:</label>
+    <input list="menuOptions" id="menuChoice" required />
+    <datalist id="menuOptions"></datalist>
 
-      <label for="notes">Catatan:</label>
-      <input type="text" name="notes">
+    <label for="adminToppingType">Jenis Topping:</label>
+    <select id="adminToppingType">
+      <option value="single">Single Topping</option>
+      <option value="double">Double Topping</option>
+    </select>
 
-      <button type="submit">Simpan Pesanan</button>
-    </form>
+    <div id="adminToppingAtasContainer">
+      <label for="adminToppingAtas">Topping Atas (khusus double):</label>
+      <input type="text" id="adminToppingAtas" />
+    </div>
 
-    <table id="orders-table" border="1" style="margin-top:20px; width:100%; text-align:left;">
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>Jumlah</th>
-          <th>Catatan</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
+    <button type="submit">Simpan Pesanan</button>
+  </form>
 
-  <section>
-    <h2>Testimoni Pelanggan</h2>
-    <div id="admin-testimoni-list"></div>
-  </section>
+  <!-- Tabel Pesanan -->
+  <h2>Daftar Pesanan</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nama</th>
+        <th>Menu</th>
+        <th>Topping</th>
+        <th>Topping Atas</th>
+      </tr>
+    </thead>
+    <tbody id="ordersBody"></tbody>
+  </table>
 
-  <script src="assets/js/admin.js"></script>
+  <script src="admin.js"></script>
 </body>
-</html>
+  </html>
