@@ -1,55 +1,23 @@
+// testimoni.js
+
 document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("testimonial-form");
-  const nameInput = document.getElementById("name");
-  const testimonialInput = document.getElementById("testimonial");
-  const container = document.getElementById("testimonials-container");
+  const testiContainer = document.querySelector(".testimoni-container");
+  const testiItems = document.querySelectorAll(".testimoni-item");
+  let currentIndex = 0;
 
-  function loadTestimonials() {
-    const testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
-
-    container.innerHTML = `<h2>Daftar Testimoni</h2>`;
-    if (testimonials.length === 0) {
-      container.innerHTML += `<p>Belum ada testimoni pelanggan.</p>`;
-      return;
-    }
-
-    testimonials.forEach(({ name, testimonial }, index) => {
-      const item = document.createElement("div");
-      item.classList.add("testimonial-item");
-      item.innerHTML = `
-        <p class="testimonial-name"><strong>${name}</strong></p>
-        <p class="testimonial-text">"${testimonial}"</p>
-        <button onclick="hapusTestimoni(${index})" class="delete-btn">Hapus</button>
-      `;
-      container.appendChild(item);
+  function showTestimoni(index) {
+    testiItems.forEach((item, i) => {
+      item.style.display = i === index ? "block" : "none";
     });
   }
 
-  window.hapusTestimoni = function (index) {
-    if (confirm("Yakin ingin menghapus testimoni ini?")) {
-      const data = JSON.parse(localStorage.getItem("testimonials")) || [];
-      data.splice(index, 1);
-      localStorage.setItem("testimonials", JSON.stringify(data));
-      loadTestimonials();
-    }
-  };
-
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const name = nameInput.value.trim();
-      const testimonial = testimonialInput.value.trim();
-
-      if (name && testimonial) {
-        const testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
-        testimonials.push({ name, testimonial });
-        localStorage.setItem("testimonials", JSON.stringify(testimonials));
-        loadTestimonials();
-        form.reset();
-      }
-    });
+  function nextTestimoni() {
+    currentIndex = (currentIndex + 1) % testiItems.length;
+    showTestimoni(currentIndex);
   }
 
-  loadTestimonials();
+  if (testiItems.length > 0) {
+    showTestimoni(currentIndex);
+    setInterval(nextTestimoni, 5000); // Ganti testimoni tiap 5 detik
+  }
 });
