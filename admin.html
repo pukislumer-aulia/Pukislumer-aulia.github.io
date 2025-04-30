@@ -4,14 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Panel - Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia&effect=neon|outline">
   <link rel="stylesheet" href="assets/css/form-style.css" />
 </head>
 <body>
-  <h1 class="font-effect-neon" style="font-family: 'Sofia', sans-serif;">Admin Panel</h1>
+  <h1>Admin Panel</h1>
 
   <section>
-    <h2 class="font-effect-outline" style="font-family: 'Sofia', sans-serif;">Tambah Menu</h2>
+    <h2>Tambah Menu</h2>
     <form id="menuForm">
       <label for="nama">Nama Menu:</label>
       <input type="text" id="nama" name="nama" required>
@@ -27,7 +26,7 @@
   </section>
 
   <section>
-    <h2 class="font-effect-outline" style="font-family: 'Sofia', sans-serif;">Data Pesanan</h2>
+    <h2>Data Pesanan</h2>
     <form id="admin-form">
       <label for="name">Nama Pembeli:</label>
       <input type="text" name="name" required>
@@ -51,6 +50,11 @@
       </thead>
       <tbody></tbody>
     </table>
+  </section>
+
+  <section>
+    <h2>Testimoni Pelanggan</h2>
+    <div id="admin-testimoni-list"></div>
   </section>
 
   <script src="assets/js/admin.js"></script>
