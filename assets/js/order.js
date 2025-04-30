@@ -27,23 +27,16 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Form submit
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+  document.getElementById("orderForm").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    const nama = form.querySelector("#nama").value;
-    const jumlah = form.querySelector("#jumlah").value;
-    const topping = singleTopping.checked
-      ? form.querySelector("#toppingSingle").value
-      : form.querySelector("#toppingDouble1").value +
-        " & " +
-        form.querySelector("#toppingDouble2").value;
-
-    const pesan = `Halo! Saya ingin pesan Pukis Lumer Aulia:
-Nama: ${nama}
-Jumlah: ${jumlah}
-Topping: ${topping}`;
-
-    const url = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
-    window.open(url, "_blank");
-  });
+  const nama = this.nama.value;
+  const menu = this.menu.value;
+  const jumlah = this.jumlah.value;
+  const catatan = this.catatan.value;
+  
+  const pesan = `Halo! Saya ingin pesan:\nNama: ${nama}\nMenu: ${menu}\nJumlah: ${jumlah}\nCatatan: ${catatan}`;
+  const url = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
+  window.open(url, "_blank");
+});
 });
