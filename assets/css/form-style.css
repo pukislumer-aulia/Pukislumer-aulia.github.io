@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Pacifico';
+  src: url('../fonts/Pacifico.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   font-family: 'Chewy', cursive;
   background-color: #fffefb;
@@ -6,10 +13,20 @@ body {
   padding: 20px;
 }
 
+body, input, textarea, button, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Pacifico', cursive;
+}
+
 h1, h2 {
-  font-family: 'TanggoStdregular', sans-serif;
   color: #d35400;
   margin-bottom: 10px;
+}
+
+.form-title {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #d35400;
+  text-align: center;
 }
 
 form {
@@ -38,6 +55,7 @@ select {
   border: 1px solid #ccc;
   border-radius: 8px;
   box-sizing: border-box;
+  font-family: 'Chewy', cursive;
 }
 
 button {
@@ -48,6 +66,7 @@ button {
   border-radius: 8px;
   cursor: pointer;
   font-size: 1em;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -73,13 +92,6 @@ button:hover {
   color: #333;
 }
 
-.form-title {
-  font-size: 1.5em;
-  margin-bottom: 15px;
-  color: #d35400;
-  text-align: center;
-}
-
 table {
   border-collapse: collapse;
   width: 100%;
@@ -89,13 +101,4 @@ th, td {
   border: 1px solid #ccc;
   padding: 10px;
   text-align: left;
-}
-@font-face {
-  font-family: 'Pacifico';
-  src: url('../fonts/Pacifico.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-body, input, textarea, button, h1, h2, h3, h4, h5, h6 {
-  font-family: 'Pacifico', cursive;
 }
