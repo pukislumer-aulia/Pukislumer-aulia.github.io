@@ -1,208 +1,156 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pukis Lumer Aulia - Pukis Lumer No 1 di Padang Panjang</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="preload" href="assets/fonts/roboto.ttf" as="font" type="font/ttf" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia&effect=neon" />
-  <style>
-    @font-face {
-      font-family: 'Roboto';
-      src: url('assets/fonts/roboto.ttf') format('truetype');
-    }
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: pink;
-      margin: 0;
-      padding: 0;
-    }
-    h1 {
-      font-family: 'Sofia', cursive;
-    }
-    h2 {
-      font-family: 'Pacifico', cursive;
-    }
-    .promo-banner {
-      background: #e74c3c;
-      color: white;
-      padding: 10px;
-      text-align: center;
-      font-weight: bold;
-      animation: slide 15s linear infinite;
-    }
-    @keyframes slide {
-      0% {transform: translateX(100%);}
-      100% {transform: translateX(-100%);}
-    }
-    .floating-btn {
-      position: fixed;
-      right: 10px;
-      bottom: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 1000;
-    }
-    .floating-btn a {
-      display: none;
-      padding: 10px 15px;
-      color: white;
-      border-radius: 30px;
-      text-decoration: none;
-      font-size: 14px;
-      transition: all 0.3s ease;
-    }
-    .floating-btn a.whatsapp { background: green; }
-    .floating-btn a.undang { background: deeppink; }
-    .floating-btn a.shopee { background: orange; }
-    .floating-btn a.maxim { background: white; color: red; border: 1px solid red; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pukis Lumer Aulia</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preload" href="fonts/roboto.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="fonts/pacifico.ttf" as="font" type="font/ttf" crossorigin>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: pink;
+            margin: 0;
+        }
 
-    .floating-btn:hover a {
-      display: block;
-    }
-  </style>
+        h1 {
+            font-size: 2.5em;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 0 10px #f0f, 0 0 20px #f0f;
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-family: 'Pacifico', cursive;
+            text-align: center;
+        }
+
+        .cover {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        .promo-banner {
+            background-color: yellow;
+            color: red;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+
+        .promo-banner span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        .kupon {
+            background: #fff;
+            border: dashed 2px red;
+            padding: 10px;
+            text-align: center;
+            margin: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .testimonial {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .testimonial > div {
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            width: 200px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .floating-button {
+            position: fixed;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            bottom: 20px;
+        }
+
+        .floating-button button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 30px;
+            color: #fff;
+            cursor: pointer;
+            display: none;
+        }
+
+        #waBtn { background: green; }
+        #inviteBtn { background: pink; }
+        #shopeeBtn { background: orange; }
+        #maximBtn { background: white; color: red; border: 1px solid red; }
+
+        .toggle-floating {
+            background: #333;
+            color: white;
+            border-radius: 30px;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="promo-banner">
-    GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!
-  </div>
+    <h1>Pukis Lumer Aulia</h1>
+    <img src="pukis.jpg" alt="Cover" class="cover" />
 
-  <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="header-img" style="width:100%; max-height:400px; object-fit:cover;">
-  <h1 class="font-effect-neon" style="text-align:center;">PUKIS LUMER AULIA</h1>
-
-  <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
-  <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
-  <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
-  <p>Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke PUKIS LUMER AULIA</p>
-
-  <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)</p>
-  <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
-  <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
-  <p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
-
-  <h2>Kenapa Harus Pukis Lumer Aulia?</h2>
-  <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa yang luar biasa. Tersedia dalam berbagai rasa favorit semua umur!</p>
-
-  <h2>Fakta Unik Tentang Kami</h2>
-  <ul>
-    <li>Adonan spesial rahasia keluarga sejak 2023-an!</li>
-    <li>Pukis Lumer Kekinian pertama Hadir di Padang Panjang.</li>
-    <li>Lembut sempurna karena teknik pemanggangan tradisional.</li>
-    <li>Lebih dari 10+ varian topping setiap harinya selalu Ready.</li>
-    <li>Memakai 100% bahan premium tanpa pengawet.</li>
-    <li>Jadi jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
-  </ul>
-
-  <h2>Galeri Pukis</h2>
-  <div class="gallery">
-    <img src="assets/images/pukis1.jpg" alt="Pukis 1">
-    <img src="assets/images/pukis2.jpg" alt="Pukis 2">
-    <img src="assets/images/pukis3.jpg" alt="Pukis 3">
-    <img src="assets/images/pukis4.jpg" alt="Pukis 4">
-    <img src="assets/images/pukis5.jpg" alt="Pukis 5">
-  </div>
-
-  <h2>Order Pukis Lumer Aulia</h2>
-  <form action="https://wa.me/6281296668670" method="GET" target="_blank" class="form-order">
-    <label>Nama:</label>
-    <input type="text" name="Nama" required>
-    <label>Jumlah Pesanan:</label>
-    <input type="number" name="Jumlah" min="1" required>
-    <label>Pilih Tipe Topping:</label>
-    <select id="tipeTopping" name="Tipe Topping" onchange="toggleToppingAtas()" required>
-      <option value="">Pilih Tipe Topping</option>
-      <option value="Single">Single Topping</option>
-      <option value="Double">Double Topping</option>
-    </select>
-
-    <label>Pilih Topping Bawah:</label>
-    <div class="checkbox-group">
-      <input type="checkbox" name="Topping Bawah" value="Coklat"> Coklat<br>
-      <input type="checkbox" name="Topping Bawah" value="Tiramisu"> Tiramisu<br>
-      <input type="checkbox" name="Topping Bawah" value="Vanilla"> Vanilla<br>
-      <input type="checkbox" name="Topping Bawah" value="Stroberi"> Stroberi<br>
-      <input type="checkbox" name="Topping Bawah" value="Cappucino"> Cappucino<br>
-      <input type="checkbox" name="Topping Bawah" value="Taro"> Taro<br>
-      <input type="checkbox" name="Topping Bawah" value="Matcha"> Matcha<br>
+    <div class="promo-banner">
+        <span>Promo Hari Ini: Beli 3 Gratis 1 + Kupon Diskon Menarik + Bonus Topping!</span>
     </div>
 
-    <div id="toppingAtasSection" style="display:none;">
-      <label>Pilih Topping Atas (Untuk Double Topping):</label>
-      <div class="checkbox-group">
-        <input type="checkbox" name="Topping Atas" value="Meses"> Meses<br>
-        <input type="checkbox" name="Topping Atas" value="Keju"> Keju<br>
-        <input type="checkbox" name="Topping Atas" value="Kacang"> Kacang<br>
-        <input type="checkbox" name="Topping Atas" value="Choco Chips"> Choco Chips<br>
-        <input type="checkbox" name="Topping Atas" value="Oreo"> Oreo<br>
-      </div>
+    <div class="kupon">Gunakan Kode: PUKISHEMAT di Maxim/Grab</div>
+
+    <h2>Testimoni Pelanggan</h2>
+    <div class="testimonial">
+        <div>"Rasanya lembut dan lumer banget!" - Rani</div>
+        <div>"Anak-anak suka banget, toppingnya banyak!" - Bunda Fitri</div>
+        <div>"Pelayanan cepat, bisa order lewat Maxim juga!" - Dedi</div>
+        <div>"Harga murah, rasa mahal!" - Siska</div>
+        <div>"Langganan tiap malam, selalu fresh!" - Iqbal</div>
     </div>
-    <button type="submit">Kirim Pesanan</button>
-  </form>
 
-  <h2>Lokasi Kami</h2>
-  <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
+    <div class="floating-button">
+        <button id="waBtn" onclick="location.href='https://wa.me/6281296668670'">Chat WhatsApp</button>
+        <button id="inviteBtn" onclick="alert('Ajak teman via link: pukis.web.id/share')">Undang Teman</button>
+        <button id="shopeeBtn" onclick="location.href='https://shopee.co.id/pukis-lumer'">Shopee</button>
+        <button id="maximBtn" onclick="location.href='https://food.maxim.com/order'">Maxim</button>
+        <button class="toggle-floating" onclick="toggleButtons()">+</button>
+    </div>
 
-  <h2>Testimoni Pelanggan</h2>
-  <div class="testimonials" id="testimonialsList"></div>
-
-  <div class="form-testimonial">
-    <h2>Tulis Testimoni Kamu</h2>
-    <form id="testimonialForm">
-      <label>Nama:</label>
-      <input type="text" id="nameInput" required>
-      <label>Testimoni:</label>
-      <textarea id="testimonialInput" required></textarea>
-      <button type="submit">Kirim Testimoni</button>
-    </form>
-  </div>
-
-  <div class="admin-link">
-    <a href="admin.html" target="_blank">Masuk Admin</a>
-  </div>
-
-  <div class="floating-btn">
-    <a class="whatsapp" href="https://wa.me/6281296668670">Chat WhatsApp</a>
-    <a class="undang" href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral!">Undang Teman</a>
-    <a class="shopee" href="https://shopee.co.id/">Shopee</a>
-    <a class="maxim" href="https://food.maxim.com/">Maxim</a>
-  </div>
-
-  <script>
-    function toggleToppingAtas() {
-      const toppingType = document.getElementById('tipeTopping').value;
-      const section = document.getElementById('toppingAtasSection');
-      section.style.display = toppingType === 'Double' ? 'block' : 'none';
-    }
-
-    // Testimoni
-    const form = document.getElementById('testimonialForm');
-    const list = document.getElementById('testimonialsList');
-    const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-
-    function renderTestimonials() {
-      list.innerHTML = '';
-      testimonials.forEach(({ name, message }) => {
-        const el = document.createElement('div');
-        el.innerHTML = `<strong>${name}:</strong><p>${message}</p><hr>`;
-        list.appendChild(el);
-      });
-    }
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const name = document.getElementById('nameInput').value;
-      const message = document.getElementById('testimonialInput').value;
-      testimonials.push({ name, message });
-      localStorage.setItem('testimonials', JSON.stringify(testimonials));
-      form.reset();
-      renderTestimonials();
-    });
-
-    renderTestimonials();
-  </script>
+    <script>
+        let shown = false;
+        function toggleButtons() {
+            shown = !shown;
+            document.getElementById('waBtn').style.display = shown ? 'block' : 'none';
+            document.getElementById('inviteBtn').style.display = shown ? 'block' : 'none';
+            document.getElementById('shopeeBtn').style.display = shown ? 'block' : 'none';
+            document.getElementById('maximBtn').style.display = shown ? 'block' : 'none';
+        }
+    </script>
 
 </body>
 </html>
