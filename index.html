@@ -294,6 +294,43 @@ function displayTestimonial(name, testimonial) {
   newTestimonial.innerHTML = `<p><em>"${testimonial}"</em><br><strong>— ${name}</strong></p>`;
   testimonialList.appendChild(newTestimonial);
 }
+  <!-- Form Order dan Script WhatsApp -->
+<section id="order">
+  <h2>Pesan Sekarang</h2>
+  <form id="orderForm">
+    <label for="name">Nama:</label>
+    <input type="text" id="name" required />
+
+    <label for="menu">Menu:</label>
+    <select id="menu" required>
+      <option value="Pukis Coklat">Pukis Coklat</option>
+      <option value="Pukis Keju">Pukis Keju</option>
+      <option value="Pukis Green Tea">Pukis Green Tea</option>
+      <!-- Tambah menu lain di sini -->
+    </select>
+
+    <label for="qty">Jumlah:</label>
+    <input type="number" id="qty" min="1" required />
+
+    <button type="submit">Kirim ke WhatsApp</button>
+  </form>
+</section>
+
+<script>
+  document.getElementById("orderForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const nama = document.getElementById("name").value;
+    const menu = document.getElementById("menu").value;
+    const qty = document.getElementById("qty").value;
+
+    const pesan = `Halo! Saya ingin memesan:\n\nNama: ${nama}\nMenu: ${menu}\nJumlah: ${qty}`;
+    const nomorWa = "6281296668670"; // Nomor WA kamu
+
+    const url = `https://wa.me/${nomorWa}?text=${encodeURIComponent(pesan)}`;
+    window.open(url, "_blank");
+  });
+</script>
 </script>
 </body>
 </html>
