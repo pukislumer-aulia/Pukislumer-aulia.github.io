@@ -47,3 +47,32 @@ ign: left;
 .order-form button:hover {
   background-color: #ff1493;
 }
+.order-form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-form input,
+.order-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: 'Chewy', cursive;
+}
+
+.order-form button {
+  background-color: #ff4081;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.order-form button:hover {
+  background-color: #e91e63;
+}
