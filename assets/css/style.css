@@ -1,190 +1,48 @@
-/* Reset dan body style */
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: #ffdde1;
+/* style.css */
+
+body {
+  margin: 0;
+  font-family: 'Chewy', cursive;
+  background-color: #fff8f0;
+  color: #333;
 }
 
-/* Import font lokal Pacifico dan Roboto */
-@font-face {
-    font-family: 'Pacifico';
-    src: url('../fonts/pacifico.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'Roboto';
-    src: url('../fonts/roboto.ttf') format('truetype');
-}
-
-/* Header dengan gambar */
 header {
-    position: relative;
-    text-align: center;
-    color: #fff;
-}
-.header-img {
-    width: 100%;
-    height: auto;
-    display: block;
+  background-color: #ff69b4;
+  color: white;
+  padding: 1rem;
+  text-align: center;
 }
 
-/* Efek Neon untuk h1 (font Sofia dari Google) */
-.text-neon {
-    font-family: 'Sofia', cursive;
-    font-size: 3em;
-    margin: 20px 0;
-    color: #f0f;
-    text-shadow:
-        0 0 5px #f0f,
-        0 0 10px #f0f,
-        0 0 20px #f0f,
-        0 0 30px #ff00de,
-        0 0 40px #ff00de,
-        0 0 55px #ff00de,
-        0 0 75px #ff00de;
+nav {
+  background-color: #fff;
+  border-bottom: 2px solid #ffc0cb;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
-/* Semua <h2> menggunakan font Pacifico */
-h2 {
-    font-family: 'Pacifico', cursive;
-    font-size: 2em;
-    margin-top: 40px;
-    text-align: center;
+nav a {
+  text-decoration: none;
+  color: #ff69b4;
+  font-weight: bold;
 }
 
-/* Gaya Kupon Promo */
-#coupon {
-    background: #ff89ab;
-    margin: 20px auto;
-    padding: 20px;
-    width: 80%;
-    border: 3px dashed #ff1463;
-    border-radius: 10px;
-    text-align: center;
-}
-#coupon p {
-    font-size: 1.2em;
+main {
+  padding: 1rem;
 }
 
-/* Galeri Produk (grid responsif) */
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
-    padding: 0 10px;
-}
-.gallery img {
-    width: 100%;
-    border-radius: 8px;
+section {
+  margin-bottom: 2rem;
 }
 
-/* Form Pemesanan */
-#orderForm {
-    width: 80%;
-    margin: 20px auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-}
-#orderForm label {
-    display: block;
-    margin-bottom: 10px;
-    font-family: 'Roboto', sans-serif;
-}
-#orderForm input, #orderForm select, #orderForm button {
-    font-family: 'Roboto', sans-serif;
-    padding: 8px;
-    margin-top: 5px;
-}
-#orderForm button {
-    background: #ff1463;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    margin-top: 15px;
-    cursor: pointer;
-}
-
-/* Tombol Mengambang (Floating Buttons) */
-.floating-buttons {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    text-align: right;
-}
-.float-button {
-    display: none;  /* tersembunyi default */
-    width: 50px;
-    height: 50px;
-    margin-top: 10px;
-    color: #fff;
-    line-height: 50px;
-    text-align: center;
-    border-radius: 50%;
-    text-decoration: none;
-    font-size: 0.9em;
-}
-#toggleFloat {
-    display: block;  /* tombol utama selalu tampil */
-    width: 50px;
-    height: 50px;
-    background: #555;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    font-size: 1.5em;
-    cursor: pointer;
-}
-/* Warna untuk setiap tombol */
-.whatsapp {
-    background: #25D366;
-}
-.invite {
-    background: #FF69B4;
-}
-.shopee {
-    background: #FF5722;
-}
-.maxim {
-    background: #fff;
-    color: #000;
-    border: 1px solid #000;
-}
-
-/* Form dan daftar Testimoni */
-#testimonials {
-    width: 80%;
-    margin: 20px auto;
-}
-#testimonials form {
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-}
-#testimonials label {
-    display: block;
-    margin-bottom: 10px;
-}
-#testimonials input, #testimonials textarea, #testimonials button {
-    font-family: 'Roboto', sans-serif;
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-}
-#testimonials button {
-    margin-top: 15px;
-    background: #25D366;
-    border: none;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-}
-#testimonials-list {
-    margin-top: 20px;
-}
-.testimonial-item {
-    background: #fff;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+footer {
+  background-color: #ff69b4;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }
