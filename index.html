@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +10,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <header>
     <img src="assets/images/pukis.jpg" alt="Header Pukis" class="header-img">
     <h1>Pukis Lumer Aulia</h1>
     <p>Assalamu'alaikum warahmatullahi wabarakatuh<br>
-    Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
+      Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
     <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.<br>
-    Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke <strong>PUKIS LUMER AULIA</strong></p>
+      Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke <strong>PUKIS LUMER AULIA</strong></p>
     <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)<br>
-    <strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang<br>
-    <strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
+      <strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang<br>
+      <strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
     <p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
-  </header>  <nav class="navbar">
+  </header>
+
+  <nav class="navbar">
     <div class="menu-toggle">☰</div>
     <ul class="nav-links">
       <li><a href="#menu">Menu</a></li>
@@ -28,7 +32,9 @@
       <li><a href="#galeri">Galeri</a></li>
       <li><a href="#testimoni">Testimoni</a></li>
     </ul>
-  </nav>  <main>
+  </nav>
+
+  <main>
     <section id="menu">
       <h2 class="section-title">Pilihan Varian</h2>
       <ul>
@@ -53,77 +59,83 @@
           </ul>
         </li>
       </ul>
-    </section><section id="order">
-  <h2 class="section-title">Form Order</h2>
-  <form class="order-form">
-    <label for="variant">Pilih Varian:</label>
-    <select id="variant" name="variant">
-      <option value="non">Non Topping</option>
-      <option value="single">Single Topping</option>
-      <option value="double">Double Topping</option>
-    </select>
+    </section>
 
-    <label for="size">Pilih Ukuran:</label>
-    <select id="size" name="size">
-      <option value="small">Box Kecil (5 pcs)</option>
-      <option value="large">Box Besar (10 pcs)</option>
-    </select>
+    <section id="order">
+      <h2 class="section-title">Form Order</h2>
+      <form class="order-form">
+        <label for="variant">Pilih Varian:</label>
+        <select id="variant" name="variant">
+          <option value="non">Non Topping</option>
+          <option value="single">Single Topping</option>
+          <option value="double">Double Topping</option>
+        </select>
 
-    <div id="topping-single" class="topping-group" style="display:none">
-      <label>Pilih Topping (Single):</label>
-      <input type="checkbox" name="toppingSingle" value="Coklat"> Coklat
-      <input type="checkbox" name="toppingSingle" value="Tiramisu"> Tiramisu
-      <input type="checkbox" name="toppingSingle" value="Matcha"> Matcha
-      <input type="checkbox" name="toppingSingle" value="Cappucino"> Cappucino
-      <input type="checkbox" name="toppingSingle" value="Stroberry"> Stroberry
-      <input type="checkbox" name="toppingSingle" value="Vanilla"> Vanilla
-    </div>
+        <label for="size">Pilih Ukuran:</label>
+        <select id="size" name="size">
+          <option value="small">Box Kecil (5 pcs)</option>
+          <option value="large">Box Besar (10 pcs)</option>
+        </select>
 
-    <div id="topping-double" class="topping-group" style="display:none">
-      <label>Pilih Topping (Double):</label>
-      <input type="checkbox" name="toppingDouble" value="Meses"> Meses
-      <input type="checkbox" name="toppingDouble" value="Keju"> Keju
-      <input type="checkbox" name="toppingDouble" value="Kacang"> Kacang
-      <input type="checkbox" name="toppingDouble" value="Choco Chip"> Choco Chip
-      <input type="checkbox" name="toppingDouble" value="Oreo"> Oreo
-    </div>
+        <div id="topping-single" class="topping-group" style="display:none">
+          <label>Pilih Topping (Single):</label>
+          <input type="checkbox" name="toppingSingle" value="Coklat"> Coklat
+          <input type="checkbox" name="toppingSingle" value="Tiramisu"> Tiramisu
+          <input type="checkbox" name="toppingSingle" value="Matcha"> Matcha
+          <input type="checkbox" name="toppingSingle" value="Cappucino"> Cappucino
+          <input type="checkbox" name="toppingSingle" value="Stroberry"> Stroberry
+          <input type="checkbox" name="toppingSingle" value="Vanilla"> Vanilla
+        </div>
 
-    <label for="jumlah">Jumlah Box:</label>
-    <input type="number" id="jumlah" name="jumlah" min="1" value="1">
+        <div id="topping-double" class="topping-group" style="display:none">
+          <label>Pilih Topping (Double):</label>
+          <input type="checkbox" name="toppingDouble" value="Meses"> Meses
+          <input type="checkbox" name="toppingDouble" value="Keju"> Keju
+          <input type="checkbox" name="toppingDouble" value="Kacang"> Kacang
+          <input type="checkbox" name="toppingDouble" value="Choco Chip"> Choco Chip
+          <input type="checkbox" name="toppingDouble" value="Oreo"> Oreo
+        </div>
 
-    <p id="totalHarga">Total Harga: Rp 0</p>
+        <label for="jumlah">Jumlah Box:</label>
+        <input type="number" id="jumlah" name="jumlah" min="1" value="1">
 
-    <button type="submit">Pesan Sekarang</button>
-  </form>
-</section>
+        <p id="totalHarga">Total Harga: Rp 0</p>
 
-<section id="galeri">
-  <h2 class="section-title">Galeri</h2>
-  <div class="galeri-grid">
-    <img src="assets/images/pukis1.jpg" alt="Pukis 1">
-    <img src="assets/images/pukis2.jpg" alt="Pukis 2">
-    <img src="assets/images/pukis3.jpg" alt="Pukis 3">
-    <img src="assets/images/pukis4.jpg" alt="Pukis 4">
-    <img src="assets/images/pukis5.jpg" alt="Pukis 5">
-  </div>
-</section>
+        <button type="submit">Pesan Sekarang</button>
+      </form>
+    </section>
 
-<section id="testimoni">
-  <h2 class="section-title">Testimoni Pelanggan</h2>
-  <div class="testimoni-container">
-    <div class="testimoni-card">
-      <p>"Pukisnya lembut banget, toppingnya melimpah!" - Rina</p>
-    </div>
-    <div class="testimoni-card">
-      <p>"Anak-anak suka banget sama Pukis Lumer Aulia. Favorit kami!" - Bunda Tika</p>
-    </div>
-    <div class="testimoni-card">
-      <p>"Cocok buat camilan sore. Manisnya pas dan pilihan toppingnya banyak." - Dodi</p>
-    </div>
-  </div>
-</section>
+    <section id="galeri">
+      <h2 class="section-title">Galeri</h2>
+      <div class="galeri-grid">
+        <img src="assets/images/pukis1.jpg" alt="Pukis 1">
+        <img src="assets/images/pukis2.jpg" alt="Pukis 2">
+        <img src="assets/images/pukis3.jpg" alt="Pukis 3">
+        <img src="assets/images/pukis4.jpg" alt="Pukis 4">
+        <img src="assets/images/pukis5.jpg" alt="Pukis 5">
+      </div>
+    </section>
 
-  </main>  <footer>
+    <section id="testimoni">
+      <h2 class="section-title">Testimoni Pelanggan</h2>
+      <div class="testimoni-container">
+        <div class="testimoni-card">
+          <p>"Pukisnya lembut banget, toppingnya melimpah!" - Rina</p>
+        </div>
+        <div class="testimoni-card">
+          <p>"Anak-anak suka banget sama Pukis Lumer Aulia. Favorit kami!" - Bunda Tika</p>
+        </div>
+        <div class="testimoni-card">
+          <p>"Cocok buat camilan sore. Manisnya pas dan pilihan toppingnya banyak." - Dodi</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
     <p>&copy; 2025 Pukis Lumer Aulia. All Rights Reserved.</p>
-  </footer>  <script src="order.js"></script></body>
+  </footer>
+
+  <script src="order.js"></script>
+</body>
 </html>
