@@ -48,7 +48,7 @@ footer {
   width: 100%;
 }
 
-/* Responsive Section Titles */
+/* Section Titles */
 .section-title {
   font-size: 2rem;
   font-family: 'TanggoStdregular', cursive;
@@ -118,6 +118,7 @@ footer {
 
 .order-form label {
   display: block;
+  margin-top: 1rem;
   margin-bottom: 0.5rem;
   font-weight: bold;
   color: #ff69b4;
@@ -132,6 +133,14 @@ footer {
   border: 1px solid #ffc0cb;
   border-radius: 8px;
   font-family: 'Chewy', cursive;
+}
+
+.order-form input:focus,
+.order-form select:focus,
+.order-form textarea:focus {
+  border-color: #ff69b4;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 105, 180, 0.4);
 }
 
 /* Topping Checkbox Styling */
@@ -162,19 +171,19 @@ footer {
   background-color: #ffe6ef;
 }
 
-/* Topping Colors */
-.topping-options .coklat { color: #6b3e26; }
-.topping-options .stroberry { color: red; }
-.topping-options .matcha { color: green; }
-.topping-options .vanilla { color: #f3e5ab; }
-.topping-options .tiramisu { color: #8b5e3c; }
-.topping-options .cappucino { color: #a1887f; }
-.topping-options .taro { color: #b388eb; }
-.topping-options .meses { color: #4e342e; }
-.topping-options .keju { color: #ffd700; }
-.topping-options .kacang { color: #a0522d; }
-.topping-options .chocochips { color: #5d4037; }
-.topping-options .oreo { color: #3e3e3e; }
+/* Warna berdasarkan class topping */
+.topping-options label[class*="coklat"] { color: #6b3e26; }
+.topping-options label[class*="stroberry"] { color: red; }
+.topping-options label[class*="matcha"] { color: green; }
+.topping-options label[class*="vanilla"] { color: #f3e5ab; }
+.topping-options label[class*="tiramisu"] { color: #8b5e3c; }
+.topping-options label[class*="cappucino"] { color: #a1887f; }
+.topping-options label[class*="taro"] { color: #b388eb; }
+.topping-options label[class*="meses"] { color: #4e342e; }
+.topping-options label[class*="keju"] { color: #ffd700; }
+.topping-options label[class*="kacang"] { color: #a0522d; }
+.topping-options label[class*="choco-chip"] { color: #5d4037; }
+.topping-options label[class*="oreo"] { color: #3e3e3e; }
 
 /* Submit Button */
 .order-form button {
@@ -185,11 +194,13 @@ footer {
   border-radius: 10px;
   cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
+  transform: scale(1);
 }
 
 .order-form button:hover {
   background-color: #ff85c1;
+  transform: scale(1.05);
 }
 
 /* Testimoni */
