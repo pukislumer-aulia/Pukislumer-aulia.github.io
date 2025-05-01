@@ -240,7 +240,6 @@ document.getElementById('testimonialForm').addEventListener('submit', function(e
 </head>
 <body>
 
-  <!-- Di sinilah kamu tempel bagian testimoni -->
   <section id="testimonials">
     <h2>Testimoni Pelanggan</h2>
     <div id="testimonialsList"></div>
@@ -251,8 +250,43 @@ document.getElementById('testimonialForm').addEventListener('submit', function(e
       <button type="submit">Kirim Testimoni</button>
     </form>
   </section>
+<!-- SECTION ORDER -->
+<section id="order">
+  <h2>Pesan Sekarang</h2>
+  <form id="orderForm">
+    <label for="name">Nama:</label>
+    <input type="text" id="name" required />
 
-  <!-- Bagian lain seperti galeri, order, kontak, dsb -->
+    <label for="menu">Menu:</label>
+    <select id="menu" required>
+      <option value="Pukis Coklat">Pukis Coklat</option>
+      <option value="Pukis Keju">Pukis Keju</option>
+      <option value="Pukis Green Tea">Pukis Green Tea</option>
+    </select>
+
+    <label for="topping">Topping:</label>
+    <div>
+      <label><input type="radio" name="toppingType" value="single" required /> Single Topping</label>
+      <label><input type="radio" name="toppingType" value="double" /> Double Topping</label>
+    </div>
+
+    <label for="size">Pilih Ukuran & Jumlah:</label>
+    <div>
+      <label>Kotak Kecil (isi 5):
+        <input type="number" id="smallBoxQty" min="0" value="0" />
+      </label>
+    </div>
+    <div>
+      <label>Kotak Besar (isi 10):
+        <input type="number" id="largeBoxQty" min="0" value="0" />
+      </label>
+    </div>
+
+    <p id="totalPrice">Total: Rp. 0</p>
+
+    <button type="submit">Kirim ke WhatsApp</button>
+  </form>
+</section>
 
   <!-- Script JS di bagian paling bawah sebelum </body> -->
   <script src="assets/js/testimoni.js"></script>
