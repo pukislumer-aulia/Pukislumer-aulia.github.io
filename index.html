@@ -1,55 +1,138 @@
-<section id="order">
-  <h2>Pesan Sekarang</h2>
-  <form id="orderForm">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pukis Lumer Aulia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #ff69b4;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    section {
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    .gallery img {
+      width: 45%;
+      margin: 2%;
+      border-radius: 10px;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-order {
+      display: block;
+      width: 80%;
+      max-width: 400px;
+      margin: 30px auto;
+      background-color: #25d366;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 18px;
+      text-decoration: none;
+      border-radius: 10px;
+    }
+    form {
+      max-width: 500px;
+      margin: 30px auto;
+      background: #f0f0f0;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    form button {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .footer {
+      background-color: #eee;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Pukis Lumer Aulia</h1>
+  <p>Jajanan Kekinian No.1 di Pasar Kuliner Padang Panjang</p>
+</header>
+
+<section>
+  <h2>Fakta Unik Tentang Kami</h2>
+  <ul>
+    <li>Adonan spesial rahasia keluarga sejak 2023-an!</li>
+    <li>Pukis Lumer Kekinian pertama Hadir di Padang Panjang.</li>
+    <li>Lembut sempurna karena teknik pemanggangan tradisional.</li>
+    <li>Lebih dari 10+ varian topping setiap harinya selalu Ready.</li>
+    <li>Memakai 100% bahan premium tanpa pengawet.</li>
+    <li>Jadi jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Galeri Pukis</h2>
+  <div class="gallery">
+    <img src="pukis1.jpg" alt="Pukis Lumer 1">
+    <img src="pukis2.jpg" alt="Pukis Lumer 2">
+    <img src="pukis3.jpg" alt="Pukis Lumer 3">
+    <img src="pukis4.jpg" alt="Pukis Lumer 4">
+    <img src="pukis5.jpg" alt="Pukis Lumer 5">
+  </div>
+</section>
+
+<section>
+  <h2>Lokasi Kami</h2>
+  <p style="text-align:center;">
+    <a href="https://www.google.com/maps?q=Pasar+Kuliner+Padang+Panjang" target="_blank">
+      Klik di sini untuk lihat lokasi di Google Maps
+    </a>
+  </p>
+</section>
+
+<a class="btn-order" href="https://wa.me/6281296668670?text=Halo%2C+saya+mau+order+Pukis+Lumer+Aulia%21" target="_blank">
+  Order via WhatsApp
+</a>
+
+<section>
+  <h2>Testimoni Pelanggan</h2>
+  <p style="text-align:center;">Tulis Testimoni Kamu</p>
+  <form>
     <label for="name">Nama:</label>
-    <input type="text" id="name" required />
-
-    <label for="menu">Menu:</label>
-    <select id="menu" required>
-      <option value="Pukis Coklat">Pukis Coklat</option>
-      <option value="Pukis Keju">Pukis Keju</option>
-      <option value="Pukis Green Tea">Pukis Green Tea</option>
-    </select>
-
-    <p><strong>Pilih Topping:</strong></p>
-    <label><input type="radio" name="toppingType" id="singleRadio" required /> Single Topping</label>
-    <label><input type="radio" name="toppingType" id="doubleRadio" required /> Double Topping</label>
-
-    <div id="singleTopping" style="display:none;">
-      <label for="singleToppingSelect">Topping:</label>
-      <select id="singleToppingSelect">
-        <option value="">-- Pilih Topping --</option>
-        <option value="Coklat">Coklat</option>
-        <option value="Stroberi">Stroberi</option>
-        <option value="Cappucino">Cappucino</option>
-        <option value="TARO">TARO</option>
-        <option value="Matcha">Matcha</option>
-        <option value="Tiramisu">Tiramisu</option>
-        <option value="Vanilla">Vanilla</option>
-      </select>
-    </div>
-
-    <div id="doubleTopping" style="display:none;">
-      <p><strong>Pilih 2 Topping:</strong></p>
-      <label><input type="checkbox" name="doubleTopping" value="meses" /> meses</label>
-      <label><input type="checkbox" name="doubleTopping" value="Keju" /> Keju</label>
-      <label><input type="checkbox" name="doubleTopping" value="Kacang" /> Kacang</label>
-      <label><input type="checkbox" name="doubleTopping" value="Choco chips" /> Choco chips</label>
-      <label><input type="checkbox" name="doubleTopping" value="Oreo" /> Oreo</label>
-    </div>
-
-    <label for="boxSize">Ukuran Kotak:</label>
-    <select id="boxSize" required>
-      <option value="">-- Pilih Ukuran --</option>
-      <option value="kecil">Kotak Kecil (5 pcs)</option>
-      <option value="besar">Kotak Besar (10 pcs)</option>
-    </select>
-
-    <label for="qty">Jumlah Kotak:</label>
-    <input type="number" id="qty" min="1" required />
-
-    <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
-
-    <button type="submit">Kirim ke WhatsApp</button>
+    <input type="text" id="name" name="name" placeholder="Nama Kamu">
+    <label for="testimonial">Testimoni:</label>
+    <textarea id="testimonial" name="testimonial" rows="4" placeholder="Tulis testimoni di sini..."></textarea>
+    <button type="submit">Kirim Testimoni</button>
   </form>
 </section>
+
+<div class="footer">
+  <p>&copy; 2025 Pukis Lumer Aulia. All rights reserved.</p>
+</div>
+
+</body>
+</html>
