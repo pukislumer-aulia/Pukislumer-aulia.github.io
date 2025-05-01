@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +9,7 @@
   <meta name="author" content="Pukis Lumer Aulia">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
   <style>
-    /* Semua CSS lengkap responsif */
+    body {
       font-family: 'Chewy', cursive;
       margin: 0;
       background: pink;
@@ -96,7 +98,6 @@
       margin: 10px 0;
       border-radius: 10px;
     }
-    /* Tombol mengambang */
     .floating-buttons {
       position: fixed;
       top: 50%;
@@ -130,7 +131,6 @@
       0%, 100% { transform: translateY(-50%) rotate(-1deg); }
       50% { transform: translateY(-50%) rotate(1deg); }
     }
-    /* Admin Link */
     .admin-link {
       text-align: center;
       margin-top: 50px;
@@ -142,6 +142,7 @@
     }
   </style>
 </head>
+<body>
   <div class="page-wrapper">
     <div class="promo-image">
       <img src="assets/images/kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
@@ -203,10 +204,59 @@
       </form>
     </div>
 
+    <h2>Pesan Sekarang</h2>
+    <form id="orderForm">
+      <label for="name">Nama:</label>
+      <input type="text" id="name" required />
+
+      <label for="menu">Menu:</label>
+      <select id="menu" required>
+        <option value="Pukis Coklat">Pukis Coklat</option>
+        <option value="Pukis Keju">Pukis Keju</option>
+        <option value="Pukis Green Tea">Pukis Green Tea</option>
+      </select>
+
+      <p><strong>Pilih Topping:</strong></p>
+      <label><input type="radio" name="toppingType" id="singleRadio" required /> Single Topping</label>
+      <label><input type="radio" name="toppingType" id="doubleRadio" required /> Double Topping</label>
+
+      <div id="singleTopping" style="display:none;">
+        <label for="singleToppingSelect">Topping:</label>
+        <select id="singleToppingSelect">
+          <option value="">-- Pilih Topping --</option>
+          <option value="Coklat">Coklat</option>
+          <option value="Keju">Keju</option>
+          <option value="Green Tea">Green Tea</option>
+          <option value="Oreo">Oreo</option>
+        </select>
+      </div>
+
+      <div id="doubleTopping" style="display:none;">
+        <p><strong>Pilih 2 Topping:</strong></p>
+        <label><input type="checkbox" name="doubleTopping" value="Coklat" /> Coklat</label>
+        <label><input type="checkbox" name="doubleTopping" value="Keju" /> Keju</label>
+        <label><input type="checkbox" name="doubleTopping" value="Green Tea" /> Green Tea</label>
+        <label><input type="checkbox" name="doubleTopping" value="Oreo" /> Oreo</label>
+      </div>
+
+      <label for="boxSize">Ukuran Kotak:</label>
+      <select id="boxSize" required>
+        <option value="">-- Pilih Ukuran --</option>
+        <option value="kecil">Kotak Kecil (5 pcs)</option>
+        <option value="besar">Kotak Besar (10 pcs)</option>
+      </select>
+
+      <label for="qty">Jumlah Kotak:</label>
+      <input type="number" id="qty" min="1" required />
+
+      <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
+
+      <button type="submit">Kirim ke WhatsApp</button>
+    </form>
+
     <div class="admin-link">
       <a href="https://pukislumeraulia.com/admin.html" target="_blank">Masuk Admin</a>
     </div>
-
   </div>
 
   <div class="floating-buttons">
@@ -215,84 +265,6 @@
     <a href="https://shopee.co.id/" target="_blank" class="shopee">Shopee</a>
     <a href="https://food.maxim.com/" target="_blank" class="maxim">Maxim</a>
   </div>
-
-<script>
-function toggleToppingAtas() {
-  var tipe = document.getElementById('tipeTopping').value;
-  var toppingAtas = document.getElementById('toppingAtasSection');
-  toppingAtas.style.display = (tipe === 'Single') ? 'none' : 'block';
-}
-window.onload = function() {
-  toggleToppingAtas();
-  loadTestimonials();
-}
-document.getElementById('testimonialForm').addEventListener('submit', function(event) {
-<head>
-  <meta charset="UTF-8">
-  <title>Pukis Lumer Aulia</title>
-
-  <section id="testimonials">
-    <h2>Testimoni Pelanggan</h2>
-    <div id="testimonialsList"></div>
-
-    <form id="testimonialForm">
-      <input type="text" id="nameInput" placeholder="Nama Anda" required />
-      <textarea id="testimonialInput" placeholder="Tulis testimoni Anda..." required></textarea>
-      <button type="submit">Kirim Testimoni</button>
-    </form>
-  </section>
-<!-- Form Order -->
-<section id="order">
-  <h2>Pesan Sekarang</h2>
-  <form id="orderForm">
-    <label for="name">Nama:</label>
-    <input type="text" id="name" required />
-
-    <label for="menu">Menu:</label>
-    <select id="menu" required>
-      <option value="Pukis Coklat">Pukis Coklat</option>
-      <option value="Pukis Keju">Pukis Keju</option>
-      <option value="Pukis Green Tea">Pukis Green Tea</option>
-    </select>
-
-    <p><strong>Pilih Topping:</strong></p>
-    <label><input type="radio" name="toppingType" id="singleRadio" required /> Single Topping</label>
-    <label><input type="radio" name="toppingType" id="doubleRadio" required /> Double Topping</label>
-
-    <div id="singleTopping" style="display:none;">
-      <label for="singleToppingSelect">Topping:</label>
-      <select id="singleToppingSelect">
-        <option value="">-- Pilih Topping --</option>
-        <option value="Coklat">Coklat</option>
-        <option value="Keju">Keju</option>
-        <option value="Green Tea">Green Tea</option>
-        <option value="Oreo">Oreo</option>
-      </select>
-    </div>
-
-    <div id="doubleTopping" style="display:none;">
-      <p><strong>Pilih 2 Topping:</strong></p>
-      <label><input type="checkbox" name="doubleTopping" value="Coklat" /> Coklat</label>
-      <label><input type="checkbox" name="doubleTopping" value="Keju" /> Keju</label>
-      <label><input type="checkbox" name="doubleTopping" value="Green Tea" /> Green Tea</label>
-      <label><input type="checkbox" name="doubleTopping" value="Oreo" /> Oreo</label>
-    </div>
-
-    <label for="boxSize">Ukuran Kotak:</label>
-    <select id="boxSize" required>
-      <option value="">-- Pilih Ukuran --</option>
-      <option value="kecil">Kotak Kecil (5 pcs)</option>
-      <option value="besar">Kotak Besar (10 pcs)</option>
-    </select>
-
-    <label for="qty">Jumlah Kotak:</label>
-    <input type="number" id="qty" min="1" required />
-
-    <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
-
-    <button type="submit">Kirim ke WhatsApp</button>
-  </form>
-</section>
 
   <script src="assets/js/testimoni.js"></script>
   <script src="assets/js/order.js"></script>
