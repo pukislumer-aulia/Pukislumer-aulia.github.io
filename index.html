@@ -1,56 +1,154 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!DOCTYPE html><html lang="id"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet" />
-</head>
-<body>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff0e6;
+      color: #333;
+    }header {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+}
 
+.judul {
+  font-family: 'Chewy', cursive;
+  font-size: 3rem;
+  color: red;
+  text-shadow: 2px 2px 0 white;
+  animation: melt 2s infinite alternate ease-in-out;
+}
+
+@keyframes melt {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(5px) skewY(1deg); }
+}
+
+main {
+  padding: 1rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+.form-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-top: 2rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input[type="text"], select, input[type="number"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.color-coklat { color: #8B4513; }
+.color-tiramisu { color: #A0522D; }
+.color-matcha { color: #228B22; }
+.color-cappucino { color: #a67b5b; }
+.color-stroberry { color: #ff4d88; }
+.color-vanilla { color: #f5deb3; }
+.color-taro { color: #9370db; }
+.color-meses { color: #4b3b2a; }
+.color-keju { color: #fcd116; }
+.color-kacang { color: #deb887; }
+.color-choco { color: #5c4033; }
+.color-oreo { color: #333333; }
+
+button {
+  background: #ff4d4d;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+  </style>
+</head><body>
   <header>
-    <h1 class="judul melt">PUKIS LUMER AULIA</h1>
-  </header>
+    <h1 class="judul">PUKIS LUMER AULIA</h1>
+    <p style="font-size: 1.2rem; font-weight: bold;">Jajanan pasar kekinian yang meleleh di hati dan lidah!</p>
+  </header>  <main>
+    <section class="form-section">
+      <p><strong>Pantun Pembuka:</strong><br>
+        Jalan-jalan ke Padang Panjang,<br>
+        Jangan lupa bawa keluarga.<br>
+        Mau jajanan enak dan terang,<br>
+        Pukis Lumer Aulia jawabannya!</p><p><strong>Kenapa pilih Pukis Lumer Aulia?</strong><br>
+    - Meleleh di mulut, bikin nagih!<br>
+    - Banyak pilihan topping favorit<br>
+    - Harga terjangkau<br>
+    - Bisa pesan lewat Maxim, Grab, GoFood, atau WhatsApp langsung!</p>
 
-  <main>
-    <form id="orderForm">
-      <label>Nama:</label>
-      <input type="text" id="name" required />
+  <p><strong>Fakta Unik:</strong><br>
+    Kami hanya buka dari jam 16.00 - 23.59 setiap hari. Produk selalu fresh setiap sore!</p>
 
-      <label>Menu:</label>
-      <select id="menu">
-        <option value="original">Pukis Original</option>
-        <option value="pandan">Pukis Pandan</option>
-      </select>
+  <form id="orderForm">
+    <label for="name">Nama Pemesan:</label>
+    <input type="text" id="name" required>
 
-      <label>Pilih Topping:</label>
-      <div>
-        <label><input type="radio" name="toppingType" value="none" id="nonRadio" checked /> Non Topping</label>
-        <label><input type="radio" name="toppingType" value="single" id="singleRadio" /> Single Topping</label>
-        <label><input type="radio" name="toppingType" value="double" id="doubleRadio" /> Double Topping</label>
-      </div>
+    <label for="menu">Pilih Varian:</label>
+    <select id="menu" required>
+      <option value="Original">Pukis Original</option>
+      <option value="Pandan">Pukis Pandan</option>
+    </select>
 
-      <label>Ukuran Box:</label>
-      <select id="boxSize">
-        <option value="5">Isi 5</option>
-        <option value="10">Isi 10</option>
-      </select>
+    <label for="kategori">Pilih Kategori Topping:</label>
+    <div>
+      <input type="radio" name="kategori" id="nonTopping" value="non" checked> Non Topping
+      <input type="radio" name="kategori" id="singleToppingRadio" value="single"> Single Topping
+      <input type="radio" name="kategori" id="doubleToppingRadio" value="double"> Double Topping
+    </div>
 
-      <label>Jumlah Kotak:</label>
-      <input type="number" id="qty" value="1" min="1" />
+    <div id="toppingOptions" style="display: none;">
+      <div id="toppingCheckboxes" class="checkbox-group"></div>
+    </div>
 
-      <div id="toppingOptions" style="display: none;">
-        <label class="topping-group">Pilih Topping:</label>
-        <div id="toppingList" class="topping-list"></div>
-      </div>
+    <label for="boxSize">Ukuran Box:</label>
+    <select id="boxSize" required>
+      <option value="5">Isi 5</option>
+      <option value="10">Isi 10</option>
+    </select>
 
-      <div id="totalDisplay"><strong>Total Harga:</strong> Rp 0</div>
+    <label for="qty">Jumlah Box:</label>
+    <input type="number" id="qty" min="1" value="1" required>
 
-      <button type="submit">Pesan Sekarang</button>
-    </form>
-  </main>
+    <div id="totalDisplay" style="margin-top:1rem;"></div>
 
-  <script src="js/order.js"></script>
-</body>
-</html>
+    <button type="submit">Pesan Sekarang</button>
+  </form>
+</section>
+
+  </main>  <script src="order.js"></script></body></html>
