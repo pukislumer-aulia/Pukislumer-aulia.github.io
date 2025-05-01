@@ -1,100 +1,59 @@
-const singleToppingDiv = document.getElementById("singleTopping");
-const doubleToppingDiv = document.getElementById("doubleTopping");
-const singleRadio = document.getElementById("singleRadio");
-const doubleRadio = document.getElementById("doubleRadio");
-const boxSize = document.getElementById("boxSize");
-const qty = document.getElementById("qty");
-const totalDisplay = document.getElementById("totalDisplay");
+document.addEventListener("DOMContentLoaded", function () {
+  const singleRadio = document.getElementById("singleRadio");
+  const doubleRadio = document.getElementById("doubleRadio");
+  const singleDiv = document.getElementById("singleTopping");
+  const doubleDiv = document.getElementById("doubleTopping");
+  const qtyInput = document.getElementById("qty");
+  const boxSize = document.getElementById("boxSize");
+  const totalDisplay = document.getElementById("totalDisplay");
+  const orderForm = document.getElementById("orderForm");
 
-singleToppingDiv.style.display = "none";
-doubleToppingDiv.style.display = "none";
-
-singleRadio.addEventListener("change", () => {
-  singleToppingDiv.style.display = "block";
-  doubleToppingDiv.style.display = "none";
-  document.querySelectorAll('input[name="doubleTopping"]').forEach(cb => cb.checked = false);
-  updateTotal();
-});
-
-doubleRadio.addEventListener("change", () => {
-  doubleToppingDiv.style.display = "block";
-  singleToppingDiv.style.display = "none";
-  document.getElementById("singleToppingSelect").value = "";
-  updateTotal();
-});
-
-document.querySelectorAll("input, select").forEach(el => {
-  el.addEventListener("input", updateTotal);
-  el.addEventListener("change", updateTotal);
-});
-
-function updateTotal() {
-  const box = boxSize.value;
-  const jumlah = parseInt(qty.value) || 0;
-  let harga = 0;
-
-  if (singleRadio.checked) {
-    if (box === "kecil") harga = 13000;
-    else if (box === "besar") harga = 25000;
-  } else if (doubleRadio.checked) {
-    if (box === "kecil") harga = 15000;
-    else if (box === "besar") harga = 28000;
+  function updateToppingDisplay() {
+    singleDiv.style.display = singleRadio.checked ? "block" : "none";
+    doubleDiv.style.display = doubleRadio.checked ? "block" : "none";
+    calculateTotal();
   }
 
-  const total = harga * jumlah;
-  totalDisplay.innerHTML = `<strong>Total Harga:</strong> Rp ${total.toLocaleString()}`;
-}
+  singleRadio.addEventListener("change", updateToppingDisplay);
+  doubleRadio.addEventListener("change", updateToppingDisplay);
 
-document.getElementById("orderForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+  [qtyInput, boxSize, singleRadio, doubleRadio].forEach((el) => {
+    el.addEventListener("change", calculateTotal);
+  });
 
-  const nama = document.getElementById("name").value.trim();
-  const menu = document.getElementById("menu").value;
-  const ukuran = boxSize.value;
-  const jumlah = parseInt(qty.value);
+  function calculateTotal() {
+    const qty = parseInt(qtyInput.value) || 0;
+    const size = boxSize.value;
+    let pricePerBox = 0;
 
-  if (!ukuran || jumlah < 1) {
-    alert("Pilih ukuran kotak dan jumlahnya.");
-    return;
-  }
-
-  let toppingText = "";
-  let hargaPerBox = 0;
-
-  if (singleRadio.checked) {
-    const topping = document.getElementById("singleToppingSelect").value;
-    if (!topping) {
-      alert("Pilih topping single terlebih dahulu.");
-      return;
+    if (size === "kecil") {
+      pricePerBox = singleRadio.checked ? 12000 : doubleRadio.checked ? 14000 : 0;
+    } else if (size === "besar") {
+      pricePerBox = singleRadio.checked ? 24000 : doubleRadio.checked ? 27000 : 0;
     }
-    toppingText = `Single Topping: ${topping}`;
-    hargaPerBox = (ukuran === "kecil") ? 13000 : 25000;
-  } else if (doubleRadio.checked) {
-    const selected = document.querySelectorAll('input[name="doubleTopping"]:checked');
-    if (selected.length !== 2) {
-      alert("Pilih tepat 2 topping untuk double.");
-      return;
-    }
-    const toppingArr = Array.from(selected).map(cb => cb.value);
-    toppingText = `Double Topping: ${toppingArr.join(" + ")}`;
-    hargaPerBox = (ukuran === "kecil") ? 15000 : 28000;
-  } else {
-    alert("Pilih jenis topping terlebih dahulu.");
-    return;
+
+    const total = qty * pricePerBox;
+    totalDisplay.innerHTML = `<strong>Total Harga:</strong> Rp ${total.toLocaleString("id-ID")}`;
+    return total;
   }
 
-  const ukuranText = (ukuran === "kecil") ? "Kotak Kecil (5 pcs)" : "Kotak Besar (10 pcs)";
-  const totalHarga = hargaPerBox * jumlah;
+  orderForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const menu = document.getElementById("menu").value;
+    const size = boxSize.value;
+    const qty = qtyInput.value;
+    const total = calculateTotal();
+    let topping = "";
 
-  const pesan = `Halo Pukis Lumer Aulia! Saya ingin memesan:\n\n` +
-                `Nama: ${nama}\n` +
-                `Menu: ${menu}\n` +
-                `Ukuran: ${ukuranText}\n` +
-                `Jumlah Kotak: ${jumlah}\n` +
-                `${toppingText}\n` +
-                `Total Harga: Rp ${totalHarga.toLocaleString()}`;
+    if (singleRadio.checked) {
+      topping = document.getElementById("singleToppingSelect").value;
+    } else if (doubleRadio.checked) {
+      const checked = Array.from(document.querySelectorAll('input[name="doubleTopping"]:checked')).map(cb => cb.value);
+      topping = checked.join(" + ");
+    }
 
-  const nomorWa = "6281296668670";
-  const url = `https://wa.me/${nomorWa}?text=${encodeURIComponent(pesan)}`;
-  window.open(url, "_blank");
+    const message = `Halo, saya mau pesan:\nNama: ${name}\nMenu: ${menu}\nTopping: ${topping}\nUkuran: ${size}\nJumlah: ${qty}\nTotal Harga: Rp ${total.toLocaleString("id-ID")}`;
+    window.open(`https://wa.me/6281296668670?text=${encodeURIComponent(message)}`);
+  });
 });
