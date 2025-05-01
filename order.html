@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order | Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/form-style.css" />
+</head>
+<body>
+  <h1>Form Pemesanan Pukis Lumer Aulia</h1>
+  <form id="order-form">
+    <label for="nama">Nama:</label>
+    <input type="text" id="nama" required />
+
+    <label for="menu">Pilih Menu:</label>
+    <select id="menu">
+      <option value="Pukis Original">Pukis Original</option>
+      <option value="Pukis Pandan">Pukis Pandan</option>
+    </select>
+
+    <label for="topping-type">Jenis Topping:</label>
+    <select id="topping-type">
+      <option value="Non Topping">Non Topping</option>
+      <option value="Single Topping">Single Topping</option>
+      <option value="Double Topping">Double Topping</option>
+    </select>
+
+    <div id="topping-section" style="display:none;">
+      <p>Pilih Topping:</p>
+      <div id="topping-options"></div>
+    </div>
+
+    <label for="box-size">Ukuran:</label>
+    <select id="box-size">
+      <option value="kecil">Box Kecil (5 pcs)</option>
+      <option value="besar">Box Besar (10 pcs)</option>
+    </select>
+
+    <label for="quantity">Jumlah:</label>
+    <input type="number" id="quantity" min="1" required />
+
+    <p id="total-price">Total: Rp0</p>
+    <button type="submit">Pesan via WhatsApp</button>
+  </form>
+
+  <script src="assets/js/order.js"></script>
+</body>
+</html>
