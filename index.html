@@ -3,57 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Form Order Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <h1>Form Order Pukis Lumer Aulia</h1>
-  <form id="orderForm">
-    <label>Nama:</label>
-    <input type="text" id="name" required />
 
-    <label>Menu:</label>
-    <input type="text" id="menu" value="Pukis Lumer" readonly />
+  <header>
+    <h1 class="judul melt">PUKIS LUMER AULIA</h1>
+  </header>
 
-    <label>Ukuran Box:</label>
-    <select id="boxSize" required>
-      <option value="kecil">Kecil</option>
-      <option value="besar">Besar</option>
-    </select>
+  <main>
+    <form id="orderForm">
+      <label>Nama:</label>
+      <input type="text" id="name" required />
 
-    <label>Jumlah Kotak:</label>
-    <input type="number" id="qty" value="1" min="1" required />
+      <label>Menu:</label>
+      <select id="menu">
+        <option value="original">Pukis Original</option>
+        <option value="pandan">Pukis Pandan</option>
+      </select>
 
-    <label>Pilih Jenis Topping:</label><br/>
-    <input type="radio" name="toppingType" id="nonRadio" value="non" checked />
-    <label for="nonRadio">Non Topping</label><br/>
+      <label>Pilih Topping:</label>
+      <div>
+        <label><input type="radio" name="toppingType" value="none" id="nonRadio" checked /> Non Topping</label>
+        <label><input type="radio" name="toppingType" value="single" id="singleRadio" /> Single Topping</label>
+        <label><input type="radio" name="toppingType" value="double" id="doubleRadio" /> Double Topping</label>
+      </div>
 
-    <input type="radio" name="toppingType" id="singleRadio" value="single" />
-    <label for="singleRadio">Single Topping</label><br/>
+      <label>Ukuran Box:</label>
+      <select id="boxSize">
+        <option value="5">Isi 5</option>
+        <option value="10">Isi 10</option>
+      </select>
 
-    <input type="radio" name="toppingType" id="doubleRadio" value="double" />
-    <label for="doubleRadio">Double Topping</label>
+      <label>Jumlah Kotak:</label>
+      <input type="number" id="qty" value="1" min="1" />
 
-    <div id="singleTopping" style="display: none; margin-top: 10px;">
-      <h4>Pilih Topping Single:</h4>
-      <label><input type="checkbox" name="singleTopping" value="Coklat" /> Coklat</label><br/>
-      <label><input type="checkbox" name="singleTopping" value="Keju" /> Keju</label><br/>
-      <label><input type="checkbox" name="singleTopping" value="Kacang" /> Kacang</label><br/>
-      <label><input type="checkbox" name="singleTopping" value="Greentea" /> Greentea</label><br/>
-    </div>
+      <div id="toppingOptions" style="display: none;">
+        <label class="topping-group">Pilih Topping:</label>
+        <div id="toppingList" class="topping-list"></div>
+      </div>
 
-    <div id="doubleTopping" style="display: none; margin-top: 10px;">
-      <h4>Pilih Topping Double:</h4>
-      <label><input type="checkbox" name="doubleTopping" value="Coklat Keju" /> Coklat Keju</label><br/>
-      <label><input type="checkbox" name="doubleTopping" value="Kacang Keju" /> Kacang Keju</label><br/>
-      <label><input type="checkbox" name="doubleTopping" value="Greentea Coklat" /> Greentea Coklat</label><br/>
-    </div>
+      <div id="totalDisplay"><strong>Total Harga:</strong> Rp 0</div>
 
-    <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
+      <button type="submit">Pesan Sekarang</button>
+    </form>
+  </main>
 
-    <button type="submit">Pesan Sekarang</button>
-  </form>
-
-  <script src="order.js"></script>
+  <script src="js/order.js"></script>
 </body>
 </html>
