@@ -1,6 +1,6 @@
 /* style.css */
 
-/* Font dan Dasar */
+/* Global Styles */
 body {
   margin: 0;
   font-family: 'Chewy', cursive;
@@ -38,7 +38,6 @@ section {
   margin-bottom: 2rem;
 }
 
-/* Footer */
 footer {
   background-color: #ff69b4;
   color: white;
@@ -49,105 +48,16 @@ footer {
   width: 100%;
 }
 
-/* Gaya Order Form */
-.order-form {
-  background: #fff;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  max-width: 600px;
-  margin: auto;
+/* Responsive Section Titles */
+.section-title {
+  font-size: 2rem;
+  font-family: 'TanggoStdregular', cursive;
+  color: #ff69b4;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
-.order-form input,
-.order-form select {
-  width: 100%;
-  padding: 0.6rem;
-  margin: 0.5rem 0;
-  border: 2px solid #ff69b4;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-.order-form button {
-  background: #ff69b4;
-  color: white;
-  padding: 0.6rem 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-  transition: background 0.3s ease;
-}
-
-.order-form button:hover {
-  background: #e85caa;
-}
-
-/* Topping Styling */
-.topping-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 0.5rem;
-}
-
-.topping-options label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #ffe4ec;
-  padding: 6px 10px;
-  border-radius: 10px;
-  font-weight: bold;
-  font-size: 0.95rem;
-  border: 1px solid #ffaad4;
-  cursor: pointer;
-}
-
-.topping-options input[type="checkbox"] {
-  transform: scale(1.2);
-}
-
-/* Warna topping */
-.topping-coklat { color: #5d3a00; }
-.topping-tiramisu { color: #9c6644; }
-.topping-matcha { color: #5ca75c; }
-.topping-cappucino { color: #8b5e3c; }
-.topping-stroberry { color: #ff4c61; }
-.topping-vanilla { color: #e9c46a; }
-.topping-taro { color: #b388eb; }
-.topping-meses { color: #3e3e3e; }
-.topping-keju { color: #ffdb58; }
-.topping-kacang { color: #a0522d; }
-.topping-choco-chips { color: #4b3832; }
-.topping-oreo { color: #1e1e1e; }
-
-/* Efek animasi meleleh */
-@keyframes melt {
-  0% { transform: translateY(0px); opacity: 1; }
-  50% { transform: translateY(5px); opacity: 0.7; }
-  100% { transform: translateY(0px); opacity: 1; }
-}
-
-.melting {
-  animation: melt 2s infinite ease-in-out;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .order-form {
-    padding: 1rem;
-    margin: 10px;
-  }
-
-  .topping-options {
-    flex-direction: column;
-  }
-}
-
-/* Navbar baru */
+/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -178,6 +88,152 @@ footer {
   cursor: pointer;
 }
 
+/* Galeri */
+.galeri-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.galeri-grid img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+  transition: transform 0.3s;
+}
+
+.galeri-grid img:hover {
+  transform: scale(1.05);
+}
+
+/* Order Form */
+.order-form {
+  background-color: #fff0f5;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.order-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #ff69b4;
+}
+
+.order-form input,
+.order-form select,
+.order-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ffc0cb;
+  border-radius: 8px;
+  font-family: 'Chewy', cursive;
+}
+
+/* Topping Checkbox Styling */
+.topping-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.topping-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background-color: #fff;
+  border: 2px solid #ffc0cb;
+  border-radius: 20px;
+  padding: 6px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.topping-options input[type="checkbox"] {
+  accent-color: #ff69b4;
+}
+
+.topping-options label:hover {
+  background-color: #ffe6ef;
+}
+
+/* Topping Colors */
+.topping-options .coklat { color: #6b3e26; }
+.topping-options .stroberry { color: red; }
+.topping-options .matcha { color: green; }
+.topping-options .vanilla { color: #f3e5ab; }
+.topping-options .tiramisu { color: #8b5e3c; }
+.topping-options .cappucino { color: #a1887f; }
+.topping-options .taro { color: #b388eb; }
+.topping-options .meses { color: #4e342e; }
+.topping-options .keju { color: #ffd700; }
+.topping-options .kacang { color: #a0522d; }
+.topping-options .chocochips { color: #5d4037; }
+.topping-options .oreo { color: #3e3e3e; }
+
+/* Submit Button */
+.order-form button {
+  background-color: #ff69b4;
+  color: white;
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.order-form button:hover {
+  background-color: #ff85c1;
+}
+
+/* Testimoni */
+.testimoni-section {
+  padding: 2rem 1rem;
+  background-color: #fff3f7;
+}
+
+.testimoni-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.testimoni-card {
+  background-color: #ffffff;
+  border: 2px solid #ffc0cb;
+  border-radius: 16px;
+  padding: 1rem;
+  max-width: 300px;
+  flex: 1 1 250px;
+  box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.testimoni-card:hover {
+  transform: scale(1.03);
+}
+
+.testimoni-text {
+  font-style: italic;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.testimoni-nama {
+  font-weight: bold;
+  color: #ff69b4;
+  font-family: 'Kanit Black', sans-serif;
+}
+
+/* Responsiveness */
 @media (max-width: 768px) {
   .nav-links {
     display: none;
@@ -196,5 +252,19 @@ footer {
 
   .menu-toggle {
     display: block;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .order-form,
+  .galeri-grid,
+  .testimoni-container {
+    padding: 10px;
+  }
+
+  .testimoni-card {
+    max-width: 100%;
   }
 }
