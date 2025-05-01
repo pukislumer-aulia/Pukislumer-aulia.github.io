@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const totalHargaText = document.getElementById("totalHarga");
   const form = document.querySelector(".order-form");
 
-  const toppingSingle = document.getElementById("topping-single");
-  const toppingDouble = document.getElementById("topping-double");
+  const toppingSingleBox = document.getElementById("topping-single");
+  const toppingDoubleBox = document.getElementById("topping-double");
 
   const harga = {
     non: {
@@ -23,10 +23,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  function resetToppingSelections() {
+    document.querySelectorAll("input[name='toppingSingle'], input[name='toppingDouble']").forEach(el => {
+      el.checked = false;
+    });
+  }
+
   function updateToppingVisibility() {
     const variant = variantSelect.value;
-    toppingSingle.style.display = variant === "single" ? "block" : "none";
-    toppingDouble.style.display = variant === "double" ? "block" : "none";
+    toppingSingleBox.style.display = "none";
+    toppingDoubleBox.style.display = "none";
+    resetToppingSelections();
+
+    if (variant === "single") {
+      toppingSingleBox.style.display = "block";
+    } else if (variant === "double") {
+      toppingDoubleBox.style.display = "block";
+    }
   }
 
   function hitungTotal() {
@@ -48,18 +61,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+
     const variant = variantSelect.value;
     const size = sizeSelect.value;
     const jumlah = jumlahInput.value;
     const total = hitungTotal();
 
     let toppings = "Tanpa Topping";
+
     if (variant === "single") {
-      toppings = [...document.querySelectorAll("input[name='toppingSingle']:checked")]
-        .map(el => el.value).join(", ") || "Tanpa Topping";
+      const selected = [...document.querySelectorAll("input[name='toppingSingle']:checked")];
+      if (selected.length === 0) {
+        alert("Pilih minimal 1 topping untuk varian Single Topping.");
+        return;
+      }
+      toppings = selected.map(el => el.value).join(", ");
     } else if (variant === "double") {
-      toppings = [...document.querySelectorAll("input[name='toppingDouble']:checked")]
-        .map(el => el.value).join(", ") || "Tanpa Topping";
+      const selected = [...document.querySelectorAll("input[name='toppingDouble']:checked")];
+      if (selected.length === 0) {
+        alert("Pilih minimal 1 topping untuk varian Duoble Topping.");
+        return;
+      }
+      toppings = selected.map(el => el.value).join(", ");
     }
 
     const pesan = `Assalamu'alaikum, saya mau order:\n\nVarian: ${variant}\nUkuran: ${size}\nJumlah: ${jumlah}\nTopping: ${toppings}\nTotal Harga: Rp ${total.toLocaleString()}`;
