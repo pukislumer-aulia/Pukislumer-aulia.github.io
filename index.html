@@ -250,7 +250,7 @@ document.getElementById('testimonialForm').addEventListener('submit', function(e
       <button type="submit">Kirim Testimoni</button>
     </form>
   </section>
-<!-- SECTION ORDER -->
+<!-- Form Order -->
 <section id="order">
   <h2>Pesan Sekarang</h2>
   <form id="orderForm">
@@ -264,31 +264,45 @@ document.getElementById('testimonialForm').addEventListener('submit', function(e
       <option value="Pukis Green Tea">Pukis Green Tea</option>
     </select>
 
-    <label for="topping">Topping:</label>
-    <div>
-      <label><input type="radio" name="toppingType" value="single" required /> Single Topping</label>
-      <label><input type="radio" name="toppingType" value="double" /> Double Topping</label>
+    <p><strong>Pilih Topping:</strong></p>
+    <label><input type="radio" name="toppingType" id="singleRadio" required /> Single Topping</label>
+    <label><input type="radio" name="toppingType" id="doubleRadio" required /> Double Topping</label>
+
+    <div id="singleTopping" style="display:none;">
+      <label for="singleToppingSelect">Topping:</label>
+      <select id="singleToppingSelect">
+        <option value="">-- Pilih Topping --</option>
+        <option value="Coklat">Coklat</option>
+        <option value="Keju">Keju</option>
+        <option value="Green Tea">Green Tea</option>
+        <option value="Oreo">Oreo</option>
+      </select>
     </div>
 
-    <label for="size">Pilih Ukuran & Jumlah:</label>
-    <div>
-      <label>Kotak Kecil (isi 5):
-        <input type="number" id="smallBoxQty" min="0" value="0" />
-      </label>
-    </div>
-    <div>
-      <label>Kotak Besar (isi 10):
-        <input type="number" id="largeBoxQty" min="0" value="0" />
-      </label>
+    <div id="doubleTopping" style="display:none;">
+      <p><strong>Pilih 2 Topping:</strong></p>
+      <label><input type="checkbox" name="doubleTopping" value="Coklat" /> Coklat</label>
+      <label><input type="checkbox" name="doubleTopping" value="Keju" /> Keju</label>
+      <label><input type="checkbox" name="doubleTopping" value="Green Tea" /> Green Tea</label>
+      <label><input type="checkbox" name="doubleTopping" value="Oreo" /> Oreo</label>
     </div>
 
-    <p id="totalPrice">Total: Rp. 0</p>
+    <label for="boxSize">Ukuran Kotak:</label>
+    <select id="boxSize" required>
+      <option value="">-- Pilih Ukuran --</option>
+      <option value="kecil">Kotak Kecil (5 pcs)</option>
+      <option value="besar">Kotak Besar (10 pcs)</option>
+    </select>
+
+    <label for="qty">Jumlah Kotak:</label>
+    <input type="number" id="qty" min="1" required />
+
+    <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
 
     <button type="submit">Kirim ke WhatsApp</button>
   </form>
 </section>
 
-  <!-- Script JS di bagian paling bawah sebelum </body> -->
   <script src="assets/js/testimoni.js"></script>
   <script src="assets/js/order.js"></script>
 </body>
