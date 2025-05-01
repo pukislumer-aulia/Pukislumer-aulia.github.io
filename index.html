@@ -1,272 +1,59 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pukis Lumer Aulia - Pukis Lumer No 1 di Padang Panjang</title>
-  <meta name="description" content="Pukis Lumer Aulia - Pukis lumer paling enak di Padang Panjang! Pilihan topping lengkap, single atau double topping, pesan sekarang!">
-  <meta name="keywords" content="Pukis Lumer, Pukis Padang Panjang, Pukis Enak, Pukis Topping, Pasar Kuliner Padang Panjang">
-  <meta name="author" content="Pukis Lumer Aulia">
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Chewy', cursive;
-      margin: 0;
-      background: pink;
-      padding-bottom: 100px;
-    }
-    .page-wrapper {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-    }
-    img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      margin: auto;
-    }
-    .promo-image img {
-      width: 50%;
-      margin-bottom: 10px;
-    }
-    .promo-banner {
-      width: 100%;
-      overflow: hidden;
-      background: #f39c12;
-      color: white;
-      font-weight: bold;
-      padding: 10px 0;
-      margin-bottom: 20px;
-      position: relative;
-    }
-    .promo-banner span {
-      display: inline-block;
-      white-space: nowrap;
-      padding-left: 100%;
-      animation: scrollBanner 15s linear infinite;
-    }
-    @keyframes scrollBanner {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
-    h1, h2 {
-      text-align: center;
-      font-family: 'Kanit', sans-serif;
-    }
-    p, label {
-      font-size: 18px;
-    }
-    .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
-    .gallery img {
-      width: 45%;
-    }
-    form {
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    input, select, textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button {
-      background-color: #e67e22;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .checkbox-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .testimonial {
-      background: #fff;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 10px;
-    }
-    .floating-buttons {
-      position: fixed;
-      top: 50%;
-      right: -100px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transform: translateY(-50%);
-      transition: right 0.3s;
-      z-index: 9999;
-    }
-    .floating-buttons a {
-      display: block;
-      width: 120px;
-      padding: 10px;
-      text-align: center;
-      border-radius: 10px 0 0 10px;
-      font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-      animation: wiggle 2s infinite;
-    }
-    .floating-buttons:hover {
-      right: 0;
-    }
-    .wa { background: #075e54; color: white; }
-    .invite { background: #25d366; color: white; }
-    .shopee { background: #ff5722; color: white; }
-    .maxim { background: white; color: red; border: 1px solid red; }
-    @keyframes wiggle {
-      0%, 100% { transform: translateY(-50%) rotate(-1deg); }
-      50% { transform: translateY(-50%) rotate(1deg); }
-    }
-    .admin-link {
-      text-align: center;
-      margin-top: 50px;
-      font-size: 12px;
-    }
-    .admin-link a {
-      color: #999;
-      text-decoration: none;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Form Order Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="page-wrapper">
-    <div class="promo-image">
-      <img src="assets/images/kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
+  <h1>Form Order Pukis Lumer Aulia</h1>
+  <form id="orderForm">
+    <label>Nama:</label>
+    <input type="text" id="name" required />
+
+    <label>Menu:</label>
+    <input type="text" id="menu" value="Pukis Lumer" readonly />
+
+    <label>Ukuran Box:</label>
+    <select id="boxSize" required>
+      <option value="kecil">Kecil</option>
+      <option value="besar">Besar</option>
+    </select>
+
+    <label>Jumlah Kotak:</label>
+    <input type="number" id="qty" value="1" min="1" required />
+
+    <label>Pilih Jenis Topping:</label><br/>
+    <input type="radio" name="toppingType" id="nonRadio" value="non" checked />
+    <label for="nonRadio">Non Topping</label><br/>
+
+    <input type="radio" name="toppingType" id="singleRadio" value="single" />
+    <label for="singleRadio">Single Topping</label><br/>
+
+    <input type="radio" name="toppingType" id="doubleRadio" value="double" />
+    <label for="doubleRadio">Double Topping</label>
+
+    <div id="singleTopping" style="display: none; margin-top: 10px;">
+      <h4>Pilih Topping Single:</h4>
+      <label><input type="checkbox" name="singleTopping" value="Coklat" /> Coklat</label><br/>
+      <label><input type="checkbox" name="singleTopping" value="Keju" /> Keju</label><br/>
+      <label><input type="checkbox" name="singleTopping" value="Kacang" /> Kacang</label><br/>
+      <label><input type="checkbox" name="singleTopping" value="Greentea" /> Greentea</label><br/>
     </div>
 
-    <div class="promo-banner">
-      <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
+    <div id="doubleTopping" style="display: none; margin-top: 10px;">
+      <h4>Pilih Topping Double:</h4>
+      <label><input type="checkbox" name="doubleTopping" value="Coklat Keju" /> Coklat Keju</label><br/>
+      <label><input type="checkbox" name="doubleTopping" value="Kacang Keju" /> Kacang Keju</label><br/>
+      <label><input type="checkbox" name="doubleTopping" value="Greentea Coklat" /> Greentea Coklat</label><br/>
     </div>
 
-    <img src="assets/images/cover pukis.jpg" alt="Pukis Lumer Aulia" class="header-img">
+    <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
 
-    <h1>PUKIS LUMER AULIA</h1>
-    <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
-    <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
-    <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
-    <p>Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke PUKIS LUMER AULIA</p>
+    <button type="submit">Pesan Sekarang</button>
+  </form>
 
-    <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)</p>
-    <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
-    <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
-    <p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
-
-    <h2>Kenapa Harus Pukis Lumer Aulia?</h2>
-    <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa yang luar biasa. Tersedia dalam berbagai rasa favorit semua umur!</p>
-
-    <h2>Fakta Unik Tentang Kami</h2>
-    <ul>
-      <li>Adonan spesial rahasia keluarga sejak 2023-an!</li>
-      <li>Pukis Lumer Kekinian pertama Hadir di Padang Panjang.</li>
-      <li>Lembut sempurna karena teknik pemanggangan tradisional.</li>
-      <li>Lebih dari 10+ varian topping setiap harinya selalu Ready.</li>
-      <li>Memakai 100% bahan premium tanpa pengawet.</li>
-      <li>Jadi jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
-    </ul>
-
-    <h2>Galeri Pukis</h2>
-    <div class="gallery">
-      <img src="assets/images/pukis1.jpg" alt="Pukis 1">
-      <img src="assets/images/pukis2.jpg" alt="Pukis 2">
-      <img src="assets/images/pukis3.jpg" alt="Pukis 3">
-      <img src="assets/images/pukis4.jpg" alt="Pukis 4">
-      <img src="assets/images/pukis5.jpg" alt="Pukis 5">
-    </div>
-
-    <h2>Lokasi Kami</h2>
-    <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color: #e67e22; font-size: 20px; font-weight: bold;">Klik di sini untuk lihat lokasi di Google Maps</a></p>
-
-    <h2>Testimoni Pelanggan</h2>
-    <div class="testimonials" id="testimonialsList"></div>
-
-    <div class="form-testimonial">
-      <h2>Tulis Testimoni Kamu</h2>
-      <form id="testimonialForm">
-        <label>Nama:</label>
-        <input type="text" id="nameInput" placeholder="Nama Kamu" required>
-        <label>Testimoni:</label>
-        <textarea id="testimonialInput" placeholder="Tulis testimoni di sini..." required></textarea>
-        <button type="submit">Kirim Testimoni</button>
-      </form>
-    </div>
-
-    <h2>Pesan Sekarang</h2>
-    <form id="orderForm">
-      <label for="name">Nama:</label>
-      <input type="text" id="name" required />
-
-      <label for="menu">Menu:</label>
-      <select id="menu" required>
-        <option value="Pukis Coklat">Pukis Coklat</option>
-        <option value="Pukis Keju">Pukis Keju</option>
-        <option value="Pukis Green Tea">Pukis Green Tea</option>
-      </select>
-
-      <p><strong>Pilih Topping:</strong></p>
-      <label><input type="radio" name="toppingType" id="singleRadio" required /> Single Topping</label>
-      <label><input type="radio" name="toppingType" id="doubleRadio" required /> Double Topping</label>
-
-      <div id="singleTopping" style="display:none;">
-        <label for="singleToppingSelect">Topping:</label>
-        <select id="singleToppingSelect">
-          <option value="">-- Pilih Topping --</option>
-          <option value="Coklat">Coklat</option>
-          <option value="Keju">Keju</option>
-          <option value="Green Tea">Green Tea</option>
-          <option value="Oreo">Oreo</option>
-        </select>
-      </div>
-
-      <div id="doubleTopping" style="display:none;">
-        <p><strong>Pilih 2 Topping:</strong></p>
-        <label><input type="checkbox" name="doubleTopping" value="Coklat" /> Coklat</label>
-        <label><input type="checkbox" name="doubleTopping" value="Keju" /> Keju</label>
-        <label><input type="checkbox" name="doubleTopping" value="Green Tea" /> Green Tea</label>
-        <label><input type="checkbox" name="doubleTopping" value="Oreo" /> Oreo</label>
-      </div>
-
-      <label for="boxSize">Ukuran Kotak:</label>
-      <select id="boxSize" required>
-        <option value="">-- Pilih Ukuran --</option>
-        <option value="kecil">Kotak Kecil (5 pcs)</option>
-        <option value="besar">Kotak Besar (10 pcs)</option>
-      </select>
-
-      <label for="qty">Jumlah Kotak:</label>
-      <input type="number" id="qty" min="1" required />
-
-      <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
-
-      <button type="submit">Kirim ke WhatsApp</button>
-    </form>
-
-    <div class="admin-link">
-      <a href="https://pukislumeraulia.com/admin.html" target="_blank">Masuk Admin</a>
-    </div>
-  </div>
-
-  <div class="floating-buttons">
-    <a href="https://wa.me/6281296668670" target="_blank" class="wa">Chat WhatsApp</a>
-    <a href="https://wa.me/?text=Yuk%20coba%20PUKIS%20LUMER%20AULIA%20yang%20lagi%20viral%20di%20Padang%20Panjang!%20Info:%20https://pukislumeraulia.com" target="_blank" class="invite">Undang Teman</a>
-    <a href="https://shopee.co.id/" target="_blank" class="shopee">Shopee</a>
-    <a href="https://food.maxim.com/" target="_blank" class="maxim">Maxim</a>
-  </div>
-
-  <script src="assets/js/testimoni.js"></script>
-  <script src="assets/js/order.js"></script>
+  <script src="order.js"></script>
 </body>
 </html>
