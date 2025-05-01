@@ -1,84 +1,129 @@
 <!DOCTYPE html><html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pukis Lumer Aulia - Pukis Lumer No 1 di Padang Panjang</title>
-  <meta name="description" content="Pukis Lumer Aulia - Pukis lumer paling enak di Padang Panjang! Pilihan topping lengkap, single atau double topping, pesan sekarang!">
-  <meta name="keywords" content="Pukis Lumer, Pukis Padang Panjang, Pukis Enak, Pukis Topping, Pasar Kuliner Padang Panjang">
-  <meta name="author" content="Pukis Lumer Aulia">
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Kanit:wght@900&family=Chewy&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <script src="assets/js/script.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="page-wrapper">
-    <div class="promo-image">
-      <img src="assets/images/kupon1.jpg" alt="Promo Kupon Pukis Lumer Aulia">
-    </div><div class="promo-banner">
-  <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
-</div>
+  <header>
+    <img src="assets/images/pukis.jpg" alt="Header Pukis" class="header-img">
+    <h1>Pukis Lumer Aulia</h1>
+    <p>Assalamu'alaikum warahmatullahi wabarakatuh<br>
+    Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
+    <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.<br>
+    Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke <strong>PUKIS LUMER AULIA</strong></p>
+    <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)<br>
+    <strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang<br>
+    <strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
+    <p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
+  </header>  <nav class="navbar">
+    <div class="menu-toggle">☰</div>
+    <ul class="nav-links">
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#order">Order</a></li>
+      <li><a href="#galeri">Galeri</a></li>
+      <li><a href="#testimoni">Testimoni</a></li>
+    </ul>
+  </nav>  <main>
+    <section id="menu">
+      <h2 class="section-title">Pilihan Varian</h2>
+      <ul>
+        <li><strong>1. Non Topping</strong>
+          <ul>
+            <li>Box Kecil (5 pcs): Rp 10.000</li>
+            <li>Box Besar (10 pcs): Rp 18.000</li>
+          </ul>
+        </li>
+        <li><strong>2. Single Topping</strong> (bebas pilih semua rasa)
+          <ul>
+            <li>Box Kecil (5 pcs): Rp 13.000</li>
+            <li>Box Besar (10 pcs): Rp 25.000</li>
+            <li>Topping: Coklat, Tiramisu, Matcha, Cappucino, Stroberry, Vanilla</li>
+          </ul>
+        </li>
+        <li><strong>3. Duoble Topping</strong> (bebas pilih semua rasa)
+          <ul>
+            <li>Box Kecil (5 pcs): Rp 15.000</li>
+            <li>Box Besar (10 pcs): Rp 28.000</li>
+            <li>Topping: Meses, Keju, Kacang, Choco Chip, Oreo</li>
+          </ul>
+        </li>
+      </ul>
+    </section><section id="order">
+  <h2 class="section-title">Form Order</h2>
+  <form class="order-form">
+    <label for="variant">Pilih Varian:</label>
+    <select id="variant" name="variant">
+      <option value="non">Non Topping</option>
+      <option value="single">Single Topping</option>
+      <option value="double">Double Topping</option>
+    </select>
 
-<img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="header-img">
+    <label for="size">Pilih Ukuran:</label>
+    <select id="size" name="size">
+      <option value="small">Box Kecil (5 pcs)</option>
+      <option value="large">Box Besar (10 pcs)</option>
+    </select>
 
-<h1>PUKIS LUMER AULIA</h1>
-<p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
-<p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
-<p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
-<p>Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke PUKIS LUMER AULIA</p>
+    <div id="topping-single" class="topping-group" style="display:none">
+      <label>Pilih Topping (Single):</label>
+      <input type="checkbox" name="toppingSingle" value="Coklat"> Coklat
+      <input type="checkbox" name="toppingSingle" value="Tiramisu"> Tiramisu
+      <input type="checkbox" name="toppingSingle" value="Matcha"> Matcha
+      <input type="checkbox" name="toppingSingle" value="Cappucino"> Cappucino
+      <input type="checkbox" name="toppingSingle" value="Stroberry"> Stroberry
+      <input type="checkbox" name="toppingSingle" value="Vanilla"> Vanilla
+    </div>
 
-<p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan masih ada)</p>
-<p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Coklat Kacang</p>
-<p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
-<p>Kita tersedia di Maxim Food, Grab Food, dan Go Food!</p>
+    <div id="topping-double" class="topping-group" style="display:none">
+      <label>Pilih Topping (Double):</label>
+      <input type="checkbox" name="toppingDouble" value="Meses"> Meses
+      <input type="checkbox" name="toppingDouble" value="Keju"> Keju
+      <input type="checkbox" name="toppingDouble" value="Kacang"> Kacang
+      <input type="checkbox" name="toppingDouble" value="Choco Chip"> Choco Chip
+      <input type="checkbox" name="toppingDouble" value="Oreo"> Oreo
+    </div>
 
-<h2>Kenapa Harus Pukis Lumer Aulia?</h2>
-<p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa yang luar biasa. Tersedia dalam berbagai rasa favorit semua umur!</p>
+    <label for="jumlah">Jumlah Box:</label>
+    <input type="number" id="jumlah" name="jumlah" min="1" value="1">
 
-<h2>Fakta Unik Tentang Kami</h2>
-<ul>
-  <li>Adonan spesial rahasia keluarga sejak 2023-an!</li>
-  <li>Pukis Lumer Kekinian pertama Hadir di Padang Panjang.</li>
-  <li>Lembut sempurna karena teknik pemanggangan tradisional.</li>
-  <li>Lebih dari 10+ varian topping setiap harinya selalu Ready.</li>
-  <li>Memakai 100% bahan premium tanpa pengawet.</li>
-  <li>Jadi jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
-</ul>
+    <p id="totalHarga">Total Harga: Rp 0</p>
 
-<h2>Galeri Pukis</h2>
-<div class="gallery">
-  <img src="assets/images/pukis1.jpg" alt="Pukis 1">
-  <img src="assets/images/pukis2.jpg" alt="Pukis 2">
-  <img src="assets/images/pukis3.jpg" alt="Pukis 3">
-  <img src="assets/images/pukis4.jpg" alt="Pukis 4">
-  <img src="assets/images/pukis5.jpg" alt="Pukis 5">
-</div>
-
-<h2>Lokasi Kami</h2>
-<p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" class="lokasi-link">Klik di sini untuk lihat lokasi di Google Maps</a></p>
-
-<h2>Testimoni Pelanggan</h2>
-<div class="testimonials" id="testimonialsList"></div>
-
-<div class="form-testimonial">
-  <h2>Tulis Testimoni Kamu</h2>
-  <form id="testimonialForm">
-    <label>Nama:</label>
-    <input type="text" id="nameInput" placeholder="Nama Kamu" required>
-    <label>Testimoni:</label>
-    <textarea id="testimonialInput" placeholder="Tulis testimoni di sini..." required></textarea>
-    <button type="submit">Kirim Testimoni</button>
+    <button type="submit">Pesan Sekarang</button>
   </form>
-</div>
+</section>
 
-<div id="orderSection"></div>
-
-  </div>  <div class="floating-buttons">
-    <a href="https://wa.me/6281296668670" class="wa" target="_blank">WhatsApp</a>
-    <a href="#" class="invite">Ajak Teman</a>
-    <a href="https://food.maxim.app" class="maxim" target="_blank">Maxim</a>
-    <a href="https://shopee.co.id" class="shopee" target="_blank">Shopee</a>
-  </div>  <div class="admin-link">
-    <a href="admin/index.html">Masuk Admin</a>
+<section id="galeri">
+  <h2 class="section-title">Galeri</h2>
+  <div class="galeri-grid">
+    <img src="assets/images/pukis1.jpg" alt="Pukis 1">
+    <img src="assets/images/pukis2.jpg" alt="Pukis 2">
+    <img src="assets/images/pukis3.jpg" alt="Pukis 3">
+    <img src="assets/images/pukis4.jpg" alt="Pukis 4">
+    <img src="assets/images/pukis5.jpg" alt="Pukis 5">
   </div>
-</body>
+</section>
+
+<section id="testimoni">
+  <h2 class="section-title">Testimoni Pelanggan</h2>
+  <div class="testimoni-container">
+    <div class="testimoni-card">
+      <p>"Pukisnya lembut banget, toppingnya melimpah!" - Rina</p>
+    </div>
+    <div class="testimoni-card">
+      <p>"Anak-anak suka banget sama Pukis Lumer Aulia. Favorit kami!" - Bunda Tika</p>
+    </div>
+    <div class="testimoni-card">
+      <p>"Cocok buat camilan sore. Manisnya pas dan pilihan toppingnya banyak." - Dodi</p>
+    </div>
+  </div>
+</section>
+
+  </main>  <footer>
+    <p>&copy; 2025 Pukis Lumer Aulia. All Rights Reserved.</p>
+  </footer>  <script src="order.js"></script></body>
 </html>
