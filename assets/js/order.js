@@ -1,101 +1,73 @@
-// order.js
-
 document.addEventListener("DOMContentLoaded", () => {
-  const menuSelect = document.getElementById("menu");
-  const toppingType = document.getElementById("topping-type");
-  const toppingSection = document.getElementById("topping-section");
-  const toppingOptions = document.getElementById("topping-options");
-  const boxSize = document.getElementById("box-size");
-  const quantity = document.getElementById("quantity");
-  const totalPrice = document.getElementById("total-price");
-  const form = document.getElementById("order-form");
+  const variantSelect = document.getElementById("variant");
+  const sizeSelect = document.getElementById("size");
+  const jumlahInput = document.getElementById("jumlah");
+  const totalHargaText = document.getElementById("totalHarga");
+  const form = document.querySelector(".order-form");
 
-  const toppingList = {
-    single: ["Coklat", "Tiramisu", "Matcha", "Cappucino", "Stroberry", "Vanilla", "Taro"],
-    double: ["Meses", "Keju", "Kacang", "Choco Chips", "Oreo"]
-  };
+  const toppingSingle = document.getElementById("topping-single");
+  const toppingDouble = document.getElementById("topping-double");
 
   const harga = {
-    "Pukis Original": {
-      "Non Topping": { kecil: 10000, besar: 18000 },
-      "Single Topping": { kecil: 13000, besar: 25000 },
-      "Double Topping": { kecil: 15000, besar: 28000 }
+    non: {
+      small: 10000,
+      large: 18000
     },
-    "Pukis Pandan": {
-      "Non Topping": { kecil: 12000, besar: 22000 },
-      "Single Topping": { kecil: 15000, besar: 28000 },
-      "Double Topping": { kecil: 18000, besar: 32000 }
+    single: {
+      small: 13000,
+      large: 25000
+    },
+    double: {
+      small: 15000,
+      large: 28000
     }
   };
 
-  function renderToppingOptions(type) {
-    toppingOptions.innerHTML = "";
-
-    if (type === "Non Topping") {
-      toppingSection.style.display = "none";
-      return;
-    }
-
-    toppingSection.style.display = "block";
-    let toppings = [...toppingList.single];
-    if (type === "Double Topping") {
-      toppings = toppings.concat(toppingList.double);
-    }
-
-    toppings.forEach(topping => {
-      const id = topping.toLowerCase().replace(/\s/g, "-");
-      const label = document.createElement("label");
-      label.className = `topping-${id}`;
-
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.name = "topping";
-      checkbox.value = topping;
-
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(" " + topping));
-      toppingOptions.appendChild(label);
-    });
+  function updateToppingVisibility() {
+    const variant = variantSelect.value;
+    toppingSingle.style.display = variant === "single" ? "block" : "none";
+    toppingDouble.style.display = variant === "double" ? "block" : "none";
   }
 
   function hitungTotal() {
-    const menu = menuSelect.value;
-    const topping = toppingType.value;
-    const size = boxSize.value;
-    const qty = parseInt(quantity.value) || 0;
-
-    const hargaSatuan = harga[menu][topping][size];
-    const total = hargaSatuan * qty;
-    totalPrice.textContent = `Total: Rp${total.toLocaleString()}`;
+    const variant = variantSelect.value;
+    const size = sizeSelect.value;
+    const jumlah = parseInt(jumlahInput.value) || 0;
+    const total = harga[variant][size] * jumlah;
+    totalHargaText.textContent = `Total Harga: Rp ${total.toLocaleString()}`;
     return total;
   }
 
-  toppingType.addEventListener("change", () => {
-    renderToppingOptions(toppingType.value);
+  variantSelect.addEventListener("change", () => {
+    updateToppingVisibility();
     hitungTotal();
   });
 
-  menuSelect.addEventListener("change", hitungTotal);
-  boxSize.addEventListener("change", hitungTotal);
-  quantity.addEventListener("input", hitungTotal);
+  sizeSelect.addEventListener("change", hitungTotal);
+  jumlahInput.addEventListener("input", hitungTotal);
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const nama = document.getElementById("nama").value;
-    const menu = menuSelect.value;
-    const topping = toppingType.value;
-    const size = boxSize.value;
-    const qty = quantity.value;
+    const variant = variantSelect.value;
+    const size = sizeSelect.value;
+    const jumlah = jumlahInput.value;
     const total = hitungTotal();
-    const toppingChecked = [...document.querySelectorAll("input[name='topping']:checked")].map(i => i.value).join(", ") || "Tanpa topping";
 
-    const pesan = `Assalamu'alaikum, saya mau order:\n\nNama: ${nama}\nMenu: ${menu}\nTopping: ${topping} (${toppingChecked})\nUkuran: ${size}\nJumlah: ${qty}\nTotal Harga: Rp${total.toLocaleString()}`;
+    let toppings = "Tanpa Topping";
+    if (variant === "single") {
+      toppings = [...document.querySelectorAll("input[name='toppingSingle']:checked")]
+        .map(el => el.value).join(", ") || "Tanpa Topping";
+    } else if (variant === "double") {
+      toppings = [...document.querySelectorAll("input[name='toppingDouble']:checked")]
+        .map(el => el.value).join(", ") || "Tanpa Topping";
+    }
 
+    const pesan = `Assalamu'alaikum, saya mau order:\n\nVarian: ${variant}\nUkuran: ${size}\nJumlah: ${jumlah}\nTopping: ${toppings}\nTotal Harga: Rp ${total.toLocaleString()}`;
     const url = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   });
 
-  // Inisialisasi awal
-  renderToppingOptions(toppingType.value);
+  // Inisialisasi saat halaman dimuat
+  updateToppingVisibility();
   hitungTotal();
 });
