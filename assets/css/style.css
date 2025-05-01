@@ -1,112 +1,200 @@
-@import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
+/* style.css */
 
+/* Font dan Dasar */
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: 'Chewy', cursive;
   background-color: #fff8f0;
   color: #333;
+}
+
+header {
+  background-color: #ff69b4;
+  color: white;
   padding: 1rem;
-}
-
-/* Judul dengan font Chewy dan efek melt */
-h1.title {
-  font-family: 'Chewy', cursive;
-  font-size: 2.5rem;
-  color: red;
-  text-shadow: 2px 2px 0 white;
-  animation: melt 2s ease-in-out infinite alternate;
   text-align: center;
-  margin-bottom: 1rem;
 }
 
-@keyframes melt {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(5px) skewX(-1deg); }
-}
-
-/* Section & Layout */
-section {
-  max-width: 800px;
-  margin: 0 auto;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-/* Form Styling */
-form {
+nav {
+  background-color: #fff;
+  border-bottom: 2px solid #ffc0cb;
+  padding: 0.5rem;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 1rem;
 }
 
-input[type="text"],
-select,
-input[type="number"] {
-  padding: 0.6rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
+nav a {
+  text-decoration: none;
+  color: #ff69b4;
+  font-weight: bold;
+}
+
+main {
+  padding: 1rem;
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+/* Footer */
+footer {
+  background-color: #ff69b4;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  position: relative;
+  bottom: 0;
   width: 100%;
 }
 
-input:focus,
-select:focus {
-  outline: none;
-  border-color: #ff6464;
-  box-shadow: 0 0 0 3px rgba(255,100,100,0.2);
-}
-
-label {
-  font-weight: bold;
-}
-
-/* Topping Checkbox Layout */
-#toppingOptions > div {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.3rem;
-}
-
-/* Tombol Kirim */
-button[type="submit"] {
-  background-color: #ff3e3e;
-  color: white;
-  padding: 0.8rem 1.2rem;
-  border: none;
+/* Gaya Order Form */
+.order-form {
+  background: #fff;
+  padding: 1rem;
   border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  max-width: 600px;
+  margin: auto;
+}
+
+.order-form input,
+.order-form select {
+  width: 100%;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+  border: 2px solid #ff69b4;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.order-form button {
+  background: #ff69b4;
+  color: white;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
   transition: background 0.3s ease;
 }
 
-button[type="submit"]:hover {
-  background-color: #cc2e2e;
+.order-form button:hover {
+  background: #e85caa;
 }
 
-/* Total Harga */
-#totalDisplay {
-  font-size: 1.1rem;
-  color: #111;
-  font-weight: bold;
+/* Topping Styling */
+.topping-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 0.5rem;
 }
 
-/* Responsif */
-@media (max-width: 600px) {
-  section {
+.topping-options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffe4ec;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  border: 1px solid #ffaad4;
+  cursor: pointer;
+}
+
+.topping-options input[type="checkbox"] {
+  transform: scale(1.2);
+}
+
+/* Warna topping */
+.topping-coklat { color: #5d3a00; }
+.topping-tiramisu { color: #9c6644; }
+.topping-matcha { color: #5ca75c; }
+.topping-cappucino { color: #8b5e3c; }
+.topping-stroberry { color: #ff4c61; }
+.topping-vanilla { color: #e9c46a; }
+.topping-taro { color: #b388eb; }
+.topping-meses { color: #3e3e3e; }
+.topping-keju { color: #ffdb58; }
+.topping-kacang { color: #a0522d; }
+.topping-choco-chips { color: #4b3832; }
+.topping-oreo { color: #1e1e1e; }
+
+/* Efek animasi meleleh */
+@keyframes melt {
+  0% { transform: translateY(0px); opacity: 1; }
+  50% { transform: translateY(5px); opacity: 0.7; }
+  100% { transform: translateY(0px); opacity: 1; }
+}
+
+.melting {
+  animation: melt 2s infinite ease-in-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .order-form {
     padding: 1rem;
+    margin: 10px;
   }
 
-  h1.title {
-    font-size: 2rem;
+  .topping-options {
+    flex-direction: column;
+  }
+}
+
+/* Navbar baru */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  background-color: #fdd835;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  font-family: 'Kanit Black', sans-serif;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #000;
+  font-weight: bold;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 24px;
+    background-color: #fdd835;
+    padding: 10px;
+    border-radius: 10px;
   }
 
-  button[type="submit"] {
-    font-size: 1rem;
-    padding: 0.6rem 1rem;
+  .nav-links.active {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
   }
 }
