@@ -5,15 +5,18 @@ body {
   margin: 0;
   padding: 0;
 }
+
 header {
   background: #ffcc99;
   text-align: center;
   padding: 20px;
 }
+
 header h1 {
   margin: 0;
   color: #b85c00;
 }
+
 .container {
   max-width: 600px;
   margin: 30px auto;
@@ -22,14 +25,21 @@ header h1 {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
-.topping-group {
-  display: none;
-  margin-top: 15px;
-}
+
 label {
   display: block;
   margin: 6px 0;
 }
+
+select, input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
 button {
   margin-top: 20px;
   padding: 10px 20px;
@@ -42,9 +52,66 @@ button {
 button:hover {
   background-color: #b65b1a;
 }
+
 footer {
   text-align: center;
   padding: 10px;
   background: #ffcc99;
   color: #5a2d00;
 }
+
+.topping-group {
+  display: none;
+  margin-top: 15px;
+}
+
+.topping-group h4 {
+  margin-bottom: 5px;
+  color: #b85c00;
+}
+
+.socials {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.socials a {
+  color: #d2691e;
+  text-decoration: none;
+  margin: 0 10px;
+  font-weight: bold;
+}
+.socials a:hover {
+  text-decoration: underline;
+}
+
+/* Tombol mengambang */
+.floating-buttons {
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999;
+}
+
+.float-btn {
+  width: 45px;
+  height: 45px;
+  background: #25d366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  font-size: 20px;
+}
+
+.float-btn.invite { background: #007bff; }
+.float-btn.shopee { background: #ee4d2d; }
+.float-btn.gofood { background: #d50000; }
+.float-btn.grabfood { background: #00b14f; }
+.float-btn.maximfood { background: #ffa500; }
