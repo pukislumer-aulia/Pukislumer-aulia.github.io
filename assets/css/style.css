@@ -106,7 +106,7 @@ footer {
   transform: scale(1.05);
 }
 
-/* Order Form */
+<div class="order-form">
 .order-form {
   background-color: #fff0f5;
   padding: 1rem;
@@ -114,6 +114,7 @@ footer {
   box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
   max-width: 600px;
   margin: 0 auto;
+  
 }
 
 .order-form label {
@@ -142,7 +143,7 @@ footer {
   outline: none;
   box-shadow: 0 0 5px rgba(255, 105, 180, 0.4);
 }
-
+</div>
 /* Topping Checkbox Styling */
 .topping-options {
   display: flex;
