@@ -1,2 +1,97 @@
-/* form-style.css */
-form { background: white; }
+/* Formulir Pemesanan Pukis Lumer Aulia */
+
+form {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff8f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+form h2 {
+  text-align: center;
+  color: #b3541e;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: bold;
+}
+
+input[type="text"],
+select,
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.radio-group input {
+  margin-right: 5px;
+}
+
+.topping-section {
+  display: none;
+  margin-top: 10px;
+}
+
+.topping-section select,
+.topping-section .checkboxes {
+  width: 100%;
+}
+
+.checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.checkboxes label {
+  background: #f4f4f4;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.checkboxes input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+button {
+  margin-top: 20px;
+  background-color: #b3541e;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #934418;
+}
+
+#totalDisplay {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  color: #444;
+  font-size: 18px;
+}
