@@ -25,15 +25,22 @@ function validateOrderForm() {
 }
 
 // Fungsi untuk mendapatkan tipe topping yang dipilih
-function getSelectedToppingType() {
-  const toppingRadioButtons = document.querySelectorAll('input[name="toppingType"]');
-  let selectedToppingType = 'none';
+function handleTipeChange() {
+  const tipe = document.getElementById("tipeTopping").value;
+  const singleGroup = document.getElementById("singleToppingGroup");
+  const doubleGroup = document.getElementById("doubleToppingGroup");
 
-  toppingRadioButtons.forEach(button => {
-    if (button.checked) {
-      selectedToppingType = button.value;
-    }
-  });
+  if (tipe === "none") {
+    singleGroup.style.display = "none";
+    doubleGroup.style.display = "none";
+  } else if (tipe === "single") {
+    singleGroup.style.display = "block";
+    doubleGroup.style.display = "none";
+  } else if (tipe === "double") {
+    singleGroup.style.display = "block";
+    doubleGroup.style.display = "block";
+  }
+}
 
   return selectedToppingType;
 }
@@ -64,7 +71,7 @@ function submitOrder() {
   `;
 
   const encodedMessage = encodeURIComponent(orderMessage);
-  const whatsappUrl = `https://wa.me/6281234567890?text=${encodedMessage}`; // Ganti dengan nomor WhatsApp Anda
+  const whatsappUrl = `https://wa.me/6281296668670?text=${encodedMessage}`; // Ganti dengan nomor WhatsApp Anda
 
   window.open(whatsappUrl, '_blank');
 }
