@@ -1,40 +1,32 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const testimonialsList = document.getElementById("testimonialsList");
-  const testimonialForm = document.getElementById("testimonialForm");
-  const nameInput = document.getElementById("nameInput");
-  const testimonialInput = document.getElementById("testimonialInput");
+  const form = document.querySelector(".form-testimonial form");
+  const list = document.getElementById("testimoni-list");
 
-  // Ambil testimoni dari localStorage atau pakai default jika kosong
-  let testimonials = JSON.parse(localStorage.getItem("testimonials")) || [
-    { name: "Rina", text: "Pukisnya lembut banget, favorit keluarga!" },
-    { name: "Dodi", text: "Toppingnya mewah, harga bersahabat." },
-    { name: "Sari", text: "Cocok untuk oleh-oleh dan ngemil!" },
-  ];
+  // Load dari localStorage
+  const testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
 
-  function displayTestimonials() {
-    testimonialsList.innerHTML = "";
-    testimonials.forEach((t) => {
+  function renderTestimonials() {
+    list.innerHTML = "";
+    testimonials.forEach((t, i) => {
       const div = document.createElement("div");
-      div.classList.add("testimonial");
-      div.innerHTML = `<strong>${t.name}</strong><p>${t.text}</p>`;
-      testimonialsList.appendChild(div);
+      div.className = "testimonial";
+      div.innerHTML = `<p>"${t.text}" - <strong>${t.name}</strong></p>`;
+      list.appendChild(div);
     });
   }
 
-  testimonialForm.addEventListener("submit", function (e) {
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
-    const newTestimonial = {
-      name: nameInput.value.trim(),
-      text: testimonialInput.value.trim(),
-    };
-    if (newTestimonial.name && newTestimonial.text) {
-      testimonials.push(newTestimonial);
-      localStorage.setItem("testimonials", JSON.stringify(testimonials)); // Simpan ke localStorage
-      displayTestimonials();
-      nameInput.value = "";
-      testimonialInput.value = "";
+    const name = form.querySelector('input[name="name"]').value.trim();
+    const text = form.querySelector('textarea[name="testimonial"]').value.trim();
+
+    if (name && text) {
+      testimonials.push({ name, text });
+      localStorage.setItem("testimonials", JSON.stringify(testimonials));
+      form.reset();
+      renderTestimonials();
     }
   });
 
-  displayTestimonials();
+  renderTestimonials();
 });
