@@ -99,4 +99,70 @@ footer {
   section {
     padding: 0.5rem;
   }
+  /* Gaya untuk bagian testimoni */
+#testimoni {
+  padding: 2rem;
+  background-color: #fff5e6;
+  border-top: 2px solid #f4a261;
+  border-bottom: 2px solid #f4a261;
+}
+
+#testimoni h2 {
+  font-family: "Kanit Black", sans-serif;
+  color: #e76f51;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.testimonial {
+  background-color: #ffe8d6;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.testimonial strong {
+  display: block;
+  font-size: 1.1rem;
+  color: #2a9d8f;
+  margin-bottom: 0.3rem;
+}
+
+.testimonial-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.testimonial-form input,
+.testimonial-form textarea {
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  font-family: "Chewy", cursive;
+}
+
+.testimonial-form button {
+  background-color: #2a9d8f;
+  color: white;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.testimonial-form button:hover {
+  background-color: #21867a;
+}
 }
