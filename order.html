@@ -2,47 +2,49 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Order | Pukis Lumer Aulia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Pukis Lumer Aulia</title>
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/form-style.css" />
 </head>
 <body>
-  <h1>Form Pemesanan Pukis Lumer Aulia</h1>
-  <form id="order-form">
-    <label for="nama">Nama:</label>
-    <input type="text" id="nama" required />
+  <header>
+    <h1>Order Pukis Lumer Aulia</h1>
+  </header>
 
-    <label for="menu">Pilih Menu:</label>
-    <select id="menu">
-      <option value="Pukis Original">Pukis Original</option>
-      <option value="Pukis Pandan">Pukis Pandan</option>
-    </select>
+  <main>
+    <form id="orderForm">
+      <label for="variant">Varian:</label>
+      <select id="variant" name="variant" required>
+        <option value="">-- Pilih Varian --</option>
+        <option value="original">Original</option>
+        <option value="pandan">Pandan</option>
+      </select>
 
-    <label for="topping-type">Jenis Topping:</label>
-    <select id="topping-type">
-      <option value="Non Topping">Non Topping</option>
-      <option value="Single Topping">Single Topping</option>
-      <option value="Double Topping">Double Topping</option>
-    </select>
+      <label for="toppingType">Jenis Topping:</label>
+      <select id="toppingType" name="toppingType" required>
+        <option value="">-- Pilih Topping --</option>
+        <option value="non">Non Topping</option>
+        <option value="single">Single Topping</option>
+        <option value="double">Double Topping</option>
+      </select>
 
-    <div id="topping-section" style="display:none;">
-      <p>Pilih Topping:</p>
-      <div id="topping-options"></div>
-    </div>
+      <label for="boxSize">Ukuran Box:</label>
+      <select id="boxSize" name="boxSize" required>
+        <option value="">-- Pilih Ukuran --</option>
+        <option value="5">Box Kecil (5 pcs)</option>
+        <option value="10">Box Besar (10 pcs)</option>
+      </select>
 
-    <label for="box-size">Ukuran:</label>
-    <select id="box-size">
-      <option value="kecil">Box Kecil (5 pcs)</option>
-      <option value="besar">Box Besar (10 pcs)</option>
-    </select>
+      <div id="toppingContainer" style="display: none;">
+        <p>Pilih Topping (maksimal sesuai isi box):</p>
+        <div id="toppingOptions"></div>
+      </div>
 
-    <label for="quantity">Jumlah:</label>
-    <input type="number" id="quantity" min="1" required />
+      <p>Total Harga: <span id="totalPrice">Rp0</span></p>
 
-    <p id="total-price">Total: Rp0</p>
-    <button type="submit">Pesan via WhatsApp</button>
-  </form>
+      <button type="submit">Order via WhatsApp</button>
+    </form>
+  </main>
 
   <script src="assets/js/order.js"></script>
 </body>
