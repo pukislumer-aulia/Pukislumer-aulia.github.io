@@ -1,4 +1,4 @@
-/* File: assets/css/form-style.css */
+}/* File: form-style.css */
 
 form {
   margin-top: 30px;
@@ -26,22 +26,23 @@ form select {
   font-size: 1rem;
 }
 
-form input[type="radio"] {
+form input[type="checkbox"] {
   margin-right: 8px;
 }
 
-#toppingArea {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0 20px 0;
+.topping-group {
+  display: none;
+  margin-bottom: 15px;
+  background-color: #fffaf0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #f0d070;
 }
 
-#toppingArea label {
-  background-color: #fff3d9;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ffce58;
+.topping-group label {
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 10px;
   cursor: pointer;
 }
 
@@ -63,4 +64,50 @@ form button:hover {
 #totalDisplay {
   font-size: 1.1rem;
   margin: 10px 0 20px 0;
+}
+
+.floating-buttons {
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999;
+}
+
+.float-btn {
+  width: 45px;
+  height: 45px;
+  background: #25d366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  font-size: 20px;
+}
+
+.float-btn.invite { background: #007bff; }
+.float-btn.shopee { background: #ee4d2d; }
+.float-btn.gofood { background: #d50000; }
+.float-btn.grabfood { background: #00b14f; }
+.float-btn.maximfood { background: #ffa500; }
+
+.socials {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.socials a {
+  color: #ff9900;
+  font-weight: bold;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.socials a:hover {
+  text-decoration: underline;
 }
