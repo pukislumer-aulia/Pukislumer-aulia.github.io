@@ -1,106 +1,119 @@
-const toppingArea = document.getElementById("toppingArea");
-const form = document.getElementById("orderForm");
-const qtyInput = document.getElementById("qty");
-const boxSizeSelect = document.getElementById("boxSize");
-const totalDisplay = document.getElementById("totalDisplay");
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("orderForm");
+  const toppingArea = document.getElementById("toppingArea");
+  const toppingRadios = document.querySelectorAll('input[name="toppingType"]');
+  const boxSize = document.getElementById("boxSize");
+  const menu = document.getElementById("menu");
+  const qty = document.getElementById("qty");
+  const totalDisplay = document.getElementById("totalDisplay");
 
-// Data topping
-const toppingSingle = ["Coklat", "Tiramisu", "Stroberi", "Cappucino", "Vanilla", "Taro", "Matcha"];
-const toppingDouble = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
+  const singleToppings = ["Coklat", "Tiramisu", "Matcha", "Cappucino", "Stroberry", "Vanilla", "Taro"];
+  const doubleToppings = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
 
-// Harga dasar
-const hargaBox = {
-  5: 10000,
-  10: 18000
-};
-
-// Hitung total
-function updateTotal() {
-  const box = parseInt(boxSizeSelect.value);
-  const qty = parseInt(qtyInput.value) || 0;
-  const total = hargaBox[box] * qty;
-  totalDisplay.innerHTML = `<strong>Total Harga:</strong> Rp ${total.toLocaleString("id-ID")}`;
-}
-
-qtyInput.addEventListener("input", updateTotal);
-boxSizeSelect.addEventListener("change", updateTotal);
-
-// Tipe topping handler
-document.querySelectorAll('input[name="toppingType"]').forEach(input => {
-  input.addEventListener("change", () => {
-    const type = input.value;
+  function updateToppings() {
+    const type = document.querySelector('input[name="toppingType"]:checked')?.value;
     toppingArea.innerHTML = "";
 
-    if (type === "none") {
-      toppingArea.style.display = "none";
-    } else {
-      toppingArea.style.display = "flex";
-
-      if (type === "single") {
-        toppingSingle.forEach(t => {
-          const label = document.createElement("label");
-          label.innerHTML = `<input type="checkbox" name="toppingSingle" value="${t}"/> ${t}`;
-          toppingArea.appendChild(label);
-        });
-      }
-
-      if (type === "double") {
-        const singleDiv = document.createElement("div");
-        const doubleDiv = document.createElement("div");
-
-        singleDiv.innerHTML = "<strong>Base Topping:</strong><br/>";
-        toppingSingle.forEach(t => {
-          const label = document.createElement("label");
-          label.innerHTML = `<input type="checkbox" name="toppingSingle" value="${t}"/> ${t}`;
-          singleDiv.appendChild(label);
-        });
-
-        doubleDiv.innerHTML = "<br/><strong>Taburan Atas:</strong><br/>";
-        toppingDouble.forEach(t => {
-          const label = document.createElement("label");
-          label.innerHTML = `<input type="checkbox" name="toppingDouble" value="${t}"/> ${t}`;
-          doubleDiv.appendChild(label);
-        });
-
-        toppingArea.appendChild(singleDiv);
-        toppingArea.appendChild(doubleDiv);
-      }
+    if (type === "single") {
+      createToppingGroup("Topping Single", singleToppings, "single");
+    } else if (type === "double") {
+      createToppingGroup("Topping Single", singleToppings, "single");
+      createToppingGroup("Topping Double", doubleToppings, "double");
     }
-  });
-});
-
-// Kirim ke WhatsApp
-form.addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const name = document.getElementById("name").value;
-  const menu = document.getElementById("menu").value;
-  const box = boxSizeSelect.value;
-  const qty = qtyInput.value;
-  const toppingType = document.querySelector('input[name="toppingType"]:checked')?.value || "none";
-
-  let toppings = "";
-  if (toppingType === "single") {
-    const selected = [...document.querySelectorAll('input[name="toppingSingle"]:checked')].map(i => i.value);
-    toppings = selected.join(", ");
-  } else if (toppingType === "double") {
-    const base = [...document.querySelectorAll('input[name="toppingSingle"]:checked')].map(i => i.value);
-    const atas = [...document.querySelectorAll('input[name="toppingDouble"]:checked')].map(i => i.value);
-    toppings = `Base: ${base.join(", ")} | Taburan: ${atas.join(", ")}`;
-  } else {
-    toppings = "Tanpa Topping";
   }
 
-  const total = hargaBox[box] * parseInt(qty);
-  const pesan = `Halo! Saya ingin pesan Pukis:\n\nNama: ${name}\nJenis: ${menu}\nTopping: ${toppings}\nUkuran: ${box} pcs\nJumlah: ${qty} box\nTotal: Rp ${total.toLocaleString("id-ID")}`;
+  function createToppingGroup(labelText, toppings, namePrefix) {
+    const groupLabel = document.createElement("p");
+    groupLabel.textContent = labelText;
+    groupLabel.style.fontWeight = "bold";
+    toppingArea.appendChild(groupLabel);
 
-  const url = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
-  window.open(url, "_blank");
+    toppings.forEach((topping) => {
+      const label = document.createElement("label");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.name = `${namePrefix}Topping`;
+      checkbox.value = topping;
+      checkbox.addEventListener("change", validateToppingLimit);
+      label.appendChild(checkbox);
+      label.append(" " + topping);
+      toppingArea.appendChild(label);
+    });
+  }
+
+  function validateToppingLimit() {
+    const max = parseInt(boxSize.value);
+    const selected = toppingArea.querySelectorAll("input[type='checkbox']:checked");
+    if (selected.length > max) {
+      alert(`Maksimal ${max} topping sesuai isi box.`);
+      this.checked = false;
+    }
+  }
+
+  function calculatePrice() {
+    const jenis = menu.value;
+    const type = document.querySelector('input[name="toppingType"]:checked')?.value;
+    const size = parseInt(boxSize.value);
+    const jumlah = parseInt(qty.value) || 0;
+
+    let harga = 0;
+
+    const hargaTable = {
+      original: {
+        none: {5: 10000, 10: 18000},
+        single: {5: 13000, 10: 25000},
+        double: {5: 15000, 10: 28000}
+      },
+      pandan: {
+        none: {5: 12000, 10: 22000},
+        single: {5: 15000, 10: 28000},
+        double: {5: 18000, 10: 32000}
+      }
+    };
+
+    if (type && size && hargaTable[jenis]?.[type]?.[size]) {
+      harga = hargaTable[jenis][type][size] * jumlah;
+    }
+
+    totalDisplay.innerHTML = `<strong>Total Harga:</strong> Rp ${harga.toLocaleString("id-ID")}`;
+    return harga;
+  }
+
+  toppingRadios.forEach((radio) => {
+    radio.addEventListener("change", updateToppings);
+  });
+
+  [menu, boxSize, qty].forEach((el) => el.addEventListener("change", calculatePrice));
+  toppingArea.addEventListener("change", calculatePrice);
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const nama = document.getElementById("name").value;
+    const jenis = menu.value;
+    const size = parseInt(boxSize.value);
+    const jumlah = parseInt(qty.value);
+    const type = document.querySelector('input[name="toppingType"]:checked')?.value || "none";
+    const toppingEls = toppingArea.querySelectorAll("input[type='checkbox']:checked");
+    const toppings = Array.from(toppingEls).map((el) => el.value);
+    const harga = calculatePrice();
+
+    if (toppings.length > size) {
+      alert(`Jumlah topping melebihi isi box! Maksimal ${size}`);
+      return;
+    }
+
+    const message = `
+Halo! Saya ingin pesan Pukis:
+Nama: ${nama}
+Jenis: ${jenis}
+Topping: ${type.toUpperCase()} - ${toppings.join(", ") || "Tanpa Topping"}
+Ukuran Kotak: ${size} pcs
+Jumlah Kotak: ${jumlah}
+Total: Rp ${harga.toLocaleString("id-ID")}
+`;
+
+    const encoded = encodeURIComponent(message);
+    window.open(`https://wa.me/6281296668670?text=${encoded}`, "_blank");
+  });
 });
-
-// Undang Teman
-function shareSite() {
-  const text = "Yuk coba Pukis Lumer Aulia! Pesan di sini:";
-  const url = window.location.href;
-  navigator.share ? navigator.share({ title: "Pukis Lumer Aulia", text, url }) : alert("Fitur ini tidak didukung di perangkat Anda.");
-}
