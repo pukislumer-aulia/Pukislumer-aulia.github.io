@@ -1,74 +1,57 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pukis Lumer Aulia</title>
-  <meta name="description" content="Pukis lumer terenak di Padang Panjang!"/>
-  <link rel="stylesheet" href="assets/css/style.css"/>
-  <link rel="stylesheet" href="assets/css/form-style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <div class="page-wrapper">
-    <div class="promo-image">
-      <img src="assets/images/kupon1.jpg" alt="Promo Kupon"/>
-    </div>
-    <div class="promo-banner">
-      <span>GUNTING DAN KUMPULKAN 15 KUPON, TUKARKAN DENGAN 1 BOX KECIL GRATIS!</span>
-    </div>
-    <img src="assets/images/pukis.jpg" alt="Header Pukis" class="header-img"/>
-    <h1>PUKIS LUMER AULIA</h1>
-    <p>Padang Panjang Kota Kuliner – jangan lupa mampir!</p>
+  <header>
+    <h1>Pukis Lumer Aulia</h1>
+    <p>Manis, Lumer, Bikin Ketagihan!</p>
+  </header>
 
-    <h2>Kenapa Harus Pukis Lumer Aulia?</h2>
-    <ul>
-      <li>Resep rahasia sejak 2023</li>
-      <li>Tekstur super lembut</li>
-      <li>10+ topping ready tiap hari</li>
-    </ul>
+  <main class="container">
+    <section id="form-pemesanan">
+      <h2>Form Pemesanan</h2>
+      <form>
+        <label for="tipeTopping">Pilih Tipe Topping:</label>
+        <select id="tipeTopping" onchange="handleTipeChange()">
+          <option value="none">Non Topping</option>
+          <option value="single">Single Topping</option>
+          <option value="double">Double Topping</option>
+        </select>
 
-    <h2>Galeri</h2>
-    <div class="gallery">
-      <img src="assets/images/pukis1.jpg" />
-      <img src="assets/images/pukis2.jpg" />
-      <img src="assets/images/pukis3.jpg" />
-      <img src="assets/images/pukis4.jpg" />
-      <img src="assets/images/pukis5.jpg" />
-    </div>
+        <div id="singleToppingGroup" class="topping-group">
+          <h4>Topping Single</h4>
+          <label><input type="checkbox" name="toppingSingle" value="Coklat"> Coklat</label>
+          <label><input type="checkbox" name="toppingSingle" value="Tiramisu"> Tiramisu</label>
+          <label><input type="checkbox" name="toppingSingle" value="Stroberi"> Stroberi</label>
+          <label><input type="checkbox" name="toppingSingle" value="Cappucino"> Cappucino</label>
+          <label><input type="checkbox" name="toppingSingle" value="Vanilla"> Vanilla</label>
+          <label><input type="checkbox" name="toppingSingle" value="Taro"> Taro</label>
+          <label><input type="checkbox" name="toppingSingle" value="Matcha"> Matcha</label>
+        </div>
 
-    <h2>Pesan Sekarang</h2>
-    <form id="orderForm">
-      <label for="name">Nama:</label>
-      <input type="text" id="name" required/>
+        <div id="doubleToppingGroup" class="topping-group">
+          <h4>Topping Double (Taburan Atas)</h4>
+          <label><input type="checkbox" name="toppingDouble" value="Meses"> Meses</label>
+          <label><input type="checkbox" name="toppingDouble" value="Keju"> Keju</label>
+          <label><input type="checkbox" name="toppingDouble" value="Kacang"> Kacang</label>
+          <label><input type="checkbox" name="toppingDouble" value="Choco Chip"> Choco Chip</label>
+          <label><input type="checkbox" name="toppingDouble" value="Oreo"> Oreo</label>
+        </div>
 
-      <label for="menu">Jenis Pukis:</label>
-      <select id="menu">
-        <option value="original">Pukis Original</option>
-        <option value="pandan">Pukis Pandan</option>
-      </select>
+        <button type="submit">Pesan Sekarang</button>
+      </form>
+    </section>
+  </main>
 
-      <p><strong>Pilih Tipe Topping:</strong></p>
-      <label><input type="radio" name="toppingType" value="none" /> Non Topping</label>
-      <label><input type="radio" name="toppingType" value="single" /> Single Topping</label>
-      <label><input type="radio" name="toppingType" value="double" /> Double Topping</label>
+  <footer>
+    <p>&copy; 2025 Pukis Lumer Aulia</p>
+  </footer>
 
-      <div id="toppingArea"></div>
-
-      <label for="boxSize">Ukuran Kotak:</label>
-      <select id="boxSize">
-        <option value="5">Kecil (5 pcs)</option>
-        <option value="10">Besar (10 pcs)</option>
-      </select>
-
-      <label for="qty">Jumlah Kotak:</label>
-      <input type="number" id="qty" min="1" required/>
-
-      <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
-      <button type="submit">Pesan via WhatsApp</button>
-    </form>
-  </div>
-
-  <script src="assets/js/order.js"></script>
+  <script src="assets/js/script.js"></script>
 </body>
 </html>
