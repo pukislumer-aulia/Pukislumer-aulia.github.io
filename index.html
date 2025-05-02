@@ -26,6 +26,7 @@
     <a href="#tentang">Tentang</a>
     <a href="#menu">Menu</a>
     <a href="#galeri">Galeri</a>
+    <a href="#testimoni">Testimoni</a>
     <a href="#order">Order</a>
   </nav>
 
@@ -62,6 +63,16 @@
       </div>
     </section>
 
+    <section id="testimoni">
+      <h2>Testimoni Pelanggan</h2>
+      <div id="testimonialsList" class="testimonial-list"></div>
+      <form id="testimonialForm" class="testimonial-form">
+        <input type="text" id="nameInput" placeholder="Nama" required />
+        <textarea id="testimonialInput" placeholder="Tulis testimoni..." required></textarea>
+        <button type="submit">Kirim</button>
+      </form>
+    </section>
+
     <section id="order">
       <h2>Order Sekarang</h2>
       <form onsubmit="return kirimPesanWA(event)" class="order-form">
@@ -94,12 +105,6 @@
       return false;
     }
   </script>
-
-  <!-- Optional: jika file JS lain tidak digunakan, bisa dihapus -->
-  <!-- <script src="assets/js/main.js"></script> -->
-  <!-- <script src="assets/js/index.js"></script> -->
-  <!-- <script src="assets/js/order.js"></script> -->
-  <!-- <script src="assets/js/script.js"></script> -->
-  <!-- <script src="assets/js/testimoni.js"></script> -->
+  <script src="assets/js/testimoni.js"></script>
 </body>
 </html>
