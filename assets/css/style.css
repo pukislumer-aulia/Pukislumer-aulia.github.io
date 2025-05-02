@@ -1,45 +1,66 @@
-/* File: style.css */
+/* File: assets/css/form-style.css */
 
-body {
-  margin: 0;
-  padding: 0;
+form {
+  margin-top: 30px;
+  background-color: #fffef5;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
   font-family: 'Kanit', sans-serif;
-  background-color: #fffdf5;
-  color: #333;
 }
 
-header {
-  text-align: center;
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="number"],
+form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+form input[type="radio"] {
+  margin-right: 8px;
+}
+
+#toppingArea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 20px 0;
+}
+
+#toppingArea label {
+  background-color: #fff3d9;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ffce58;
+  cursor: pointer;
+}
+
+form button {
   background-color: #ff9900;
   color: white;
-  padding: 20px 10px;
-  border-bottom: 4px solid #e68a00;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 2em;
+form button:hover {
+  background-color: #e68a00;
 }
 
-header p {
-  margin: 5px 0 0 0;
-  font-size: 1.1em;
-}
-
-main.container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-footer {
-  text-align: center;
-  padding: 15px;
-  background-color: #f1f1f1;
-  font-size: 0.9em;
-  margin-top: 40px;
-}
-
-h2, h3, h4 {
-  color: #ff9900;
+#totalDisplay {
+  font-size: 1.1rem;
+  margin: 10px 0 20px 0;
 }
