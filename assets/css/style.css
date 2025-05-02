@@ -1,91 +1,69 @@
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #fffaf4;
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
+/* File: assets/css/form-style.css */
 
-header {
-  background: #ffcc99;
-  text-align: center;
-  padding: 20px;
-}
-
-header h1 {
-  margin: 0;
-  color: #b85c00;
-}
-
-.container {
-  max-width: 600px;
-  margin: 30px auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-label {
-  display: block;
-  margin: 6px 0;
-}
-
-select, input[type="text"], input[type="number"] {
-  width: 100%;
-  padding: 8px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #d2691e;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #b65b1a;
-}
-
-footer {
-  text-align: center;
-  padding: 10px;
-  background: #ffcc99;
-  color: #5a2d00;
-}
-
-.topping-group {
-  display: none;
-  margin-top: 15px;
-}
-
-.topping-group h4 {
-  margin-bottom: 5px;
-  color: #b85c00;
-}
-
-.socials {
+form {
   margin-top: 30px;
-  text-align: center;
+  background-color: #fffef5;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  font-family: 'Kanit', sans-serif;
 }
 
-.socials a {
-  color: #d2691e;
-  text-decoration: none;
-  margin: 0 10px;
+form label {
+  display: block;
+  margin-bottom: 5px;
   font-weight: bold;
 }
-.socials a:hover {
-  text-decoration: underline;
+
+form input[type="text"],
+form input[type="number"],
+form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
-/* Tombol mengambang */
+form input[type="radio"] {
+  margin-right: 8px;
+}
+
+#toppingArea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 20px 0;
+}
+
+#toppingArea label {
+  background-color: #fff3d9;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ffce58;
+  cursor: pointer;
+}
+
+form button {
+  background-color: #ff9900;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+form button:hover {
+  background-color: #e68a00;
+}
+
+#totalDisplay {
+  font-size: 1.1rem;
+  margin: 10px 0 20px 0;
+}
 .floating-buttons {
   position: fixed;
   right: 15px;
@@ -95,7 +73,6 @@ footer {
   gap: 10px;
   z-index: 999;
 }
-
 .float-btn {
   width: 45px;
   height: 45px;
@@ -109,9 +86,12 @@ footer {
   box-shadow: 0 4px 6px rgba(0,0,0,0.2);
   font-size: 20px;
 }
-
 .float-btn.invite { background: #007bff; }
 .float-btn.shopee { background: #ee4d2d; }
 .float-btn.gofood { background: #d50000; }
 .float-btn.grabfood { background: #00b14f; }
 .float-btn.maximfood { background: #ffa500; }
+.socials {
+  margin-top: 30px;
+  text-align: center;
+}
