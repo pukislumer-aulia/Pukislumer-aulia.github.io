@@ -3,35 +3,47 @@
 body {
   margin: 0;
   font-family: 'Chewy', cursive;
-  background-color: #fd700;
+  background-color: #ffdab9; /* warna peach muda yang lebih lembut */
   color: #333;
+  line-height: 1.6;
 }
+
 img {
   max-width: 100%;
   height: auto;
   display: block;
 }
+
 .text-container {
-  max-width: 600px; /* Sesuaikan dengan lebar teks */
-  margin: 0 auto;   /* Agar tetap di tengah */
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .text-container img {
   max-width: 100%;
   height: auto;
 }
+
 header {
   background-color: #ff69b4;
   color: white;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
   text-align: center;
+}
+
+.header-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-bottom: 4px solid #ffc0cb;
 }
 
 nav {
   background-color: #fff;
   border-bottom: 2px solid #ffc0cb;
-  padding: 0.5rem;
+  padding: 0.8rem;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
 }
@@ -40,6 +52,12 @@ nav a {
   text-decoration: none;
   color: #ff69b4;
   font-weight: bold;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #e91e63;
 }
 
 main {
@@ -48,6 +66,13 @@ main {
 
 section {
   margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+#galeri .galeri-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
 }
 
 footer {
@@ -58,4 +83,20 @@ footer {
   position: relative;
   bottom: 0;
   width: 100%;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.8rem;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+  }
+
+  section {
+    padding: 0.5rem;
+  }
 }
