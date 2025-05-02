@@ -1,2 +1,147 @@
-/* style.css */
-body { background: pink; }
+/* Fonts */
+body {
+  font-family: 'Oswald', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fffaf2;
+  color: #333;
+}
+
+.page-wrapper {
+  padding: 20px;
+  max-width: 960px;
+  margin: auto;
+}
+
+/* Header image */
+.header-img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+/* Headings */
+h1, h2 {
+  font-family: 'Kanit', sans-serif;
+  color: #d35400;
+}
+
+h1 {
+  font-size: 36px;
+  margin-top: 10px;
+}
+
+h2 {
+  margin-top: 30px;
+}
+
+/* Promo */
+.promo-banner {
+  background-color: #f1c40f;
+  color: #000;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.promo-image img {
+  width: 100%;
+  max-width: 400px;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+/* Gallery */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gallery img {
+  width: calc(50% - 10px);
+  border-radius: 10px;
+}
+
+/* Testimonials */
+.testimonials {
+  margin-top: 20px;
+  padding: 10px;
+  background: #ecf0f1;
+  border-radius: 10px;
+}
+
+.testimonials p {
+  font-style: italic;
+}
+
+/* Testimonial Form */
+.form-testimonial {
+  margin-top: 20px;
+  background: #fdf2e9;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.form-testimonial input,
+.form-testimonial textarea {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.form-testimonial button {
+  background-color: #e67e22;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-testimonial button:hover {
+  background-color: #d35400;
+}
+
+/* Floating Buttons */
+.floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.floating-buttons a {
+  background-color: #2ecc71;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 25px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.floating-buttons a.wa { background-color: #25d366; }
+.floating-buttons a.invite { background-color: #3498db; }
+.floating-buttons a.shopee { background-color: #ff5722; }
+.floating-buttons a.maxim { background-color: #9b59b6; }
+
+.admin-link {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.admin-link a {
+  text-decoration: none;
+  color: #c0392b;
+  font-weight: bold;
+}
