@@ -9,12 +9,12 @@
   <title>Pukis Lumer Aulia</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/form-style.css" />
-  <link rel="stylesheet" href="assets/css/admin.css" />
   <link rel="preload" href="assets/font/TanggoStdRegular.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/font/Kanit-Black.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/font/Chewy-Regular.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
+
   <header>
     <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="header-image" />
     <h1>Pukis Lumer Aulia</h1>
@@ -22,45 +22,56 @@
     <p>Jam Operasional: 16.00 – 23.59 WIB</p>
   </header>
 
-  <section id="tentang">
-    <h2>Assalamu'alaikum warahmatullahi wabarakatuh</h2>
-    <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
-    <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya. Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke PUKIS LUMER AULIA</p>
-    <h3>Kenapa Harus Pukis Lumer Aulia?</h3>
-    <ul>
-      <li>Resep rahasia keluarga sejak 2023</li>
-      <li>Pertama hadir di Padang Panjang</li>
-      <li>Teknik pemanggangan tradisional</li>
-      <li>10+ topping ready setiap hari</li>
-      <li>100% bahan premium tanpa pengawet</li>
-      <li>Jajanan nomor #1 di Pasar Kuliner!</li>
-    </ul>
-  </section>
+  <nav>
+    <a href="#tentang">Tentang</a>
+    <a href="#menu">Menu</a>
+    <a href="#galeri">Galeri</a>
+    <a href="#order">Order</a>
+  </nav>
 
-  <section id="menu">
-    <h2>Menu Pilihan</h2>
-    <p>Best Seller: Double Topping Vanilla Oreo vs Coklat Kacang</p>
-    <!-- Nanti diisi galeri menu dengan gambar -->
-  </section>
+  <main>
+    <section id="tentang">
+      <h2>Assalamu'alaikum warahmatullahi wabarakatuh</h2>
+      <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
+      <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya. Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke PUKIS LUMER AULIA</p>
+      <h3>Kenapa Harus Pukis Lumer Aulia?</h3>
+      <ul>
+        <li>Resep rahasia keluarga sejak 2023</li>
+        <li>Pertama hadir di Padang Panjang</li>
+        <li>Teknik pemanggangan tradisional</li>
+        <li>10+ topping ready setiap hari</li>
+        <li>100% bahan premium tanpa pengawet</li>
+        <li>Jajanan nomor #1 di Pasar Kuliner!</li>
+      </ul>
+    </section>
 
-  <section id="galeri">
-    <h2>Galeri</h2>
-    <div class="galeri-wrapper">
-      <img src="assets/images/pukis1.jpg" alt="Pukis 1" />
-      <img src="assets/images/pukis2.jpg" alt="Pukis 2" />
-      <img src="assets/images/pukis3.jpg" alt="Pukis 3" />
-      <img src="assets/images/pukis4.jpg" alt="Pukis 4" />
-      <img src="assets/images/pukis5.jpg" alt="Pukis 5" />
-    </div>
-  </section>
+    <section id="menu">
+      <h2>Menu Pilihan</h2>
+      <p>Best Seller: Double Topping Vanilla Oreo vs Coklat Kacang</p>
+      <!-- Tambahkan galeri menu di sini -->
+    </section>
 
-  <section id="order">
-    <h2>Order Sekarang</h2>
-    <form action="https://wa.me/6281296668670" method="get" target="_blank">
-      <input type="text" name="text" placeholder="Isi pesananmu di sini" required />
-      <button type="submit">Order via WhatsApp</button>
-    </form>
-  </section>
+    <section id="galeri">
+      <h2>Galeri</h2>
+      <div class="galeri-wrapper">
+        <img src="assets/images/pukis1.jpg" alt="Pukis 1" />
+        <img src="assets/images/pukis2.jpg" alt="Pukis 2" />
+        <img src="assets/images/pukis3.jpg" alt="Pukis 3" />
+        <img src="assets/images/pukis4.jpg" alt="Pukis 4" />
+        <img src="assets/images/pukis5.jpg" alt="Pukis 5" />
+      </div>
+    </section>
+
+    <section id="order">
+      <h2>Order Sekarang</h2>
+      <form onsubmit="return kirimPesanWA(event)" class="order-form">
+        <input type="text" id="nama" placeholder="Nama" required />
+        <input type="text" id="pesanan" placeholder="Pesanan (contoh: Box Kecil, Double Topping, Oreo + Keju)" required />
+        <input type="number" id="jumlah" placeholder="Jumlah Box" required />
+        <button type="submit">Kirim via WhatsApp</button>
+      </form>
+    </section>
+  </main>
 
   <footer>
     <p>Follow kami di: 
@@ -71,10 +82,24 @@
     <p>&copy; 2025 Pukis Lumer Aulia</p>
   </footer>
 
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/index.js"></script>
-  <script src="assets/js/order.js"></script>
-  <script src="assets/js/script.js"></script>
-  <script src="assets/js/testimoni.js"></script>
+  <script>
+    function kirimPesanWA(e) {
+      e.preventDefault();
+      const nama = document.getElementById("nama").value;
+      const pesanan = document.getElementById("pesanan").value;
+      const jumlah = document.getElementById("jumlah").value;
+      const pesan = `Halo! Saya ingin pesan:\nNama: ${nama}\nPesanan: ${pesanan}\nJumlah: ${jumlah} box`;
+      const url = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
+      window.open(url, "_blank");
+      return false;
+    }
+  </script>
+
+  <!-- Optional: jika file JS lain tidak digunakan, bisa dihapus -->
+  <!-- <script src="assets/js/main.js"></script> -->
+  <!-- <script src="assets/js/index.js"></script> -->
+  <!-- <script src="assets/js/order.js"></script> -->
+  <!-- <script src="assets/js/script.js"></script> -->
+  <!-- <script src="assets/js/testimoni.js"></script> -->
 </body>
 </html>
