@@ -1,176 +1,134 @@
-/* style.css */
-
+/* Mengatur font untuk seluruh website */
 body {
-  margin: 0;
-  font-family: 'Chewy', cursive;
-  background-color: #ffdab9; /* warna peach muda yang lebih lembut */
-  color: #333;
+  font-family: "Chewy", cursive;
+  font-size: 1rem; /* Ukuran font default */
   line-height: 1.6;
+  color: #333;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+/* Menebalkan judul utama */
+h1, h2, h3 {
+  font-family: "Chewy", cursive;
+  font-weight: bold; /* Menebalkan judul */
+  color: #e76f51;
 }
 
-.text-container {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.text-container img {
-  max-width: 100%;
-  height: auto;
-}
-
+/* Gaya untuk header */
 header {
-  background-color: #ff69b4;
-  color: white;
-  padding: 1.5rem 1rem;
   text-align: center;
+  margin-bottom: 2rem;
 }
 
-.header-image {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  border-bottom: 4px solid #ffc0cb;
-}
-
-nav {
-  background-color: #fff;
-  border-bottom: 2px solid #ffc0cb;
-  padding: 0.8rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-}
-
-nav a {
-  text-decoration: none;
-  color: #ff69b4;
+header h1 {
+  font-size: 2.5rem; /* Ukuran font lebih besar untuk judul utama */
   font-weight: bold;
-  font-size: 1rem;
-  transition: color 0.3s;
+}
+
+header p {
+  font-size: 1.1rem;
+  font-weight: normal;
+  color: #333;
+}
+
+/* Menyesuaikan menu navigasi */
+nav a {
+  font-family: "Chewy", cursive;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: #333;
+  padding: 1rem;
+  margin: 0 0.5rem;
 }
 
 nav a:hover {
-  color: #e91e63;
-}
-
-main {
-  padding: 1rem;
-}
-
-section {
-  margin-bottom: 2rem;
-  padding: 1rem;
-}
-
-#galeri .galeri-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-}
-
-footer {
-  background-color: #ff69b4;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  font-size: 0.9rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  header h1 {
-    font-size: 1.8rem;
-  }
-
-  nav a {
-    font-size: 0.9rem;
-  }
-
-  section {
-    padding: 0.5rem;
-  }
-  /* Gaya untuk bagian testimoni */
-#/* Gaya untuk bagian testimoni */
-#testimoni {
-  padding: 2rem;
-  background-color: #fff5e6;
-  border-top: 2px solid #f4a261;
-  border-bottom: 2px solid #f4a261;
-}
-
-#testimoni h2 {
-  font-family: "Kanit Black", sans-serif;
-  font-size: 2rem;
   color: #e76f51;
-  text-align: center;
-  margin-bottom: 1.5rem;
 }
 
-.testimonial-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+/* Gaya untuk konten */
+main {
+  padding: 2rem;
 }
 
-.testimonial {
-  background-color: #ffe8d6;
-  padding: 1.2rem;
-  border-radius: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  font-family: "Chewy", cursive;
+/* Gaya untuk bagian tentang */
+#tentang h2 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+#tentang p {
   font-size: 1.1rem;
-  line-height: 1.6;
 }
 
-.testimonial strong {
-  display: block;
-  font-size: 1.2rem;
-  color: #2a9d8f;
-  margin-bottom: 0.4rem;
-  font-family: "Kanit Black", sans-serif;
+/* Gaya untuk bagian menu */
+#menu h2 {
+  font-size: 2rem;
+  font-weight: bold;
 }
 
-.testimonial-form {
+#menu p {
+  font-size: 1.1rem;
+}
+
+/* Gaya untuk galeri */
+#galeri h2 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.galeri-wrapper img {
+  width: 100%;
+  max-width: 300px;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* Gaya untuk bagian order */
+#order h2 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.order-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 500px;
-  margin: 0 auto;
-  font-family: "Chewy", cursive;
 }
 
-.testimonial-form input,
-.testimonial-form textarea {
-  padding: 0.8rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #ccc;
+.order-form input,
+.order-form button {
+  padding: 1rem;
+  font-size: 1.1rem;
 }
 
-.testimonial-form button {
+.order-form button {
   background-color: #2a9d8f;
   color: white;
-  padding: 0.9rem;
   border: none;
-  font-size: 1rem;
-  border-radius: 0.5rem;
   cursor: pointer;
-  font-weight: bold;
   transition: background-color 0.3s ease;
 }
 
-.testimonial-form button:hover {
+.order-form button:hover {
   background-color: #21867a;
 }
+
+/* Gaya footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f4f4f4;
+}
+
+footer p {
+  font-size: 1rem;
+}
+
+footer a {
+  text-decoration: none;
+  color: #2a9d8f;
+  margin: 0 0.5rem;
+}
+
+footer a:hover {
+  color: #e76f51;
 }
