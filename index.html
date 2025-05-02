@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="assets/css/form-style.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
@@ -19,7 +19,8 @@
       <h2>Form Pemesanan</h2>
       <form id="orderForm">
         <label for="tipeTopping">Pilih Tipe Topping:</label>
-        <select id="tipeTopping" onchange="handleTipeChange()">
+        <select id="tipeTopping" required onchange="handleTipeChange()">
+          <option value="" disabled selected>Pilih tipe topping...</option>
           <option value="none">Non Topping</option>
           <option value="single">Single Topping</option>
           <option value="double">Double Topping</option>
@@ -71,13 +72,23 @@
     <a href="https://food.maximapp.net" target="_blank" class="float-btn maximfood"><i class="fas fa-biking"></i></a>
   </div>
 
-  <script src="assets/js/script.js"></script>
   <script>
+    function handleTipeChange() {
+      const tipe = document.getElementById("tipeTopping").value;
+      document.getElementById("singleToppingGroup").style.display = tipe === "single" ? "block" : "none";
+      document.getElementById("doubleToppingGroup").style.display = tipe === "double" ? "block" : "none";
+    }
+
     document.getElementById("orderForm").addEventListener("submit", function (e) {
       e.preventDefault();
       const tipe = document.getElementById("tipeTopping").value;
       const single = [...document.querySelectorAll('input[name="toppingSingle"]:checked')].map(el => el.value);
       const double = [...document.querySelectorAll('input[name="toppingDouble"]:checked')].map(el => el.value);
+
+      if ((tipe === "single" && single.length === 0) || (tipe === "double" && double.length === 0)) {
+        alert("Silakan pilih minimal 1 topping.");
+        return;
+      }
 
       let pesan = `Halo! Saya ingin pesan Pukis Lumer.\nTipe Topping: ${tipe}\n`;
       if (single.length > 0) pesan += `Topping Single: ${single.join(", ")}\n`;
