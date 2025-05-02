@@ -1,103 +1,51 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const namaInput = document.getElementById("nama");
-  const menuSelect = document.getElementById("menu");
-  const toppingType = document.getElementById("topping-type");
-  const toppingSection = document.getElementById("topping-section");
-  const toppingOptions = document.getElementById("topping-options");
-  const boxSize = document.getElementById("box-size");
-  const quantity = document.getElementById("quantity");
-  const totalPrice = document.getElementById("total-price");
-  const form = document.getElementById("order-form");
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Order Pukis Lumer Aulia</h1>
+  </header>
 
-  const toppingList = {
-    single: ["Coklat", "Tiramisu", "Matcha", "Cappucino", "Stroberry", "Vanilla", "Taro"],
-    double: ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"]
-  };
+  <main>
+    <form id="orderForm">
+      <label for="variant">Varian:</label>
+      <select id="variant" name="variant" required>
+        <option value="">-- Pilih Varian --</option>
+        <option value="original">Original</option>
+        <option value="pandan">Pandan</option>
+      </select>
 
-  const harga = {
-    "Pukis Original": {
-      "Non Topping": { kecil: 10000, besar: 18000 },
-      "Single Topping": { kecil: 13000, besar: 25000 },
-      "Double Topping": { kecil: 15000, besar: 28000 }
-    },
-    "Pukis Pandan": {
-      "Non Topping": { kecil: 12000, besar: 22000 },
-      "Single Topping": { kecil: 15000, besar: 28000 },
-      "Double Topping": { kecil: 18000, besar: 32000 }
-    }
-  };
+      <label for="toppingType">Jenis Topping:</label>
+      <select id="toppingType" name="toppingType" required>
+        <option value="">-- Pilih Topping --</option>
+        <option value="non">Non Topping</option>
+        <option value="single">Single Topping</option>
+        <option value="double">Double Topping</option>
+      </select>
 
-  function renderToppingOptions(type) {
-    toppingOptions.innerHTML = "";
+      <label for="boxSize">Ukuran Box:</label>
+      <select id="boxSize" name="boxSize" required>
+        <option value="">-- Pilih Ukuran --</option>
+        <option value="5">Box Kecil (5 pcs)</option>
+        <option value="10">Box Besar (10 pcs)</option>
+      </select>
 
-    if (type === "Non Topping") {
-      toppingSection.style.display = "none";
-      return;
-    }
+      <div id="toppingContainer" style="display: none;">
+        <p>Pilih Topping (maksimal sesuai isi box):</p>
+        <div id="toppingOptions"></div>
+      </div>
 
-    toppingSection.style.display = "block";
-    let toppings = [...toppingList.single];
-    if (type === "Double Topping") {
-      toppings = toppings.concat(toppingList.double);
-    }
+      <p>Total Harga: <span id="totalPrice">Rp0</span></p>
 
-    toppings.forEach(topping => {
-      const id = topping.toLowerCase().replace(/\s/g, "-");
-      const label = document.createElement("label");
-      label.className = `topping-${id}`;
-      label.style.display = "block";
+      <button type="submit">Order via WhatsApp</button>
+    </form>
+  </main>
 
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.name = "topping";
-      checkbox.value = topping;
-
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(" " + topping));
-      toppingOptions.appendChild(label);
-    });
-  }
-
-  function hitungTotal() {
-    const menu = menuSelect.value;
-    const topping = toppingType.value;
-    const size = boxSize.value;
-    const qty = parseInt(quantity.value) || 0;
-
-    const hargaSatuan = harga[menu][topping][size];
-    const total = hargaSatuan * qty;
-    totalPrice.textContent = `Total: Rp${total.toLocaleString()}`;
-    return total;
-  }
-
-  toppingType.addEventListener("change", () => {
-    renderToppingOptions(toppingType.value);
-    hitungTotal();
-  });
-
-  menuSelect.addEventListener("change", hitungTotal);
-  boxSize.addEventListener("change", hitungTotal);
-  quantity.addEventListener("input", hitungTotal);
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const nama = namaInput.value.trim();
-    const menu = menuSelect.value;
-    const topping = toppingType.value;
-    const size = boxSize.value;
-    const qty = quantity.value;
-    const total = hitungTotal();
-
-    const toppingChecked = [...document.querySelectorAll("input[name='topping']:checked")]
-      .map(i => i.value).join(", ") || "Tanpa topping";
-
-    const pesan = `Assalamu'alaikum, saya mau order:\n\nNama: ${nama}\nMenu: ${menu}\nTopping: ${topping} (${toppingChecked})\nUkuran: ${size}\nJumlah: ${qty}\nTotal Harga: Rp${total.toLocaleString()}`;
-
-    const url = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
-    window.open(url, "_blank");
-  });
-
-  // Inisialisasi awal
-  renderToppingOptions(toppingType.value);
-  hitungTotal();
-});
+  <script src="assets/js/order.js"></script>
+</body>
+</html>
