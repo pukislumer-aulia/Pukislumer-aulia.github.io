@@ -6,7 +6,20 @@ body {
   background-color: #fd700;
   color: #333;
 }
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.text-container {
+  max-width: 600px; /* Sesuaikan dengan lebar teks */
+  margin: 0 auto;   /* Agar tetap di tengah */
+}
 
+.text-container img {
+  max-width: 100%;
+  height: auto;
+}
 header {
   background-color: #ff69b4;
   color: white;
