@@ -1,97 +1,66 @@
-/* Formulir Pemesanan Pukis Lumer Aulia */
+/* File: assets/css/form-style.css */
 
 form {
-  max-width: 600px;
-  margin: 30px auto;
+  margin-top: 30px;
+  background-color: #fffef5;
   padding: 20px;
-  background: #fff8f0;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  font-family: 'Kanit', sans-serif;
 }
 
-form h2 {
-  text-align: center;
-  color: #b3541e;
-  margin-bottom: 20px;
-}
-
-label {
+form label {
   display: block;
-  margin: 12px 0 6px;
+  margin-bottom: 5px;
   font-weight: bold;
 }
 
-input[type="text"],
-select,
-input[type="number"] {
+form input[type="text"],
+form input[type="number"],
+form select {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  margin-bottom: 15px;
   border-radius: 8px;
-  box-sizing: border-box;
+  border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
-.radio-group {
-  display: flex;
-  gap: 15px;
-  margin: 10px 0;
+form input[type="radio"] {
+  margin-right: 8px;
 }
 
-.radio-group input {
-  margin-right: 5px;
-}
-
-.topping-section {
-  display: none;
-  margin-top: 10px;
-}
-
-.topping-section select,
-.topping-section .checkboxes {
-  width: 100%;
-}
-
-.checkboxes {
+#toppingArea {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 10px;
+  margin: 10px 0 20px 0;
 }
 
-.checkboxes label {
-  background: #f4f4f4;
+#toppingArea label {
+  background-color: #fff3d9;
   padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 1px solid #ffce58;
   cursor: pointer;
 }
 
-.checkboxes input[type="checkbox"] {
-  margin-right: 5px;
-}
-
-button {
-  margin-top: 20px;
-  background-color: #b3541e;
+form button {
+  background-color: #ff9900;
   color: white;
-  padding: 12px;
+  padding: 12px 20px;
   border: none;
   border-radius: 10px;
-  width: 100%;
-  font-size: 16px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
-button:hover {
-  background-color: #934418;
+form button:hover {
+  background-color: #e68a00;
 }
 
 #totalDisplay {
-  margin-top: 20px;
-  text-align: center;
-  font-weight: bold;
-  color: #444;
-  font-size: 18px;
+  font-size: 1.1rem;
+  margin: 10px 0 20px 0;
 }
