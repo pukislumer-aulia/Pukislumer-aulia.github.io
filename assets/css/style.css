@@ -83,6 +83,61 @@ img {
   max-width: 100%;
   display: block;
 }
-.float-btn i, .social-follow i {
-  margin-right: 6px;
+.floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: -100px; /* Tombol tersembunyi di luar layar */
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: right 0.3s ease; /* Menambahkan transisi saat tombol muncul */
+}
+
+.floating-buttons:hover {
+  right: 10px; /* Tombol muncul saat hover di kontainer */
+}
+
+.float-btn {
+  background-color: #ff9900;
+  color: white;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.float-btn i {
+  margin-right: 8px;
+}
+
+.float-btn:hover {
+  background-color: #e68a00;
+}
+
+.social-follow {
+  margin-top: 10px;
+}
+
+.social-follow a {
+  display: block;
+  background-color: #333;
+  color: white;
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 12px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.social-follow a:hover {
+  background-color: #555;
+}
 }
