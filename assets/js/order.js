@@ -1,125 +1,106 @@
-// order.js
+const toppingArea = document.getElementById("toppingArea");
+const form = document.getElementById("orderForm");
+const qtyInput = document.getElementById("qty");
+const boxSizeSelect = document.getElementById("boxSize");
+const totalDisplay = document.getElementById("totalDisplay");
 
-// Mendapatkan elemen form dan elemen-elemen input yang diperlukan
-const orderForm = document.getElementById('orderForm');
-const nameInput = document.getElementById('name');
-const menuSelect = document.getElementById('menu');
-const toppingRadioButtons = document.querySelectorAll('input[name="toppingType"]');
-const toppingArea = document.getElementById('toppingArea');
-const boxSizeSelect = document.getElementById('boxSize');
-const qtyInput = document.getElementById('qty');
-const totalDisplay = document.getElementById('totalDisplay');
+// Data topping
+const toppingSingle = ["Coklat", "Tiramisu", "Stroberi", "Cappucino", "Vanilla", "Taro", "Matcha"];
+const toppingDouble = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
 
-// Daftar topping untuk single dan double topping
-const singleToppings = ['Coklat', 'Tiramisu', 'Matcha', 'Cappucino', 'Strawberry', 'Vanilla', 'Taro'];
-const doubleToppings = ['Meses', 'Keju', 'Kacang', 'Choco Chips', 'Oreo'];
-
-// Harga berdasarkan jenis pukis dan topping
-const prices = {
-  original: {
-    none: { 5: 10000, 10: 18000 },
-    single: { 5: 13000, 10: 25000 },
-    double: { 5: 15000, 10: 28000 },
-  },
-  pandan: {
-    none: { 5: 12000, 10: 22000 },
-    single: { 5: 15000, 10: 28000 },
-    double: { 5: 18000, 10: 32000 },
-  }
+// Harga dasar
+const hargaBox = {
+  5: 10000,
+  10: 18000
 };
 
-// Fungsi untuk menampilkan topping berdasarkan tipe topping
-function showToppings(toppingType) {
-  // Menghapus topping area sebelum menampilkan topping baru
-  toppingArea.innerHTML = '';
-
-  let toppingsToShow = [];
-
-  // Menentukan topping yang akan ditampilkan berdasarkan tipe topping
-  if (toppingType === 'none') {
-    return; // Tidak ada topping
-  } else if (toppingType === 'single') {
-    toppingsToShow = singleToppings;
-  } else if (toppingType === 'double') {
-    toppingsToShow = singleToppings.concat(doubleToppings);
-  }
-
-  // Menampilkan topping sebagai checkbox
-  toppingsToShow.forEach(topping => {
-    const label = document.createElement('label');
-    label.innerHTML = `<input type="checkbox" class="topping" value="${topping}"> ${topping}`;
-    toppingArea.appendChild(label);
-  });
+// Hitung total
+function updateTotal() {
+  const box = parseInt(boxSizeSelect.value);
+  const qty = parseInt(qtyInput.value) || 0;
+  const total = hargaBox[box] * qty;
+  totalDisplay.innerHTML = `<strong>Total Harga:</strong> Rp ${total.toLocaleString("id-ID")}`;
 }
 
-// Fungsi untuk menghitung total harga berdasarkan pilihan
-function calculateTotal() {
-  const menuValue = menuSelect.value;
-  const toppingType = getSelectedToppingType();
-  const boxSizeValue = parseInt(boxSizeSelect.value);
-  const qtyValue = parseInt(qtyInput.value);
+qtyInput.addEventListener("input", updateTotal);
+boxSizeSelect.addEventListener("change", updateTotal);
 
-  // Menentukan harga berdasarkan pilihan
-  const pricePerBox = prices[menuValue][toppingType][boxSizeValue];
-  const totalPrice = pricePerBox * qtyValue;
+// Tipe topping handler
+document.querySelectorAll('input[name="toppingType"]').forEach(input => {
+  input.addEventListener("change", () => {
+    const type = input.value;
+    toppingArea.innerHTML = "";
 
-  // Menampilkan total harga di halaman
-  totalDisplay.innerHTML = `<strong>Total Harga:</strong> Rp ${totalPrice.toLocaleString()}`;
-}
+    if (type === "none") {
+      toppingArea.style.display = "none";
+    } else {
+      toppingArea.style.display = "flex";
 
-// Fungsi untuk mendapatkan tipe topping yang dipilih
-function getSelectedToppingType() {
-  let selectedToppingType = 'none'; // Default: Non Topping
+      if (type === "single") {
+        toppingSingle.forEach(t => {
+          const label = document.createElement("label");
+          label.innerHTML = `<input type="checkbox" name="toppingSingle" value="${t}"/> ${t}`;
+          toppingArea.appendChild(label);
+        });
+      }
 
-  toppingRadioButtons.forEach(button => {
-    if (button.checked) {
-      selectedToppingType = button.value;
+      if (type === "double") {
+        const singleDiv = document.createElement("div");
+        const doubleDiv = document.createElement("div");
+
+        singleDiv.innerHTML = "<strong>Base Topping:</strong><br/>";
+        toppingSingle.forEach(t => {
+          const label = document.createElement("label");
+          label.innerHTML = `<input type="checkbox" name="toppingSingle" value="${t}"/> ${t}`;
+          singleDiv.appendChild(label);
+        });
+
+        doubleDiv.innerHTML = "<br/><strong>Taburan Atas:</strong><br/>";
+        toppingDouble.forEach(t => {
+          const label = document.createElement("label");
+          label.innerHTML = `<input type="checkbox" name="toppingDouble" value="${t}"/> ${t}`;
+          doubleDiv.appendChild(label);
+        });
+
+        toppingArea.appendChild(singleDiv);
+        toppingArea.appendChild(doubleDiv);
+      }
     }
   });
-
-  return selectedToppingType;
-}
-
-// Event listener untuk perubahan pilihan menu, tipe topping, ukuran kotak, dan jumlah kotak
-menuSelect.addEventListener('change', () => {
-  const toppingType = getSelectedToppingType();
-  showToppings(toppingType);
-  calculateTotal();
 });
 
-toppingRadioButtons.forEach(button => {
-  button.addEventListener('change', () => {
-    const toppingType = button.value;
-    showToppings(toppingType);
-    calculateTotal();
-  });
-});
-
-boxSizeSelect.addEventListener('change', calculateTotal);
-qtyInput.addEventListener('input', calculateTotal);
-
-// Fungsi untuk menangani pengiriman form (simulasi pesan via WhatsApp)
-orderForm.addEventListener('submit', (e) => {
+// Kirim ke WhatsApp
+form.addEventListener("submit", function(e) {
   e.preventDefault();
 
-  const name = nameInput.value;
-  const menu = menuSelect.value;
-  const toppingType = getSelectedToppingType();
-  const boxSize = boxSizeSelect.value;
+  const name = document.getElementById("name").value;
+  const menu = document.getElementById("menu").value;
+  const box = boxSizeSelect.value;
   const qty = qtyInput.value;
-  const total = totalDisplay.innerText;
+  const toppingType = document.querySelector('input[name="toppingType"]:checked')?.value || "none";
 
-  // Menyusun pesan untuk WhatsApp
-  const message = `Halo, saya ingin pesan Pukis Lumer Aulia:
-- Nama: ${name}
-- Jenis Pukis: ${menu === 'original' ? 'Pukis Original' : 'Pukis Pandan'}
-- Topping: ${toppingType === 'none' ? 'Tanpa Topping' : toppingType}
-- Ukuran Kotak: ${boxSize === '5' ? 'Kecil (5 pcs)' : 'Besar (10 pcs)'}
-- Jumlah Kotak: ${qty}
-- Total Harga: ${total}`;
+  let toppings = "";
+  if (toppingType === "single") {
+    const selected = [...document.querySelectorAll('input[name="toppingSingle"]:checked')].map(i => i.value);
+    toppings = selected.join(", ");
+  } else if (toppingType === "double") {
+    const base = [...document.querySelectorAll('input[name="toppingSingle"]:checked')].map(i => i.value);
+    const atas = [...document.querySelectorAll('input[name="toppingDouble"]:checked')].map(i => i.value);
+    toppings = `Base: ${base.join(", ")} | Taburan: ${atas.join(", ")}`;
+  } else {
+    toppings = "Tanpa Topping";
+  }
 
-  // Mengarahkan ke WhatsApp dengan pesan otomatis
-  const encodedMessage = encodeURIComponent(message);
-  const whatsappUrl = `https://wa.me/6281234567890?text=${encodedMessage}`; // Ganti nomor dengan nomor WhatsApp Anda
-  window.open(whatsappUrl, '_blank');
+  const total = hargaBox[box] * parseInt(qty);
+  const pesan = `Halo! Saya ingin pesan Pukis:\n\nNama: ${name}\nJenis: ${menu}\nTopping: ${toppings}\nUkuran: ${box} pcs\nJumlah: ${qty} box\nTotal: Rp ${total.toLocaleString("id-ID")}`;
+
+  const url = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
+  window.open(url, "_blank");
 });
+
+// Undang Teman
+function shareSite() {
+  const text = "Yuk coba Pukis Lumer Aulia! Pesan di sini:";
+  const url = window.location.href;
+  navigator.share ? navigator.share({ title: "Pukis Lumer Aulia", text, url }) : alert("Fitur ini tidak didukung di perangkat Anda.");
+}
