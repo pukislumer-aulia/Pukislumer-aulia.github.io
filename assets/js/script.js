@@ -1,41 +1,132 @@
 // script.js
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Smooth scroll untuk navigasi
-  const links = document.querySelectorAll("a.scroll");
+// Fungsi untuk memvalidasi form order
+function validateOrderForm() {
+  const name = document.getElementById('name').value;
+  const menu = document.getElementById('menu').value;
+  const toppingType = getSelectedToppingType();
+  const boxSize = document.getElementById('boxSize').value;
+  const qty = document.getElementById('qty').value;
 
-  links.forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute("href"));
-      if (target) {
-        window.scrollTo({
-          top: target.offsetTop - 80,
-          behavior: "smooth",
-        });
-      }
-    });
-  });
-
-  // Efek hover gambar
-  const galleryImages = document.querySelectorAll(".gallery img");
-  galleryImages.forEach((img) => {
-    img.addEventListener("mouseenter", () => {
-      img.classList.add("hovered");
-    });
-    img.addEventListener("mouseleave", () => {
-      img.classList.remove("hovered");
-    });
-  });
-
-  // Tombol ajak teman
-  const ajakBtn = document.querySelector("#ajak-teman");
-  if (ajakBtn) {
-    ajakBtn.addEventListener("click", () => {
-      const shareText =
-        "Ayo coba Pukis Lumer Aulia! Enak banget & banyak toppingnya! Yuk ke Pasar Kuliner Padang Panjang!";
-      const url = encodeURIComponent("https://wa.me/?text=" + shareText);
-      window.open(url, "_blank");
-    });
+  if (!name || !menu || !toppingType || !boxSize || !qty) {
+    alert('Semua kolom harus diisi dengan benar.');
+    return false;
   }
+
+  const maxToppings = parseInt(boxSize); // Jumlah topping terbatas sesuai jumlah isi box
+  const selectedToppings = document.querySelectorAll('.topping:checked').length;
+
+  if (selectedToppings > maxToppings) {
+    alert(`Jumlah topping maksimal untuk box ${boxSize} pcs adalah ${maxToppings} topping.`);
+    return false;
+  }
+
+  return true;
+}
+
+// Fungsi untuk mendapatkan tipe topping yang dipilih
+function getSelectedToppingType() {
+  const toppingRadioButtons = document.querySelectorAll('input[name="toppingType"]');
+  let selectedToppingType = 'none';
+
+  toppingRadioButtons.forEach(button => {
+    if (button.checked) {
+      selectedToppingType = button.value;
+    }
+  });
+
+  return selectedToppingType;
+}
+
+// Fungsi untuk memvalidasi dan mengirimkan pesan via WhatsApp
+function submitOrder() {
+  if (!validateOrderForm()) {
+    return;
+  }
+
+  const name = document.getElementById('name').value;
+  const menu = document.getElementById('menu').value;
+  const toppingType = getSelectedToppingType();
+  const boxSize = document.getElementById('boxSize').value;
+  const qty = document.getElementById('qty').value;
+  const totalPrice = document.getElementById('totalDisplay').innerText;
+
+  const toppingsSelected = Array.from(document.querySelectorAll('.topping:checked')).map(topping => topping.value).join(', ') || 'Tidak ada topping';
+
+  const orderMessage = `
+    Halo, saya ingin pesan Pukis Lumer Aulia:
+    - Nama: ${name}
+    - Jenis Pukis: ${menu === 'original' ? 'Pukis Original' : 'Pukis Pandan'}
+    - Topping: ${toppingType === 'none' ? 'Tanpa Topping' : toppingsSelected}
+    - Ukuran Kotak: ${boxSize === '5' ? 'Kecil (5 pcs)' : 'Besar (10 pcs)'}
+    - Jumlah Kotak: ${qty}
+    - Total Harga: ${totalPrice}
+  `;
+
+  const encodedMessage = encodeURIComponent(orderMessage);
+  const whatsappUrl = `https://wa.me/6281234567890?text=${encodedMessage}`; // Ganti dengan nomor WhatsApp Anda
+
+  window.open(whatsappUrl, '_blank');
+}
+
+// Fungsi untuk meng-update total harga dan menampilkan topping
+function updateTotalPrice() {
+  const menu = document.getElementById('menu').value;
+  const toppingType = getSelectedToppingType();
+  const boxSize = document.getElementById('boxSize').value;
+  const qty = document.getElementById('qty').value;
+
+  const priceData = {
+    original: {
+      none: { 5: 10000, 10: 18000 },
+      single: { 5: 13000, 10: 25000 },
+      double: { 5: 15000, 10: 28000 },
+    },
+    pandan: {
+      none: { 5: 12000, 10: 22000 },
+      single: { 5: 15000, 10: 28000 },
+      double: { 5: 18000, 10: 32000 },
+    }
+  };
+
+  const totalPrice = priceData[menu][toppingType][parseInt(boxSize)] * parseInt(qty);
+  document.getElementById('totalDisplay').innerHTML = `<strong>Total Harga:</strong> Rp ${totalPrice.toLocaleString()}`;
+}
+
+// Fungsi untuk menampilkan topping sesuai tipe yang dipilih
+function displayToppings(toppingType) {
+  const toppingArea = document.getElementById('toppingArea');
+  toppingArea.innerHTML = ''; // Bersihkan area topping sebelumnya
+
+  let availableToppings = [];
+  if (toppingType === 'single') {
+    availableToppings = ['Coklat', 'Tiramisu', 'Matcha', 'Cappucino', 'Strawberry', 'Vanilla', 'Taro'];
+  } else if (toppingType === 'double') {
+    availableToppings = ['Coklat', 'Tiramisu', 'Matcha', 'Cappucino', 'Strawberry', 'Vanilla', 'Taro', 'Meses', 'Keju', 'Kacang', 'Choco Chips', 'Oreo'];
+  }
+
+  availableToppings.forEach(topping => {
+    const label = document.createElement('label');
+    label.innerHTML = `<input type="checkbox" class="topping" value="${topping}"> ${topping}`;
+    toppingArea.appendChild(label);
+  });
+}
+
+// Event listener untuk memilih topping
+document.querySelectorAll('input[name="toppingType"]').forEach(radio => {
+  radio.addEventListener('change', (event) => {
+    displayToppings(event.target.value);
+    updateTotalPrice();
+  });
+});
+
+// Event listener untuk perubahan pada pilihan menu dan jumlah kotak
+document.getElementById('menu').addEventListener('change', updateTotalPrice);
+document.getElementById('boxSize').addEventListener('change', updateTotalPrice);
+document.getElementById('qty').addEventListener('input', updateTotalPrice);
+
+// Event listener untuk submit form
+document.getElementById('orderForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  submitOrder();
 });
