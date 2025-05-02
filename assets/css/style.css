@@ -1,72 +1,50 @@
-/* File: assets/css/style.css */
-
 body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #fffaf4;
+  color: #333;
   margin: 0;
   padding: 0;
-  font-family: 'Kanit', sans-serif;
-  background-color: #fffef3;
-  color: #333;
 }
-
-.page-wrapper {
-  max-width: 800px;
-  margin: 0 auto;
+header {
+  background: #ffcc99;
+  text-align: center;
   padding: 20px;
 }
-
-.header-img {
-  width: 100%;
-  border-radius: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+header h1 {
+  margin: 0;
+  color: #b85c00;
 }
-
-h1 {
-  text-align: center;
-  font-family: 'Chewy', cursive;
-  font-size: 2.5rem;
-  color: #ff8800;
-  margin-bottom: 10px;
+.container {
+  max-width: 600px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
-
-h2 {
-  margin-top: 40px;
-  color: #cc6600;
-  border-bottom: 2px solid #ffe6b3;
-  padding-bottom: 5px;
+.topping-group {
+  display: none;
+  margin-top: 15px;
 }
-
-ul {
-  list-style: disc;
-  padding-left: 20px;
+label {
+  display: block;
+  margin: 6px 0;
 }
-
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 10px;
+button {
   margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #d2691e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
-
-.gallery img {
-  width: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+button:hover {
+  background-color: #b65b1a;
 }
-
-.promo-banner {
-  background-color: #fff3d1;
-  padding: 12px;
-  border-radius: 10px;
+footer {
   text-align: center;
-  font-weight: bold;
-  margin: 20px 0;
-  border: 2px dashed #ffa500;
-}
-
-.promo-image img {
-  width: 100%;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  padding: 10px;
+  background: #ffcc99;
+  color: #5a2d00;
 }
