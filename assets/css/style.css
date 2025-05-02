@@ -164,4 +164,18 @@ img {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
 }
+.testimonial-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.testimonial-item {
+  background-color: #fff3d9;
+  border-left: 5px solid #ffa500;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-style: italic;
+}
 }
