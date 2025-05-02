@@ -140,4 +140,28 @@ img {
 .social-follow a:hover {
   background-color: #555;
 }
+.promo-marquee {
+  overflow: hidden;
+  background-color: #fff3d1;
+  border: 2px dashed #ffa500;
+  border-radius: 10px;
+  padding: 10px 0;
+  margin: 20px 0;
+  position: relative;
+}
+
+.promo-text {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: marquee 15s linear infinite;
+  font-weight: bold;
+  color: #cc6600;
+  font-size: 1.1rem;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
 }
