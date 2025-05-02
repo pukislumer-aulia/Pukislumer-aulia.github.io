@@ -83,3 +83,6 @@ img {
   max-width: 100%;
   display: block;
 }
+.float-btn i, .social-follow i {
+  margin-right: 6px;
+}
