@@ -68,3 +68,18 @@ img {
   max-width: 100%;
   height: auto;
 }
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  max-width: 100%;
+  display: block;
+}
