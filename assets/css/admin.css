@@ -1,2 +1,36 @@
-/* admin.css */
-h1 { color: red; }
+.admin-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background: #fffdf9;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background: #ffcc99;
+}
+
+.action-buttons button {
+  padding: 6px 12px;
+  margin-right: 5px;
+  border: none;
+  background: #cc6600;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.action-buttons button:hover {
+  background: #a94d00;
+}
