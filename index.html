@@ -2,47 +2,79 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Pukis Lumer Aulia - Pukis lembut dengan topping melimpah dari Pasar Kuliner Padang Panjang. Tersedia di Maxim Food, Grab Food, dan Go Food.">
+  <meta name="keywords" content="Pukis Lumer, Pukis Padang Panjang, Jajanan Tradisional, Pukis Kekinian, Pasar Kuliner, jajanan viral, Pukis Oreo, Pukis Coklat, Pukis Aulia">
+  <meta name="author" content="Pukis Lumer Aulia">
   <title>Pukis Lumer Aulia</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/form-style.css" />
+  <link rel="stylesheet" href="assets/css/admin.css" />
+  <link rel="preload" href="assets/font/TanggoStdRegular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/font/Kanit-Black.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/font/Chewy-Regular.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
   <header>
+    <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="header-image" />
     <h1>Pukis Lumer Aulia</h1>
+    <p>Pasar Kuliner Padang Panjang, depan Aquarium - Gerobak Pink</p>
+    <p>Jam Operasional: 16.00 – 23.59 WIB</p>
   </header>
 
-  <nav class="navbar">
-    <div class="menu-toggle">&#9776;</div>
-    <ul class="nav-links">
-      <li><a href="index.html">Beranda</a></li>
-      <li><a href="menu.html">Menu</a></li>
-      <li><a href="galeri.html">Galeri</a></li>
-      <li><a href="testimoni.html">Testimoni</a></li>
-      <li><a href="order.html">Order</a></li>
+  <section id="tentang">
+    <h2>Assalamu'alaikum warahmatullahi wabarakatuh</h2>
+    <p>Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
+    <p>Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya. Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke PUKIS LUMER AULIA</p>
+    <h3>Kenapa Harus Pukis Lumer Aulia?</h3>
+    <ul>
+      <li>Resep rahasia keluarga sejak 2023</li>
+      <li>Pertama hadir di Padang Panjang</li>
+      <li>Teknik pemanggangan tradisional</li>
+      <li>10+ topping ready setiap hari</li>
+      <li>100% bahan premium tanpa pengawet</li>
+      <li>Jajanan nomor #1 di Pasar Kuliner!</li>
     </ul>
-  </nav>
+  </section>
 
-  <main>
-    <section>
-      <img src="assets/images/pukis.jpg" alt="Header Pukis" class="header-image" />
-    </section>
+  <section id="menu">
+    <h2>Menu Pilihan</h2>
+    <p>Best Seller: Double Topping Vanilla Oreo vs Coklat Kacang</p>
+    <!-- Nanti diisi galeri menu dengan gambar -->
+  </section>
 
-    <section>
-      <h2 class="section-title">Tentang Kami</h2>
-      <p>Pukis Lumer Aulia adalah jajanan khas yang disukai semua kalangan. Kami hadir di Pasar Kuliner Padang Panjang setiap hari pukul 16.00 - 23.59. Tersedia juga di Grab Food, Go Food, dan Maxim Food.</p>
-    </section>
-  </main>
+  <section id="galeri">
+    <h2>Galeri</h2>
+    <div class="galeri-wrapper">
+      <img src="assets/images/pukis1.jpg" alt="Pukis 1" />
+      <img src="assets/images/pukis2.jpg" alt="Pukis 2" />
+      <img src="assets/images/pukis3.jpg" alt="Pukis 3" />
+      <img src="assets/images/pukis4.jpg" alt="Pukis 4" />
+      <img src="assets/images/pukis5.jpg" alt="Pukis 5" />
+    </div>
+  </section>
+
+  <section id="order">
+    <h2>Order Sekarang</h2>
+    <form action="https://wa.me/6281296668670" method="get" target="_blank">
+      <input type="text" name="text" placeholder="Isi pesananmu di sini" required />
+      <button type="submit">Order via WhatsApp</button>
+    </form>
+  </section>
 
   <footer>
+    <p>Follow kami di: 
+      <a href="https://www.instagram.com/pukis.lumer_aulia" target="_blank">Instagram</a> | 
+      <a href="https://www.facebook.com/pukislumeraulia" target="_blank">Facebook</a> | 
+      <a href="https://www.tiktok.com/@pukislumeraulia" target="_blank">TikTok</a>
+    </p>
     <p>&copy; 2025 Pukis Lumer Aulia</p>
   </footer>
 
-  <script>
-    const toggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    toggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-    });
-  </script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/index.js"></script>
+  <script src="assets/js/order.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/testimoni.js"></script>
 </body>
 </html>
