@@ -2,38 +2,43 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin - Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="assets/css/admin.css" />
+  <link rel="stylesheet" href="assets/css/admin.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700&display=swap" rel="stylesheet"/>
 </head>
 <body>
-  <header>
-    <h1>Admin Panel Pukis Lumer Aulia</h1>
-  </header>
+  <div class="admin-wrapper">
+    <h1>Panel Admin</h1>
 
-  <main>
-    <section>
-      <h2>Data Pesanan</h2>
+    <section class="order-list">
+      <h2>Daftar Pesanan</h2>
       <table>
         <thead>
           <tr>
             <th>Nama</th>
+            <th>Jenis</th>
             <th>Topping</th>
+            <th>Ukuran</th>
             <th>Jumlah</th>
-            <th>Status</th>
+            <th>Total</th>
           </tr>
         </thead>
-        <tbody id="order-table-body">
-          <!-- Data pesanan akan muncul di sini via JavaScript -->
+        <tbody id="orderTableBody">
+          <!-- Data pesanan akan muncul di sini -->
         </tbody>
       </table>
     </section>
-  </main>
 
-  <footer>
-    <p>&copy; 2025 Admin Pukis Lumer Aulia</p>
-  </footer>
+    <section class="testimonial-section">
+      <h2>Testimoni Pelanggan</h2>
+      <div id="testimonialList">
+        <!-- Testimoni ditampilkan di sini -->
+      </div>
+    </section>
+  </div>
 
   <script src="assets/js/admin.js"></script>
+  <script src="assets/js/testimoni.js"></script>
 </body>
 </html>
