@@ -1,73 +1,101 @@
-const toppingData = {
-  single: ["Coklat", "Tiramisu", "Matcha", "Cappucino", "Stroberry", "Vanilla", "Taro"],
-  double: ["Coklat", "Tiramisu", "Matcha", "Cappucino", "Stroberry", "Vanilla", "Taro", "Meses", "Keju", "Kacang", "Choco Chips", "Oreo"]
-};
+document.addEventListener("DOMContentLoaded", function () {
+  const singleRadio = document.getElementById("singleRadio");
+  const doubleRadio = document.getElementById("doubleRadio");
+  const singleToppingDiv = document.getElementById("singleTopping");
+  const doubleToppingDiv = document.getElementById("doubleTopping");
+  const menuSelect = document.getElementById("menu");
+  const boxSize = document.getElementById("boxSize");
+  const qtyInput = document.getElementById("qty");
+  const totalDisplay = document.getElementById("totalDisplay");
+  const orderForm = document.getElementById("orderForm");
 
-const harga = {
-  original: {
-    non: { 5: 10000, 10: 18000 },
-    single: { 5: 13000, 10: 25000 },
-    double: { 5: 15000, 10: 28000 }
-  },
-  pandan: {
-    non: { 5: 12000, 10: 22000 },
-    single: { 5: 15000, 10: 28000 },
-    double: { 5: 18000, 10: 32000 }
-  }
-};
-
-const form = document.getElementById('orderForm');
-const toppingContainer = document.getElementById('toppingContainer');
-const toppingOptions = document.getElementById('toppingOptions');
-const totalPrice = document.getElementById('totalPrice');
-
-form.addEventListener('change', updateUI);
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const variant = form.variant.value;
-  const toppingType = form.toppingType.value;
-  const boxSize = form.boxSize.value;
-  const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked')).map(el => el.value);
-  const hargaAkhir = harga[variant][toppingType][boxSize];
-
-  if (toppings.length > parseInt(boxSize)) {
-    alert("Jumlah topping melebihi isi box!");
-    return;
+  function updateToppingVisibility() {
+    if (singleRadio.checked) {
+      singleToppingDiv.style.display = "block";
+      doubleToppingDiv.style.display = "none";
+    } else if (doubleRadio.checked) {
+      singleToppingDiv.style.display = "none";
+      doubleToppingDiv.style.display = "block";
+    } else {
+      singleToppingDiv.style.display = "none";
+      doubleToppingDiv.style.display = "none";
+    }
   }
 
-  const waMessage = `Halo! Saya ingin order:\n- Varian: ${variant}\n- Topping: ${toppingType}\n- Ukuran: ${boxSize} pcs\n- Pilihan Topping: ${toppings.join(', ') || 'Tidak ada'}\n- Total: Rp${hargaAkhir.toLocaleString()}`;
-  window.open(`https://wa.me/6281296668670?text=${encodeURIComponent(waMessage)}`, '_blank');
+  singleRadio.addEventListener("change", updateToppingVisibility);
+  doubleRadio.addEventListener("change", updateToppingVisibility);
+
+  function getHarga(menu, topping, box, qty) {
+    let harga = 0;
+    const base = menu.includes("Pandan") ? "Pandan" : "Original";
+
+    const hargaTable = {
+      Original: {
+        none: { kecil: 10000, besar: 18000 },
+        single: { kecil: 13000, besar: 25000 },
+        double: { kecil: 15000, besar: 28000 },
+      },
+      Pandan: {
+        none: { kecil: 12000, besar: 22000 },
+        single: { kecil: 15000, besar: 28000 },
+        double: { kecil: 18000, besar: 32000 },
+      },
+    };
+
+    const kategori = topping === "none" ? "none" : topping === "single" ? "single" : "double";
+    harga = hargaTable[base][kategori][box] * qty;
+    return harga;
+  }
+
+  function updateTotal() {
+    const menu = menuSelect.value;
+    const box = boxSize.value;
+    const qty = parseInt(qtyInput.value) || 0;
+    let toppingType = "none";
+
+    if (singleRadio.checked) toppingType = "single";
+    if (doubleRadio.checked) toppingType = "double";
+
+    if (menu && box && qty > 0) {
+      const harga = getHarga(menu, toppingType, box, qty);
+      totalDisplay.innerHTML = `<strong>Total Harga:</strong> Rp ${harga.toLocaleString("id-ID")}`;
+    } else {
+      totalDisplay.innerHTML = `<strong>Total Harga:</strong> Rp 0`;
+    }
+  }
+
+  [menuSelect, boxSize, qtyInput, singleRadio, doubleRadio].forEach(el => {
+    el.addEventListener("change", updateTotal);
+  });
+
+  orderForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const menu = menuSelect.value;
+    const box = boxSize.value;
+    const qty = qtyInput.value;
+
+    let toppingInfo = "";
+    let toppingType = "Non Topping";
+
+    if (singleRadio.checked) {
+      toppingType = "Single Topping";
+      toppingInfo = document.getElementById("singleToppingSelect").value;
+    } else if (doubleRadio.checked) {
+      toppingType = "Double Topping";
+      const selected = [...document.querySelectorAll('input[name="doubleTopping"]:checked')].map(e => e.value);
+      const boxCount = box === "kecil" ? 5 : 10;
+      if (selected.length > boxCount) {
+        alert(`Maksimal ${boxCount} topping untuk box ini`);
+        return;
+      }
+      toppingInfo = selected.join(", ");
+    }
+
+    const message = `Halo, saya mau pesan PUKIS LUMER:\n\nNama: ${name}\nMenu: ${menu}\nTopping: ${toppingType} - ${toppingInfo}\nUkuran Box: ${box}\nJumlah Box: ${qty}\n\nTotal: ${totalDisplay.textContent.replace("Total Harga: ", "")}`;
+    const waUrl = `https://wa.me/6281296668670?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, "_blank");
+  });
+
+  updateToppingVisibility();
 });
-
-function updateUI() {
-  const variant = form.variant.value;
-  const toppingType = form.toppingType.value;
-  const boxSize = form.boxSize.value;
-
-  // Update topping
-  toppingOptions.innerHTML = "";
-  if (toppingType === "non" || !variant || !boxSize) {
-    toppingContainer.style.display = "none";
-  } else {
-    toppingContainer.style.display = "block";
-    const allowed = toppingData[toppingType];
-    allowed.forEach(t => {
-      const label = document.createElement('label');
-      const input = document.createElement('input');
-      input.type = "checkbox";
-      input.name = "topping";
-      input.value = t;
-      label.appendChild(input);
-      label.append(" " + t);
-      toppingOptions.appendChild(label);
-    });
-  }
-
-  // Update harga
-  if (variant && toppingType && boxSize && harga[variant] && harga[variant][toppingType]) {
-    const total = harga[variant][toppingType][boxSize];
-    totalPrice.textContent = `Rp${total.toLocaleString()}`;
-  } else {
-    totalPrice.textContent = "Rp0";
-  }
-}
