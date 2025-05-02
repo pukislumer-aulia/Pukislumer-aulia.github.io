@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
+
   <header>
     <h1>Pukis Lumer Aulia</h1>
     <p>Manis, Lumer, Bikin Ketagihan!</p>
@@ -15,7 +17,7 @@
   <main class="container">
     <section id="form-pemesanan">
       <h2>Form Pemesanan</h2>
-      <form>
+      <form id="orderForm">
         <label for="tipeTopping">Pilih Tipe Topping:</label>
         <select id="tipeTopping" onchange="handleTipeChange()">
           <option value="none">Non Topping</option>
@@ -25,26 +27,33 @@
 
         <div id="singleToppingGroup" class="topping-group">
           <h4>Topping Single</h4>
-          <label><input type="checkbox" name="toppingSingle" value="Coklat"> Coklat</label>
-          <label><input type="checkbox" name="toppingSingle" value="Tiramisu"> Tiramisu</label>
-          <label><input type="checkbox" name="toppingSingle" value="Stroberi"> Stroberi</label>
-          <label><input type="checkbox" name="toppingSingle" value="Cappucino"> Cappucino</label>
-          <label><input type="checkbox" name="toppingSingle" value="Vanilla"> Vanilla</label>
-          <label><input type="checkbox" name="toppingSingle" value="Taro"> Taro</label>
-          <label><input type="checkbox" name="toppingSingle" value="Matcha"> Matcha</label>
+          <label><input type="checkbox" name="toppingSingle" value="Coklat" /> Coklat</label>
+          <label><input type="checkbox" name="toppingSingle" value="Tiramisu" /> Tiramisu</label>
+          <label><input type="checkbox" name="toppingSingle" value="Stroberi" /> Stroberi</label>
+          <label><input type="checkbox" name="toppingSingle" value="Cappucino" /> Cappucino</label>
+          <label><input type="checkbox" name="toppingSingle" value="Vanilla" /> Vanilla</label>
+          <label><input type="checkbox" name="toppingSingle" value="Taro" /> Taro</label>
+          <label><input type="checkbox" name="toppingSingle" value="Matcha" /> Matcha</label>
         </div>
 
         <div id="doubleToppingGroup" class="topping-group">
           <h4>Topping Double (Taburan Atas)</h4>
-          <label><input type="checkbox" name="toppingDouble" value="Meses"> Meses</label>
-          <label><input type="checkbox" name="toppingDouble" value="Keju"> Keju</label>
-          <label><input type="checkbox" name="toppingDouble" value="Kacang"> Kacang</label>
-          <label><input type="checkbox" name="toppingDouble" value="Choco Chip"> Choco Chip</label>
-          <label><input type="checkbox" name="toppingDouble" value="Oreo"> Oreo</label>
+          <label><input type="checkbox" name="toppingDouble" value="Meses" /> Meses</label>
+          <label><input type="checkbox" name="toppingDouble" value="Keju" /> Keju</label>
+          <label><input type="checkbox" name="toppingDouble" value="Kacang" /> Kacang</label>
+          <label><input type="checkbox" name="toppingDouble" value="Choco Chip" /> Choco Chip</label>
+          <label><input type="checkbox" name="toppingDouble" value="Oreo" /> Oreo</label>
         </div>
 
         <button type="submit">Pesan Sekarang</button>
       </form>
+    </section>
+
+    <section class="socials">
+      <h3>Ikuti Kami</h3>
+      <a href="https://instagram.com/" target="_blank">Instagram</a> |
+      <a href="https://facebook.com/" target="_blank">Facebook</a> |
+      <a href="https://tiktok.com/" target="_blank">TikTok</a>
     </section>
   </main>
 
@@ -52,6 +61,38 @@
     <p>&copy; 2025 Pukis Lumer Aulia</p>
   </footer>
 
+  <!-- Tombol Mengambang -->
+  <div class="floating-buttons">
+    <a href="https://wa.me/6281296668670" target="_blank" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
+    <a href="#" onclick="undangTeman()" class="float-btn invite"><i class="fas fa-user-plus"></i></a>
+    <a href="https://shopee.co.id" target="_blank" class="float-btn shopee"><i class="fas fa-store"></i></a>
+    <a href="https://gofood.co.id" target="_blank" class="float-btn gofood"><i class="fas fa-motorcycle"></i></a>
+    <a href="https://grab.com/id/food/" target="_blank" class="float-btn grabfood"><i class="fas fa-utensils"></i></a>
+    <a href="https://food.maximapp.net" target="_blank" class="float-btn maximfood"><i class="fas fa-biking"></i></a>
+  </div>
+
   <script src="assets/js/script.js"></script>
+  <script>
+    document.getElementById("orderForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const tipe = document.getElementById("tipeTopping").value;
+      const single = [...document.querySelectorAll('input[name="toppingSingle"]:checked')].map(el => el.value);
+      const double = [...document.querySelectorAll('input[name="toppingDouble"]:checked')].map(el => el.value);
+
+      let pesan = `Halo! Saya ingin pesan Pukis Lumer.\nTipe Topping: ${tipe}\n`;
+      if (single.length > 0) pesan += `Topping Single: ${single.join(", ")}\n`;
+      if (double.length > 0) pesan += `Topping Double: ${double.join(", ")}`;
+
+      const url = "https://wa.me/6281296668670?text=" + encodeURIComponent(pesan);
+      window.open(url, "_blank");
+    });
+
+    function undangTeman() {
+      const shareText = "Yuk cobain Pukis Lumer Aulia! https://pukis-aulia.com";
+      navigator.share
+        ? navigator.share({ title: "Pukis Aulia", text: shareText, url: location.href })
+        : alert("Bagikan link: " + shareText);
+    }
+  </script>
 </body>
 </html>
