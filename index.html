@@ -86,24 +86,3 @@
       const double = [...document.querySelectorAll('input[name="toppingDouble"]:checked')].map(el => el.value);
 
       if ((tipe === "single" && single.length === 0) || (tipe === "double" && double.length === 0)) {
-        alert("Silakan pilih minimal 1 topping.");
-        return;
-      }
-
-      let pesan = `Halo! Saya ingin pesan Pukis Lumer.\nTipe Topping: ${tipe}\n`;
-      if (single.length > 0) pesan += `Topping Single: ${single.join(", ")}\n`;
-      if (double.length > 0) pesan += `Topping Double: ${double.join(", ")}`;
-
-      const url = "https://wa.me/6281296668670?text=" + encodeURIComponent(pesan);
-      window.open(url, "_blank");
-    });
-
-    function undangTeman() {
-      const shareText = "Yuk cobain Pukis Lumer Aulia! https://pukis-aulia.com";
-      navigator.share
-        ? navigator.share({ title: "Pukis Aulia", text: shareText, url: location.href })
-        : alert("Bagikan link: " + shareText);
-    }
-  </script>
-</body>
-</html>
