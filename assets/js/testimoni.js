@@ -9,6 +9,24 @@ function displayTestimonials() {
     { name: "Dewi", message: "Pukisnya lembut, toppingnya banyak pilihan, dan harganya terjangkau. Mantap!" },
     { name: "Eka", message: "Rasa Pukis Pandannya enak banget, cocok banget untuk teman ngopi!" }
   ];
+  document.addEventListener("DOMContentLoaded", () => {
+  const testimonialList = document.getElementById("testimonialList");
+
+  const testimoni = [
+    "Kuenya lembut banget dan lumer di mulut!",
+    "Toppingnya banyak pilihan dan enak semua.",
+    "Pelayanan cepat, kuenya masih hangat saat sampai.",
+    "Pukis pandan favorit keluarga saya!",
+    "Sudah order 3x, selalu puas!"
+  ];
+
+  testimoni.forEach((isi) => {
+    const div = document.createElement("div");
+    div.classList.add("testimonial-item");
+    div.textContent = isi;
+    testimonialList.appendChild(div);
+  });
+});
 
   const testimonialsContainer = document.getElementById('testimonials');
   testimonialsContainer.innerHTML = ''; // Clear existing testimonials
