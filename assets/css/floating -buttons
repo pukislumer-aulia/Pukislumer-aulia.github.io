@@ -1,0 +1,25 @@
+.floating-buttons {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 999;
+}
+
+.float-btn {
+  text-decoration: none;
+  background-color: #ff9800;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background 0.3s;
+}
+
+.float-btn:hover {
+  background-color: #e68900;
+}
