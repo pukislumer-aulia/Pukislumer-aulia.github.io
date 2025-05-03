@@ -81,7 +81,18 @@
 
   <script src="testimoni.js"></script>
 </body>
-    <p><strong>Pilih Tipe Topping:</strong></p>
+<h2>Pesan Sekarang</h2>
+    <form id="orderForm">
+      <label for="name">Nama:</label>
+      <input type="text" id="name" required/>
+
+      <label for="menu">Jenis Pukis:</label>
+      <select id="menu">
+        <option value="original">Pukis Original</option>
+        <option value="pandan">Pukis Pandan</option>
+      </select>
+
+      <p><strong>Pilih Tipe Topping:</strong></p>
       <label><input type="radio" name="toppingType" value="none" /> Non Topping</label>
       <label><input type="radio" name="toppingType" value="single" /> Single Topping</label>
       <label><input type="radio" name="toppingType" value="double" /> Double Topping</label>
@@ -100,26 +111,8 @@
       <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
       <button type="submit">Pesan via WhatsApp</button>
     </form>
-</div>
-
-    <section class="testimonial-section">
-      <h2>Testimoni Pelanggan</h2>
-      <div id="testimonialList">
-        <!-- Testimoni ditampilkan di sini -->
-      </div>
-    </section>
   </div>
-
-  <script src="assets/js/admin.js"></script>
-  <script src="assets/js/testimoni.js"></script>oi
-</div>   <label for="qty">Jumlah Kotak:</label>
-      <input type="number" id="qty" min="1" required/>
-
-      <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
-      <button type="submit">Pesan via WhatsApp</button>
-    </form>
-  </div>
-
+  
 <!-- Tombol Mengambang dengan Ikon (Posisi ke samping kanan) -->
 <div class="floating-buttons">
   <a href="https://wa.me/6281296668670" class="float-btn whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
