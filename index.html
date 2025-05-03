@@ -144,16 +144,8 @@
 
     function updateToppingDisplay() {
       const jenisTopping = toppingJenis.value;
-      if (jenisTopping === 'non') {
-        singleToppingGroup.style.display = 'none';
-        doubleToppingGroup.style.display = 'none';
-      } else if (jenisTopping === 'single') {
-        singleToppingGroup.style.display = 'block';
-        doubleToppingGroup.style.display = 'none';
-      } else if (jenisTopping === 'double') {
-        singleToppingGroup.style.display = 'block';
-        doubleToppingGroup.style.display = 'block';
-      }
+      singleToppingGroup.style.display = (jenisTopping === 'single' || jenisTopping === 'double') ? 'block' : 'none';
+      doubleToppingGroup.style.display = (jenisTopping === 'double') ? 'block' : 'none';
     }
 
     function hitungTotal() {
@@ -176,8 +168,7 @@
     }
 
     function getSelectedToppings(selector) {
-      return Array.from(document.querySelectorAll(selector + ':checked'))
-                  .map(el => el.value);
+      return Array.from(document.querySelectorAll(selector + ':checked')).map(el => el.value);
     }
 
     function validateToppingLimit() {
@@ -185,21 +176,21 @@
       const boxSize = parseInt(ukuran.value);
       let valid = true;
 
-      const single = getSelectedToppings('.singleTopping');
-      const double = getSelectedToppings('.doubleTopping');
-
       if (toppingVal === 'single') {
-        if (single.length > boxSize) {
-          alert(`Maksimal ${boxSize} topping untuk ${boxSize} pukis.`);
+        const selected = getSelectedToppings('.singleTopping');
+        if (selected.length > boxSize) {
+          alert(`Maksimal ${boxSize} rasa topping untuk ${boxSize} pukis.`);
           valid = false;
         }
       } else if (toppingVal === 'double') {
-        if ((single.length + double.length) > boxSize) {
-          alert(`Total topping (single + double) tidak boleh lebih dari ${boxSize}.`);
+        const singleSelected = getSelectedToppings('.singleTopping');
+        const doubleSelected = getSelectedToppings('.doubleTopping');
+
+        if (singleSelected.length > boxSize || doubleSelected.length > boxSize) {
+          alert(`Untuk Double Topping:\n- Maksimal ${boxSize} rasa\n- Maksimal ${boxSize} taburan`);
           valid = false;
         }
       }
-
       return valid;
     }
 
@@ -213,9 +204,8 @@
       updateToppingDisplay();
       hitungTotal();
     });
-
     document.querySelectorAll('.singleTopping, .doubleTopping').forEach(el => {
-      el.addEventListener('change', hitungTotal);
+      el.onchange = hitungTotal;
     });
 
     form.addEventListener('submit', function(e) {
@@ -231,12 +221,13 @@
 
       const single = getSelectedToppings('.singleTopping').join(', ');
       const double = getSelectedToppings('.doubleTopping').join(', ');
-      const toppingDetail =
-        toppingJenis.value === 'single'
-          ? `\n- Rasa: ${single}`
-          : toppingJenis.value === 'double'
-          ? `\n- Rasa: ${single}\n- Taburan: ${double}`
-          : '';
+      let toppingDetail = '';
+
+      if (toppingJenis.value === 'single') {
+        toppingDetail = `\n- Rasa: ${single}`;
+      } else if (toppingJenis.value === 'double') {
+        toppingDetail = `\n- Rasa: ${single}\n- Taburan: ${double}`;
+      }
 
       const totalText = totalHarga.innerText;
       const finalPesan = `${pesan}${toppingDetail}\n${totalText}`;
