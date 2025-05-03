@@ -1,50 +1,20 @@
-// testimoni.js
+const fakeTestimonials = [
+  { name: "Andi", message: "Pukisnya enak banget, topingnya beragam, dan sangat lezat!" },
+  { name: "Budi", message: "Favorit saya! Rasa dan kualitas tidak diragukan." },
+  { name: "Citra", message: "Coklatnya lumer banget, saya ketagihan!" },
+  { name: "Dewi", message: "Lembut, banyak pilihan topping, dan harga terjangkau." },
+  { name: "Eka", message: "Pukis Pandannya cocok banget buat teman ngopi!" }
+];
 
-// Fungsi untuk menampilkan testimonial
-function displayTestimonials() {
-  const testimonials = [
-    { name: "Andi", message: "Pukisnya enak banget, topingnya beragam, dan sangat lezat!" },
-    { name: "Budi", message: "Favorit saya, Pukis Lumer Aulia selalu jadi pilihan untuk cemilan. Rasa dan kualitas tidak diragukan!" },
-    { name: "Citra", message: "Coklatnya lumer banget! Rasanya pas dan enak. Saya jadi ketagihan!" },
-    { name: "Dewi", message: "Pukisnya lembut, toppingnya banyak pilihan, dan harganya terjangkau. Mantap!" },
-    { name: "Eka", message: "Rasa Pukis Pandannya enak banget, cocok banget untuk teman ngopi!" }
-  ];
-document.addEventListener("DOMContentLoaded", () => {
-  const testimonialList = document.getElementById("testimonialList");
-  const defaultTestimoni = [
-    "Kuenya lembut banget dan lumer di mulut!",
-    "Toppingnya banyak pilihan dan enak semua.",
-    "Pelayanan cepat, kuenya masih hangat saat sampai.",
-    "Pukis pandan favorit keluarga saya!",
-    "Sudah order 3x, selalu puas!"
-  ];
-
-  defaultTestimoni.forEach((isi) => {
-    const div = document.createElement("div");
-    div.classList.add("testimonial-item");
-    div.textContent = isi;
-    testimonialList.appendChild(div);
-  });
-});
-
-function tambahTestimoni() {
-  const input = document.getElementById("testimonialInput");
-  const isi = input.value.trim();
-  if (isi !== "") {
-    const testimonialList = document.getElementById("testimonialList");
-    const div = document.createElement("div");
-    div.classList.add("testimonial-item");
-    div.textContent = isi;
-    testimonialList.appendChild(div);
-    input.value = "";
-  }
-}
-});
-
+// Tampilkan testimoni dari fake + localStorage
+function loadStoredTestimonials() {
+  const storedTestimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
   const testimonialsContainer = document.getElementById('testimonials');
-  testimonialsContainer.innerHTML = ''; // Clear existing testimonials
+  testimonialsContainer.innerHTML = "";
 
-  testimonials.forEach(testimonial => {
+  const allTestimonials = [...fakeTestimonials, ...storedTestimonials];
+
+  allTestimonials.forEach(testimonial => {
     const testimonialDiv = document.createElement('div');
     testimonialDiv.classList.add('testimonial');
     testimonialDiv.innerHTML = `
@@ -55,10 +25,10 @@ function tambahTestimoni() {
   });
 }
 
-// Fungsi untuk menambahkan testimonial baru
+// Tambah testimoni baru
 function addTestimonial() {
-  const name = document.getElementById('testimonial-name').value;
-  const message = document.getElementById('testimonial-message').value;
+  const name = document.getElementById('testimonial-name').value.trim();
+  const message = document.getElementById('testimonial-message').value.trim();
 
   if (!name || !message) {
     alert('Nama dan pesan tidak boleh kosong!');
@@ -66,41 +36,22 @@ function addTestimonial() {
   }
 
   const newTestimonial = { name, message };
-
-  // Simpan testimonial di localStorage (untuk demo saja, bisa disesuaikan)
   let storedTestimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
   storedTestimonials.push(newTestimonial);
   localStorage.setItem('testimonials', JSON.stringify(storedTestimonials));
 
-  // Tampilkan testimonial yang baru ditambahkan
-  displayTestimonials();
+  loadStoredTestimonials();
 
-  // Clear input fields
+  // Kosongkan form
   document.getElementById('testimonial-name').value = '';
   document.getElementById('testimonial-message').value = '';
 }
 
-// Fungsi untuk memuat testimonial dari localStorage saat halaman dimuat
-function loadStoredTestimonials() {
-  const storedTestimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-  const testimonialsContainer = document.getElementById('testimonials');
-
-  storedTestimonials.forEach(testimonial => {
-    const testimonialDiv = document.createElement('div');
-    testimonialDiv.classList.add('testimonial');
-    testimonialDiv.innerHTML = `
-      <p class="testimonial-message">"${testimonial.message}"</p>
-      <p class="testimonial-name">- ${testimonial.name}</p>
-    `;
-    testimonialsContainer.appendChild(testimonialDiv);
-  });
-}
-
-// Event listener untuk form testimonial
+// Event form
 document.getElementById('addTestimonialForm').addEventListener('submit', function(event) {
   event.preventDefault();
   addTestimonial();
 });
 
-// Memuat testimonial saat halaman dimuat
+// Load awal
 window.onload = loadStoredTestimonials;
