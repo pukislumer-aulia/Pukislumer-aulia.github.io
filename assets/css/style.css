@@ -178,4 +178,26 @@ img {
   border-radius: 10px;
   font-style: italic;
 }
+
+.testimonial-form {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.testimonial-form input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.testimonial-form button {
+  background-color: #ff9900;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
 }
