@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,8 +79,8 @@
     </select><label for="ukuran">Ukuran Box</label>
 <select id="ukuran" required>
   <option value="">-- Pilih Ukuran --</option>
-  <option value="6">6 pcs</option>
-  <option value="12">12 pcs</option>
+  <option value="5">5 pcs</option>
+  <option value="10">10 pcs</option>
 </select>
 
 <label for="jumlah">Jumlah Box</label>
@@ -121,12 +122,12 @@
 
   </form>  <script>
     const hargaDasar = {
-      original: {6: 12000, 12: 22000},
-      pandan: {6: 13000, 12: 24000}
+      original: {6: 12000, 10: 22000},
+      pandan: {5: 13000, 10: 24000}
     };
     const toppingHarga = {
-      single: {6: 15000, 12: 27000},
-      double: {6: 18000, 12: 32000}
+      single: {5: 15000, 10: 27000},
+      double: {5: 18000, 10: 32000}
     };
 
     const jenis = document.getElementById('jenis');
@@ -224,5 +225,6 @@
       const wa = `https://wa.me/6281296668670?text=${encoded}`;
       window.open(wa, '_blank');
     });
-  </script></body>
+  </script>
+</body>
 </html>
