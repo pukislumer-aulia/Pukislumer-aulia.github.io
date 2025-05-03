@@ -64,3 +64,63 @@ form button:hover {
   font-size: 1.1rem;
   margin: 10px 0 20px 0;
 }
+body {
+  font-family: sans-serif;
+  padding: 20px;
+  background: #fff8e1;
+}
+
+h2 {
+  color: #ff9900;
+}
+
+.testimonial-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.testimonial {
+  background-color: #fff3d9;
+  border-left: 5px solid #ffa500;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-style: italic;
+}
+
+.testimonial-message {
+  margin: 0;
+}
+
+.testimonial-name {
+  margin: 5px 0 0;
+  text-align: right;
+  font-weight: bold;
+  font-style: normal;
+}
+
+.testimonial-form {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.testimonial-form input,
+.testimonial-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.testimonial-form button {
+  background-color: #ff9900;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
