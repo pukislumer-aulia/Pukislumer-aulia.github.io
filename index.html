@@ -201,8 +201,8 @@
       hitungTotal();
     });
     document.querySelectorAll('.singleTopping, .doubleTopping').forEach(el => {
-      el.addEventListener('change', hitungTotal);
-    });
+  el.onchange = hitungTotal;
+});
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
