@@ -92,20 +92,34 @@
         <option value="pandan">Pukis Pandan</option>
       </select>
 
-      <p><strong>Pilih Tipe Topping:</strong></p>
-      <label><input type="radio" name="toppingType" value="none" /> Non Topping</label>
-      <label><input type="radio" name="toppingType" value="single" /> Single Topping</label>
-      <label><input type="radio" name="toppingType" value="double" /> Double Topping</label>
 
-      <div id="toppingArea"></div>
+   <!-- Pilihan Jenis Topping -->
+<label for="jenisTopping">Jenis Topping</label>
+<select id="jenisTopping">
+  <option value="non">Non Topping</option>
+  <option value="single">Single Topping</option>
+  <option value="double">Double Topping</option>
+</select>
 
-      <label for="boxSize">Ukuran Kotak:</label>
-      <select id="boxSize">
-        <option value="5">Kecil (5 pcs)</option>
-        <option value="10">Besar (10 pcs)</option>
-      </select>
+<!-- Isi Box -->
+<label for="jumlahIsi">Jumlah Isi per Box</label>
+<input type="number" id="jumlahIsi" value="5" min="1" />
 
-      <label for="qty">Jumlah Kotak:</label>
+<!-- Topping Single -->
+<div id="toppingSingleGroup" style="display: none;">
+  <p><strong>Pilih Topping Single (maks sesuai isi box):</strong></p>
+  <div id="toppingSingleOptions">
+    <!-- Akan diisi lewat JavaScript -->
+  </div>
+</div>
+
+<!-- Topping Double -->
+<div id="toppingDoubleGroup" style="display: none;">
+  <p><strong>Pilih Topping Double (maks sesuai isi box):</strong></p>
+  <div id="toppingDoubleOptions">
+    <!-- Akan diisi lewat JavaScript -->
+  </div>
+</div>   <label for="qty">Jumlah Kotak:</label>
       <input type="number" id="qty" min="1" required/>
 
       <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
