@@ -79,126 +79,114 @@
     <button type="submit">Kirim Testimoni</button>
   </form>
   <script src="testimoni.js"></script>
-</body>
-<h2>Pesan Sekarang</h2>
-<form id="orderForm">
-  <label for="name">Nama:</label>
-  <input type="text" id="name" required/>
 
-  <label for="menu">Jenis Pukis:</label>
-  <select id="menu">
-    <option value="original">Pukis Original</option>
-    <option value="pandan">Pukis Pandan</option>
-  </select>
+  <script>
+  const toppingSingle = ["Keju", "Coklat", "Pandan", "Kacang", "Strawberry"];
+  const toppingDouble = ["Coklat + Keju", "Pandan + Kacang", "Coklat + Pandan", "Strawberry + Keju"];
 
-  <p><strong>Pilih Tipe Topping:</strong></p>
-  <label><input type="radio" name="toppingType" value="none" /> Non Topping</label>
-  <label><input type="radio" name="toppingType" value="single" /> Single Topping</label>
-  <label><input type="radio" name="toppingType" value="double" /> Double Topping</label>
+  function createCheckboxList(containerId, options, name) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    options.forEach((topping, i) => {
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = `${name}-${i}`;
+      checkbox.name = name;
+      checkbox.value = topping;
 
-  <div id="toppingSingleGroup" style="display: none;">
-    <p><strong>Pilih Topping Single (maks: isi box)</strong></p>
-    <div id="toppingSingleOptions"></div>
-  </div>
+      checkbox.addEventListener("change", limitSelection); // Tambah validasi
 
-  <div id="toppingDoubleGroup" style="display: none;">
-    <p><strong>Pilih Topping Double (maks: isi box)</strong></p>
-    <div id="toppingDoubleOptions"></div>
-  </div>
+      const label = document.createElement("label");
+      label.htmlFor = checkbox.id;
+      label.textContent = topping;
 
-  <label for="boxSize">Ukuran Kotak:</label>
-  <select id="boxSize">
-    <option value="5">Kecil (5 pcs)</option>
-    <option value="10">Besar (10 pcs)</option>
-  </select>
-
-  <label for="qty">Jumlah Kotak:</label>
-  <input type="number" id="qty" min="1" required/>
-
-  <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
-  <button type="submit">Pesan via WhatsApp</button>
-</form>
-
-  </div>  <script>
-    const toppingSingle = ["Keju", "Coklat", "Pandan", "Kacang", "Strawberry"];
-    const toppingDouble = ["Coklat + Keju", "Pandan + Kacang", "Coklat + Pandan", "Strawberry + Keju"];
-
-    function createCheckboxList(containerId, options, name) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      options.forEach((topping, i) => {
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = `${name}-${i}`;
-        checkbox.name = name;
-        checkbox.value = topping;
-
-        const label = document.createElement("label");
-        label.htmlFor = checkbox.id;
-        label.textContent = topping;
-
-        const wrapper = document.createElement("div");
-        wrapper.appendChild(checkbox);
-        wrapper.appendChild(label);
-        container.appendChild(wrapper);
-      });
-    }
-
-    document.querySelectorAll("input[name='toppingType']").forEach(input => {
-      input.addEventListener("change", updateToppingVisibility);
+      const wrapper = document.createElement("div");
+      wrapper.appendChild(checkbox);
+      wrapper.appendChild(label);
+      container.appendChild(wrapper);
     });
-    document.getElementById("boxSize").addEventListener("change", updateToppingVisibility);
+  }
 
-    function updateToppingVisibility() {
-      const selected = document.querySelector("input[name='toppingType']:checked")?.value;
-      const singleGroup = document.getElementById("toppingSingleGroup");
-      const doubleGroup = document.getElementById("toppingDoubleGroup");
+  function limitSelection() {
+    const isiBox = parseInt(document.getElementById("boxSize").value);
 
-      if (selected === "none") {
-        singleGroup.style.display = "none";
-        doubleGroup.style.display = "none";
-      } else if (selected === "single") {
-        singleGroup.style.display = "block";
-        doubleGroup.style.display = "none";
-        createCheckboxList("toppingSingleOptions", toppingSingle, "singleTopping");
-      } else if (selected === "double") {
-        singleGroup.style.display = "block";
-        doubleGroup.style.display = "block";
-        createCheckboxList("toppingSingleOptions", toppingSingle, "singleTopping");
-        createCheckboxList("toppingDoubleOptions", toppingDouble, "doubleTopping");
-      }
-    }
-
-    function validateTopping() {
-      const isiBox = parseInt(document.getElementById("boxSize").value);
-      const tipe = document.querySelector("input[name='toppingType']:checked")?.value;
-
-      if (tipe === "single") {
-        const count = document.querySelectorAll("input[name='singleTopping']:checked").length;
-        if (count > isiBox) {
-          alert("Topping single melebihi isi box!");
-          return false;
-        }
-      }
-
-      if (tipe === "double") {
-        const countSingle = document.querySelectorAll("input[name='singleTopping']:checked").length;
-        const countDouble = document.querySelectorAll("input[name='doubleTopping']:checked").length;
-        if (countSingle > isiBox || countDouble > isiBox) {
-          alert("Topping single/double melebihi isi box!");
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    document.querySelector("form").addEventListener("submit", function (e) {
-      if (!validateTopping()) {
-        e.preventDefault();
-      }
+    // Batasi topping single
+    const singleCheckboxes = document.querySelectorAll("input[name='singleTopping']");
+    const singleChecked = Array.from(singleCheckboxes).filter(cb => cb.checked);
+    singleCheckboxes.forEach(cb => {
+      cb.disabled = !cb.checked && singleChecked.length >= isiBox;
     });
-  </script>
+
+    // Batasi topping double
+    const doubleCheckboxes = document.querySelectorAll("input[name='doubleTopping']");
+    const doubleChecked = Array.from(doubleCheckboxes).filter(cb => cb.checked);
+    doubleCheckboxes.forEach(cb => {
+      cb.disabled = !cb.checked && doubleChecked.length >= isiBox;
+    });
+  }
+
+  function updateToppingVisibility() {
+    const selected = document.querySelector("input[name='toppingType']:checked")?.value;
+    const singleGroup = document.getElementById("toppingSingleGroup");
+    const doubleGroup = document.getElementById("toppingDoubleGroup");
+
+    if (selected === "none") {
+      singleGroup.style.display = "none";
+      doubleGroup.style.display = "none";
+    } else if (selected === "single") {
+      singleGroup.style.display = "block";
+      doubleGroup.style.display = "none";
+      createCheckboxList("toppingSingleOptions", toppingSingle, "singleTopping");
+    } else if (selected === "double") {
+      singleGroup.style.display = "block";
+      doubleGroup.style.display = "block";
+      createCheckboxList("toppingSingleOptions", toppingSingle, "singleTopping");
+      createCheckboxList("toppingDoubleOptions", toppingDouble, "doubleTopping");
+    }
+  }
+
+  function validateTopping() {
+    const isiBox = parseInt(document.getElementById("boxSize").value);
+    const tipe = document.querySelector("input[name='toppingType']:checked")?.value;
+
+    if (tipe === "single") {
+      const count = document.querySelectorAll("input[name='singleTopping']:checked").length;
+      if (count > isiBox) {
+        alert("Topping single melebihi isi box!");
+        return false;
+      }
+    }
+
+    if (tipe === "double") {
+      const countSingle = document.querySelectorAll("input[name='singleTopping']:checked").length;
+      const countDouble = document.querySelectorAll("input[name='doubleTopping']:checked").length;
+      if (countSingle > isiBox || countDouble > isiBox) {
+        alert("Topping single atau double melebihi isi box!");
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  document.querySelectorAll("input[name='toppingType']").forEach(input => {
+    input.addEventListener("change", () => {
+      updateToppingVisibility();
+      limitSelection();
+    });
+  });
+
+  document.getElementById("boxSize").addEventListener("change", () => {
+    updateToppingVisibility();
+    limitSelection();
+  });
+
+  document.getElementById("orderForm").addEventListener("submit", function (e) {
+    if (!validateTopping()) {
+      e.preventDefault();
+    }
+  });
+                    </script>
 
 
 <!-- Tombol Mengambang dengan Ikon (Posisi ke samping kanan) -->
