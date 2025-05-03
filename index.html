@@ -81,35 +81,26 @@
 
   <script src="testimoni.js"></script>
 </body>
-    <h2>Pesan Sekarang</h2>
-    <form id="orderForm">
-      <label for="name">Nama:</label>
-      <input type="text" id="name" required/>
+    <p><strong>Pilih Tipe Topping:</strong></p>
+      <label><input type="radio" name="toppingType" value="none" /> Non Topping</label>
+      <label><input type="radio" name="toppingType" value="single" /> Single Topping</label>
+      <label><input type="radio" name="toppingType" value="double" /> Double Topping</label>
 
-      <label for="menu">Jenis Pukis:</label>
-      <select id="menu">
-        <option value="original">Pukis Original</option>
-        <option value="pandan">Pukis Pandan</option>
+      <div id="toppingArea"></div>
+
+      <label for="boxSize">Ukuran Kotak:</label>
+      <select id="boxSize">
+        <option value="5">Kecil (5 pcs)</option>
+        <option value="10">Besar (10 pcs)</option>
       </select>
 
-    <section class="order-list">
-      <h2>Daftar Pesanan</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Jenis</th>
-            <th>Topping</th>
-            <th>Ukuran</th>
-            <th>Jumlah</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody id="orderTableBody">
-          <!-- Data pesanan akan muncul di sini -->
-        </tbody>
-      </table>
-    </section>
+      <label for="qty">Jumlah Kotak:</label>
+      <input type="number" id="qty" min="1" required/>
+
+      <p id="totalDisplay"><strong>Total Harga:</strong> Rp 0</p>
+      <button type="submit">Pesan via WhatsApp</button>
+    </form>
+</div>
 
     <section class="testimonial-section">
       <h2>Testimoni Pelanggan</h2>
