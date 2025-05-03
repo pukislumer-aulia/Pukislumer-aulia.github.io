@@ -9,10 +9,9 @@ function displayTestimonials() {
     { name: "Dewi", message: "Pukisnya lembut, toppingnya banyak pilihan, dan harganya terjangkau. Mantap!" },
     { name: "Eka", message: "Rasa Pukis Pandannya enak banget, cocok banget untuk teman ngopi!" }
   ];
-  document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const testimonialList = document.getElementById("testimonialList");
-
-  const testimoni = [
+  const defaultTestimoni = [
     "Kuenya lembut banget dan lumer di mulut!",
     "Toppingnya banyak pilihan dan enak semua.",
     "Pelayanan cepat, kuenya masih hangat saat sampai.",
@@ -20,12 +19,26 @@ function displayTestimonials() {
     "Sudah order 3x, selalu puas!"
   ];
 
-  testimoni.forEach((isi) => {
+  defaultTestimoni.forEach((isi) => {
     const div = document.createElement("div");
     div.classList.add("testimonial-item");
     div.textContent = isi;
     testimonialList.appendChild(div);
   });
+});
+
+function tambahTestimoni() {
+  const input = document.getElementById("testimonialInput");
+  const isi = input.value.trim();
+  if (isi !== "") {
+    const testimonialList = document.getElementById("testimonialList");
+    const div = document.createElement("div");
+    div.classList.add("testimonial-item");
+    div.textContent = isi;
+    testimonialList.appendChild(div);
+    input.value = "";
+  }
+}
 });
 
   const testimonialsContainer = document.getElementById('testimonials');
