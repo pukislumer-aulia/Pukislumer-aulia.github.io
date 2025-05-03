@@ -29,7 +29,7 @@
       margin-top: 1rem;
       font-weight: bold;
     }
-    select, input[type="number"] {
+    select, input[type="number"], input[type="text"] {
       width: 100%;
       padding: 0.5rem;
       margin-top: 0.25rem;
@@ -71,11 +71,14 @@
 <body>
   <h1>Pemesanan Pukis Lumer Aulia</h1>
   <form id="pukisForm">
+    <label for="nama">Nama Pemesan</label>
+    <input type="text" id="nama" required placeholder="Nama Anda" />
+
     <label for="jenis">Jenis Pukis</label>
     <select id="jenis" required>
       <option value="">-- Pilih Jenis --</option>
-      <option value="original">Original</option>
-      <option value="pandan">Pandan</option>
+      <option value="Original">Original</option>
+      <option value="Pandan">Pandan</option>
     </select>
 
     <label for="ukuran">Ukuran Box</label>
@@ -125,8 +128,8 @@
 
   <script>
     const hargaDasar = {
-      original: {5: 12000, 10: 22000},
-      pandan: {5: 13000, 10: 24000}
+      Original: {5: 12000, 10: 22000},
+      Pandan: {5: 13000, 10: 24000}
     };
     const toppingHarga = {
       single: {5: 15000, 10: 27000},
@@ -144,8 +147,8 @@
 
     function updateToppingDisplay() {
       const jenisTopping = toppingJenis.value;
-      singleToppingGroup.style.display = (jenisTopping === 'single' || jenisTopping === 'double') ? 'block' : 'none';
-      doubleToppingGroup.style.display = (jenisTopping === 'double') ? 'block' : 'none';
+      singleToppingGroup.style.display = jenisTopping === 'single' || jenisTopping === 'double' ? 'block' : 'none';
+      doubleToppingGroup.style.display = jenisTopping === 'double' ? 'block' : 'none';
     }
 
     function hitungTotal() {
@@ -176,19 +179,19 @@
       const boxSize = parseInt(ukuran.value);
       let valid = true;
 
-      if (toppingVal === 'single') {
-        const selected = getSelectedToppings('.singleTopping');
-        if (selected.length > boxSize) {
-          alert(`Maksimal ${boxSize} rasa topping untuk ${boxSize} pukis.`);
+      if (toppingVal === 'single' || toppingVal === 'double') {
+        const selectedSingle = getSelectedToppings('.singleTopping');
+        const selectedDouble = getSelectedToppings('.doubleTopping');
+
+        if (toppingVal === 'single' && selectedSingle.length > boxSize) {
+          alert(`Maksimal ${boxSize} topping untuk ${boxSize} pukis.`);
           valid = false;
         }
-      } else if (toppingVal === 'double') {
-        const singleSelected = getSelectedToppings('.singleTopping');
-        const doubleSelected = getSelectedToppings('.doubleTopping');
-
-        if (singleSelected.length > boxSize || doubleSelected.length > boxSize) {
-          alert(`Untuk Double Topping:\n- Maksimal ${boxSize} rasa\n- Maksimal ${boxSize} taburan`);
-          valid = false;
+        if (toppingVal === 'double') {
+          if (selectedSingle.length > boxSize || selectedDouble.length > boxSize) {
+            alert(`Double topping: maksimal ${boxSize} rasa dan ${boxSize} taburan untuk ${boxSize} pukis.`);
+            valid = false;
+          }
         }
       }
       return valid;
@@ -210,29 +213,34 @@
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+
+      const nama = document.getElementById('nama').value.trim();
+      if (!nama) {
+        alert('Nama pemesan wajib diisi.');
+        return;
+      }
+
       if (!validateToppingLimit()) return;
 
-      const pesan = `Halo! Saya ingin memesan Pukis:
-
-- Jenis: ${jenis.value}
-- Ukuran: ${ukuran.value} pcs
-- Jumlah: ${jumlah.value} box
-- Topping: ${toppingJenis.value}`;
+      const jenisVal = jenis.value;
+      const ukuranVal = ukuran.value;
+      const jumlahVal = jumlah.value;
+      const toppingVal = toppingJenis.value;
 
       const single = getSelectedToppings('.singleTopping').join(', ');
       const double = getSelectedToppings('.doubleTopping').join(', ');
-      let toppingDetail = '';
 
-      if (toppingJenis.value === 'single') {
-        toppingDetail = `\n- Rasa: ${single}`;
-      } else if (toppingJenis.value === 'double') {
-        toppingDetail = `\n- Rasa: ${single}\n- Taburan: ${double}`;
+      let pesan = `Halo! Saya ingin memesan Pukis:\n\n- Nama: ${nama}\n- Jenis: ${jenisVal}\n- Ukuran: ${ukuranVal} pcs\n- Jumlah: ${jumlahVal} box\n- Topping: ${toppingVal}`;
+
+      if (toppingVal === 'single') {
+        pesan += `\n- Rasa: ${single}`;
+      } else if (toppingVal === 'double') {
+        pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;
       }
 
-      const totalText = totalHarga.innerText;
-      const finalPesan = `${pesan}${toppingDetail}\n${totalText}`;
-      const encoded = encodeURIComponent(finalPesan);
-      const wa = `https://wa.me/6281296668670?text=${encoded}`;
+      pesan += `\n${totalHarga.innerText}`;
+
+      const wa = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
       window.open(wa, '_blank');
     });
   </script>
