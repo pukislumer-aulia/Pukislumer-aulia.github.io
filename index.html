@@ -61,17 +61,26 @@
     </div>
 
 
-<h2>Testimoni Pelanggan</h2>
-<div id="testimonialList" class="testimonial-wrapper"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Testimoni Pelanggan</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
-<!-- Form Tambah Testimoni -->
-<div class="testimonial-form">
-  <input type="text" id="namaInput" placeholder="Nama kamu..." />
-  <input type="text" id="kotaInput" placeholder="Kota asal..." />
-  <textarea id="testimonialInput" placeholder="Tulis testimoni kamu di sini..."></textarea>
-  <button onclick="tambahTestimoni()">Kirim Testimoni</button>
-</div>
-  </div>
+  <h2>Testimoni Pelanggan</h2>
+  <div id="testimonials" class="testimonial-wrapper"></div>
+
+  <!-- Form Testimoni -->
+  <form id="addTestimonialForm" class="testimonial-form">
+    <input type="text" id="testimonial-name" placeholder="Nama kamu..." required />
+    <textarea id="testimonial-message" placeholder="Tulis testimoni kamu di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>
+
+  <script src="testimoni.js"></script>
+</body>
     <h2>Pesan Sekarang</h2>
     <form id="orderForm">
       <label for="name">Nama:</label>
