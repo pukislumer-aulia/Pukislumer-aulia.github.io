@@ -224,68 +224,74 @@
 <body>
   <h2>Pemesanan Pukis Lumer Aulia</h2>
 
-  <form id="formPukis">
-    <div class="form-group">
-      <label>Nama Pemesan:</label>
-      <input type="text" id="namaPemesan" placeholder="Nama Anda" required>
-    </div>
-
-    <div class="form-group">
-      <label>Jenis Pukis:</label>
-      <label><input type="radio" name="jenis" value="original" checked onchange="hitungHarga()"> Original</label>
-      <label><input type="radio" name="jenis" value="pandan" onchange="hitungHarga()"> Pandan</label>
-    </div>
-
-    <div class="form-group">
-      <label>Topping:</label>
-      <label><input type="radio" name="topping" value="non" checked onchange="ubahTopping(); hitungHarga()"> Non Topping</label>
-      <label><input type="radio" name="topping" value="single" onchange="ubahTopping(); hitungHarga()"> Single Topping</label>
-      <label><input type="radio" name="topping" value="double" onchange="ubahTopping(); hitungHarga()"> Double Topping</label>
-    </div>
-
-    <div class="form-group" id="singleToppingGroup" style="display: none;">
-      <label>Pilih Rasa:</label>
-      <div class="topping-group">
-        <label><input type="checkbox" class="singleTopping" value="Coklat"> Coklat</label>
-        <label><input type="checkbox" class="singleTopping" value="Tiramisu"> Tiramisu</label>
-        <label><input type="checkbox" class="singleTopping" value="Stroberi"> Stroberi</label>
-        <label><input type="checkbox" class="singleTopping" value="Cappucino"> Cappucino</label>
-        <label><input type="checkbox" class="singleTopping" value="Vanilla"> Vanilla</label>
-        <label><input type="checkbox" class="singleTopping" value="Taro"> Taro</label>
-        <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>
+    <form id="formPukis">
+      <div class="form-group">
+        <label for="namaPemesan">Nama Pemesan:</label>
+        <input type="text" id="namaPemesan" placeholder="Nama Anda" required>
       </div>
-    </div>
 
-    <div class="form-group" id="doubleToppingGroup" style="display: none;">
-      <label>Pilih Taburan:</label>
-      <div class="topping-group">
-        <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>
-        <label><input type="checkbox" class="doubleTopping" value="Keju"> Keju</label>
-        <label><input type="checkbox" class="doubleTopping" value="Kacang"> Kacang</label>
-        <label><input type="checkbox" class="doubleTopping" value="Choco Chip"> Choco Chip</label>
-        <label><input type="checkbox" class="doubleTopping" value="Oreo"> Oreo</label>
+      <div class="form-group">
+        <label>Jenis Pukis:</label>
+        <label><input type="radio" name="jenis" value="original" checked onchange="hitungHarga()"> Original</label>
+        <label><input type="radio" name="jenis" value="pandan" onchange="hitungHarga()"> Pandan</label>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>Isi per Box:</label>
-      <select id="isiBox" onchange="hitungHarga()">
-        <option value="5">5 pcs</option>
-        <option value="10">10 pcs</option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label>Topping:</label>
+        <label><input type="radio" name="topping" value="non" checked onchange="ubahTopping(); hitungHarga()"> Non Topping</label>
+        <label><input type="radio" name="topping" value="single" onchange="ubahTopping(); hitungHarga()"> Single Topping</label>
+        <label><input type="radio" name="topping" value="double" onchange="ubahTopping(); hitungHarga()"> Double Topping</label>
+      </div>
 
-    <div class="form-group">
-      <label>Jumlah Box:</label>
-      <input type="number" id="jumlahBox" value="1" min="1" onchange="hitungHarga()">
-    </div>
+      <div class="form-group" id="singleToppingGroup" style="display: none;">
+        <label>Pilih Rasa (Single):</label>
+        <div class="topping-group">
+          <label><input type="checkbox" class="singleTopping" value="Coklat"> Coklat</label>
+          <label><input type="checkbox" class="singleTopping" value="Tiramisu"> Tiramisu</label>
+          <label><input type="checkbox" class="singleTopping" value="Stroberi"> Stroberi</label>
+          <label><input type="checkbox" class="singleTopping" value="Cappucino"> Cappucino</label>
+          <label><input type="checkbox" class="singleTopping" value="Vanilla"> Vanilla</label>
+          <label><input type="checkbox" class="singleTopping" value="Taro"> Taro</label>
+          <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>
+        </div>
+      </div>
 
-    <div class="form-group">
-      <p>Total Harga: <span id="totalHarga">Rp0</span></p>
-    </div>
+      <div class="form-group" id="doubleToppingGroup" style="display: none;">
+        <label>Pilih Taburan (Double):</label>
+        <div class="topping-group">
+          <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>
+          <label><input type="checkbox" class="doubleTopping" value="Keju"> Keju</label>
+          <label><input type="checkbox" class="doubleTopping" value="Kacang"> Kacang</label>
+          <label><input type="checkbox" class="doubleTopping" value="Choco Chip"> Choco Chip</label>
+          <label><input type="checkbox" class="doubleTopping" value="Oreo"> Oreo</label>
+        </div>
+      </div>
 
-    <button type="submit">Kirim Pesanan via WhatsApp</button>
-  </form>
+      <div class="form-group">
+        <label for="isiBox">Isi per Box:</label>
+        <select id="isiBox" onchange="hitungHarga()">
+          <option value="5">5 pcs</option>
+          <option value="10">10 pcs</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="jumlahBox">Jumlah Box:</label>
+        <input type="number" id="jumlahBox" value="1" min="1" onchange="hitungHarga()">
+      </div>
+
+      <div class="form-group">
+        <p>Total Harga: <span id="totalHarga">Rp0</span></p>
+      </div>
+
+      <button type="submit">Kirim Pesanan via WhatsApp</button>
+    </form>
+  </div>
+
+  <!-- Floating message -->
+  <div class="floating-message">
+    Pesan Sekarang!
+  </div>
 
   <script>
     const hargaPukis = {
@@ -312,10 +318,8 @@
       const topping = document.querySelector('input[name="topping"]:checked').value;
       const isi = parseInt(document.getElementById("isiBox").value);
       const jumlah = parseInt(document.getElementById("jumlahBox").value);
-
       const hargaSatuan = hargaPukis[jenis][topping][isi] || 0;
       const total = hargaSatuan * jumlah;
-
       document.getElementById("totalHarga").innerText = `Rp${total.toLocaleString("id-ID")}`;
     }
 
@@ -326,7 +330,6 @@
     function validasiTopping() {
       const topping = document.querySelector('input[name="topping"]:checked').value;
       const isi = parseInt(document.getElementById("isiBox").value);
-
       const single = getSelectedToppings('.singleTopping');
       const double = getSelectedToppings('.doubleTopping');
 
@@ -341,7 +344,6 @@
           return false;
         }
       }
-
       return true;
     }
 
@@ -359,23 +361,22 @@
       const topping = document.querySelector('input[name="topping"]:checked').value;
       const isi = document.getElementById("isiBox").value;
       const jumlah = document.getElementById("jumlahBox").value;
-
       const single = getSelectedToppings('.singleTopping').join(', ');
       const double = getSelectedToppings('.doubleTopping').join(', ');
+      const totalText = document.getElementById("totalHarga").innerText;
 
       let pesan = `Halo! Saya ingin memesan Pukis:\n- Nama: ${nama}\n- Jenis: ${jenis}\n- Topping: ${topping}\n- Isi per Box: ${isi} pcs\n- Jumlah Box: ${jumlah}`;
-
       if (topping === 'single') pesan += `\n- Rasa: ${single}`;
       if (topping === 'double') pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;
-
-      const totalText = document.getElementById("totalHarga").innerText;
       pesan += `\n${totalText}`;
 
       const waURL = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
       window.open(waURL, "_blank");
     });
-
     window.onload = hitungHarga;
+  </script>
+   <script src="assets/js/testimoni.js"></script>
+  <!-- Tombol Utama -->
 
   </div>  <!-- Tombol Aksi Mengambang -->  <div class="floating-buttons">
     <a href="https://wa.me/6281296668670" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
