@@ -85,7 +85,9 @@
       object-fit: cover;
     }
     /* Floating message styles */
-    <!-- Tombol Mengambang dengan Ikon (Posisi ke samping kanan) -->
+    <!-- Sisipkan setelah form dan script JavaScript -->
+
+<!-- Tombol Mengambang dengan Ikon (Posisi ke samping kanan) -->
 <div class="floating-buttons">
   <a href="https://wa.me/6281296668670" class="float-btn whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
   <a href="https://shopee.co.id/" class="float-btn shopee" target="_blank"><i class="fas fa-store"></i> ShopeeFood</a>
@@ -100,6 +102,59 @@
     <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
   </div>
 </div>
+
+<!-- Font Awesome (untuk ikon) -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<style>
+  .floating-buttons {
+    position: fixed;
+    top: 20%;
+    right: 0;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .float-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px 0 0 4px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+  .float-btn:hover {
+    background-color: #555;
+  }
+  .whatsapp { background-color: #25d366; }
+  .shopee { background-color: #ee4d2d; }
+  .maxim { background-color: #ffd700; color: #000; }
+  .gofood { background-color: #ff0000; }
+  .grabfood { background-color: #00b14f; }
+  .invite { background-color: #6c63ff; }
+  .social-follow {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .social-follow a {
+    background-color: #444;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px 0 0 4px;
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .social-follow a:hover {
+    background-color: #666;
+  }
+</style>
     }
   </style>
 </head>
