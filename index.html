@@ -1,42 +1,22 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<style>
-  <link rel="stylesheet" href="style.css">
-  <style>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pukis Lumer Aulia</title>
-  <meta name="description" content="Pukis lumer terenak di Padang Panjang!"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/style.css"/>
-  <link rel="stylesheet" href="assets/css/form-style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet"/>
-<body>
-  <div class="page-wrapper">
-    <div class="promo-image">
-      <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
-      <div class="promo-container">
-  <img src="gambar-kupon.jpg" alt="Kupon Promo" class="responsive-img">
-      </div>
-    <div class="promo-running-text">
-  <p>Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia! Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!</p>
-    </div>
-    <img src="assets/images/pukis.jpg" alt="Header" class="responsive-img">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pukis Lumer Aulia</title>
-    <link rel="stylesheet" href="assets/css/style.css">
   <style>
+    body {
       font-family: 'Segoe UI', sans-serif;
       line-height: 1.7;
       padding: 20px;
       background-color: #fffefb;
       color: #333;
     }
-    h1 {color: #800000;
+    h1 {
+      color: #800000;
     }
-    h2 {color: #2E8B57;
+    h2 {
+      color: #2E8B57;
       margin-top: 40px;
     }
     .form-section {
@@ -104,54 +84,10 @@
       border-radius: 10px;
       object-fit: cover;
     }
-<style>
-  .floating-buttons {
-    position: fixed;
-    top: 20%;
-    right: 0;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .float-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    background-color: #333;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px 0 0 4px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-  }
-  .float-btn:hover {
-    background-color: #555;
-  }
-  .whatsapp { background-color: #25d366; }
-  .shopee { background-color: #ee4d2d; }
-  .maxim { background-color: #ffd700; color: #000; }
-  .gofood { background-color: #ff0000; }
-  .grabfood { background-color: #00b14f; }
-  .invite { background-color: #6c63ff; }
-  .social-follow {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .social-follow a {
-    background-color: #444;
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 4px 0 0 4px;
-    text-decoration: none;
-    font-size: 13px;
-  }
-  .social-follow a:hover {
-    background-color: #666;
-  }
+  </style>
+</head>
+<body>
+
   <h1>PUKIS LUMER AULIA</h1>
 
   <p style="color: #002147;">Assalamu'alaikum warahmatullahi wabarakatuh</p>
@@ -254,11 +190,6 @@
     </form>
   </div>
 
-  <!-- Floating message -->
-  <div class="floating-message">
-    Pesan Sekarang!
-  </div>
-
   <script>
     const hargaPukis = {
       original: {
@@ -339,45 +270,8 @@
       const waURL = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
       window.open(waURL, "_blank");
     });
+
     window.onload = hitungHarga;
-  </script>
-  <h2>Testimoni Pelanggan</h2>
-<div id="testimonialList" class="testimonial-wrapper"></div>
-<!-- Form Tambah Testimoni -->
-<div class="testimonial-form">
-  <input type="text" id="testimonialInput" placeholder="Tulis testimoni kamu di sini..." />
-  <button onclick="tambahTestimoni()">Kirim Testimoni</button>
-</div>
-  <script src="assets/js/testimoni.js"></script>
-  <!-- Tombol Utama -->
-<!-- Floating Menu -->
-<div class="floating-menu">
-  <button class="main-btn" onclick="toggleMenu()">
-    <i class="fas fa-plus"></i>
-  </button>
-
-  <script>
-  function toggleMenu() {
-    document.querySelector('.floating-menu').classList.toggle('show');
-  }
-
-<div class="floating-menu" id="floatingMenu">
-  <div class="menu-items">
-    <a href="https://wa.me/6281296668670" class="float-btn whatsapp">Chat WhatsApp</a>
-    <a href="#" class="float-btn invite">Undang Teman</a>
-    <a href="https://shopee.co.id" class="float-btn shopee">Shopee</a>
-    <a href="https://food.maxim.com" class="float-btn maxim">Maxim</a>
-    <a href="https://gofood.co.id" class="float-btn gofood">GoFood</a>
-    <a href="https://grab.com/id/food" class="float-btn grabfood">GrabFood</a>
-  </div>
-  <button class="main-btn" onclick="toggleMenu()">+</button>
-</div>
-  </div>
-</script>
-  <script>
-    function toggleMenu() {
-      document.getElementById('floatingMenu').classList.toggle('show');
-    }
   </script>
 </body>
 </html>
