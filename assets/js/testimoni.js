@@ -1,57 +1,45 @@
-const fakeTestimonials = [
-  { name: "Andi", message: "Pukisnya enak banget, topingnya beragam, dan sangat lezat!" },
-  { name: "Budi", message: "Favorit saya! Rasa dan kualitas tidak diragukan." },
-  { name: "Citra", message: "Coklatnya lumer banget, saya ketagihan!" },
-  { name: "Dewi", message: "Lembut, banyak pilihan topping, dan harga terjangkau." },
-  { name: "Eka", message: "Pukis Pandannya cocok banget buat teman ngopi!" }
-];
+document.addEventListener("DOMContentLoaded", () => {
+  const testimonialList = document.getElementById("testimonialList");
 
-// Tampilkan testimoni dari fake + localStorage
-function loadStoredTestimonials() {
-  const storedTestimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-  const testimonialsContainer = document.getElementById('testimonials');
-  testimonialsContainer.innerHTML = "";
+  // Cek apakah ada testimoni di localStorage
+  const saved = JSON.parse(localStorage.getItem("testimoni")) || [];
 
-  const allTestimonials = [...fakeTestimonials, ...storedTestimonials];
-
-  allTestimonials.forEach(testimonial => {
-    const testimonialDiv = document.createElement('div');
-    testimonialDiv.classList.add('testimonial');
-    testimonialDiv.innerHTML = `
-      <p class="testimonial-message">"${testimonial.message}"</p>
-      <p class="testimonial-name">- ${testimonial.name}</p>
-    `;
-    testimonialsContainer.appendChild(testimonialDiv);
-  });
-}
-
-// Tambah testimoni baru
-function addTestimonial() {
-  const name = document.getElementById('testimonial-name').value.trim();
-  const message = document.getElementById('testimonial-message').value.trim();
-
-  if (!name || !message) {
-    alert('Nama dan pesan tidak boleh kosong!');
-    return;
+  // Jika belum ada, tampilkan default testimoni
+  if (saved.length === 0) {
+    const defaultTestimoni = [
+      "Kuenya lembut banget dan lumer di mulut!",
+      "Toppingnya banyak pilihan dan enak semua.",
+      "Pelayanan cepat, kuenya masih hangat saat sampai.",
+      "Pukis pandan favorit keluarga saya!",
+      "Sudah order 3x, selalu puas!"
+    ];
+    defaultTestimoni.forEach((isi) => tambahKeHalaman(isi));
+    localStorage.setItem("testimoni", JSON.stringify(defaultTestimoni));
+  } else {
+    saved.forEach((isi) => tambahKeHalaman(isi));
   }
-
-  const newTestimonial = { name, message };
-  let storedTestimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
-  storedTestimonials.push(newTestimonial);
-  localStorage.setItem('testimonials', JSON.stringify(storedTestimonials));
-
-  loadStoredTestimonials();
-
-  // Kosongkan form
-  document.getElementById('testimonial-name').value = '';
-  document.getElementById('testimonial-message').value = '';
-}
-
-// Event form
-document.getElementById('addTestimonialForm').addEventListener('submit', function(event) {
-  event.preventDefault();
-  addTestimonial();
 });
 
-// Load awal
-window.onload = loadStoredTestimonials;
+function tambahTestimoni() {
+  const input = document.getElementById("testimonialInput");
+  const isi = input.value.trim();
+  if (isi !== "") {
+    tambahKeHalaman(isi);
+    simpanKeLocalStorage(isi);
+    input.value = "";
+  }
+}
+
+function tambahKeHalaman(teks) {
+  const testimonialList = document.getElementById("testimonialList");
+  const div = document.createElement("div");
+  div.classList.add("testimonial-item");
+  div.textContent = teks;
+  testimonialList.appendChild(div);
+}
+
+function simpanKeLocalStorage(teks) {
+  const existing = JSON.parse(localStorage.getItem("testimoni")) || [];
+  existing.push(teks);
+  localStorage.setItem("testimoni", JSON.stringify(existing));
+}
