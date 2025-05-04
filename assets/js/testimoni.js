@@ -42,4 +42,10 @@ function simpanKeLocalStorage(teks) {
   const existing = JSON.parse(localStorage.getItem("testimoni")) || [];
   existing.push(teks);
   localStorage.setItem("testimoni", JSON.stringify(existing));
+  function hapusSemuaTestimoni() {
+  if (confirm("Yakin ingin menghapus semua testimoni?")) {
+    localStorage.removeItem("testimoni");
+    document.getElementById("testimonialList").innerHTML = "";
+  }
+  }
 }
