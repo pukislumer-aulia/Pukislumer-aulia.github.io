@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pukis Lumer Aulia</title>
-  <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/form-style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet"/>
+<style>
+  <link rel="stylesheet" href="style.css">
   <style>
-    <body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pukis Lumer Aulia</title>
+  <meta name="description" content="Pukis lumer terenak di Padang Panjang!"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="assets/css/form-style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet"/>
+<body>
   <div class="page-wrapper">
     <div class="promo-image">
       <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
@@ -21,7 +23,12 @@
   <p>Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia! Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!</p>
     </div>
     <img src="assets/images/pukis.jpg" alt="Header" class="responsive-img">
-     <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pukis Lumer Aulia</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body {
       font-family: 'Segoe UI', sans-serif;
       line-height: 1.7;
       padding: 20px;
@@ -148,14 +155,13 @@
   .social-follow a:hover {
     background-color: #666;
   }
-    </body>
   <h1>PUKIS LUMER AULIA</h1>
 
   <p style="color: #002147;">Assalamu'alaikum warahmatullahi wabarakatuh</p>
   <p style="color: #002147;">Dimanapun kamu insyaAllah berkah, rejeki berlimpah. Aamiin Allahumma Aamiin</p>
 
   <p style="color: #cc8e8e;">Padang Panjang Kota Kuliner – Serambi Mekkah orang mengenalnya.</p>
-  <p style="color: #cc8e8e;">jalan-jalan ke Pasar Kuliner – jangan lupa mampir ke PUKIS LUMER AULIA</p>
+  <p style="color: #cc8e8e;">Kalau mampir ke Pasar Kuliner – jangan lupa mampir ke PUKIS LUMER AULIA</p>
 
   <p><strong style="color: #9370DB;">Jam Operasional:</strong> <span style="color: #9370DB;">16.00 – 23.59 WIB (selama persediaan masih ada)</span></p>
   <p><strong style="color: #6B8E23;">Best Seller:</strong> <span style="color: #6B8E23;">Double Topping Vanilla Oreo vs Coklat Kacang</span></p>
@@ -269,11 +275,13 @@
         double: {5: 18000, 10: 32000}
       }
     };
+
     function ubahTopping() {
       const topping = document.querySelector('input[name="topping"]:checked').value;
       document.getElementById("singleToppingGroup").style.display = topping === "single" || topping === "double" ? "block" : "none";
       document.getElementById("doubleToppingGroup").style.display = topping === "double" ? "block" : "none";
     }
+
     function hitungHarga() {
       const jenis = document.querySelector('input[name="jenis"]:checked').value;
       const topping = document.querySelector('input[name="topping"]:checked').value;
@@ -283,9 +291,11 @@
       const total = hargaSatuan * jumlah;
       document.getElementById("totalHarga").innerText = `Rp${total.toLocaleString("id-ID")}`;
     }
+
     function getSelectedToppings(cls) {
       return Array.from(document.querySelectorAll(cls + ':checked')).map(el => el.value);
     }
+
     function validasiTopping() {
       const topping = document.querySelector('input[name="topping"]:checked').value;
       const isi = parseInt(document.getElementById("isiBox").value);
@@ -366,10 +376,13 @@
   <button class="main-btn" onclick="toggleMenu()">+</button>
 </div>
   </div>
+</script>
   <script>
     function toggleMenu() {
       document.getElementById('floatingMenu').classList.toggle('show');
     }
   </script>
+</body>
+    </html>
 </body>
 </html>
