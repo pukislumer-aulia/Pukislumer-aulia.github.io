@@ -83,42 +83,57 @@ img {
   max-width: 100%;
   display: block;
 }
-.floating-buttons {
+.floating-menu {
   position: fixed;
+  right: 20px;
   bottom: 20px;
-  right: -100px; /* Tombol tersembunyi di luar layar */
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: right 0.3s ease; /* Menambahkan transisi saat tombol muncul */
+  z-index: 9999;
 }
 
-.floating-buttons:hover {
-  right: 10px; /* Tombol muncul saat hover di kontainer */
+.main-btn {
+  background-color: #25d366;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.menu-items {
+  display: none;
+  flex-direction: column;
+  margin-bottom: 10px;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.floating-menu.show .menu-items {
+  display: flex;
 }
 
 .float-btn {
-  background-color: #ff9900;
+  background-color: #25d366;
   color: white;
-  padding: 10px 15px;
-  margin: 5px 0;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 50%;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-.float-btn i {
-  margin-right: 8px;
-}
-
-.float-btn:hover {
-  background-color: #e68a00;
-}
+.float-btn.shopee { background-color: #ee4d2d; }
+.float-btn.maxim { background-color: #ffc107; color: #000; }
+.float-btn.gofood { background-color: #d72323; }
+.float-btn.grabfood { background-color: #00b14f; }
+.float-btn.invite { background-color: #007bff; }
 
 .social-follow {
   margin-top: 10px;
