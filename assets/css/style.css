@@ -143,37 +143,45 @@ img {
   animation: slideUp 0.3s ease forwards;
 }
 
+.floating-menu {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+}
+
+.menu-items {
+  position: absolute;
+  bottom: 70px; /* agar muncul di atas tombol utama */
+  right: 0;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+}
+
 .floating-menu.show .menu-items {
   display: flex;
+  animation: slideUp 0.3s ease;
+}
+.menu-items {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
 }
 
-.float-btn {
-  background-color: #ffd6e8; /* pastel pink */
-  color: #444;
-  padding: 12px;
-  border-radius: 50%;
-  text-decoration: none;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease, background 0.2s ease;
+.floating-menu.show .menu-items {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
-
-.float-btn:hover {
-  background-color: #ffc1dc;
-  transform: scale(1.1);
-}
-
 /* Warna khusus */
 .float-btn.shopee { background-color: #ffe0cc; }
 .float-btn.maxim { background-color: #fff6a9; color: #000; }
 .float-btn.gofood { background-color: #ffd1d1; }
 .float-btn.grabfood { background-color: #c7f5d3; }
-.float-btn.invite { background-color: #cce5ff; }
+.float-btn.invite { background-color: #ffd700; }
 
 /* Animasi */
 @keyframes slideUp {
