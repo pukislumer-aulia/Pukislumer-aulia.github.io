@@ -125,3 +125,30 @@ h2 {
   display: block;
   margin: 0 auto;
   }
+.promo-running-text {
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff4e6;
+  border-top: 2px solid red;
+  border-bottom: 2px solid red;
+  padding: 10px 0;
+  position: relative;
+}
+
+.promo-running-text p {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll-left 15s linear infinite;
+  font-weight: bold;
+  color: red;
+  font-size: 1.2em;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
