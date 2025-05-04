@@ -1,213 +1,14 @@
-/* File: assets/css/form-style.css */
-
-form {
-  margin-top: 30px;
-  background-color: #fffef5;
+body {
+  font-family: sans-serif;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  font-family: 'Kanit', sans-serif;
+  background: #fff8e1;
 }
 
-form label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+h2 {
+  color: #ff9900;
 }
 
-form input[type="text"],
-form input[type="number"],
-form select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
-
-form input[type="radio"] {
-  margin-right: 8px;
-}
-
-#toppingArea {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0 20px 0;
-}
-
-#toppingArea label {
-  background-color: #fff3d9;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ffce58;
-  cursor: pointer;
-}
-
-form button {
-  background-color: #ff9900;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-form button:hover {
-  background-color: #e68a00;
-}
-
-#totalDisplay {
-  font-size: 1.1rem;
-  margin: 10px 0 20px 0;
-}
-img {
-  max-width: 100%;
-  height: auto;
-}
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.gallery img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  object-fit: cover;
-  max-width: 100%;
-  display: block;
-}
-
-.social-follow {
-  margin-top: 10px;
-}
-
-.social-follow a {
-  display: block;
-  background-color: #333;
-  color: white;
-  padding: 8px 12px;
-  margin: 5px 0;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 12px;
-  text-align: center;
-  transition: background-color 0.3s ease;
-}
-
-.social-follow a:hover {
-  background-color: #555;
-}
-.promo-marquee {
-  overflow: hidden;
-  background-color: #fff3d1;
-  border: 2p.floating-menu {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.main-btn {
-  background-color: #ff80ab; /* pink manis */
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 28px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
-}
-
-.main-btn:hover {
-  transform: rotate(90deg) scale(1.1);
-}
-
-.menu-items {
-  display: none;
-  flex-direction: column;
-  margin-bottom: 10px;
-  align-items: flex-end;
-  gap: 12px;
-  animation: slideUp 0.3s ease forwards;
-}
-
-.floating-menu {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 9999;
-}
-
-.menu-items {
-  position: absolute;
-  bottom: 70px; /* agar muncul di atas tombol utama */
-  right: 0;
-  display: none;
-  flex-direction: column;
-  gap: 12px;
-  align-items: flex-end;
-}
-
-.floating-menu.show .menu-items {
-  display: flex;
-  animation: slideUp 0.3s ease;
-}
-.menu-items {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-  pointer-events: none;
-}
-
-.floating-menu.show .menu-items {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-/* Warna khusus */
-.float-btn.shopee { background-color: #ffe0cc; }
-.float-btn.maxim { background-color: #fff6a9; color: #000; }
-.float-btn.gofood { background-color: #ffd1d1; }
-.float-btn.grabfood { background-color: #c7f5d3; }
-.float-btn.invite { background-color: #ffd700; }
-
-/* Animasi */
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-  }x dashed #ffa500;
-  border-radius: 10px;
-  padding: 10px 0;
-  margin: 20px 0;
-  position: relative;
-}
-
-.promo-text {
-  display: inline-block;
-  white-space: nowrap;
-  padding-left: 100%;
-  animation: marquee 15s linear infinite;
-  font-weight: bold;
-  color: #cc6600;
-  font-size: 1.1rem;
-}
-
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-}
+/* Testimonial */
 .testimonial-wrapper {
   display: flex;
   flex-direction: column;
@@ -215,7 +16,7 @@ img {
   margin-top: 20px;
 }
 
-.testimonial-item {
+.testimonial {
   background-color: #fff3d9;
   border-left: 5px solid #ffa500;
   padding: 10px 15px;
@@ -223,17 +24,31 @@ img {
   font-style: italic;
 }
 
+.testimonial-message {
+  margin: 0;
+}
+
+.testimonial-name {
+  margin: 5px 0 0;
+  text-align: right;
+  font-weight: bold;
+  font-style: normal;
+}
+
 .testimonial-form {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
-.testimonial-form input {
-  flex: 1;
+.testimonial-form input,
+.testimonial-form textarea {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .testimonial-form button {
@@ -243,10 +58,4 @@ img {
   border-radius: 8px;
   color: white;
   cursor: pointer;
-}
-.testimonial-form textarea {
-  flex: 2;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
 }
