@@ -137,3 +137,8 @@ document.getElementById('orderForm').addEventListener('submit', (event) => {
   event.preventDefault();
   submitOrder();
 });
+<script>
+  function toggleMenu() {
+    document.querySelector('.floating-menu').classList.toggle('show');
+  }
+</script>
