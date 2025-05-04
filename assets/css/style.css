@@ -59,3 +59,63 @@ h2 {
   color: white;
   cursor: pointer;
 }
+.floating-menu {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.menu-items {
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.floating-menu.show .menu-items {
+  display: flex;
+  animation: slideUp 0.3s ease;
+}
+
+.main-btn {
+  background-color: #ff80ab;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.main-btn:hover {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.float-btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.float-btn.whatsapp { background-color: #25d366; }
+.float-btn.invite { background-color: #ffd700; color: #000; }
+.float-btn.shopee { background-color: #ff5722; }
+.float-btn.maxim { background-color: #fff600; color: #000; }
+.float-btn.gofood { background-color: #ff2e2e; }
+.float-btn.grabfood { background-color: #00c853; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
