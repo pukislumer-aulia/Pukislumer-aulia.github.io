@@ -83,57 +83,6 @@ img {
   max-width: 100%;
   display: block;
 }
-.floating-menu {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 9999;
-}
-
-.main-btn {
-  background-color: #25d366;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 55px;
-  height: 55px;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-.menu-items {
-  display: none;
-  flex-direction: column;
-  margin-bottom: 10px;
-  align-items: flex-end;
-  gap: 10px;
-}
-
-.floating-menu.show .menu-items {
-  display: flex;
-}
-
-.float-btn {
-  background-color: #25d366;
-  color: white;
-  padding: 10px;
-  border-radius: 50%;
-  text-decoration: none;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
-
-.float-btn.shopee { background-color: #ee4d2d; }
-.float-btn.maxim { background-color: #ffc107; color: #000; }
-.float-btn.gofood { background-color: #d72323; }
-.float-btn.grabfood { background-color: #00b14f; }
-.float-btn.invite { background-color: #007bff; }
 
 .social-follow {
   margin-top: 10px;
@@ -158,7 +107,79 @@ img {
 .promo-marquee {
   overflow: hidden;
   background-color: #fff3d1;
-  border: 2px dashed #ffa500;
+  border: 2p.floating-menu {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.main-btn {
+  background-color: #ff80ab; /* pink manis */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.main-btn:hover {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.menu-items {
+  display: none;
+  flex-direction: column;
+  margin-bottom: 10px;
+  align-items: flex-end;
+  gap: 12px;
+  animation: slideUp 0.3s ease forwards;
+}
+
+.floating-menu.show .menu-items {
+  display: flex;
+}
+
+.float-btn {
+  background-color: #ffd6e8; /* pastel pink */
+  color: #444;
+  padding: 12px;
+  border-radius: 50%;
+  text-decoration: none;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.float-btn:hover {
+  background-color: #ffc1dc;
+  transform: scale(1.1);
+}
+
+/* Warna khusus */
+.float-btn.shopee { background-color: #ffe0cc; }
+.float-btn.maxim { background-color: #fff6a9; color: #000; }
+.float-btn.gofood { background-color: #ffd1d1; }
+.float-btn.grabfood { background-color: #c7f5d3; }
+.float-btn.invite { background-color: #cce5ff; }
+
+/* Animasi */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+  }x dashed #ffa500;
   border-radius: 10px;
   padding: 10px 0;
   margin: 20px 0;
