@@ -353,22 +353,30 @@
 </div>
   <script src="assets/js/testimoni.js"></script>
   <!-- Tombol Utama -->
+<!-- Floating Menu -->
 <div class="floating-menu">
   <button class="main-btn" onclick="toggleMenu()">
     <i class="fas fa-plus"></i>
   </button>
 
   <div class="menu-items">
-    <div class="menu-items">
     <a href="https://wa.me/6281296668670" class="float-btn whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
     <a href="https://shopee.co.id/" class="float-btn shopee" target="_blank"><i class="fas fa-store"></i></a>
     <a href="https://food.maximapp.net/" class="float-btn maxim" target="_blank"><i class="fas fa-motorcycle"></i></a>
     <a href="https://gofood.co.id/" class="float-btn gofood" target="_blank"><i class="fas fa-utensils"></i></a>
     <a href="https://food.grab.com/" class="float-btn grabfood" target="_blank"><i class="fas fa-hamburger"></i></a>
     <a href="#" onclick="navigator.share({text: 'Coba Pukis Lumer Aulia!', url: window.location.href})" class="float-btn invite"><i class="fas fa-share-alt"></i></a>
-    </div><!-- tombol-tombol lainnya di sini -->
+  </div>
 </div>
+
 <!-- Font Awesome -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<!-- Script Toggle -->
+<script>
+  function toggleMenu() {
+    document.querySelector('.floating-menu').classList.toggle('show');
+  }
+</script>
 </body>
 </html>
