@@ -9,55 +9,53 @@ h2 {
 }
 
 /* Testimonial */
-.testimonial-wrapper {
+#form-testimoni {
+  background-color: #fff8f0;
+  padding: 30px;
+  text-align: center;
+  font-family: sans-serif;
+}
+form {
+  max-width: 500px;
+  margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
 }
-
-.testimonial {
-  background-color: #fff3d9;
-  border-left: 5px solid #ffa500;
-  padding: 10px 15px;
-  border-radius: 10px;
-  font-style: italic;
-}
-
-.testimonial-message {
-  margin: 0;
-}
-
-.testimonial-name {
-  margin: 5px 0 0;
-  text-align: right;
-  font-weight: bold;
-  font-style: normal;
-}
-
-.testimonial-form {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.testimonial-form input,
-.testimonial-form textarea {
+input, textarea {
+  margin: 10px 0;
   padding: 10px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  width: 100%;
-  box-sizing: border-box;
+  font-size: 1em;
 }
-
-.testimonial-form button {
-  background-color: #ff9900;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
+button {
+  background-color: #ffb347;
   color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
+}
+button:hover {
+  background-color: #ff9f1c;
+}
+#daftarTestimoni {
+  margin-top: 40px;
+}
+#listTestimoni {
+  list-style-type: none;
+  padding: 0;
+}
+#listTestimoni li {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 15px;
+  margin: 10px auto;
+  max-width: 500px;
+  border-radius: 8px;
+  text-align: left;
+}
 }
 .floating-menu {
   position: fixed;
