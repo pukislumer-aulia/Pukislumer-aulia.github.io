@@ -142,3 +142,21 @@ document.getElementById('orderForm').addEventListener('submit', (event) => {
     document.querySelector('.floating-menu').classList.toggle('show');
   }
 </script>
+
+
+<script>
+  document.getElementById("testimoniForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const nama = document.getElementById("nama").value;
+    const pesan = document.getElementById("pesan").value;
+
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${nama}</strong><br>"${pesan}"`;
+
+    document.getElementById("listTestimoni").appendChild(li);
+
+    // Reset form
+    document.getElementById("testimoniForm").reset();
+  });
+</script>
