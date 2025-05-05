@@ -219,13 +219,26 @@
     </div>
   </section>
 
-  <div class="floating-buttons">
-    <a href="https://wa.me/6281296668670" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
-    <a href="#" class="float-btn invite"><i class="fas fa-user-plus"></i> Undang Teman</a>
-    <a href="https://shopee.co.id" class="float-btn shopee"><i class="fab fa-shopify"></i> Shopee</a>
-    <a href="https://food.maxim.com" class="float-btn maxim"><i class="fas fa-motorcycle"></i> Maxim</a>
-    <a href="https://gofood.co.id" class="float-btn gofood"><i class="fas fa-utensils"></i> GoFood</a>
-    <a href="https://grab.com/id/food" class="float-btn grabfood"><i class="fas fa-hamburger"></i> GrabFood</a>
-  </div>
+  <<!-- Floating Menu -->
+<div class="floating-menu" id="floatingMenu">
+  <a href="https://wa.me/1234567890" class="float-btn whatsapp">WhatsApp</a>
+  <a href="#" class="float-btn invite">Undang Teman</a>
+  <a href="#" class="float-btn shopee">Shopee</a>
+  <a href="#" class="float-btn maxim">Maxim</a>
+  <a href="#" class="float-btn gofood">GoFood</a>
+  <a href="#" class="float-btn grabfood">GrabFood</a>
+</div>
+
+<!-- Tombol Toggle -->
+<button class="toggle-btn" onclick="toggleMenu(this)">+</button>
+
+<!-- Script -->
+<script>
+  function toggleMenu(btn) {
+    const menu = document.getElementById("floatingMenu");
+    menu.classList.toggle("hidden");
+    btn.classList.toggle("rotated");
+  }
+</script>
 </body>
 </html>
