@@ -218,7 +218,42 @@
       <ul id="listTestimoni"></ul>
     </div>
   </section>
+<script>
+  // Daftar testimoni palsu
+  const testimoniList = [
+    {
+      nama: "Dewi R., Ibu Rumah Tangga",
+      pesan: "Pukisnya lembut banget, lumer di mulut! Anak-anak sampai rebutan tiap beli."
+    },
+    {
+      nama: "Andre T., Pegawai Kantoran",
+      pesan: "Rasa kejunya mantap! Manisnya pas, cocok buat teman ngopi sore."
+    },
+    {
+      nama: "Sari M., Mahasiswa",
+      pesan: "Baru pertama coba langsung ketagihan. Isiannya melimpah, teksturnya empuk!"
+    },
+    {
+      nama: "Yuni K., Pecinta Kuliner",
+      pesan: "Udah nyoba banyak pukis, tapi yang ini beda. Lumer banget dan nggak bikin enek."
+    },
+    {
+      nama: "Dian F., Pelanggan Setia",
+      pesan: "Setiap buka pre-order, pasti cepet habis. Rekomendasi banget buat oleh-oleh!"
+    }
+  ];
 
+  // Tampilkan testimoni palsu ke dalam list
+  const ul = document.getElementById("listTestimoni");
+
+  if (ul) {
+    testimoniList.forEach(({ nama, pesan }) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${nama}</strong><br>${pesan}`;
+      ul.appendChild(li);
+    });
+  }
+</script>
   <<!-- Floating Menu -->
 <div class="floating-menu" id="floatingMenu">
   <a href="https://wa.me/1234567890" class="float-btn whatsapp">WhatsApp</a>
