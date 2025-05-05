@@ -1,23 +1,26 @@
+/* Umum */
 body {
   font-family: sans-serif;
-  font-size: 1.05em; /* Tambahan: memperbesar ukuran font */
   padding: 20px;
   background: #fff8e1;
+  font-size: 1.05rem;
+  line-height: 1.6;
 }
 
-h2 {
+h1, h2, h3 {
   color: #ff9900;
+  text-align: center;
 }
 
-/* Ukuran gambar tidak melebihi layar */
+/* Gambar Responsif */
 .responsive-img {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: auto;
+  margin: 0 auto 10px;
 }
 
-/* Testimonial */
+/* Testimoni */
 #form-testimoni {
   background-color: #fff8f0;
   padding: 30px;
@@ -48,6 +51,7 @@ button {
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  transition: background-color 0.3s;
 }
 
 button:hover {
@@ -71,60 +75,6 @@ button:hover {
   max-width: 500px;
   border-radius: 8px;
   text-align: left;
-}
-
-/* Floating Buttons Menu */
-.floating-menu {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
-  opacity: 0.2;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.floating-menu:hover {
-  opacity: 1;
-}
-
-.float-btn {
-  padding: 10px 14px;
-  border-radius: 8px;
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Khusus platform */
-.float-btn.whatsapp {
-  background-color: #25d366;
-}
-
-.float-btn.invite {
-  background-color: #ffd700;
-  color: #000;
-}
-
-.float-btn.shopee {
-  background-color: #ff5722;
-}
-
-.float-btn.maxim {
-  background-color: #fff600;
-  color: #000;
-}
-
-.float-btn.gofood {
-  background-color: #ff2e2e;
-}
-
-.float-btn.grabfood {
-  background-color: #00c853;
 }
 
 /* Promo teks berjalan */
@@ -153,5 +103,85 @@ button:hover {
   }
   100% {
     transform: translateX(-100%);
+  }
+}
+
+/* Floating Buttons Menu */
+.floating-menu {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  opacity: 0.3;
+  transition: opacity 0.4s ease;
+}
+
+.floating-menu:hover {
+  opacity: 1;
+}
+
+.float-btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Warna Tombol */
+.float-btn.whatsapp {
+  background-color: #25d366;
+}
+
+.float-btn.invite {
+  background-color: #ffd700;
+  color: #000;
+}
+
+.float-btn.shopee {
+  background-color: #ff5722;
+}
+
+.float-btn.maxim {
+  background-color: #fff600;
+  color: #000;
+}
+
+.float-btn.gofood {
+  background-color: #ff2e2e;
+}
+
+.float-btn.grabfood {
+  background-color: #00c853;
+}
+
+/* Responsive Mobile */
+@media screen and (max-width: 600px) {
+  body {
+    padding: 10px;
+    font-size: 1.1rem;
+  }
+
+  form, #listTestimoni li {
+    width: 100%;
+  }
+
+  .floating-menu {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .float-btn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .promo-running-text p {
+    font-size: 1em;
   }
 }
