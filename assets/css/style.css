@@ -1,11 +1,20 @@
 body {
   font-family: sans-serif;
+  font-size: 1.05em; /* Tambahan: memperbesar ukuran font */
   padding: 20px;
   background: #fff8e1;
 }
 
 h2 {
   color: #ff9900;
+}
+
+/* Ukuran gambar tidak melebihi layar */
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
 }
 
 /* Testimonial */
@@ -68,19 +77,18 @@ button:hover {
 .floating-menu {
   position: fixed;
   right: 20px;
-  bottom: 80px; /* naik agar tidak tumpuk dengan tombol toggle */
+  bottom: 20px;
   z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  opacity: 0.2;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.floating-menu.hidden {
-  opacity: 0;
-  transform: translateY(20px);
-  pointer-events: none;
+.floating-menu:hover {
+  opacity: 1;
 }
 
 .float-btn {
@@ -92,6 +100,7 @@ button:hover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Khusus platform */
 .float-btn.whatsapp {
   background-color: #25d366;
 }
@@ -145,25 +154,4 @@ button:hover {
   100% {
     transform: translateX(-100%);
   }
-}
-
-/* Toggle button */
-.toggle-btn {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  background-color: #ffb347;
-  color: #fff;
-  border: none;
-  padding: 14px 16px;
-  border-radius: 50%;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transition: transform 0.4s ease;
-  z-index: 10000;
-}
-
-.toggle-btn.rotated {
-  transform: rotate(45deg);
 }
