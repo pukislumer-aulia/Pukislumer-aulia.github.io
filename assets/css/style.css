@@ -64,18 +64,42 @@ button:hover {
   text-align: left;
 }
 
-/* Floating Buttons Menu */
+/* Floating Toggle Button */
+.floating-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #ff9900;
+  color: white;
+  padding: 14px;
+  border-radius: 50%;
+  z-index: 10000;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.floating-toggle i {
+  font-size: 20px;
+}
+
+/* Floating Menu */
 .floating-menu {
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  bottom: 80px;
   z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
+  transition: opacity 0.3s ease;
 }
 
+.floating-menu.hidden {
+  display: none;
+}
+
+/* Floating Buttons */
 .float-btn {
   padding: 10px 14px;
   border-radius: 8px;
@@ -85,7 +109,6 @@ button:hover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Khusus platform */
 .float-btn.whatsapp {
   background-color: #25d366;
 }
