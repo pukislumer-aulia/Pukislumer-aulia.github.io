@@ -13,21 +13,24 @@ h2 {
   background-color: #fff8f0;
   padding: 30px;
   text-align: center;
-  font-family: sans-serif;
 }
+
 form {
   max-width: 500px;
   margin: auto;
   display: flex;
   flex-direction: column;
 }
-input, textarea {
+
+input,
+textarea {
   margin: 10px 0;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1em;
 }
+
 button {
   background-color: #ffb347;
   color: white;
@@ -37,16 +40,20 @@ button {
   cursor: pointer;
   font-weight: bold;
 }
+
 button:hover {
   background-color: #ff9f1c;
 }
+
 #daftarTestimoni {
   margin-top: 40px;
 }
+
 #listTestimoni {
   list-style-type: none;
   padding: 0;
 }
+
 #listTestimoni li {
   background: #fff;
   border: 1px solid #eee;
@@ -56,7 +63,8 @@ button:hover {
   border-radius: 8px;
   text-align: left;
 }
-}
+
+/* Floating Menu */
 .floating-menu {
   position: fixed;
   right: 20px;
@@ -89,7 +97,7 @@ button:hover {
   height: 60px;
   font-size: 28px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
 }
 
@@ -103,26 +111,53 @@ button:hover {
   color: #fff;
   text-decoration: none;
   font-size: 14px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.float-btn.whatsapp { background-color: #25d366; }
-.float-btn.invite { background-color: #ffd700; color: #000; }
-.float-btn.shopee { background-color: #ff5722; }
-.float-btn.maxim { background-color: #fff600; color: #000; }
-.float-btn.gofood { background-color: #ff2e2e; }
-.float-btn.grabfood { background-color: #00c853; }
+.float-btn.whatsapp {
+  background-color: #25d366;
+}
+
+.float-btn.invite {
+  background-color: #ffd700;
+  color: #000;
+}
+
+.float-btn.shopee {
+  background-color: #ff5722;
+}
+
+.float-btn.maxim {
+  background-color: #fff600;
+  color: #000;
+}
+
+.float-btn.gofood {
+  background-color: #ff2e2e;
+}
+
+.float-btn.grabfood {
+  background-color: #00c853;
+}
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .responsive-img {
   max-width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
-  }
+}
+
 .promo-running-text {
   width: 100%;
   overflow: hidden;
