@@ -9,8 +9,6 @@
   <link rel="stylesheet" href="assets/css/form-style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
   <style>
-    
-  </style>
 </head>
 <body>
   <!-- Promo Kupon -->
@@ -55,14 +53,14 @@
     <li>100% bahan premium tanpa pengawet.</li>
     <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
   </ul>  <h2>Galeri</h2>
-  <div class="gallery">
+  <div class="promo-gallery">
     <img src="assets/images/pukis1.jpg" alt="Pukis 1" />
     <img src="assets/images/pukis2.jpg" alt="Pukis 2" />
     <img src="assets/images/pukis3.jpg" alt="Pukis 3" />
     <img src="assets/images/pukis4.jpg" alt="Pukis 4" />
     <img src="assets/images/pukis5.jpg" alt="Pukis 5" />
-  </div>  <div class="form-section">
-    
+    class="responsive-img">
+   </div> 
   <h2>Pemesanan Pukis Lumer Aulia</h2>
 
     <form id="formPukis">
@@ -216,7 +214,20 @@
   </script>
    <script src="assets/js/testimoni.js"></script>
   <!-- Tombol Utama -->
+<section id="form-testimoni">
+  <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
+  <form id="testimoniForm">
+    <input type="text" id="nama" placeholder="Nama Kamu" required>
+    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>
 
+  <div id="daftarTestimoni">
+    <h3>Testimoni Pelanggan:</h3>
+    <ul id="listTestimoni"></ul>
+  </div>
+</section>
+      
   </div>  <!-- Tombol Aksi Mengambang -->  <div class="floating-buttons">
     <a href="https://wa.me/6281296668670" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
     <a href="#" class="float-btn invite"><i class="fas fa-user-plus"></i> Undang Teman</a>
