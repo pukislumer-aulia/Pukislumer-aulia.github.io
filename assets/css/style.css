@@ -185,3 +185,18 @@ button:hover {
     font-size: 1em;
   }
 }
+/* Tombol media sosial */
+.float-btn.facebook {
+  background-color: #3b5998;
+}
+
+.float-btn.instagram {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, 
+              #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  color: white;
+}
+
+.float-btn.tiktok {
+  background-color: #010101;
+  color: #fff;
+}
