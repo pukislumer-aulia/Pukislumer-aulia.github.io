@@ -160,3 +160,13 @@ document.getElementById('orderForm').addEventListener('submit', (event) => {
     document.getElementById("testimoniForm").reset();
   });
 </script>
+
+<script>
+  function toggleMenu(btn) {
+    const menu = document.getElementById("floatingMenu");
+    menu.classList.toggle("show");
+
+    // Ubah ikon tombol (+ / ×)
+    btn.textContent = menu.classList.contains("show") ? "×" : "+";
+  }
+</script>
