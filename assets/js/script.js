@@ -170,3 +170,17 @@ document.getElementById('orderForm').addEventListener('submit', (event) => {
     btn.textContent = menu.classList.contains("show") ? "×" : "+";
   }
 </script>
+
+// Simpan ke database
+const orderRef = database.ref("pesanan").push();
+orderRef.set({
+  nama,
+  jenis,
+  topping,
+  isiBox: isi,
+  jumlahBox: jumlah,
+  rasa: single,
+  taburan: double,
+  totalHarga: totalText,
+  waktu: new Date().toISOString()
+});
