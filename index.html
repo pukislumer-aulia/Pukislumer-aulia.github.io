@@ -5,13 +5,196 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pukis Lumer Aulia</title>
   <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/form-style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
-</head>
+  <style>
+    /* Umum */
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #fff8e1;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
 
+    h1, h2, h3 {
+      color: #ff9900;
+      text-align: center;
+    }
+
+    /* Gambar Responsif */
+    .responsive-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    /* Testimoni */
+    #form-testimoni {
+      background-color: #fff8f0;
+      padding: 30px;
+      text-align: center;
+    }
+
+    form {
+      max-width: 500px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    input,
+    textarea {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    button {
+      background-color: #ffb347;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff9f1c;
+    }
+
+    #daftarTestimoni {
+      margin-top: 40px;
+    }
+
+    #listTestimoni {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #listTestimoni li {
+      background: #fff;
+      border: 1px solid #eee;
+      padding: 15px;
+      margin: 10px auto;
+      max-width: 500px;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    /* Promo teks berjalan */
+    .promo-running-text {
+      width: 100%;
+      overflow: hidden;
+      background-color: #fff4e6;
+      border-top: 2px solid red;
+      border-bottom: 2px solid red;
+      padding: 10px 0;
+      position: relative;
+    }
+
+    .promo-running-text p {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-left 15s linear infinite;
+      font-weight: bold;
+      color: red;
+      font-size: 1.2em;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Floating Buttons Menu */
+    .floating-menu {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 9999;
+    }
+
+    .floating-menu.show {
+      display: flex;
+    }
+
+    .float-btn {
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .float-btn.whatsapp { background-color: #25d366; }
+    .float-btn.invite { background-color: #ffd700; color: #000; }
+    .float-btn.shopee { background-color: #ff5722; }
+    .float-btn.maxim { background-color: #fff600; color: #000; }
+    .float-btn.gofood { background-color: #ff2e2e; }
+    .float-btn.grabfood { background-color: #00c853; }
+    .float-btn.facebook { background-color: #3b5998; }
+    .float-btn.instagram {
+      background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+      color: white;
+    }
+    .float-btn.tiktok { background-color: #010101; color: #fff; }
+
+    .toggle-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 24px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 50%;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .toggle-btn.rotated {
+      transform: rotate(45deg);
+      transition: transform 0.3s ease;
+    }
+
+    /* Responsive Mobile */
+    @media screen and (max-width: 600px) {
+      body {
+        padding: 10px;
+        font-size: 1.1rem;
+      }
+
+      form, #listTestimoni li {
+        width: 100%;
+      }
+
+      .floating-menu {
+        right: 10px;
+        bottom: 10px;
+      }
+
+      .float-btn {
+        font-size: 12px;
+        padding: 8px 12px;
+      }
+
+      .promo-running-text p {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
 <body>
   <!-- PROMO -->
   <div class="promo-image">
@@ -63,10 +246,6 @@
     <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
   </ul>
 
-  <!-- FORM PEMESANAN -->
-  <h2>Pemesanan Pukis Lumer Aulia</h2>
-  <!-- form dan script harga/topping seperti yang Anda kirim sudah OK -->
-
   <!-- FORMULIR TESTIMONI -->
   <section id="form-testimoni">
     <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
@@ -85,32 +264,22 @@
   <!-- FLOATING MENU -->
   <button class="toggle-btn" onclick="toggleMenu(this)">+</button>
   <div class="floating-menu" id="floatingMenu">
-    <a href="https://wa.me/6281296668670" class="float-btn whatsapp">
-      <i class="fab fa-whatsapp"></i> WhatsApp
-    </a>
-    <a href="https://wa.me/?text=Hai!%20Coba%20cek%20Pukis%20Lumer%20Aulia%20di%20https%3A%2F%2Fpukislumer-aulia.github.io%2F" target="_blank" class="float-btn invite">
-      <i class="fas fa-user-friends"></i> Bagikan ke Teman
-    </a>
+    <a href="https://wa.me/6281296668670" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <a href="https://wa.me/?text=Hai!%20Coba%20cek%20Pukis%20Lumer%20Aulia%20di%20https%3A%2F%2Fpukislumer-aulia.github.io%2F" target="_blank" class="float-btn invite"><i class="fas fa-user-friends"></i> Bagikan ke Teman</a>
     <a href="#" class="float-btn shopee"><i class="fas fa-store"></i> Shopee</a>
     <a href="#" class="float-btn maxim"><i class="fas fa-taxi"></i> Maxim</a>
     <a href="#" class="float-btn gofood"><i class="fas fa-utensils"></i> GoFood</a>
     <a href="#" class="float-btn grabfood"><i class="fas fa-motorcycle"></i> GrabFood</a>
-    <a href="https://facebook.com/pukislumer.aulia" target="_blank" class="float-btn facebook">
-      <i class="fab fa-facebook-f"></i> Facebook
-    </a>
-    <a href="https://instagram.com/pukis.lumer_aulia" target="_blank" class="float-btn instagram">
-      <i class="fab fa-instagram"></i> Instagram
-    </a>
-    <a href="https://tiktok.com/@pukislumer.aulia" target="_blank" class="float-btn tiktok">
-      <i class="fab fa-tiktok"></i> TikTok
-    </a>
+    <a href="https://facebook.com/pukislumer.aulia" target="_blank" class="float-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
+    <a href="https://instagram.com/pukis.lumer_aulia" target="_blank" class="float-btn instagram"><i class="fab fa-instagram"></i> Instagram</a>
+    <a href="https://tiktok.com/@pukislumer.aulia" target="_blank" class="float-btn tiktok"><i class="fab fa-tiktok"></i> TikTok</a>
   </div>
 
   <!-- SCRIPT FLOATING MENU -->
   <script>
     function toggleMenu(btn) {
       const menu = document.getElementById("floatingMenu");
-      menu.classList.toggle("hidden");
+      menu.classList.toggle("show");
       btn.classList.toggle("rotated");
     }
   </script>
