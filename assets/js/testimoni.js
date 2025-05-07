@@ -49,3 +49,25 @@ function simpanKeLocalStorage(teks) {
   }
   }
 }
+document.getElementById("testimoniForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const nama = document.getElementById("nama").value.trim();
+  const pesan = document.getElementById("pesan").value.trim();
+
+  if (!nama || !pesan) {
+    alert("Lengkapi semua kolom testimoni.");
+    return;
+  }
+
+  // Simpan testimoni ke database
+  const testiRef = database.ref("testimoni").push();
+  testiRef.set({
+    nama,
+    pesan,
+    waktu: new Date().toISOString()
+  });
+
+  alert("Testimoni berhasil dikirim!");
+  this.reset();
+});
