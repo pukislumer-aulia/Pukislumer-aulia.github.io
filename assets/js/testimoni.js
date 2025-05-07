@@ -1,6 +1,6 @@
-// Inisialisasi Firebase (pastikan ini di-load lebih dulu jika di file terpisah)
+// Inisialisasi Firebase (pastikan konfigurasi sudah benar)
 const firebaseConfig = {
-  // Ganti dengan config Firebase kamu
+  // Ganti dengan konfigurasi Firebase kamu
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -9,10 +9,8 @@ const database = firebase.database();
 document.addEventListener("DOMContentLoaded", () => {
   const testimonialList = document.getElementById("testimonialList");
 
-  // Cek apakah ada testimoni di localStorage
+  // Tampilkan testimoni dari localStorage (fake)
   const saved = JSON.parse(localStorage.getItem("testimoni")) || [];
-
-  // Jika belum ada, tampilkan testimoni fake/default
   if (saved.length === 0) {
     const defaultTestimoni = [
       "Kuenya lembut banget dan lumer di mulut!",
@@ -26,6 +24,18 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     saved.forEach((isi) => tambahKeHalaman(isi));
   }
+
+  // Ambil testimoni dari Firebase
+  const testiRef = database.ref("testimoni");
+  testiRef.once("value", (snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      const data = childSnapshot.val();
+      if (data.nama && data.pesan) {
+        const teks = `"${data.pesan}" - ${data.nama}`;
+        tambahKeHalaman(teks);
+      }
+    });
+  });
 });
 
 function tambahTestimoni() {
@@ -59,7 +69,7 @@ function hapusSemuaTestimoni() {
   }
 }
 
-// Event listener untuk form testimoni ke Firebase
+// Kirim testimoni baru ke Firebase
 document.getElementById("testimoniForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -71,7 +81,6 @@ document.getElementById("testimoniForm").addEventListener("submit", function (e)
     return;
   }
 
-  // Simpan testimoni ke Firebase
   const testiRef = database.ref("testimoni").push();
   testiRef.set({
     nama,
