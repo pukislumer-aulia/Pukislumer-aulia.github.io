@@ -1,119 +1,154 @@
-<!DOCTYPE html>  <html lang="id">  
-<head>  
-  <meta charset="UTF-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
-  <title>Pukis Lumer Aulia</title>  
-  <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />  
-  <link rel="stylesheet" href="assets/css/style.css" />  
-  <link rel="stylesheet" href="assets/css/form-style.css" />  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />  
-</head>  <body>  
-  <!-- PROMO -->  
-  <div class="promo-image">  
-    <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">  
-    <div class="promo-container">  
-      <img src="assets/images/gambar-kupon.jpg" alt="Kupon Promo" class="responsive-img">  
-    </div>  
-    <div class="promo-running-text">  
-      <p>  
-        Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!  
-        Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!  
-      </p>  
-    </div>  
-    <img src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img">  
-  </div>    <!-- KATA PEMBUKA -->    <h1>PUKIS LUMER AULIA</h1>  
-  <p style="color: #002147;">Assalamu'alaikum warahmatullahi wabarakatuh</p>  
-  <p style="color: #002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</p>  
-  <p style="color: #cc8e8e;">Padang Panjang Kota Kuliner – Serambi Mekkah.</p>  
-  <p style="color: #cc8e8e;">Sambangi Pasar Kuliner – jangan lupa mampir ke Pukis Lumer Aulia.</p>  
-  <p><strong style="color: #9370DB;">Jam Operasional:</strong> <span style="color: #9370DB;">16.00 – 23.59 WIB (selama persediaan ada)</span></p>  
-  <p><strong style="color: #6B8E23;">Best Seller:</strong> <span style="color: #6B8E23;">Double Topping Vanilla Oreo vs Cokelat Kacang</span></p>  
-  <p><strong style="color: #800020;">Lokasi:</strong> <span style="color: #800020;">Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</span></p>  
-  <p>Tersedia di Maxim Food, GrabFood, dan GoFood!</p>    <!-- GALERI -->    <h2>Galeri</h2>  
-  <div class="promo-gallery">  
-    <img src="assets/images/pukis1.jpg" class="responsive-img" alt="Pukis 1">  
-    <img src="assets/images/pukis2.jpg" class="responsive-img" alt="Pukis 2">  
-    <img src="assets/images/pukis3.jpg" class="responsive-img" alt="Pukis 3">  
-    <img src="assets/images/pukis4.jpg" class="responsive-img" alt="Pukis 4">  
-    <img src="assets/images/pukis5.jpg" class="responsive-img" alt="Pukis 5">  
-  </div>    <!-- ALASAN -->    <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>  
-  <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa luar biasa. Tersedia berbagai varian topping favorit semua umur!</p>    <h2>Fakta Unik Tentang Kami</h2>  
-  <ul style="color: #2E8B57;">  
-    <li>Resep adonan spesial keluarga sejak 2023!</li>  
-    <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>  
-    <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>  
-    <li>Lebih dari 10 varian topping siap setiap hari.</li>  
-    <li>100% bahan premium tanpa pengawet.</li>  
-    <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>  
-  </ul>    <!-- FORM PEMESANAN -->    <h2>Pemesanan Pukis Lumer Aulia</h2>  
-  <!-- form dan script harga/topping seperti yang Anda kirim sudah OK -->    <!-- FORMULIR TESTIMONI -->    <section id="form-testimoni">  
-    <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>  
-    <form id="testimoniForm">  
-      <input type="text" id="nama" placeholder="Nama Kamu" required>  
-      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>  
-      <button type="submit">Kirim Testimoni</button>  
-    </form>  <div id="daftarTestimoni">  
-  <h3>Testimoni:</h3>  
-  <ul id="listTestimoni"></ul>  
-</div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pukis Lumer Aulia</title>
+  <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/form-style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
+</head>
 
-  </section>    <!-- FLOATING MENU -->  <button class="toggle-btn" onclick="toggleMenu(this)">+</button>
+<body>
+  <!-- PROMO -->
+  <div class="promo-image">
+    <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
+    <div class="promo-container">
+      <img src="assets/images/gambar-kupon.jpg" alt="Kupon Promo" class="responsive-img">
+    </div>
+    <div class="promo-running-text">
+      <p>
+        Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!
+        Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!
+      </p>
+    </div>
+    <img src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img">
+  </div>
 
-  <div class="floating-menu" id="floatingMenu">  
-    <a href="https://wa.me/6281296668670" class="float-btn whatsapp">  
-      <i class="fab fa-whatsapp"></i> WhatsApp  
-    </a>  
-    <a href="https://wa.me/?text=Hai!%20Coba%20cek%20Pukis%20Lumer%20Aulia%20di%20https%3A%2F%2Fpukislumer-aulia.github.io%2F" target="_blank" class="float-btn invite">  
-      <i class="fas fa-user-friends"></i> Bagikan ke Teman  
-    </a>  
-    <a href="#" class="float-btn shopee"><i class="fas fa-store"></i> Shopee</a>  
-    <a href="#" class="float-btn maxim"><i class="fas fa-taxi"></i> Maxim</a>  
-    <a href="#" class="float-btn gofood"><i class="fas fa-utensils"></i> GoFood</a>  
-    <a href="#" class="float-btn grabfood"><i class="fas fa-motorcycle"></i> GrabFood</a>  
-    <a href="https://facebook.com/pukislumer.aulia" target="_blank" class="float-btn facebook">  
-      <i class="fab fa-facebook-f"></i> Facebook  
-    </a>  
-    <a href="https://instagram.com/pukis.lumer_aulia" target="_blank" class="float-btn instagram">  
-      <i class="fab fa-instagram"></i> Instagram  
-    </a>  
-    <a href="https://tiktok.com/@pukislumer.aulia" target="_blank" class="float-btn tiktok">  
-      <i class="fab fa-tiktok"></i> TikTok  
-    </a>  
-  </div>    <!-- SCRIPT FLOATING MENU -->    <script>  
-    function toggleMenu(btn) {  
-      const menu = document.getElementById("floatingMenu");  
-      menu.classList.toggle("hidden");  
-      btn.classList.toggle("rotated");  
-    }  
-  </script>    <!-- TESTIMONI PALSU -->    <script>  
-    const testimoniList = [  
-      { nama: "Dewi R., Ibu Rumah Tangga", pesan: "Pukisnya lembut banget, lumer di mulut!" },  
-      { nama: "Andre T., Pegawai Kantoran", pesan: "Rasa kejunya mantap! Cocok buat teman ngopi." },  
-      { nama: "Sari M., Mahasiswa", pesan: "Baru pertama coba langsung ketagihan." },  
-      { nama: "Yuni K., Pecinta Kuliner", pesan: "Udah nyoba banyak pukis, tapi yang ini beda." },  
-      { nama: "Dian F., Pelanggan Setia", pesan: "Setiap buka PO, pasti cepet habis. Rekomendasi!" }  
-    ];  
-    const ul = document.getElementById("listTestimoni");  
-    if (ul) testimoniList.forEach(({ nama, pesan }) => {  
-      const li = document.createElement("li");  
-      li.innerHTML = `<strong>${nama}</strong><br>${pesan}`;  
-      ul.appendChild(li);  
-    });  
-  </script>    <!-- FIREBASE -->    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js"></script>    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>    <script>  
-    const firebaseConfig = {  
-      apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",  
-      authDomain: "pukis-lumer-aulia.firebaseapp.com",  
-      projectId: "pukis-lumer-aulia",  
-      storageBucket: "pukis-lumer-aulia.appspot.com",  
-      messagingSenderId: "1059510074119",  
-      appId: "1:1059510074119:web:06b32f510a3d038324a3a2",  
-      measurementId: "G-NZY82GKPXS"  
-    };  
-    const app = firebase.initializeApp(firebaseConfig);  
-    const analytics = firebase.analytics();  
-    const database = firebase.database();  
-  </script>  
-</body>  
+  <!-- KATA PEMBUKA -->
+  <h1>PUKIS LUMER AULIA</h1>
+  <p style="color: #002147;">Assalamu'alaikum warahmatullahi wabarakatuh</p>
+  <p style="color: #002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</p>
+  <p style="color: #cc8e8e;">Padang Panjang Kota Kuliner – Serambi Mekkah.</p>
+  <p style="color: #cc8e8e;">Sambangi Pasar Kuliner – jangan lupa mampir ke Pukis Lumer Aulia.</p>
+  <p><strong style="color: #9370DB;">Jam Operasional:</strong> <span style="color: #9370DB;">16.00 – 23.59 WIB (selama persediaan ada)</span></p>
+  <p><strong style="color: #6B8E23;">Best Seller:</strong> <span style="color: #6B8E23;">Double Topping Vanilla Oreo vs Cokelat Kacang</span></p>
+  <p><strong style="color: #800020;">Lokasi:</strong> <span style="color: #800020;">Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</span></p>
+  <p>Tersedia di Maxim Food, GrabFood, dan GoFood!</p>
+
+  <!-- GALERI -->
+  <h2>Galeri</h2>
+  <div class="promo-gallery">
+    <img src="assets/images/pukis1.jpg" class="responsive-img" alt="Pukis 1">
+    <img src="assets/images/pukis2.jpg" class="responsive-img" alt="Pukis 2">
+    <img src="assets/images/pukis3.jpg" class="responsive-img" alt="Pukis 3">
+    <img src="assets/images/pukis4.jpg" class="responsive-img" alt="Pukis 4">
+    <img src="assets/images/pukis5.jpg" class="responsive-img" alt="Pukis 5">
+  </div>
+
+  <!-- ALASAN -->
+  <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
+  <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa luar biasa. Tersedia berbagai varian topping favorit semua umur!</p>
+
+  <h2>Fakta Unik Tentang Kami</h2>
+  <ul style="color: #2E8B57;">
+    <li>Resep adonan spesial keluarga sejak 2023!</li>
+    <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
+    <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
+    <li>Lebih dari 10 varian topping siap setiap hari.</li>
+    <li>100% bahan premium tanpa pengawet.</li>
+    <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
+  </ul>
+
+  <!-- FORM PEMESANAN -->
+  <h2>Pemesanan Pukis Lumer Aulia</h2>
+  <!-- form dan script harga/topping seperti yang Anda kirim sudah OK -->
+
+  <!-- FORMULIR TESTIMONI -->
+  <section id="form-testimoni">
+    <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
+    <form id="testimoniForm">
+      <input type="text" id="nama" placeholder="Nama Kamu" required>
+      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+      <button type="submit">Kirim Testimoni</button>
+    </form>
+
+    <div id="daftarTestimoni">
+      <h3>Testimoni:</h3>
+      <ul id="listTestimoni"></ul>
+    </div>
+  </section>
+
+  <!-- FLOATING MENU -->
+  <button class="toggle-btn" onclick="toggleMenu(this)">+</button>
+  <div class="floating-menu" id="floatingMenu">
+    <a href="https://wa.me/6281296668670" class="float-btn whatsapp">
+      <i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+    <a href="https://wa.me/?text=Hai!%20Coba%20cek%20Pukis%20Lumer%20Aulia%20di%20https%3A%2F%2Fpukislumer-aulia.github.io%2F" target="_blank" class="float-btn invite">
+      <i class="fas fa-user-friends"></i> Bagikan ke Teman
+    </a>
+    <a href="#" class="float-btn shopee"><i class="fas fa-store"></i> Shopee</a>
+    <a href="#" class="float-btn maxim"><i class="fas fa-taxi"></i> Maxim</a>
+    <a href="#" class="float-btn gofood"><i class="fas fa-utensils"></i> GoFood</a>
+    <a href="#" class="float-btn grabfood"><i class="fas fa-motorcycle"></i> GrabFood</a>
+    <a href="https://facebook.com/pukislumer.aulia" target="_blank" class="float-btn facebook">
+      <i class="fab fa-facebook-f"></i> Facebook
+    </a>
+    <a href="https://instagram.com/pukis.lumer_aulia" target="_blank" class="float-btn instagram">
+      <i class="fab fa-instagram"></i> Instagram
+    </a>
+    <a href="https://tiktok.com/@pukislumer.aulia" target="_blank" class="float-btn tiktok">
+      <i class="fab fa-tiktok"></i> TikTok
+    </a>
+  </div>
+
+  <!-- SCRIPT FLOATING MENU -->
+  <script>
+    function toggleMenu(btn) {
+      const menu = document.getElementById("floatingMenu");
+      menu.classList.toggle("hidden");
+      btn.classList.toggle("rotated");
+    }
+  </script>
+
+  <!-- TESTIMONI PALSU -->
+  <script>
+    const testimoniList = [
+      { nama: "Dewi R., Ibu Rumah Tangga", pesan: "Pukisnya lembut banget, lumer di mulut!" },
+      { nama: "Andre T., Pegawai Kantoran", pesan: "Rasa kejunya mantap! Cocok buat teman ngopi." },
+      { nama: "Sari M., Mahasiswa", pesan: "Baru pertama coba langsung ketagihan." },
+      { nama: "Yuni K., Pecinta Kuliner", pesan: "Udah nyoba banyak pukis, tapi yang ini beda." },
+      { nama: "Dian F., Pelanggan Setia", pesan: "Setiap buka PO, pasti cepet habis. Rekomendasi!" }
+    ];
+    const ul = document.getElementById("listTestimoni");
+    if (ul) testimoniList.forEach(({ nama, pesan }) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${nama}</strong><br>${pesan}`;
+      ul.appendChild(li);
+    });
+  </script>
+
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
+      authDomain: "pukis-lumer-aulia.firebaseapp.com",
+      projectId: "pukis-lumer-aulia",
+      storageBucket: "pukis-lumer-aulia.appspot.com",
+      messagingSenderId: "1059510074119",
+      appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
+      measurementId: "G-NZY82GKPXS"
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    const analytics = firebase.analytics();
+    const database = firebase.database();
+  </script>
+</body>
 </html>
