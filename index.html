@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="assets/css/form-style.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
+  <!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js"></script>
+<!-- Kalau nanti butuh database, aktifkan baris di bawah -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
 </head>
 
 <body>
@@ -297,5 +302,22 @@
     btn.classList.toggle("rotated");
   }
 </script>
+
+  <script>
+  // Konfigurasi Firebase kamu
+  const firebaseConfig = {
+    apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
+    authDomain: "pukis-lumer-aulia.firebaseapp.com",
+    projectId: "pukis-lumer-aulia",
+    storageBucket: "pukis-lumer-aulia.firebasestorage.app",
+    messagingSenderId: "1059510074119",
+    appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
+    measurementId: "G-NZY82GKPXS"
+  };
+
+  // Inisialisasi Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const analytics = firebase.analytics();
+  </script>
 </body>
 </html>
