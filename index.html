@@ -7,15 +7,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />  
   <link rel="stylesheet" href="assets/css/style.css" />  
   <link rel="stylesheet" href="assets/css/form-style.css" />  
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
   <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />  
-  <!-- Firebase CDN -->  
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>  
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js"></script>  
-<!-- Kalau nanti butuh database, aktifkan baris di bawah -->  
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>  
 </head>  <body>  
-  <!-- Promo Kupon -->  
+  <!-- PROMO -->  
   <div class="promo-image">  
     <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">  
     <div class="promo-container">  
@@ -28,7 +23,7 @@
       </p>  
     </div>  
     <img src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img">  
-  </div>    <h1>PUKIS LUMER AULIA</h1>  
+  </div>    <!-- KATA PEMBUKA -->    <h1>PUKIS LUMER AULIA</h1>  
   <p style="color: #002147;">Assalamu'alaikum warahmatullahi wabarakatuh</p>  
   <p style="color: #002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</p>  
   <p style="color: #cc8e8e;">Padang Panjang Kota Kuliner – Serambi Mekkah.</p>  
@@ -36,7 +31,14 @@
   <p><strong style="color: #9370DB;">Jam Operasional:</strong> <span style="color: #9370DB;">16.00 – 23.59 WIB (selama persediaan ada)</span></p>  
   <p><strong style="color: #6B8E23;">Best Seller:</strong> <span style="color: #6B8E23;">Double Topping Vanilla Oreo vs Cokelat Kacang</span></p>  
   <p><strong style="color: #800020;">Lokasi:</strong> <span style="color: #800020;">Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</span></p>  
-  <p>Tersedia di Maxim Food, GrabFood, dan GoFood!</p>    <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>  
+  <p>Tersedia di Maxim Food, GrabFood, dan GoFood!</p>    <!-- GALERI -->    <h2>Galeri</h2>  
+  <div class="promo-gallery">  
+    <img src="assets/images/pukis1.jpg" class="responsive-img" alt="Pukis 1">  
+    <img src="assets/images/pukis2.jpg" class="responsive-img" alt="Pukis 2">  
+    <img src="assets/images/pukis3.jpg" class="responsive-img" alt="Pukis 3">  
+    <img src="assets/images/pukis4.jpg" class="responsive-img" alt="Pukis 4">  
+    <img src="assets/images/pukis5.jpg" class="responsive-img" alt="Pukis 5">  
+  </div>    <!-- ALASAN -->    <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>  
   <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa luar biasa. Tersedia berbagai varian topping favorit semua umur!</p>    <h2>Fakta Unik Tentang Kami</h2>  
   <ul style="color: #2E8B57;">  
     <li>Resep adonan spesial keluarga sejak 2023!</li>  
@@ -45,151 +47,8 @@
     <li>Lebih dari 10 varian topping siap setiap hari.</li>  
     <li>100% bahan premium tanpa pengawet.</li>  
     <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>  
-  </ul>    <h2>Galeri</h2>  
-  <div class="promo-gallery">  
-    <img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img" />  
-    <img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img" />  
-    <img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img" />  
-    <img src="assets/images/pukis4.jpg" alt="Pukis 4" class="responsive-img" />  
-    <img src="assets/images/pukis5.jpg" alt="Pukis 5" class="responsive-img" />  
-  </div>    <h2>Pemesanan Pukis Lumer Aulia</h2>  
-  <form id="formPukis">  
-    <div class="form-group">  
-      <label for="namaPemesan">Nama Pemesan:</label>  
-      <input type="text" id="namaPemesan" placeholder="Nama Anda" required>  
-    </div>  <div class="form-group">  
-  <label>Jenis Pukis:</label>  
-  <label><input type="radio" name="jenis" value="original" checked onchange="hitungHarga()"> Original</label>  
-  <label><input type="radio" name="jenis" value="pandan" onchange="hitungHarga()"> Pandan</label>  
-</div>  
-
-<div class="form-group">  
-  <label>Topping:</label>  
-  <label><input type="radio" name="topping" value="non" checked onchange="ubahTopping(); hitungHarga()"> Non Topping</label>  
-  <label><input type="radio" name="topping" value="single" onchange="ubahTopping(); hitungHarga()"> Single Topping</label>  
-  <label><input type="radio" name="topping" value="double" onchange="ubahTopping(); hitungHarga()"> Double Topping</label>  
-</div>  
-
-<div class="form-group" id="singleToppingGroup" style="display: none;">  
-  <label>Pilih Rasa (Single):</label>  
-  <div class="topping-group">  
-    <label><input type="checkbox" class="singleTopping" value="Coklat"> Coklat</label>  
-    <label><input type="checkbox" class="singleTopping" value="Tiramisu"> Tiramisu</label>  
-    <label><input type="checkbox" class="singleTopping" value="Stroberi"> Stroberi</label>  
-    <label><input type="checkbox" class="singleTopping" value="Cappucino"> Cappucino</label>  
-    <label><input type="checkbox" class="singleTopping" value="Vanilla"> Vanilla</label>  
-    <label><input type="checkbox" class="singleTopping" value="Taro"> Taro</label>  
-    <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>  
-  </div>  
-</div>  
-
-<div class="form-group" id="doubleToppingGroup" style="display: none;">  
-  <label>Pilih Taburan (Double):</label>  
-  <div class="topping-group">  
-    <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>  
-    <label><input type="checkbox" class="doubleTopping" value="Keju"> Keju</label>  
-    <label><input type="checkbox" class="doubleTopping" value="Kacang"> Kacang</label>  
-    <label><input type="checkbox" class="doubleTopping" value="Choco Chip"> Choco Chip</label>  
-    <label><input type="checkbox" class="doubleTopping" value="Oreo"> Oreo</label>  
-  </div>  
-</div>  
-
-<div class="form-group">  
-  <label for="isiBox">Isi per Box:</label>  
-  <select id="isiBox" onchange="hitungHarga()">  
-    <option value="5">5 pcs</option>  
-    <option value="10">10 pcs</option>  
-  </select>  
-</div>  
-
-<div class="form-group">  
-  <label for="jumlahBox">Jumlah Box:</label>  
-  <input type="number" id="jumlahBox" value="1" min="1" onchange="hitungHarga()">  
-</div>  
-
-<div class="form-group">  
-  <p>Total Harga: <span id="totalHarga">Rp0</span></p>  
-</div>  
-
-<button type="submit">Kirim Pesanan via WhatsApp</button>
-
-  </form>    <!-- Floating message -->    <div class="floating-message">  
-    Pesan Sekarang!  
-  </div>    <script src="assets/js/testimoni.js"></script>    <script>  
-    const hargaPukis = {  
-      original: { non: {5: 10000, 10: 18000}, single: {5: 13000, 10: 25000}, double: {5: 15000, 10: 28000} },  
-      pandan: { non: {5: 12000, 10: 22000}, single: {5: 15000, 10: 28000}, double: {5: 18000, 10: 32000} }  
-    };  
-  
-    function ubahTopping() {  
-      const topping = document.querySelector('input[name="topping"]:checked').value;  
-      document.getElementById("singleToppingGroup").style.display = (topping === "single" || topping === "double") ? "block" : "none";  
-      document.getElementById("doubleToppingGroup").style.display = (topping === "double") ? "block" : "none";  
-    }  
-  
-    function hitungHarga() {  
-      const jenis = document.querySelector('input[name="jenis"]:checked').value;  
-      const topping = document.querySelector('input[name="topping"]:checked').value;  
-      const isi = parseInt(document.getElementById("isiBox").value);  
-      const jumlah = parseInt(document.getElementById("jumlahBox").value);  
-      const hargaSatuan = hargaPukis[jenis][topping][isi] || 0;  
-      const total = hargaSatuan * jumlah;  
-      document.getElementById("totalHarga").innerText = `Rp${total.toLocaleString("id-ID")}`;  
-    }  
-  
-    function getSelectedToppings(cls) {  
-      return Array.from(document.querySelectorAll(cls + ':checked')).map(el => el.value);  
-    }  
-  
-    function validasiTopping() {  
-      const topping = document.querySelector('input[name="topping"]:checked').value;  
-      const isi = parseInt(document.getElementById("isiBox").value);  
-      const single = getSelectedToppings('.singleTopping');  
-      const double = getSelectedToppings('.doubleTopping');  
-  
-      if (topping === 'single' && single.length > isi) {  
-        alert(`Single topping maksimal ${isi} rasa.`);  
-        return false;  
-      }  
-  
-      if (topping === 'double') {  
-        if (single.length > isi || double.length > isi) {  
-          alert(`Double topping maksimal ${isi} rasa dan ${isi} taburan.`);  
-          return false;  
-        }  
-      }  
-      return true;  
-    }  
-  
-    document.getElementById("formPukis").addEventListener("submit", function(e) {  
-      e.preventDefault();  
-      if (!validasiTopping()) return;  
-  
-      const nama = document.getElementById("namaPemesan").value.trim();  
-      if (!nama) {  
-        alert("Nama pemesan wajib diisi.");  
-        return;  
-      }  
-  
-      const jenis = document.querySelector('input[name="jenis"]:checked').value;  
-      const topping = document.querySelector('input[name="topping"]:checked').value;  
-      const isi = document.getElementById("isiBox").value;  
-      const jumlah = document.getElementById("jumlahBox").value;  
-      const single = getSelectedToppings('.singleTopping').join(', ');  
-      const double = getSelectedToppings('.doubleTopping').join(', ');  
-      const totalText = document.getElementById("totalHarga").innerText;  
-  
-      let pesan = `Halo! Saya ingin memesan Pukis:\n- Nama: ${nama}\n- Jenis: ${jenis}\n- Topping: ${topping}\n- Isi per Box: ${isi} pcs\n- Jumlah Box: ${jumlah}`;  
-      if (topping === 'single') pesan += `\n- Rasa: ${single}`;  
-      if (topping === 'double') pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;  
-      pesan += `\n${totalText}`;  
-  
-      const waURL = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;  
-      window.open(waURL, "_blank");  
-    });  
-  
-    window.onload = hitungHarga;  
-  </script>    <section id="form-testimoni">  
+  </ul>    <!-- FORM PEMESANAN -->    <h2>Pemesanan Pukis Lumer Aulia</h2>  
+  <!-- form dan script harga/topping seperti yang Anda kirim sudah OK -->    <!-- FORMULIR TESTIMONI -->    <section id="form-testimoni">  
     <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>  
     <form id="testimoniForm">  
       <input type="text" id="nama" placeholder="Nama Kamu" required>  
@@ -200,99 +59,61 @@
   <ul id="listTestimoni"></ul>  
 </div>
 
-  </section>  
-<script>  
-  // Daftar testimoni palsu  
-  const testimoniList = [  
-    {  
-      nama: "Dewi R., Ibu Rumah Tangga",  
-      pesan: "Pukisnya lembut banget, lumer di mulut! Anak-anak sampai rebutan tiap beli."  
-    },  
-    {  
-      nama: "Andre T., Pegawai Kantoran",  
-      pesan: "Rasa kejunya mantap! Manisnya pas, cocok buat teman ngopi sore."  
-    },  
-    {  
-      nama: "Sari M., Mahasiswa",  
-      pesan: "Baru pertama coba langsung ketagihan. Isiannya melimpah, teksturnya empuk!"  
-    },  
-    {  
-      nama: "Yuni K., Pecinta Kuliner",  
-      pesan: "Udah nyoba banyak pukis, tapi yang ini beda. Lumer banget dan nggak bikin enek."  
-    },  
-    {  
-      nama: "Dian F., Pelanggan Setia",  
-      pesan: "Setiap buka pre-order, pasti cepet habis. Rekomendasi banget buat oleh-oleh!"  
+  </section>    <!-- FLOATING MENU -->  <button class="toggle-btn" onclick="toggleMenu(this)">+</button>
+
+  <div class="floating-menu" id="floatingMenu">  
+    <a href="https://wa.me/6281296668670" class="float-btn whatsapp">  
+      <i class="fab fa-whatsapp"></i> WhatsApp  
+    </a>  
+    <a href="https://wa.me/?text=Hai!%20Coba%20cek%20Pukis%20Lumer%20Aulia%20di%20https%3A%2F%2Fpukislumer-aulia.github.io%2F" target="_blank" class="float-btn invite">  
+      <i class="fas fa-user-friends"></i> Bagikan ke Teman  
+    </a>  
+    <a href="#" class="float-btn shopee"><i class="fas fa-store"></i> Shopee</a>  
+    <a href="#" class="float-btn maxim"><i class="fas fa-taxi"></i> Maxim</a>  
+    <a href="#" class="float-btn gofood"><i class="fas fa-utensils"></i> GoFood</a>  
+    <a href="#" class="float-btn grabfood"><i class="fas fa-motorcycle"></i> GrabFood</a>  
+    <a href="https://facebook.com/pukislumer.aulia" target="_blank" class="float-btn facebook">  
+      <i class="fab fa-facebook-f"></i> Facebook  
+    </a>  
+    <a href="https://instagram.com/pukis.lumer_aulia" target="_blank" class="float-btn instagram">  
+      <i class="fab fa-instagram"></i> Instagram  
+    </a>  
+    <a href="https://tiktok.com/@pukislumer.aulia" target="_blank" class="float-btn tiktok">  
+      <i class="fab fa-tiktok"></i> TikTok  
+    </a>  
+  </div>    <!-- SCRIPT FLOATING MENU -->    <script>  
+    function toggleMenu(btn) {  
+      const menu = document.getElementById("floatingMenu");  
+      menu.classList.toggle("hidden");  
+      btn.classList.toggle("rotated");  
     }  
-  ];  // Tampilkan testimoni palsu ke dalam list
-const ul = document.getElementById("listTestimoni");
-
-if (ul) {
-testimoniList.forEach(({ nama, pesan }) => {
-const li = document.createElement("li");
-li.innerHTML = <strong>${nama}</strong><br>${pesan};
-ul.appendChild(li);
-});
-}
-</script>
-
-<!-- Tombol Toggle -->  <button class="toggle-btn" onclick="toggleMenu(this)">+</button>
-
-<!-- Floating Menu -->  <div class="floating-menu" id="floatingMenu">  
-  <a href="https://wa.me/6281296668670" class="float-btn whatsapp">  
-    <i class="fab fa-whatsapp"></i> WhatsApp  
-  </a>  
-  <a href="https://wa.me/?text=Hai!%20Coba%20cek%20Pukis%20Lumer%20Aulia%20di%20https%3A%2F%2Fpukislumer-aulia.github.io%2F" target="_blank" class="float-btn invite">  
-    <i class="fas fa-user-friends"></i> Bagikan ke Teman  
-  </a>  
-  <a href="#" class="float-btn shopee">  
-    <i class="fas fa-store"></i> Shopee  
-  </a>  
-  <a href="#" class="float-btn maxim">  
-    <i class="fas fa-taxi"></i> Maxim  
-  </a>  
-  <a href="#" class="float-btn gofood">  
-    <i class="fas fa-utensils"></i> GoFood  
-  </a>  
-  <a href="#" class="float-btn grabfood">  
-    <i class="fas fa-motorcycle"></i> GrabFood  
-  </a>  
-  <a href="https://facebook.com/pukislumer.aulia" target="_blank" class="float-btn facebook">  
-    <i class="fab fa-facebook-f"></i> Facebook  
-  </a>  
-  <a href="https://instagram.com/pukis.lumer_aulia" target="_blank" class="float-btn instagram">  
-    <i class="fab fa-instagram"></i> Instagram  
-  </a>  
-  <a href="https://tiktok.com/@pukislumer.aulia" target="_blank" class="float-btn tiktok">  
-    <i class="fab fa-tiktok"></i> TikTok  
-  </a>  
-</div>  
-<!-- Script -->  
-<script>  
-  function toggleMenu(btn) {  
-    const menu = document.getElementById("floatingMenu");  
-    menu.classList.toggle("hidden");  
-    btn.classList.toggle("rotated");  
-  }  
-</script>    <script>  
-  // Konfigurasi Firebase kamu  
-  const firebaseConfig = {  
-    apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",  
-    authDomain: "pukis-lumer-aulia.firebaseapp.com",  
-    projectId: "pukis-lumer-aulia",  
-    storageBucket: "pukis-lumer-aulia.firebasestorage.app",  
-    messagingSenderId: "1059510074119",  
-    appId: "1:1059510074119:web:06b32f510a3d038324a3a2",  
-    measurementId: "G-NZY82GKPXS"  
-  };  
-  
-  // Inisialisasi Firebase  
-  const app = firebase.initializeApp(firebaseConfig);  
-  const analytics = firebase.analytics();  
-  </script>    <script>  
-  const app = firebase.initializeApp(firebaseConfig);  
-  const analytics = firebase.analytics();  
-  const database = firebase.database();  
-  </script>   </body>  
-</html>  Seperti tombol mengambang tidak muncul bisa benerin ini dulu
+  </script>    <!-- TESTIMONI PALSU -->    <script>  
+    const testimoniList = [  
+      { nama: "Dewi R., Ibu Rumah Tangga", pesan: "Pukisnya lembut banget, lumer di mulut!" },  
+      { nama: "Andre T., Pegawai Kantoran", pesan: "Rasa kejunya mantap! Cocok buat teman ngopi." },  
+      { nama: "Sari M., Mahasiswa", pesan: "Baru pertama coba langsung ketagihan." },  
+      { nama: "Yuni K., Pecinta Kuliner", pesan: "Udah nyoba banyak pukis, tapi yang ini beda." },  
+      { nama: "Dian F., Pelanggan Setia", pesan: "Setiap buka PO, pasti cepet habis. Rekomendasi!" }  
+    ];  
+    const ul = document.getElementById("listTestimoni");  
+    if (ul) testimoniList.forEach(({ nama, pesan }) => {  
+      const li = document.createElement("li");  
+      li.innerHTML = `<strong>${nama}</strong><br>${pesan}`;  
+      ul.appendChild(li);  
+    });  
+  </script>    <!-- FIREBASE -->    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js"></script>    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>    <script>  
+    const firebaseConfig = {  
+      apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",  
+      authDomain: "pukis-lumer-aulia.firebaseapp.com",  
+      projectId: "pukis-lumer-aulia",  
+      storageBucket: "pukis-lumer-aulia.appspot.com",  
+      messagingSenderId: "1059510074119",  
+      appId: "1:1059510074119:web:06b32f510a3d038324a3a2",  
+      measurementId: "G-NZY82GKPXS"  
+    };  
+    const app = firebase.initializeApp(firebaseConfig);  
+    const analytics = firebase.analytics();  
+    const database = firebase.database();  
+  </script>  </body>  
+</html>  Apakah yang kamu kirim tersebut sudah ada di HTML yang aku kirim ini
 
