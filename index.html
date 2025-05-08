@@ -221,14 +221,33 @@
   </div>
 </section>
 
-  <div class="floating-buttons">
-    <a href="https://wa.me/6281296668670" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
-    <a href="#" class="float-btn invite"><i class="fas fa-user-plus"></i> Undang Teman</a>
-    <a href="https://shopee.co.id" class="float-btn shopee"><i class="fab fa-shopify"></i> Shopee</a>
-    <a href="https://food.maxim.com" class="float-btn maxim"><i class="fas fa-motorcycle"></i> Maxim</a>
-    <a href="https://gofood.co.id" class="float-btn gofood"><i class="fas fa-utensils"></i> GoFood</a>
-    <a href="https://grab.com/id/food" class="float-btn grabfood"><i class="fas fa-hamburger"></i> GrabFood</a>
+<div class="toggle-container">
+  <div class="toggle-header" onclick="toggleContent()">Kontak & Link</div>
+  <div class="toggle-content" id="toggleContent">
+    <p><strong>Chat WhatsApp:</strong> <a href="https://wa.me/6281296668670">081296668670</a></p>
+    <p><strong>Undang Teman:</strong></p>
+    <ul>
+      <li><a href="https://facebook.com/sharer/sharer.php?u=https://pukislumer-aulia.github.io/">Facebook</a></li>
+      <li><a href="https://www.instagram.com/">Instagram</a></li>
+      <li><a href="https://www.tiktok.com/">TikTok</a></li>
+      <li><a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io/">Twitter</a></li>
+      <li><a href="https://wa.me/?text=https://pukislumer-aulia.github.io/">WhatsApp</a></li>
+      <li><a href="https://pukislumer-aulia.github.io/">Website</a></li>
+    </ul>
+    <p><strong>Maxim:</strong> <a href="https://food.maxim.com">Link</a></p>
+    <p><strong>Facebook:</strong> pukislumer.aulia</p>
+    <p><strong>TikTok:</strong> @pukislumer.aulia</p>
+    <p><strong>Twitter:</strong> @pukislumer.aulia</p>
+    <p><strong>Instagram:</strong> @pukis.lumer_aulia</p>
   </div>
+</div>
+
+<script>
+  function toggleContent() {
+    var content = document.getElementById("toggleContent");
+    content.style.display = content.style.display === "block" ? "none" : "block";
+  }
+</script>
 
   <script src="assets/js/script.js"></script>
   <script src="assets/js/testimoni.js"></script>
