@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pukis Lumer Aulia</title>
   <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/form-style.css" />
@@ -14,7 +13,6 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
 </head>
 
 <body>
@@ -26,8 +24,7 @@
     </div>
     <div class="promo-running-text">
       <p>
-        Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!
-        Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!
+        Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia! Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!
       </p>
     </div>
     <img src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img" />
@@ -66,11 +63,11 @@
   </div>
 
   <!-- Form Pemesanan -->
-<h2>Pemesanan Pukis Lumer Aulia</h2>
+  <h2>Pemesanan Pukis Lumer Aulia</h2>
   <form id="formPukis">
     <div class="form-group">
       <label for="namaPemesan">Nama Pemesan:</label>
-      <input type="text" id="namaPemesan" placeholder="Nama Anda" required>
+      <input type="text" id="namaPemesan" placeholder="Nama Anda" required />
     </div>
 
     <div class="form-group">
@@ -130,91 +127,7 @@
     <button type="submit">Kirim Pesanan via WhatsApp</button>
   </form>
 
-  <!-- Floating message -->
-  <div class="floating-message">
-    Pesan Sekarang!
-  </div>
-
-  <script src="assets/js/testimoni.js"></script>
-  <script>
-    const hargaPukis = {
-      original: { non: {5: 10000, 10: 18000}, single: {5: 13000, 10: 25000}, double: {5: 15000, 10: 28000} },
-      pandan: { non: {5: 12000, 10: 22000}, single: {5: 15000, 10: 28000}, double: {5: 18000, 10: 32000} }
-    };
-
-    function ubahTopping() {
-      const topping = document.querySelector('input[name="topping"]:checked').value;
-      document.getElementById("singleToppingGroup").style.display = (topping === "single" || topping === "double") ? "block" : "none";
-      document.getElementById("doubleToppingGroup").style.display = (topping === "double") ? "block" : "none";
-    }
-
-    function hitungHarga() {
-      const jenis = document.querySelector('input[name="jenis"]:checked').value;
-      const topping = document.querySelector('input[name="topping"]:checked').value;
-      const isi = parseInt(document.getElementById("isiBox").value);
-      const jumlah = parseInt(document.getElementById("jumlahBox").value);
-      const hargaSatuan = hargaPukis[jenis][topping][isi] || 0;
-      const total = hargaSatuan * jumlah;
-      document.getElementById("totalHarga").innerText = `Rp${total.toLocaleString("id-ID")}`;
-    }
-
-    function getSelectedToppings(cls) {
-      return Array.from(document.querySelectorAll(cls + ':checked')).map(el => el.value);
-    }
-
-    function validasiTopping() {
-      const topping = document.querySelector('input[name="topping"]:checked').value;
-      const isi = parseInt(document.getElementById("isiBox").value);
-      const single = getSelectedToppings('.singleTopping');
-      const double = getSelectedToppings('.doubleTopping');
-
-      if (topping === 'single' && single.length > isi) {
-        alert(`Single topping maksimal ${isi} rasa.`);
-        return false;
-      }
-
-      if (topping === 'double') {
-        if (single.length > isi || double.length > isi) {
-          alert(`Double topping maksimal ${isi} rasa dan ${isi} taburan.`);
-          return false;
-        }
-      }
-      return true;
-    }
-
-    document.getElementById("formPukis").addEventListener("submit", function(e) {
-      e.preventDefault();
-      if (!validasiTopping()) return;
-
-      const nama = document.getElementById("namaPemesan").value.trim();
-      if (!nama) {
-        alert("Nama pemesan wajib diisi.");
-        return;
-      }
-
-      const jenis = document.querySelector('input[name="jenis"]:checked').value;
-      const topping = document.querySelector('input[name="topping"]:checked').value;
-      const isi = document.getElementById("isiBox").value;
-      const jumlah = document.getElementById("jumlahBox").value;
-      const single = getSelectedToppings('.singleTopping').join(', ');
-      const double = getSelectedToppings('.doubleTopping').join(', ');
-      const totalText = document.getElementById("totalHarga").innerText;
-
-      let pesan = `Halo! Saya ingin memesan Pukis:\n- Nama: ${nama}\n- Jenis: ${jenis}\n- Topping: ${topping}\n- Isi per Box: ${isi} pcs\n- Jumlah Box: ${jumlah}`;
-      if (topping === 'single') pesan += `\n- Rasa: ${single}`;
-      if (topping === 'double') pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;
-      pesan += `\n${totalText}`;
-
-      const waURL = `https://wa.me/6281296668670?text=${e");
-    });
-
-    window.onload = hitungHarga;
-  </script>
-
- 
-    <a href="#" class="float-btn invite"><i class="fas fa-u <section  <!-- ... (bagian form tidak diubah karena sudah baik. Hanya indentasi dan keterbacaan ditingkatkan.) -->
-
-  <!-- Form Testimoni -->
+  <!-- Testimoni Section -->
   <section id="form-testimoni">
     <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
     <form id="testimoniForm">
@@ -244,14 +157,86 @@
   </div>
 
   <!-- Script -->
-  <script src="assets/js/testimoni.js"></script>
   <script>
+    const hargaPukis = {
+      original: { non: {5: 10000, 10: 18000}, single: {5: 13000, 10: 25000}, double: {5: 15000, 10: 28000} },
+      pandan: { non: {5: 12000, 10: 22000}, single: {5: 15000, 10: 28000}, double: {5: 18000, 10: 32000} }
+    };
+
+    function ubahTopping() {
+      const topping = document.querySelector('input[name="topping"]:checked').value;
+      document.getElementById("singleToppingGroup").style.display = (topping !== "non") ? "block" : "none";
+      document.getElementById("doubleToppingGroup").style.display = (topping === "double") ? "block" : "none";
+    }
+
+    function hitungHarga() {
+      const jenis = document.querySelector('input[name="jenis"]:checked').value;
+      const topping = document.querySelector('input[name="topping"]:checked').value;
+      const isi = parseInt(document.getElementById("isiBox").value);
+      const jumlah = parseInt(document.getElementById("jumlahBox").value);
+      const hargaSatuan = hargaPukis[jenis][topping][isi] || 0;
+      document.getElementById("totalHarga").innerText = `Rp${(hargaSatuan * jumlah).toLocaleString("id-ID")}`;
+    }
+
+    function getSelectedToppings(cls) {
+      return Array.from(document.querySelectorAll(cls + ':checked')).map(el => el.value);
+    }
+
+    function validasiTopping() {
+      const topping = document.querySelector('input[name="topping"]:checked').value;
+      const isi = parseInt(document.getElementById("isiBox").value);
+      const single = getSelectedToppings('.singleTopping');
+      const double = getSelectedToppings('.doubleTopping');
+
+      if (topping === 'single' && single.length > isi) {
+        alert(`Single topping maksimal ${isi} rasa.`);
+        return false;
+      }
+
+      if (topping === 'double' && (single.length > isi || double.length > isi)) {
+        alert(`Double topping maksimal ${isi} rasa dan ${isi} taburan.`);
+        return false;
+      }
+
+      return true;
+    }
+
+    document.getElementById("formPukis").addEventListener("submit", function(e) {
+      e.preventDefault();
+      if (!validasiTopping()) return;
+
+      const nama = document.getElementById("namaPemesan").value.trim();
+      if (!nama) {
+        alert("Nama pemesan wajib diisi.");
+        return;
+      }
+
+      const jenis = document.querySelector('input[name="jenis"]:checked').value;
+      const topping = document.querySelector('input[name="topping"]:checked').value;
+      const isi = document.getElementById("isiBox").value;
+      const jumlah = document.getElementById("jumlahBox").value;
+      const single = getSelectedToppings('.singleTopping').join(', ');
+      const double = getSelectedToppings('.doubleTopping').join(', ');
+      const totalText = document.getElementById("totalHarga").innerText;
+
+      let pesan = `Halo! Saya ingin memesan Pukis:\n- Nama: ${nama}\n- Jenis: ${jenis}\n- Topping: ${topping}\n- Isi per Box: ${isi} pcs\n- Jumlah Box: ${jumlah}`;
+      if (topping === 'single') pesan += `\n- Rasa: ${single}`;
+      if (topping === 'double') pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;
+      pesan += `\n${totalText}`;
+
+      const waURL = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
+      window.open(waURL, '_blank');
+    });
+
     function toggleMenu(btn) {
       const menu = document.getElementById("floatingMenu");
       menu.classList.toggle("hidden");
       btn.classList.toggle("rotated");
     }
 
+    window.onload = hitungHarga;
+
+    // Testimoni
     const testimoniList = [
       { nama: "Dewi R., Ibu Rumah Tangga", pesan: "Pukisnya lembut banget, lumer di mulut! Anak-anak sampai rebutan tiap beli." },
       { nama: "Andre T., Pegawai Kantoran", pesan: "Rasa kejunya mantap! Manisnya pas, cocok buat teman ngopi sore." },
@@ -268,14 +253,13 @@
         ul.appendChild(li);
       });
     }
-  </script>
 
-  <script>
+    // Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
       authDomain: "pukis-lumer-aulia.firebaseapp.com",
       projectId: "pukis-lumer-aulia",
-      storageBucket: "pukis-lumer-aulia.firebasestorage.app",
+      storageBucket: "pukis-lumer-aulia.appspot.com",
       messagingSenderId: "1059510074119",
       appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
       measurementId: "G-NZY82GKPXS"
