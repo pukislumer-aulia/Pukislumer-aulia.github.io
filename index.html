@@ -74,9 +74,21 @@
       border: 1px solid #ccc;
     }
 
+    .topping-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 0.5rem;
+    }
+
     .topping-group label {
-      display: inline-block;
-      margin: 5px 10px 0 0;
+      font-weight: normal;
+    }
+
+    #totalHarga {
+      font-weight: bold;
+      font-size: 1.2em;
+      color: #d2691e;
     }
 
     button {
@@ -87,6 +99,7 @@
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
+      width: 100%;
     }
 
     button:hover {
@@ -151,7 +164,7 @@
   </style>
 </head>
 <body>
-  <!-- Promo -->
+  <!-- Promo Section -->
   <div class="promo-image">
     <img src="https://via.placeholder.com/600x300?text=Promo+Pukis" alt="Promo Kupon" />
     <div class="promo-running-text">
@@ -186,63 +199,7 @@
     <img src="https://via.placeholder.com/300x200?text=Pukis+3" alt="Pukis 3" />
   </div>
 
-  <!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Form Pemesanan Pukis</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #fff8f0;
-    }
-    h2 {
-      color: #a0522d;
-      text-align: center;
-    }
-    label {
-      display: block;
-      margin: 8px 0 4px;
-    }
-    input[type="radio"], select, input[type="number"], input[type="text"] {
-      margin-right: 10px;
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .topping-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 0.5rem;
-    }
-    .topping-group label {
-      font-weight: normal;
-    }
-    #totalHarga {
-      font-weight: bold;
-      font-size: 1.2em;
-      color: #d2691e;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px;
-      font-size: 1em;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-  </style>
   <h2>Pemesanan Pukis Lumer Aulia</h2>
-
   <form id="formPukis">
     <div class="form-group">
       <label>Nama Pemesan:</label>
@@ -306,98 +263,7 @@
     <button type="submit">Kirim Pesanan via WhatsApp</button>
   </form>
 
-  <script>
-    const hargaPukis = {
-      original: {
-        non: {5: 10000, 10: 18000},
-        single: {5: 13000, 10: 25000},
-        double: {5: 15000, 10: 28000}
-      },
-      pandan: {
-        non: {5: 12000, 10: 22000},
-        single: {5: 15000, 10: 28000},
-        double: {5: 18000, 10: 32000}
-      }
-    };
-
-    function ubahTopping() {
-      const topping = document.querySelector('input[name="topping"]:checked').value;
-      document.getElementById("singleToppingGroup").style.display = topping === "single" || topping === "double" ? "block" : "none";
-      document.getElementById("doubleToppingGroup").style.display = topping === "double" ? "block" : "none";
-    }
-
-    function hitungHarga() {
-      const jenis = document.querySelector('input[name="jenis"]:checked').value;
-      const topping = document.querySelector('input[name="topping"]:checked').value;
-      const isi = parseInt(document.getElementById("isiBox").value);
-      const jumlah = parseInt(document.getElementById("jumlahBox").value);
-
-      const hargaSatuan = hargaPukis[jenis][topping][isi] || 0;
-      const total = hargaSatuan * jumlah;
-
-      document.getElementById("totalHarga").innerText = `Rp${total.toLocaleString("id-ID")}`;
-    }
-
-    function getSelectedToppings(cls) {
-      return Array.from(document.querySelectorAll(cls + ':checked')).map(el => el.value);
-    }
-
-    function validasiTopping() {
-      const topping = document.querySelector('input[name="topping"]:checked').value;
-      const isi = parseInt(document.getElementById("isiBox").value);
-
-      const single = getSelectedToppings('.singleTopping');
-      const double = getSelectedToppings('.doubleTopping');
-
-      if (topping === 'single' && single.length > isi) {
-        alert(`Single topping maksimal ${isi} rasa.`);
-        return false;
-      }
-
-      if (topping === 'double') {
-        if (single.length > isi || double.length > isi) {
-          alert(`Double topping maksimal ${isi} rasa dan ${isi} taburan.`);
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    document.getElementById("formPukis").addEventListener("submit", function(e) {
-      e.preventDefault();
-      if (!validasiTopping()) return;
-
-      const nama = document.getElementById("namaPemesan").value.trim();
-      if (!nama) {
-        alert("Nama pemesan wajib diisi.");
-        return;
-      }
-
-      const jenis = document.querySelector('input[name="jenis"]:checked').value;
-      const topping = document.querySelector('input[name="topping"]:checked').value;
-      const isi = document.getElementById("isiBox").value;
-      const jumlah = document.getElementById("jumlahBox").value;
-
-      const single = getSelectedToppings('.singleTopping').join(', ');
-      const double = getSelectedToppings('.doubleTopping').join(', ');
-
-      let pesan = `Halo! Saya ingin memesan Pukis:\n- Nama: ${nama}\n- Jenis: ${jenis}\n- Topping: ${topping}\n- Isi per Box: ${isi} pcs\n- Jumlah Box: ${jumlah}`;
-
-      if (topping === 'single') pesan += `\n- Rasa: ${single}`;
-      if (topping === 'double') pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;
-
-      const totalText = document.getElementById("totalHarga").innerText;
-      pesan += `\n${totalText}`;
-
-      const waURL = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
-      window.open(waURL, "_blank");
-    });
-
-    window.onload = hitungHarga;
-  
-
-  <button class="toggle-btn" onclick="toggleMenu(this)">+</button>
+  <button class="toggle-btn" onclick="toggleMenu()">+</button>
   <div class="floating-menu hidden" id="floatingMenu">
     <a href="https://wa.me/6281296668670" class="float-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
     <a href="#" class="float-btn"><i class="fab fa-instagram"></i> Instagram</a>
@@ -425,38 +291,57 @@
       document.getElementById("totalHarga").innerText = `Rp${(hargaSatuan * jumlah).toLocaleString("id-ID")}`;
     }
 
-    function toggleMenu(btn) {
+    function getSelectedToppings(cls) {
+      return Array.from(document.querySelectorAll(cls + ':checked')).map(el => el.value);
+    }
+
+    function validasiTopping() {
+      const topping = document.querySelector('input[name="topping"]:checked').value;
+      const isi = parseInt(document.getElementById("isiBox").value);
+      const single = getSelectedToppings('.singleTopping');
+      const double = getSelectedToppings('.doubleTopping');
+
+      if (topping === 'single' && single.length > isi) {
+        alert(`Single topping maksimal ${isi} rasa.`);
+        return false;
+      }
+
+      if (topping === 'double') {
+        if (single.length > isi || double.length > isi) {
+          alert(`Double topping maksimal ${isi} rasa dan ${isi} taburan.`);
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function toggleMenu() {
       document.getElementById("floatingMenu").classList.toggle("hidden");
     }
 
     document.getElementById("formPukis").addEventListener("submit", function(e) {
       e.preventDefault();
+      if (!validasiTopping()) return;
+
       const nama = document.getElementById("namaPemesan").value.trim();
       const jenis = document.querySelector('input[name="jenis"]:checked').value;
       const topping = document.querySelector('input[name="topping"]:checked').value;
       const isi = document.getElementById("isiBox").value;
       const jumlah = document.getElementById("jumlahBox").value;
       const total = document.getElementById("totalHarga").innerText;
+      const single = getSelectedToppings('.singleTopping').join(', ');
+      const double = getSelectedToppings('.doubleTopping').join(', ');
 
-      let pesan = `Halo! Saya ingin pesan Pukis:\n- Nama: ${nama}\n- Jenis: ${jenis}\n- Topping: ${topping}\n- Isi: ${isi}\n- Jumlah Box: ${jumlah}\n- Total: ${total}`;
-      window.open(`https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`, '_blank');
+      let pesan = `Halo! Saya ingin pesan Pukis:\n- Nama: ${nama}\n- Jenis: ${jenis}\n- Topping: ${topping}\n- Isi per Box: ${isi}\n- Jumlah Box: ${jumlah}`;
+      if (topping === 'single') pesan += `\n- Rasa: ${single}`;
+      if (topping === 'double') pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;
+      pesan += `\n- Total: ${total}`;
+
+      window.open(`https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`, "_blank");
     });
-</script>
-  <h2>Testimoni</h2>
-  <ul id="listTestimoni"></ul>
-    window.onload = function() {
-      hitungHarga();
-      const testimoni = [
-        { nama: "Dewi R.", pesan: "Pukisnya lembut dan lumer di mulut!" },
-        { nama: "Andre T.", pesan: "Rasa kejunya mantap, cocok buat ngopi." }
-      ];
-      const ul = document.getElementById("listTestimoni");
-      testimoni.forEach(t => {
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>${t.nama}</strong><br>${t.pesan}`;
-        ul.appendChild(li);
-      });
-    };
+
+    window.onload = hitungHarga;
   </script>
 </body>
 </html>
