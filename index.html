@@ -11,20 +11,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
   <style>
     .toggle-testimoni-btn {
-      position: fixed;
-      right: 0;
-      top: 50%;
-      background-color: #6B8E23;
-      color: white;
-      padding: 10px 15px;
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
-      cursor: pointer;
-      z-index: 999;
+    
     }
 
     #form-testimoni {
-      display: none;
+      display: yes;
       position: fixed;
       right: 0;
       top: 0;
@@ -231,22 +222,21 @@
 
     window.onload = hitungHarga;
   </script>
-  <!-- Tombol Toggle Testimoni -->
-  <div class="toggle-testimoni-btn" onclick="toggleTestimoni()">Testimoni</div>
 
-  <section id="form-testimoni">
-    <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
-    <form id="testimoniForm">
-      <input type="text" id="nama" placeholder="Nama Kamu" required>
-      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
-      <button type="submit">Kirim Testimoni</button>
-    </form>
+<!-- Form Testimoni -->
+<section id="form-testimoni">
+  <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
+  <form id="testimoniForm">
+    <input type="text" id="nama" placeholder="Nama Kamu" required>
+    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>
 
-    <div id="daftarTestimoni">
-      <h3>Testimoni:</h3>
-      <ul id="listTestimoni"></ul>
-    </div>
-  </section>
+  <div id="daftarTestimoni">
+    <h3>Testimoni:</h3>
+    <ul id="listTestimoni"></ul>
+  </div>
+</section>
 
   <div class="floating-buttons">
     <a href="https://wa.me/6281296668670" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
