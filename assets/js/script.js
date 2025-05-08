@@ -184,3 +184,33 @@ orderRef.set({
   totalHarga: totalText,
   waktu: new Date().toISOString()
 });
+
+function updateToppingStyles() {
+  // SINGLE
+  document.querySelectorAll('.singleTopping').forEach(cb => {
+    const label = cb.parentElement;
+    if (cb.checked) {
+      label.classList.add('checked-topping');
+    } else {
+      label.classList.remove('checked-topping');
+    }
+  });
+
+  // DOUBLE
+  document.querySelectorAll('.doubleTopping').forEach(cb => {
+    const label = cb.parentElement;
+    if (cb.checked) {
+      label.classList.add('checked-topping');
+    } else {
+      label.classList.remove('checked-topping');
+    }
+  });
+}
+
+// Jalankan saat halaman selesai dimuat
+window.addEventListener('DOMContentLoaded', updateToppingStyles);
+
+// Deteksi saat user mencentang atau menghapus centang
+document.querySelectorAll('.singleTopping, .doubleTopping').forEach(cb => {
+  cb.addEventListener('change', updateToppingStyles);
+});
