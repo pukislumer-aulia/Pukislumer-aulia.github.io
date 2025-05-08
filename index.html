@@ -10,189 +10,153 @@
   <link rel="stylesheet" href="assets/css/form-style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
   <style>
-    /* Tambahan CSS untuk toggle testimoni */
-    #form-testimoni {
+    .toggle-testimoni-btn {
       position: fixed;
-      top: 50%;
-      right: -320px;
-      transform: translateY(-50%);
-      width: 300px;
-      background: #fff8f0;
-      border: 2px solid #9370DB;
-      border-radius: 10px 0 0 10px;
-      box-shadow: -3px 0 10px rgba(0,0,0,0.2);
-      transition: right 0.3s ease;
-      z-index: 999;
-      padding: 15px;
-    }
-
-    #toggleTestimoni {
-      position: fixed;
-      top: 50%;
       right: 0;
-      transform: translateY(-50%);
-      background-color: #9370DB;
+      top: 50%;
+      background-color: #6B8E23;
       color: white;
-      padding: 10px;
-      border-radius: 10px 0 0 10px;
+      padding: 10px 15px;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
       cursor: pointer;
-      z-index: 1000;
+      z-index: 999;
     }
 
-    #form-testimoni.show {
+    #form-testimoni {
+      display: none;
+      position: fixed;
       right: 0;
-    }
-
-    .form-group label {
-      font-weight: bold;
-      color: #002147;
+      top: 0;
+      width: 300px;
+      height: 100%;
+      background: #fff;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
+      z-index: 998;
+      padding: 20px;
     }
 
     .responsive-img {
       max-width: 100%;
       height: auto;
     }
-
-    .topping-group label {
-      display: inline-block;
-      margin-right: 10px;
-    }
-
-    .floating-buttons {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 1000;
-    }
-
-    .float-btn {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 10px;
-      border-radius: 10px;
-      color: white;
-      text-decoration: none;
-      background-color: #9370DB;
-    }
-
-    .float-btn.whatsapp { background-color: #25D366; }
-    .float-btn.invite { background-color: #555; }
-    .float-btn.shopee { background-color: #EE4D2D; }
-    .float-btn.maxim { background-color: #FFD700; color: black; }
-    .float-btn.gofood { background-color: #E71D36; }
-    .float-btn.grabfood { background-color: #00A149; }
-
   </style>
 </head>
 
 <body>
-  <!-- Toggle Tombol -->
-  <div id="toggleTestimoni">Testimoni</div>
-
-  <!-- Testimoni Panel -->
-  <section id="form-testimoni">
-    <h2>Tulis Testimoni Kamu!</h2>
-    <form id="testimoniForm">
-      <input type="text" id="nama" placeholder="Nama Kamu" required>
-      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
-      <button type="submit">Kirim Testimoni</button>
-    </form>
-    <div id="daftarTestimoni">
-      <h3>Testimoni:</h3>
-      <ul id="listTestimoni"></ul>
+  <!-- Promo Kupon -->
+  <div class="promo-image">
+    <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
+    <div class="promo-container">
+      <img src="assets/images/gambar-kupon.jpg" alt="Kupon Promo" class="responsive-img">
     </div>
-  </section>
+    <div class="promo-running-text">
+      <p>
+        Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!
+        Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!
+      </p>
+    </div>
+    <img src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img">
+  </div>
 
-  <!-- Konten Utama -->
   <h1>PUKIS LUMER AULIA</h1>
   <p style="color: #002147;">Assalamu'alaikum warahmatullahi wabarakatuh</p>
   <p style="color: #002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</p>
   <p style="color: #cc8e8e;">Padang Panjang Kota Kuliner – Serambi Mekkah.</p>
   <p style="color: #cc8e8e;">Sambangi Pasar Kuliner – jangan lupa mampir ke Pukis Lumer Aulia.</p>
-  <p><strong style="color: #9370DB;">Jam Operasional:</strong> <span style="color: #9370DB;">16.00 – 23.59 WIB</span></p>
+  <p><strong style="color: #9370DB;">Jam Operasional:</strong> <span style="color: #9370DB;">16.00 – 23.59 WIB (selama persediaan ada)</span></p>
   <p><strong style="color: #6B8E23;">Best Seller:</strong> <span style="color: #6B8E23;">Double Topping Vanilla Oreo vs Cokelat Kacang</span></p>
-  <p><strong style="color: #800020;">Lokasi:</strong> <span style="color: #800020;">Pasar Kuliner Padang Panjang, dekat Roti Tenonk</span></p>
+  <p><strong style="color: #800020;">Lokasi:</strong> <span style="color: #800020;">Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</span></p>
+  <p>Tersedia di Maxim Food, GrabFood, dan GoFood!</p>
 
-  <h2>Pemesanan Pukis Lumer Aulia</h2>
+  <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
+  <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa luar biasa. Tersedia berbagai varian topping favorit semua umur!</p>
+
+  <h2>Fakta Unik Tentang Kami</h2>
+  <ul style="color: #2E8B57;">
+    <li>Resep adonan spesial keluarga sejak 2023!</li>
+    <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
+    <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
+    <li>Lebih dari 10 varian topping siap setiap hari.</li>
+    <li>100% bahan premium tanpa pengawet.</li>
+    <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
+  </ul>
+
+  <h2>Galeri</h2>
+  <div class="promo-gallery">
+    <img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img" />
+    <img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img" />
+    <img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img" />
+    <img src="assets/images/pukis4.jpg" alt="Pukis 4" class="responsive-img" />
+    <img src="assets/images/pukis5.jpg" alt="Pukis 5" class="responsive-img" />
+  </div>
+
+  <!-- Formulir Pesanan -->
+
+   <h2>Pemesanan Pukis Lumer Aulia</h2>
   <form id="formPukis">
     <div class="form-group">
       <label for="namaPemesan">Nama Pemesan:</label>
       <input type="text" id="namaPemesan" placeholder="Nama Anda" required>
-    </div>
+    </div><div class="form-group">
+  <label>Jenis Pukis:</label>
+  <label><input type="radio" name="jenis" value="original" checked onchange="hitungHarga()"> Original</label>
+  <label><input type="radio" name="jenis" value="pandan" onchange="hitungHarga()"> Pandan</label>
+</div>
 
-    <div class="form-group">
-      <label>Jenis Pukis:</label>
-      <label><input type="radio" name="jenis" value="original" checked onchange="hitungHarga()"> Original</label>
-      <label><input type="radio" name="jenis" value="pandan" onchange="hitungHarga()"> Pandan</label>
-    </div>
+<div class="form-group">
+  <label>Topping:</label>
+  <label><input type="radio" name="topping" value="non" checked onchange="ubahTopping(); hitungHarga()"> Non Topping</label>
+  <label><input type="radio" name="topping" value="single" onchange="ubahTopping(); hitungHarga()"> Single Topping</label>
+  <label><input type="radio" name="topping" value="double" onchange="ubahTopping(); hitungHarga()"> Double Topping</label>
+</div>
 
-    <div class="form-group">
-      <label>Topping:</label>
-      <label><input type="radio" name="topping" value="non" checked onchange="ubahTopping(); hitungHarga()"> Non Topping</label>
-      <label><input type="radio" name="topping" value="single" onchange="ubahTopping(); hitungHarga()"> Single Topping</label>
-      <label><input type="radio" name="topping" value="double" onchange="ubahTopping(); hitungHarga()"> Double Topping</label>
-    </div>
-
-    <div class="form-group" id="singleToppingGroup" style="display: none;">
-      <label>Pilih Rasa (Single):</label>
-      <div class="topping-group">
-        <label><input type="checkbox" class="singleTopping" value="Coklat"> Coklat</label>
-        <label><input type="checkbox" class="singleTopping" value="Tiramisu"> Tiramisu</label>
-        <label><input type="checkbox" class="singleTopping" value="Stroberi"> Stroberi</label>
-        <label><input type="checkbox" class="singleTopping" value="Cappucino"> Cappucino</label>
-        <label><input type="checkbox" class="singleTopping" value="Vanilla"> Vanilla</label>
-        <label><input type="checkbox" class="singleTopping" value="Taro"> Taro</label>
-        <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>
-      </div>
-    </div>
-
-    <div class="form-group" id="doubleToppingGroup" style="display: none;">
-      <label>Pilih Taburan (Double):</label>
-      <div class="topping-group">
-        <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>
-        <label><input type="checkbox" class="doubleTopping" value="Keju"> Keju</label>
-        <label><input type="checkbox" class="doubleTopping" value="Kacang"> Kacang</label>
-        <label><input type="checkbox" class="doubleTopping" value="Choco Chip"> Choco Chip</label>
-        <label><input type="checkbox" class="doubleTopping" value="Oreo"> Oreo</label>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="isiBox">Isi per Box:</label>
-      <select id="isiBox" onchange="hitungHarga()">
-        <option value="5">5 pcs</option>
-        <option value="10">10 pcs</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="jumlahBox">Jumlah Box:</label>
-      <input type="number" id="jumlahBox" value="1" min="1" onchange="hitungHarga()">
-    </div>
-
-    <div class="form-group">
-      <p>Total Harga: <span id="totalHarga">Rp0</span></p>
-    </div>
-
-    <button type="submit">Kirim Pesanan via WhatsApp</button>
-  </form>
-
-  <!-- Floating Buttons -->
-  <div class="floating-buttons">
-    <a href="https://wa.me/6281296668670" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
-    <a href="#" class="float-btn invite"><i class="fas fa-user-plus"></i> Undang Teman</a>
-    <a href="https://shopee.co.id" class="float-btn shopee"><i class="fab fa-shopify"></i> Shopee</a>
-    <a href="https://food.maxim.com" class="float-btn maxim"><i class="fas fa-motorcycle"></i> Maxim</a>
-    <a href="https://gofood.co.id" class="float-btn gofood"><i class="fas fa-utensils"></i> GoFood</a>
-    <a href="https://grab.com/id/food" class="float-btn grabfood"><i class="fas fa-hamburger"></i> GrabFood</a>
+<div class="form-group" id="singleToppingGroup" style="display: none;">
+  <label>Pilih Rasa (Single):</label>
+  <div class="topping-group">
+    <label><input type="checkbox" class="singleTopping" value="Coklat"> Coklat</label>
+    <label><input type="checkbox" class="singleTopping" value="Tiramisu"> Tiramisu</label>
+    <label><input type="checkbox" class="singleTopping" value="Stroberi"> Stroberi</label>
+    <label><input type="checkbox" class="singleTopping" value="Cappucino"> Cappucino</label>
+    <label><input type="checkbox" class="singleTopping" value="Vanilla"> Vanilla</label>
+    <label><input type="checkbox" class="singleTopping" value="Taro"> Taro</label>
+    <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>
   </div>
+</div>
 
-  <!-- Script -->
-  <script>
+<div class="form-group" id="doubleToppingGroup" style="display: none;">
+  <label>Pilih Taburan (Double):</label>
+  <div class="topping-group">
+    <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>
+    <label><input type="checkbox" class="doubleTopping" value="Keju"> Keju</label>
+    <label><input type="checkbox" class="doubleTopping" value="Kacang"> Kacang</label>
+    <label><input type="checkbox" class="doubleTopping" value="Choco Chip"> Choco Chip</label>
+    <label><input type="checkbox" class="doubleTopping" value="Oreo"> Oreo</label>
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="isiBox">Isi per Box:</label>
+  <select id="isiBox" onchange="hitungHarga()">
+    <option value="5">5 pcs</option>
+    <option value="10">10 pcs</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="jumlahBox">Jumlah Box:</label>
+  <input type="number" id="jumlahBox" value="1" min="1" onchange="hitungHarga()">
+</div>
+
+<div class="form-group">
+  <p>Total Harga: <span id="totalHarga">Rp0</span></p>
+</div>
+
+<button type="submit">Kirim Pesanan via WhatsApp</button>
+
+  </form>  <div class="floating-message">Pesan Sekarang!</div>
+  <a href="#formPukis" class="float-btn"><i class="fas fa-shopping-cart"></i></a>  <script>
     const hargaPukis = {
       original: { non: {5: 10000, 10: 18000}, single: {5: 13000, 10: 25000}, double: {5: 15000, 10: 28000} },
       pandan: { non: {5: 12000, 10: 22000}, single: {5: 15000, 10: 28000}, double: {5: 18000, 10: 32000} }
@@ -200,7 +164,7 @@
 
     function ubahTopping() {
       const topping = document.querySelector('input[name="topping"]:checked').value;
-      document.getElementById("singleToppingGroup").style.display = (topping !== "non") ? "block" : "none";
+      document.getElementById("singleToppingGroup").style.display = (topping === "single" || topping === "double") ? "block" : "none";
       document.getElementById("doubleToppingGroup").style.display = (topping === "double") ? "block" : "none";
     }
 
@@ -262,15 +226,44 @@
       pesan += `\n${totalText}`;
 
       const waURL = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
-      window.open(waURL, "_blank");
-    });
-
-    // Toggle Testimoni
-    document.getElementById("toggleTestimoni").addEventListener("click", () => {
-      document.getElementById("form-testimoni").classList.toggle("show");
+      window.open(waURL, '_blank');
     });
 
     window.onload = hitungHarga;
   </script>
+  <!-- Tombol Toggle Testimoni -->
+  <div class="toggle-testimoni-btn" onclick="toggleTestimoni()">Testimoni</div>
+
+  <section id="form-testimoni">
+    <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
+    <form id="testimoniForm">
+      <input type="text" id="nama" placeholder="Nama Kamu" required>
+      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+      <button type="submit">Kirim Testimoni</button>
+    </form>
+
+    <div id="daftarTestimoni">
+      <h3>Testimoni:</h3>
+      <ul id="listTestimoni"></ul>
+    </div>
+  </section>
+
+  <div class="floating-buttons">
+    <a href="https://wa.me/6281296668670" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
+    <a href="#" class="float-btn invite"><i class="fas fa-user-plus"></i> Undang Teman</a>
+    <a href="https://shopee.co.id" class="float-btn shopee"><i class="fab fa-shopify"></i> Shopee</a>
+    <a href="https://food.maxim.com" class="float-btn maxim"><i class="fas fa-motorcycle"></i> Maxim</a>
+    <a href="https://gofood.co.id" class="float-btn gofood"><i class="fas fa-utensils"></i> GoFood</a>
+    <a href="https://grab.com/id/food" class="float-btn grabfood"><i class="fas fa-hamburger"></i> GrabFood</a>
+  </div>
+
+  <script>
+    function toggleTestimoni() {
+      const form = document.getElementById("form-testimoni");
+      form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+    }
+  </script>
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/testimoni.js"></script>
 </body>
 </html>
