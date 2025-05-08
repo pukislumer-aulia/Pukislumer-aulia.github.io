@@ -1,143 +1,120 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pukis Lumer Aulia</title>
-  <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/form-style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
+  <meta name="description" content="Pukis lumer terenak di Padang Panjang!">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Kanit', sans-serif; margin: 0; padding: 0; }
+    .responsive-img { width: 100%; height: auto; }
+    .promo-running-text p { background: #f0e68c; padding: 10px; animation: scrollText 10s linear infinite; white-space: nowrap; overflow: hidden; }
+    @keyframes scrollText { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    .form-group { margin-bottom: 1em; }
+    label { display: block; margin-bottom: 5px; }
+    input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 8px; }
+    button { background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+    .floating-message-toggle { position: fixed; top: 50%; right: -200px; background: #ff69b4; color: white; padding: 15px; border-radius: 10px 0 0 10px; transition: right 0.3s ease-in-out; cursor: pointer; z-index: 999; }
+    .floating-message-toggle:hover { right: 0; }
+  </style>
 </head>
-
 <body>
-  <!-- Promo Kupon -->
   <div class="promo-image">
     <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
     <div class="promo-container">
       <img src="assets/images/gambar-kupon.jpg" alt="Kupon Promo" class="responsive-img">
     </div>
     <div class="promo-running-text">
-      <p>
-        Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!
-        Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!
-      </p>
+      <p>Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia! Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!</p>
     </div>
     <img src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img">
-  </div>
-
-  <h1>PUKIS LUMER AULIA</h1>
-  <p style="color: #002147;">Assalamu'alaikum warahmatullahi wabarakatuh</p>
-  <p style="color: #002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</p>
-  <p style="color: #cc8e8e;">Padang Panjang Kota Kuliner – Serambi Mekkah.</p>
-  <p style="color: #cc8e8e;">Sambangi Pasar Kuliner – jangan lupa mampir ke Pukis Lumer Aulia.</p>
-  <p><strong style="color: #9370DB;">Jam Operasional:</strong> <span style="color: #9370DB;">16.00 – 23.59 WIB (selama persediaan ada)</span></p>
-  <p><strong style="color: #6B8E23;">Best Seller:</strong> <span style="color: #6B8E23;">Double Topping Vanilla Oreo vs Cokelat Kacang</span></p>
-  <p><strong style="color: #800020;">Lokasi:</strong> <span style="color: #800020;">Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</span></p>
-  <p>Tersedia di Maxim Food, GrabFood, dan GoFood!</p>
-
-  <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
-  <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa luar biasa. Tersedia berbagai varian topping favorit semua umur!</p>
-
-  <h2>Fakta Unik Tentang Kami</h2>
-  <ul style="color: #2E8B57;">
+  </div>  <h1>PUKIS LUMER AULIA</h1>
+  <p>Assalamu'alaikum warahmatullahi wabarakatuh</p>
+  <p>Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</p>
+  <p>Padang Panjang Kota Kuliner – Serambi Mekkah.</p>
+  <p>Sambangi Pasar Kuliner – jangan lupa mampir ke Pukis Lumer Aulia.</p>
+  <p><strong>Jam Operasional:</strong> 16.00 – 23.59 WIB (selama persediaan ada)</p>
+  <p><strong>Best Seller:</strong> Double Topping Vanilla Oreo vs Cokelat Kacang</p>
+  <p><strong>Lokasi:</strong> Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</p>
+  <p>Tersedia di Maxim Food, GrabFood, dan GoFood!</p>  <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
+  <ul>
     <li>Resep adonan spesial keluarga sejak 2023!</li>
     <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
     <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
     <li>Lebih dari 10 varian topping siap setiap hari.</li>
     <li>100% bahan premium tanpa pengawet.</li>
     <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
-  </ul>
-
-  <h2>Galeri</h2>
+  </ul>  <h2>Galeri</h2>
   <div class="promo-gallery">
     <img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img" />
     <img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img" />
     <img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img" />
     <img src="assets/images/pukis4.jpg" alt="Pukis 4" class="responsive-img" />
     <img src="assets/images/pukis5.jpg" alt="Pukis 5" class="responsive-img" />
-  </div>
-
-  <h2>Pemesanan Pukis Lumer Aulia</h2>
+  </div>  <h2>Pemesanan Pukis Lumer Aulia</h2>
   <form id="formPukis">
     <div class="form-group">
       <label for="namaPemesan">Nama Pemesan:</label>
       <input type="text" id="namaPemesan" placeholder="Nama Anda" required>
+    </div><div class="form-group">
+  <label>Jenis Pukis:</label>
+  <label><input type="radio" name="jenis" value="original" checked onchange="hitungHarga()"> Original</label>
+  <label><input type="radio" name="jenis" value="pandan" onchange="hitungHarga()"> Pandan</label>
+</div>
+
+<div class="form-group">
+  <label>Topping:</label>
+  <label><input type="radio" name="topping" value="non" checked onchange="ubahTopping(); hitungHarga()"> Non Topping</label>
+  <label><input type="radio" name="topping" value="single" onchange="ubahTopping(); hitungHarga()"> Single Topping</label>
+  <label><input type="radio" name="topping" value="double" onchange="ubahTopping(); hitungHarga()"> Double Topping</label>
+</div>
+
+<div class="form-group" id="singleToppingGroup" style="display: none;">
+  <label>Pilih Rasa (Single):</label>
+  <label><input type="checkbox" class="singleTopping" value="Coklat"> Coklat</label>
+  <label><input type="checkbox" class="singleTopping" value="Tiramisu"> Tiramisu</label>
+  <label><input type="checkbox" class="singleTopping" value="Stroberi"> Stroberi</label>
+</div>
+
+<div class="form-group" id="doubleToppingGroup" style="display: none;">
+  <label>Pilih Taburan (Double):</label>
+  <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>
+  <label><input type="checkbox" class="doubleTopping" value="Keju"> Keju</label>
+  <label><input type="checkbox" class="doubleTopping" value="Kacang"> Kacang</label>
+</div>
+
+<div class="form-group">
+  <label for="isiBox">Isi per Box:</label>
+  <select id="isiBox" onchange="hitungHarga()">
+    <option value="5">5 pcs</option>
+    <option value="10">10 pcs</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="jumlahBox">Jumlah Box:</label>
+  <input type="number" id="jumlahBox" value="1" min="1" onchange="hitungHarga()">
+</div>
+
+<div class="form-group">
+  <p>Total Harga: <span id="totalHarga">Rp0</span></p>
+</div>
+
+<button type="submit">Kirim Pesanan via WhatsApp</button>
+
+  </form>  <div class="floating-message-toggle" onclick="window.scrollTo(0, document.body.scrollHeight);">Pesan Sekarang!</div>  <section id="form-testimoni">
+    <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
+    <form id="testimoniForm">
+      <input type="text" id="nama" placeholder="Nama Kamu" required>
+      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+      <button type="submit">Kirim Testimoni</button>
+    </form>
+    <div id="daftarTestimoni">
+      <h3>Testimoni:</h3>
+      <ul id="listTestimoni"></ul>
     </div>
-
-    <div class="form-group">
-      <label>Jenis Pukis:</label>
-      <label><input type="radio" name="jenis" value="original" checked onchange="hitungHarga()"> Original</label>
-      <label><input type="radio" name="jenis" value="pandan" onchange="hitungHarga()"> Pandan</label>
-    </div>
-
-    <div class="form-group">
-      <label>Topping:</label>
-      <label><input type="radio" name="topping" value="non" checked onchange="ubahTopping(); hitungHarga()"> Non Topping</label>
-      <label><input type="radio" name="topping" value="single" onchange="ubahTopping(); hitungHarga()"> Single Topping</label>
-      <label><input type="radio" name="topping" value="double" onchange="ubahTopping(); hitungHarga()"> Double Topping</label>
-    </div>
-
-    <div class="form-group" id="singleToppingGroup" style="display: none;">
-      <label>Pilih Rasa (Single):</label>
-      <div class="topping-group">
-        <label><input type="checkbox" class="singleTopping" value="Coklat"> Coklat</label>
-        <label><input type="checkbox" class="singleTopping" value="Tiramisu"> Tiramisu</label>
-        <label><input type="checkbox" class="singleTopping" value="Stroberi"> Stroberi</label>
-        <label><input type="checkbox" class="singleTopping" value="Cappucino"> Cappucino</label>
-        <label><input type="checkbox" class="singleTopping" value="Vanilla"> Vanilla</label>
-        <label><input type="checkbox" class="singleTopping" value="Taro"> Taro</label>
-        <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>
-      </div>
-    </div>
-
-    <div class="form-group" id="doubleToppingGroup" style="display: none;">
-      <label>Pilih Taburan (Double):</label>
-      <div class="topping-group">
-        <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>
-        <label><input type="checkbox" class="doubleTopping" value="Keju"> Keju</label>
-        <label><input type="checkbox" class="doubleTopping" value="Kacang"> Kacang</label>
-        <label><input type="checkbox" class="doubleTopping" value="Choco Chip"> Choco Chip</label>
-        <label><input type="checkbox" class="doubleTopping" value="Oreo"> Oreo</label>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="isiBox">Isi per Box:</label>
-      <select id="isiBox" onchange="hitungHarga()">
-        <option value="5">5 pcs</option>
-        <option value="10">10 pcs</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="jumlahBox">Jumlah Box:</label>
-      <input type="number" id="jumlahBox" value="1" min="1" onchange="hitungHarga()">
-    </div>
-
-    <div class="form-group">
-      <p>Total Harga: <span id="totalHarga">Rp0</span></p>
-    </div>
-
-    <button type="submit">Kirim Pesanan via WhatsApp</button>
-  </form>
-
-  <!-- Floating message -->
-  <div class="floating-message">
-    Pesan Sekarang!
-  </div>
-<!-- Single Topping -->
-<label class="singleTopping-label">
-  <input type="checkbox" class="singleTopping" value="Coklat"> Coklat
-</label>
-
-<!-- Double Topping -->
-<label class="doubleTopping-label">
-  <input type="checkbox" class="doubleTopping" value="Meses"> Meses
-</label>
-  <script src="assets/js/testimoni.js"></script>
-  <script>
+  </section>  <script>
     const hargaPukis = {
       original: { non: {5: 10000, 10: 18000}, single: {5: 13000, 10: 25000}, double: {5: 15000, 10: 28000} },
       pandan: { non: {5: 12000, 10: 22000}, single: {5: 15000, 10: 28000}, double: {5: 18000, 10: 32000} }
@@ -210,32 +187,17 @@
       window.open(waURL, "_blank");
     });
 
+    document.getElementById("testimoniForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const nama = document.getElementById("nama").value;
+      const pesan = document.getElementById("pesan").value;
+      const list = document.getElementById("listTestimoni");
+      const item = document.createElement("li");
+      item.textContent = `${nama}: ${pesan}`;
+      list.appendChild(item);
+      this.reset();
+    });
+
     window.onload = hitungHarga;
-  </script>
-
-  <section id="form-testimoni">
-    <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
-    <form id="testimoniForm">
-      <input type="text" id="nama" placeholder="Nama Kamu" required>
-      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
-      <button type="submit">Kirim Testimoni</button>
-    </form>
-
-    <div id="daftarTestimoni">
-      <h3>Testimoni:</h3>
-      <ul id="listTestimoni"></ul>
-    </div>
-  </section>
-
-  <div class="floating-buttons">
-    <a href="https://wa.me/6281296668670" class="float-btn whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
-    <a href="#" class="float-btn invite"><i class="fas fa-user-plus"></i> Undang Teman</a>
-    <a href="https://shopee.co.id" class="float-btn shopee"><i class="fab fa-shopify"></i> Shopee</a>
-    <a href="https://food.maxim.com" class="float-btn maxim"><i class="fas fa-motorcycle"></i> Maxim</a>
-    <a href="https://gofood.co.id" class="float-btn gofood"><i class="fas fa-utensils"></i> GoFood</a>
-    <a href="https://grab.com/id/food" class="float-btn grabfood"><i class="fas fa-hamburger"></i> GrabFood</a>
-  </div>
-
-  <script src="assets/js/script.js"></script>
-</body>
+  </script></body>
 </html>
