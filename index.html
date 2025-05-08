@@ -395,9 +395,7 @@
     });
 
     window.onload = hitungHarga;
-  </script>
-  <h2>Testimoni</h2>
-  <ul id="listTestimoni"></ul>
+  
 
   <button class="toggle-btn" onclick="toggleMenu(this)">+</button>
   <div class="floating-menu hidden" id="floatingMenu">
@@ -443,7 +441,9 @@
       let pesan = `Halo! Saya ingin pesan Pukis:\n- Nama: ${nama}\n- Jenis: ${jenis}\n- Topping: ${topping}\n- Isi: ${isi}\n- Jumlah Box: ${jumlah}\n- Total: ${total}`;
       window.open(`https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`, '_blank');
     });
-
+</script>
+  <h2>Testimoni</h2>
+  <ul id="listTestimoni"></ul>
     window.onload = function() {
       hitungHarga();
       const testimoni = [
