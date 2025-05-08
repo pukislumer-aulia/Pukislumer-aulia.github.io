@@ -250,3 +250,26 @@ button:hover {
 .promo-gallery img:hover {
   transform: scale(1.05);
 }
+/* Warna default */
+.singleTopping-label {
+  color: #800000;
+}
+.doubleTopping-label {
+  color: #C71585;
+}
+
+/* Hover */
+.singleTopping-label:hover {
+  color: #a52a2a;
+  cursor: pointer;
+}
+.doubleTopping-label:hover {
+  color: #d87093;
+  cursor: pointer;
+}
+
+/* Efek saat dipilih */
+.checked-topping {
+  font-weight: bold;
+  text-decoration: underline;
+}
