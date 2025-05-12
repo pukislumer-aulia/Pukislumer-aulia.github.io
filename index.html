@@ -9,15 +9,13 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/form-style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
-  <style>
 
+  <style>
     .responsive-img {
       max-width: 100%;
       height: auto;
     }
-  </style>
-  <title>Toggle Kontak</title>
-  <style>
+
     .toggle-container {
       position: fixed;
       bottom: 20px;
@@ -52,8 +50,8 @@
       color: #007bff;
     }
   </style>
-</head>
-<body>
+</head>  
+</body>
   <!-- Promo Kupon -->
   <div class="promo-image">
     <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
@@ -257,31 +255,23 @@
   </div>
 </section>
 
-<div class="toggle-container">
-  <div class="toggle-header" onclick="toggleContent()">Kontak & Link</div>
-  <div class="toggle-content" id="toggleContent">
-    <p><strong>Chat WhatsApp:</strong> <a href="https://wa.me/6281296668670">081296668670</a></p>
-    <p><strong>Undang Teman:</strong></p>
-    <ul>
-      <li><a href="https://facebook.com/sharer/sharer.php?u=https://pukislumer-aulia.github.io/">Facebook</a></li>
-      <li><a href="https://www.instagram.com/">Instagram</a></li>
-      <li><a href="https://www.tiktok.com/">TikTok</a></li>
-      <li><a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io/">Twitter</a></li>
-      <li><a href="https://wa.me/?text=https://pukislumer-aulia.github.io/">WhatsApp</a></li>
-      <li><a href="https://pukislumer-aulia.github.io/">Website</a></li>
-    </ul>
-    <p><strong>Maxim:</strong> <a href="https://food.maxim.com">Link</a></p>
-    <p><strong>Facebook:</strong> pukislumer.aulia</p>
-    <p><strong>TikTok:</strong> @pukislumer.aulia</p>
-    <p><strong>Twitter:</strong> @pukislumer.aulia</p>
-    <p><strong>Instagram:</strong> @pukis.lumer_aulia</p>
-  </div>
+<div class="toggle-float-btn" onclick="toggleFloatingIcons()">
+  <i class="fas fa-share-alt"></i>
+</div>
+
+<div class="floating-icons-container" id="floatingIcons">
+  <a href="https://wa.me/6281296668670" target="_blank" class="floating-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
+  <a href="https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon link"><i class="fas fa-link"></i></a>
+  <a href="https://facebook.com/sharer/sharer.php?u=https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon facebook"><i class="fab fa-facebook-f"></i></a>
+  <a href="https://www.instagram.com/pukis.lumer_aulia" target="_blank" class="floating-icon instagram"><i class="fab fa-instagram"></i></a>
+  <a href="https://www.tiktok.com/@pukislumer.aulia" target="_blank" class="floating-icon tiktok"><i class="fab fa-tiktok"></i></a>
+  <a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon twitter"><i class="fab fa-twitter"></i></a>
+  <a href="https://food.maxim.com" target="_blank" class="floating-icon maxim"><i class="fas fa-utensils"></i></a>
 </div>
 
 <script>
-  function toggleContent() {
-    var content = document.getElementById("toggleContent");
-    content.style.display = content.style.display === "block" ? "none" : "block";
+  function toggleFloatingIcons() {
+    document.getElementById('floatingIcons').classList.toggle('show');
   }
 </script>
 
