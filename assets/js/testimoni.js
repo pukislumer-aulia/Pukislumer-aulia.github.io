@@ -1,59 +1,58 @@
-// Inisialisasi Firebase (pastikan konfigurasi sudah benar)
+// Konfigurasi Firebase (isi sesuai dengan Firebase kamu)
 const firebaseConfig = {
-  // Ganti dengan konfigurasi Firebase kamu
+  apiKey: "API_KEY_KAMU",
+  authDomain: "PROJECT_ID.firebaseapp.com",
+  databaseURL: "https://PROJECT_ID.firebaseio.com",
+  projectId: "PROJECT_ID",
+  storageBucket: "PROJECT_ID.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 document.addEventListener("DOMContentLoaded", () => {
-  const testimonialList = document.getElementById("testimonialList");
+  const testimonialList = document.getElementById("listTestimoni");
 
-  // Tampilkan testimoni dari localStorage (fake)
+  // Tampilkan testimoni fake dari localStorage jika belum ada
   const saved = JSON.parse(localStorage.getItem("testimoni")) || [];
   if (saved.length === 0) {
     const defaultTestimoni = [
-      "Kuenya lembut banget dan lumer di mulut!",
-      "Toppingnya banyak pilihan dan enak semua.",
-      "Pelayanan cepat, kuenya masih hangat saat sampai.",
-      "Pukis pandan favorit keluarga saya!",
-      "Sudah order 3x, selalu puas!"
+      '"Kuenya lembut banget dan lumer di mulut!" - Rina',
+      '"Toppingnya banyak pilihan dan enak semua." - Dodi',
+      '"Pelayanan cepat, kuenya masih hangat saat sampai." - Siska',
+      '"Pukis pandan favorit keluarga saya!" - Budi',
+      '"Sudah order 3x, selalu puas!" - Ana'
     ];
-    defaultTestimoni.forEach((isi) => tambahKeHalaman(isi));
+    defaultTestimoni.forEach(teks => tambahKeHalaman(teks));
     localStorage.setItem("testimoni", JSON.stringify(defaultTestimoni));
   } else {
-    saved.forEach((isi) => tambahKeHalaman(isi));
+    saved.forEach(teks => tambahKeHalaman(teks));
   }
 
-  // Ambil testimoni dari Firebase
+  // Ambil testimoni dari Firebase (opsional, tidak menimpa localStorage)
   const testiRef = database.ref("testimoni");
-  testiRef.once("value", (snapshot) => {
-    snapshot.forEach((childSnapshot) => {
+  testiRef.once("value", snapshot => {
+    snapshot.forEach(childSnapshot => {
       const data = childSnapshot.val();
       if (data.nama && data.pesan) {
         const teks = `"${data.pesan}" - ${data.nama}`;
-        tambahKeHalaman(teks);
+        if (!saved.includes(teks)) {
+          tambahKeHalaman(teks);
+        }
       }
     });
   });
 });
 
-function tambahTestimoni() {
-  const input = document.getElementById("testimonialInput");
-  const isi = input.value.trim();
-  if (isi !== "") {
-    tambahKeHalaman(isi);
-    simpanKeLocalStorage(isi);
-    input.value = "";
-  }
-}
-
+// Tambahkan testimoni baru ke halaman dan localStorage
 function tambahKeHalaman(teks) {
-  const testimonialList = document.getElementById("testimonialList");
-  const div = document.createElement("div");
-  div.classList.add("testimonial-item");
-  div.textContent = teks;
-  testimonialList.appendChild(div);
+  const testimonialList = document.getElementById("listTestimoni");
+  const li = document.createElement("li");
+  li.classList.add("testimonial-item");
+  li.textContent = teks;
+  testimonialList.appendChild(li);
 }
 
 function simpanKeLocalStorage(teks) {
@@ -62,14 +61,7 @@ function simpanKeLocalStorage(teks) {
   localStorage.setItem("testimoni", JSON.stringify(existing));
 }
 
-function hapusSemuaTestimoni() {
-  if (confirm("Yakin ingin menghapus semua testimoni?")) {
-    localStorage.removeItem("testimoni");
-    document.getElementById("testimonialList").innerHTML = "";
-  }
-}
-
-// Kirim testimoni baru ke Firebase
+// Kirim testimoni ke Firebase dan simpan lokal
 document.getElementById("testimoniForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -81,6 +73,11 @@ document.getElementById("testimoniForm").addEventListener("submit", function (e)
     return;
   }
 
+  const teks = `"${pesan}" - ${nama}`;
+  tambahKeHalaman(teks);
+  simpanKeLocalStorage(teks);
+
+  // Simpan ke Firebase
   const testiRef = database.ref("testimoni").push();
   testiRef.set({
     nama,
@@ -91,3 +88,11 @@ document.getElementById("testimoniForm").addEventListener("submit", function (e)
   alert("Testimoni berhasil dikirim!");
   this.reset();
 });
+
+// Fungsi tambahan (jika ingin hapus semua)
+function hapusSemuaTestimoni() {
+  if (confirm("Yakin ingin menghapus semua testimoni lokal?")) {
+    localStorage.removeItem("testimoni");
+    document.getElementById("listTestimoni").innerHTML = "";
+  }
+}
