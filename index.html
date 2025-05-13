@@ -256,14 +256,21 @@
 
   <div id="daftarTestimoni">
     <h3>Testimoni:</h3>
-    <ul id="listTestimoni"></ul>
+    <ul id="listTestimoni">
+      <!-- Testimoni palsu -->
+      <li><strong>Rina</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+      <li><strong>Andi</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+      <li><strong>Siti</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+    </ul>
   </div>
 </section>
 
-<div class="toggle-float-btn" onclick="toggleFloatingIcons()">
+<!-- Tombol Share Mengambang -->
+<div class="toggle-float-btn" id="toggleShareBtn">
   <i class="fas fa-share-alt"></i>
 </div>
 
+<!-- Ikon Sosial Media -->
 <div class="floating-icons-container" id="floatingIcons">
   <a href="https://wa.me/6281296668670" target="_blank" class="floating-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
   <a href="https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon link"><i class="fas fa-link"></i></a>
@@ -274,13 +281,7 @@
   <a href="https://food.maxim.com" target="_blank" class="floating-icon maxim"><i class="fas fa-utensils"></i></a>
 </div>
 
-<script>
-  function toggleFloatingIcons() {
-    document.getElementById('floatingIcons').classList.toggle('show');
-  }
-</script>
-
-  <script src="assets/js/script.js"></script>
-  <script src="assets/js/testimoni.js"></script>
+<!-- JavaScript utama -->
+<script src="assets/js/script.js" defer></script>
 </body>
 </html>
