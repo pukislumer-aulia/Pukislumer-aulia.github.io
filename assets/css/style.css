@@ -1,4 +1,4 @@
-/* Umum */
+/* === UMUM === */
 body {
   font-family: sans-serif;
   padding: 20px;
@@ -12,7 +12,6 @@ h1, h2, h3 {
   text-align: center;
 }
 
-/* Gambar Responsif */
 .responsive-img {
   max-width: 100%;
   height: auto;
@@ -20,7 +19,7 @@ h1, h2, h3 {
   margin: 0 auto 10px;
 }
 
-/* Testimoni */
+/* === FORM TESTIMONI === */
 #form-testimoni {
   background-color: #fff8f0;
   padding: 30px;
@@ -58,6 +57,7 @@ button:hover {
   background-color: #ff9f1c;
 }
 
+/* === LIST TESTIMONI === */
 #daftarTestimoni {
   margin-top: 40px;
 }
@@ -77,7 +77,7 @@ button:hover {
   text-align: left;
 }
 
-/* Promo teks berjalan */
+/* === PROMO TEKS BERJALAN === */
 .promo-running-text {
   width: 100%;
   overflow: hidden;
@@ -106,120 +106,66 @@ button:hover {
   }
 }
 
-/* Floating Buttons Menu */
-.floating-menu {
-  display: none; /* default hidden */
+/* === TOMBOL TOGGLE FLOATING SHARE === */
+.toggle-float-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 12px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === FLOATING SHARE ICONS === */
+.floating-icons-container {
+  display: none;
   position: fixed;
   bottom: 80px;
   right: 20px;
   flex-direction: column;
-  align-items: flex-end;
   gap: 10px;
-  z-index: 9999;
-  opacity: 0.3;
-  transition: opacity 0.4s ease;
+  z-index: 1000;
+  transition: opacity 0.3s ease;
 }
 
-.floating-menu.show {
+.floating-icons-container.show {
   display: flex;
 }
 
-.floating-menu:hover {
-  opacity: 1;
-}
-
-.float-btn {
-  padding: 10px 14px;
-  border-radius: 8px;
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Warna Tombol */
-.float-btn.whatsapp {
-  background-color: #25d366;
-}
-
-.float-btn.invite {
-  background-color: #ffd700;
-  color: #000;
-}
-
-.float-btn.shopee {
-  background-color: #ff5722;
-}
-
-.float-btn.maxim {
-  background-color: #fff600;
-  color: #000;
-}
-
-.float-btn.gofood {
-  background-color: #ff2e2e;
-}
-
-.float-btn.grabfood {
-  background-color: #00c853;
-}
-
-.float-btn.facebook {
-  background-color: #3b5998;
-}
-
-.float-btn.instagram {
-  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, 
-              #fd5949 45%, #d6249f 60%, #285AEB 90%);
-  color: white;
-}
-
-.float-btn.tiktok {
-  background-color: #010101;
-  color: #fff;
-}
-
-.toggle-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  font-size: 24px;
-  padding: 10px 15px;
-  border: none;
+.floating-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background-color: #007bff;
   color: white;
-  cursor: pointer;
-  z-index: 1000;
+  font-size: 18px;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive Mobile */
-@media screen and (max-width: 600px) {
-  body {
-    padding: 10px;
-    font-size: 1.1rem;
-  }
-
-  form, #listTestimoni li {
-    width: 100%;
-  }
-
-  .floating-menu {
-    right: 10px;
-    bottom: 10px;
-  }
-
-  .float-btn {
-    font-size: 12px;
-    padding: 8px 12px;
-  }
-
-  .promo-running-text p {
-    font-size: 1em;
-  }
+/* Warna ikon */
+.floating-icon.whatsapp { background-color: #25d366; }
+.floating-icon.instagram {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
 }
+.floating-icon.facebook { background-color: #3b5998; }
+.floating-icon.shopee { background-color: #ff5722; }
+.floating-icon.tiktok { background-color: #010101; }
+.floating-icon.maxim { background-color: #fff600; color: #000; }
+.floating-icon.gofood { background-color: #ff2e2e; }
+.floating-icon.grabfood { background-color: #00c853; }
 
-/* Galeri Promo */
+/* === GALERI PROMO === */
 .promo-gallery {
   display: flex;
   flex-wrap: wrap;
@@ -240,7 +186,7 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Warna default */
+/* === TOPPING STYLE === */
 .singleTopping-label {
   color: #800000;
 }
@@ -248,7 +194,6 @@ button:hover {
   color: #C71585;
 }
 
-/* Hover */
 .singleTopping-label:hover {
   color: #a52a2a;
   cursor: pointer;
@@ -258,8 +203,39 @@ button:hover {
   cursor: pointer;
 }
 
-/* Efek saat dipilih */
 .checked-topping {
   font-weight: bold;
   text-decoration: underline;
+}
+
+/* === RESPONSIVE === */
+@media screen and (max-width: 600px) {
+  body {
+    padding: 10px;
+    font-size: 1.1rem;
+  }
+
+  form, #listTestimoni li {
+    width: 100%;
+  }
+
+  .toggle-float-btn {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .floating-icons-container {
+    right: 15px;
+    bottom: 75px;
+  }
+
+  .floating-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .promo-running-text p {
+    font-size: 1em;
+  }
 }
