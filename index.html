@@ -245,26 +245,27 @@
     window.onload = hitungHarga;
   </script>
 
-<div id="daftarTestimoni">
-  <h3>Testimoni:</h3>
-  <ul id="listTestimoni">
-    <!-- Testimoni palsu -->
-    <li><strong>Rina</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
-    <li><strong>Andi</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
-    <li><strong>Siti</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
-  </ul>
-  <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
-    Hapus Semua Testimoni
-  </button>
-</div>
-
-<!-- Tombol Share Mengambang -->
-<div class="toggle-float-btn" id="toggleShareBtn">
+<!-- Form Testimoni --><section id="form-testimoni">
+  <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
+  <form id="testimoniForm">
+    <input type="text" id="nama" placeholder="Nama Kamu" required>
+    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>  <div id="daftarTestimoni">
+    <h3>Testimoni:</h3>
+    <ul id="listTestimoni">
+      <!-- Testimoni palsu -->
+      <li><strong>Rina</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+      <li><strong>Andi</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+      <li><strong>Siti</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+    </ul>
+    <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+      Hapus Semua Testimoni
+    </button>
+  </div>
+</section><!-- Tombol Share Mengambang --><div class="toggle-float-btn" id="toggleShareBtn">
   <i class="fas fa-share-alt"></i>
-</div>
-
-<!-- Ikon Sosial Media -->
-<div class="floating-icons-container" id="floatingIcons">
+</div><!-- Ikon Sosial Media --><div class="floating-icons-container" id="floatingIcons">
   <a href="https://wa.me/6281296668670" target="_blank" class="floating-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
   <a href="https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon link"><i class="fas fa-link"></i></a>
   <a href="https://facebook.com/sharer/sharer.php?u=https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon facebook"><i class="fab fa-facebook-f"></i></a>
@@ -272,7 +273,57 @@
   <a href="https://www.tiktok.com/@pukislumer.aulia" target="_blank" class="floating-icon tiktok"><i class="fab fa-tiktok"></i></a>
   <a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon twitter"><i class="fab fa-twitter"></i></a>
   <a href="https://food.maxim.com" target="_blank" class="floating-icon maxim"><i class="fas fa-utensils"></i></a>
-</div>
+</div><!-- JavaScript utama --><script src="assets/js/script.js" defer></script><script>
+  const toggleBtn = document.getElementById("toggleShareBtn");
+  const floatingIcons = document.getElementById("floatingIcons");
+  toggleBtn.addEventListener("click", () => {
+    floatingIcons.classList.toggle("show");
+  });
+</script><style>
+  .toggle-float-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff5722;
+    color: white;
+    border-radius: 50%;
+    padding: 15px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .floating-icons-container {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+  }
+
+  .floating-icon {
+    background-color: #fff;
+    color: #333;
+    border-radius: 50%;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .floating-icon:hover {
+    background-color: #ff9800;
+    color: white;
+  }
+
+  .floating-icons-container.show {
+    display: flex;
+  }
+</style>
 
 <!-- JavaScript utama -->
 <script src="assets/js/script.js" defer></script>
