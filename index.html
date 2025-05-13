@@ -245,25 +245,18 @@
     window.onload = hitungHarga;
   </script>
 
-<!-- Form Testimoni -->
-<section id="form-testimoni">
-  <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
-  <form id="testimoniForm">
-    <input type="text" id="nama" placeholder="Nama Kamu" required>
-    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
-    <button type="submit">Kirim Testimoni</button>
-  </form>
-
-  <div id="daftarTestimoni">
-    <h3>Testimoni:</h3>
-    <ul id="listTestimoni">
-      <!-- Testimoni palsu -->
-      <li><strong>Rina</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
-      <li><strong>Andi</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
-      <li><strong>Siti</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
-    </ul>
-  </div>
-</section>
+<div id="daftarTestimoni">
+  <h3>Testimoni:</h3>
+  <ul id="listTestimoni">
+    <!-- Testimoni palsu -->
+    <li><strong>Rina</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+    <li><strong>Andi</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+    <li><strong>Siti</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+  </ul>
+  <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+    Hapus Semua Testimoni
+  </button>
+</div>
 
 <!-- Tombol Share Mengambang -->
 <div class="toggle-float-btn" id="toggleShareBtn">
