@@ -108,16 +108,20 @@ button:hover {
 
 /* Floating Buttons Menu */
 .floating-menu {
+  display: none; /* default hidden */
   position: fixed;
+  bottom: 80px;
   right: 20px;
-  bottom: 20px;
-  z-index: 9999;
-  display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
+  z-index: 9999;
   opacity: 0.3;
   transition: opacity 0.4s ease;
+}
+
+.floating-menu.show {
+  display: flex;
 }
 
 .floating-menu:hover {
@@ -160,18 +164,19 @@ button:hover {
   background-color: #00c853;
 }
 
-/* Responsive Floating Menu */
-.floating-menu {
-  display: none;
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  flex-direction: column;
-  gap: 10px;
+.float-btn.facebook {
+  background-color: #3b5998;
 }
 
-.floating-menu.show {
-  display: flex;
+.float-btn.instagram {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, 
+              #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  color: white;
+}
+
+.float-btn.tiktok {
+  background-color: #010101;
+  color: #fff;
 }
 
 .toggle-btn {
@@ -214,22 +219,6 @@ button:hover {
   }
 }
 
-/* Tombol media sosial */
-.float-btn.facebook {
-  background-color: #3b5998;
-}
-
-.float-btn.instagram {
-  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, 
-              #fd5949 45%, #d6249f 60%, #285AEB 90%);
-  color: white;
-}
-
-.float-btn.tiktok {
-  background-color: #010101;
-  color: #fff;
-}
-
 /* Galeri Promo */
 .promo-gallery {
   display: flex;
@@ -250,6 +239,7 @@ button:hover {
 .promo-gallery img:hover {
   transform: scale(1.05);
 }
+
 /* Warna default */
 .singleTopping-label {
   color: #800000;
