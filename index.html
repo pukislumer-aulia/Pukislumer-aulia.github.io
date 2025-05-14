@@ -54,6 +54,26 @@
     }
   </style>
 
+  <style>
+  footer {
+    background-color: #222;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+
+  .map-link img {
+    width: 30px;
+    vertical-align: middle;
+    transition: transform 0.2s ease;
+  }
+
+  .map-link:hover img {
+    transform: scale(1.2);
+  }
+  </style>
+
   <script src="assets/js/script.js" defer></script>
 </head>
 </body>
@@ -331,9 +351,17 @@
 <footer>
   <p>&copy; 2025 Pukis Lumer Aulia. All rights reserved.</p>
   <p>
-    Kunjungi kami di lokasi berikut:
-    <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" rel="noopener noreferrer">
-      PUKIS LUMER AULIA - Lihat di Google Maps
+    Kunjungi lokasi kami:
+    <a
+      href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="map-link"
+    >
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/684/684908.png"
+        alt="Lokasi Pukis Lumer Aulia"
+      />
     </a>
   </p>
 </footer>
