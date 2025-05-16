@@ -283,6 +283,13 @@
     <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
       Hapus Semua Testimoni
     </button>
+    <script>
+  const toggleBtn = document.getElementById("toggleShareBtn");
+  const floatingIcons = document.getElementById("floatingIcons");
+  toggleBtn.addEventListener("click", () => {
+    floatingIcons.classList.toggle("show");
+  });
+</script>
   </div>
 <!-- Tombol Share Mengambang --><div class="toggle-float-btn" id="toggleShareBtn">
   <i class="fas fa-share-alt"></i>
