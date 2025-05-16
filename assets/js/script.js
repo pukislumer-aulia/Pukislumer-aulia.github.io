@@ -159,3 +159,12 @@ document.getElementById('orderForm').addEventListener('submit', (e) => {
   e.preventDefault();
   submitOrder();
 });
+// Toggle tombol share mengambang
+const toggleBtn = document.getElementById("toggleShareBtn");
+const floatingIcons = document.getElementById("floatingIcons");
+
+if (toggleBtn && floatingIcons) {
+  toggleBtn.addEventListener("click", () => {
+    floatingIcons.classList.toggle("show");
+  });
+}
