@@ -76,12 +76,11 @@
 
   <script src="assets/js/script.js" defer></script>
 </head>
-</body>
+<body>
   <!-- Promo Kupon -->
   <div class="promo-image">
     <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
-    <div class="promo-container">
-   </div>
+    
     <div class="promo-running-text">
       <p>
         Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!
@@ -290,106 +289,56 @@
     floatingIcons.classList.toggle("show");
   });
 </script>
+
+  <!-- Tombol Share Mengambang -->
+  <div class="toggle-float-btn" id="toggleShareBtn">
+    <i class="fas fa-share-alt"></i>
   </div>
-<!-- Tombol Share Mengambang --><div class="toggle-float-btn" id="toggleShareBtn">
-  <i class="fas fa-share-alt"></i>
-</div><!-- Ikon Sosial Media --><div class="floating-icons-container" id="floatingIcons">
-  <a href="https://wa.me/6281296668670" target="_blank" class="floating-icon whatsapp" title="WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-  </a>
-  <a href="https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon link" title="Website">
-    <i class="fas fa-link"></i>
-  </a>
-  <a href="https://www.facebook.com/share/1YRycMnSjz/" target="_blank" class="floating-icon facebook" title="Facebook">
-    <i class="fab fa-facebook-f"></i>
-  </a>
-  <a href="https://www.instagram.com/pukis.lumer_aulia" target="_blank" class="floating-icon instagram" title="Instagram">
-    <i class="fab fa-instagram"></i>
-  </a>
-  <a href="https://www.tiktok.com/@pukislumer.aulia" target="_blank" class="floating-icon tiktok" title="TikTok">
-    <i class="fab fa-tiktok"></i>
-  </a>
-  <a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon twitter" title="Twitter">
-    <i class="fab fa-twitter"></i>
-  </a>
-  <a href="https://food.maxim.com" target="_blank" class="floating-icon maxim" title="Maxim">
-    <i class="fas fa-utensils"></i>
-  </a>
-</div><!-- Script Tombol Mengambang --><script>
-  const toggleBtn = document.getElementById("toggleShareBtn");
-  const floatingIcons = document.getElementById("floatingIcons");
-  toggleBtn.addEventListener("click", () => {
-    floatingIcons.classList.toggle("show");
-  });
-</script><!-- Style Tombol Mengambang --><style>
-  .toggle-float-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #ff5722;
-    color: white;
-    border-radius: 50%;
-    padding: 15px;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
 
-  .floating-icons-container {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    display: none;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 1000;
-  }
-
-  .floating-icon {
-    background-color: #fff;
-    color: #333;
-    border-radius: 50%;
-    padding: 10px;
-    text-align: center;
-    font-size: 18px;
-    width: 40px;
-    height: 40px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s ease;
-  }
-
-  .floating-icon:hover {
-    background-color: #ff9800;
-    color: white;
-  }
-
-  .floating-icons-container.show {
-    display: flex;
-  }
-</style><!-- Footer --><footer style="margin-top: 2rem; text-align: center;">
-  <p>&copy; 2025 Pukis Lumer Aulia. All rights reserved.</p>
-  <p>
-    Kunjungi lokasi kami:
-    <a
-      href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="map-link"
-    >
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/684/684908.png"
-        alt="Lokasi Pukis Lumer Aulia"
-        width="32"
-        height="32"
-      />
+  <!-- Ikon Sosial Media -->
+  <div class="floating-icons-container" id="floatingIcons">
+    <a href="https://wa.me/6281296668670" target="_blank" class="floating-icon whatsapp" title="WhatsApp">
+      <i class="fab fa-whatsapp"></i>
     </a>
-  </p>
-</footer>
-  
-<!-- JavaScript utama -->
-<script src="assets/js/script.js" defer></script>
+    <a href="https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon link" title="Website">
+      <i class="fas fa-link"></i>
+    </a>
+    <a href="https://www.facebook.com/share/1YRycMnSjz/" target="_blank" class="floating-icon facebook" title="Facebook">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://www.instagram.com/pukis.lumer_aulia" target="_blank" class="floating-icon instagram" title="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.tiktok.com/@pukislumer.aulia" target="_blank" class="floating-icon tiktok" title="TikTok">
+      <i class="fab fa-tiktok"></i>
+    </a>
+    <a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon twitter" title="Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+    <a href="https://food.maxim.com" target="_blank" class="floating-icon maxim" title="Maxim">
+      <i class="fas fa-utensils"></i>
+    </a>
+  </div>
+
+  <!-- Script Tombol Mengambang -->
+  <script>
+    const toggleBtn = document.getElementById("toggleShareBtn");
+    const floatingIcons = document.getElementById("floatingIcons");
+    toggleBtn.addEventListener("click", () => {
+      floatingIcons.classList.toggle("show");
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Pukis Lumer Aulia. All rights reserved.</p>
+    <p>
+      Kunjungi lokasi kami:
+      <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" rel="noopener noreferrer" class="map-link">
+        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Lokasi Pukis Lumer Aulia" width="32" height="32" />
+      </a>
+    </p>
+  </footer>
+
 </body>
 </html>
