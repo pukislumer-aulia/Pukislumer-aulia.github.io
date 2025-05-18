@@ -274,3 +274,28 @@ button:hover {
 .share-buttons a:hover {
   color: #007bff;
 }
+.floating-share {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999;
+}
+
+.floating-share a {
+  background: #fff;
+  color: #333;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 50%;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.floating-share a:hover {
+  background: #f0f0f0;
+  transform: scale(1.1);
+}
