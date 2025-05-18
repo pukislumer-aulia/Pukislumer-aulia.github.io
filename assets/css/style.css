@@ -1,301 +1,76 @@
-/* === UMUM === */
-body {
-  font-family: sans-serif;
-  padding: 20px;
-  background: #fff8e1;
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
+/* === UMUM === */ body { font-family: sans-serif; padding: 20px; background: #fff8e1; font-size: 1.05rem; line-height: 1.6; }
 
-h1, h2, h3 {
-  color: #ff9900;
-  text-align: center;
-}
+h1, h2, h3 { color: #ff9900; text-align: center; }
 
-.responsive-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto 10px;
-}
+.responsive-img { max-width: 100%; height: auto; display: block; margin: 0 auto 10px; }
 
-/* === PROMO TEKS BERJALAN === */
-.promo-running-text {
-  width: 100%;
-  overflow: hidden;
-  background-color: #fff4e6;
-  border-top: 2px solid red;
-  border-bottom: 2px solid red;
-  padding: 10px 0;
-  position: relative;
-}
+/* === PROMO TEKS BERJALAN === */ .promo-running-text { width: 100%; overflow: hidden; background-color: #fff4e6; border-top: 2px solid red; border-bottom: 2px solid red; padding: 10px 0; position: relative; }
 
-.promo-running-text p {
-  display: inline-block;
-  white-space: nowrap;
-  animation: scroll-left 15s linear infinite;
-  font-weight: bold;
-  color: red;
-  font-size: 1.2em;
-}
+.promo-running-text p { display: inline-block; white-space: nowrap; animation: scroll-left 15s linear infinite; font-weight: bold; color: red; font-size: 1.2em; }
 
-@keyframes scroll-left {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
+@keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-/* === FORM TESTIMONI === */
-#form-testimoni {
-  background-color: #fff8f0;
-  padding: 30px;
-  text-align: center;
-}
+/* === FORM TESTIMONI === */ #form-testimoni { background-color: #fff8f0; padding: 30px; text-align: center; }
 
-form {
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-}
+form { max-width: 500px; margin: auto; display: flex; flex-direction: column; }
 
-input,
-textarea {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1em;
-}
+input, textarea { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; }
 
-/* === TOMBOL === */
-button {
-  background-color: #ffb347;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
+/* === TOMBOL === */ button { background-color: #ffb347; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background-color 0.3s; }
 
-button:hover {
-  background-color: #ff9f1c;
-}
+button:hover { background-color: #ff9f1c; }
 
-/* === LIST TESTIMONI === */
-#daftarTestimoni {
-  margin-top: 40px;
-}
+/* === LIST TESTIMONI === */ #daftarTestimoni { margin-top: 40px; }
 
-#listTestimoni {
-  list-style-type: none;
-  padding: 0;
-}
+#listTestimoni { list-style-type: none; padding: 0; }
 
-#listTestimoni li {
-  background: #fff;
-  border: 1px solid #eee;
-  padding: 15px;
-  margin: 10px auto;
-  max-width: 500px;
-  border-radius: 8px;
-  text-align: left;
-}
+#listTestimoni li { background: #fff; border: 1px solid #eee; padding: 15px; margin: 10px auto; max-width: 500px; border-radius: 8px; text-align: left; }
 
-/* === GALERI PROMO === */
-.promo-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
-}
+/* === GALERI PROMO === */ .promo-gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0; }
 
-.promo-gallery img {
-  width: 180px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-}
+.promo-gallery img { width: 180px; height: auto; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
 
-.promo-gallery img:hover {
-  transform: scale(1.05);
-}
+.promo-gallery img:hover { transform: scale(1.05); }
 
-/* === TOPPING STYLE === */
-.singleTopping-label {
-  color: #800000;
-}
+/* === TOPPING STYLE === */ .singleTopping-label { color: #800000; }
 
-.singleTopping-label:hover {
-  color: #a52a2a;
-  cursor: pointer;
-}
+.singleTopping-label:hover { color: #a52a2a; cursor: pointer; }
 
-.doubleTopping-label {
-  color: #C71585;
-}
+.doubleTopping-label { color: #C71585; }
 
-.doubleTopping-label:hover {
-  color: #d87093;
-  cursor: pointer;
-}
+.doubleTopping-label:hover { color: #d87093; cursor: pointer; }
 
-.checked-topping {
-  font-weight: bold;
-  text-decoration: underline;
-}
+.checked-topping { font-weight: bold; text-decoration: underline; }
 
-/* === TOMBOL TOGGLE FLOATING SHARE === */
-.toggle-float-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #25d366;
-  color: white;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 1001;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
-}
+/* === TOMBOL TOGGLE FLOATING SHARE === */ .toggle-float-btn { position: fixed; bottom: 20px; right: 20px; background-color: #25d366; color: white; width: 56px; height: 56px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 1001; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease; }
 
-.toggle-float-btn:hover {
-  background-color: #1ebe57;
-}
+.toggle-float-btn:hover { background-color: #1ebe57; }
 
-/* === FLOATING SHARE ICONS === */
-.floating-icons-container {
-  position: fixed;
-  bottom: 90px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(20px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-  z-index: 1000;
-}
+/* === FLOATING SHARE ICONS === */ .floating-icons-container { position: fixed; bottom: 90px; right: 20px; display: flex; flex-direction: column; gap: 12px; opacity: 0; visibility: hidden; transform: translateY(20px); transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s; z-index: 1000; }
 
-.floating-icons-container.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
+.floating-icons-container.show { opacity: 1; visibility: visible; transform: translateY(0); }
 
-.floating-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  color: white;
-  font-size: 22px;
-  text-decoration: none;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  transition: filter 0.3s ease;
-}
+.floating-icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; color: white; font-size: 22px; text-decoration: none; box-shadow: 0 3px 8px rgba(0,0,0,0.2); transition: filter 0.3s ease; }
 
-.floating-icon:hover {
-  filter: brightness(0.85);
-}
+.floating-icon:hover { filter: brightness(0.85); }
 
-/* === Warna Ikon Sosial Media === */
-.floating-icon.whatsapp { background-color: #25d366; }
-.floating-icon.instagram {
-  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-}
-.floating-icon.facebook { background-color: #3b5998; }
-.floating-icon.tiktok { background-color: #010101; }
-.floating-icon.twitter { background-color: #1DA1F2; }
+/* === Warna Ikon Sosial Media === */ .floating-icon.whatsapp { background-color: #25d366; } .floating-icon.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%); } .floating-icon.facebook { background-color: #3b5998; } .floating-icon.tiktok { background-color: #010101; } .floating-icon.twitter { background-color: #1DA1F2; }
 
-/* === RESPONSIVE === */
-@media screen and (max-width: 600px) {
-  body {
-    padding: 10px;
-    font-size: 1.1rem;
-  }
+/* === SHARE BUTTONS BAGIAN TENGAH === */ .share-buttons { margin-top: 20px; text-align: center; }
 
-  form, #listTestimoni li {
-    width: 100%;
-  }
+.share-buttons a { margin: 0 10px; text-decoration: none; font-size: 24px; color: #555; transition: color 0.3s ease; }
 
-  .promo-running-text p {
-    font-size: 1em;
-  }
+.share-buttons a:hover { color: #007bff; }
 
-  .toggle-float-btn {
-    bottom: 15px;
-    right: 15px;
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
-  }
+/* === RESPONSIVE === */ @media screen and (max-width: 600px) { body { padding: 10px; font-size: 1.1rem; }
 
-  .floating-icons-container {
-    right: 15px;
-    bottom: 75px;
-  }
+form, #listTestimoni li { width: 100%; }
 
-  .floating-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-  }
-}
-.share-buttons {
-  margin-top: 20px;
-  text-align: center;
-}
+.promo-running-text p { font-size: 1em; }
 
-.share-buttons a {
-  margin: 0 10px;
-  text-decoration: none;
-  font-size: 24px;
-  color: #555;
-  transition: color 0.3s ease;
-}
+.toggle-float-btn { bottom: 15px; right: 15px; width: 48px; height: 48px; font-size: 20px; }
 
-.share-buttons a:hover {
-  color: #007bff;
-}
-.floating-share {
-  position: fixed;
-  bottom: 100px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 999;
-}
+.floating-icons-container { right: 15px; bottom: 75px; }
 
-.floating-share a {
-  background: #fff;
-  color: #333;
-  font-size: 20px;
-  padding: 10px;
-  border-radius: 50%;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  transition: background 0.3s, transform 0.2s;
-}
+.floating-icon { width: 40px; height: 40px; font-size: 18px; } }
 
-.floating-share a:hover {
-  background: #f0f0f0;
-  transform: scale(1.1);
-}
