@@ -258,3 +258,19 @@ button:hover {
     font-size: 18px;
   }
 }
+.share-buttons {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.share-buttons a {
+  margin: 0 10px;
+  text-decoration: none;
+  font-size: 24px;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+.share-buttons a:hover {
+  color: #007bff;
+}
