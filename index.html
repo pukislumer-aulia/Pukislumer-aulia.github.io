@@ -281,52 +281,40 @@
     <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
       Hapus Semua Testimoni
     </button>
-    <script>
+    
+<!-- Tombol & Ikon Share Mengambang -->
+<div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
+  <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank" aria-label="WhatsApp" rel="noopener noreferrer">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+  <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank" aria-label="Facebook" rel="noopener noreferrer">
+    <i class="fa-brands fa-facebook-f"></i>
+  </a>
+  <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
+    <i class="fa-brands fa-instagram"></i>
+  </a>
+  <a href="https://twitter.com/pukislumer_aulia" class="floating-icon twitter" target="_blank" aria-label="Twitter" rel="noopener noreferrer">
+    <i class="fa-brands fa-twitter"></i>
+  </a>
+  <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank" aria-label="TikTok" rel="noopener noreferrer">
+    <i class="fa-brands fa-tiktok"></i>
+  </a>
+</div>
+
+<div class="toggle-float-btn" id="toggleShareBtn" aria-label="Bagikan">
+  <i class="fa-solid fa-share-nodes"></i>
+</div>
+
+<script>
   const toggleBtn = document.getElementById("toggleShareBtn");
   const floatingIcons = document.getElementById("floatingIcons");
+
   toggleBtn.addEventListener("click", () => {
     floatingIcons.classList.toggle("show");
+    const isShown = floatingIcons.classList.contains("show");
+    floatingIcons.setAttribute("aria-hidden", !isShown);
   });
 </script>
-
-  <!-- Tombol Share Mengambang -->
-  <div class="toggle-float-btn" id="toggleShareBtn">
-    <i class="fas fa-share-alt"></i>
-  </div>
-
-  <!-- Ikon Sosial Media -->
-  <div class="floating-icons-container" id="floatingIcons">
-    <a href="https://wa.me/6281296668670" target="_blank" class="floating-icon whatsapp" title="WhatsApp">
-      <i class="fab fa-whatsapp"></i>
-    </a>
-    <a href="https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon link" title="Website">
-      <i class="fas fa-link"></i>
-    </a>
-    <a href="https://www.facebook.com/share/1YRycMnSjz/" target="_blank" class="floating-icon facebook" title="Facebook">
-      <i class="fab fa-facebook-f"></i>
-    </a>
-    <a href="https://www.instagram.com/pukis.lumer_aulia" target="_blank" class="floating-icon instagram" title="Instagram">
-      <i class="fab fa-instagram"></i>
-    </a>
-    <a href="https://www.tiktok.com/@pukislumer.aulia" target="_blank" class="floating-icon tiktok" title="TikTok">
-      <i class="fab fa-tiktok"></i>
-    </a>
-    <a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io/" target="_blank" class="floating-icon twitter" title="Twitter">
-      <i class="fab fa-twitter"></i>
-    </a>
-    <a href="https://food.maxim.com" target="_blank" class="floating-icon maxim" title="Maxim">
-      <i class="fas fa-utensils"></i>
-    </a>
-  </div>
-
-  <!-- Script Tombol Mengambang -->
-  <script>
-    const toggleBtn = document.getElementById("toggleShareBtn");
-    const floatingIcons = document.getElementById("floatingIcons");
-    toggleBtn.addEventListener("click", () => {
-      floatingIcons.classList.toggle("show");
-    });
-  </script>
 
   <!-- Footer -->
   <footer>
