@@ -1,10 +1,27 @@
-// Validasi Form Order
+// Ambil data dari form order
+function getOrderFormData() {
+  return {
+    name: document.getElementById('name').value,
+    menu: document.getElementById('menu').value,
+    toppingType: getSelectedToppingType(),
+    boxSize: document.getElementById('boxSize').value,
+    qty: document.getElementById('qty').value,
+    totalPrice: document.getElementById('totalDisplay').innerText
+  };
+}
+
+// Ambil topping type yang dipilih
+function getSelectedToppingType() {
+  const radios = document.querySelectorAll('input[name="toppingType"]');
+  for (const radio of radios) {
+    if (radio.checked) return radio.value;
+  }
+  return 'none';
+}
+
+// Validasi form order
 function validateOrderForm() {
-  const name = document.getElementById('name').value;
-  const menu = document.getElementById('menu').value;
-  const toppingType = getSelectedToppingType();
-  const boxSize = document.getElementById('boxSize').value;
-  const qty = document.getElementById('qty').value;
+  const { name, menu, toppingType, boxSize, qty } = getOrderFormData();
 
   if (!name || !menu || !toppingType || !boxSize || !qty) {
     alert('Semua kolom harus diisi dengan benar.');
@@ -22,39 +39,23 @@ function validateOrderForm() {
   return true;
 }
 
-// Ambil topping type yang dipilih
-function getSelectedToppingType() {
-  const radios = document.querySelectorAll('input[name="toppingType"]');
-  for (const radio of radios) {
-    if (radio.checked) {
-      return radio.value;
-    }
-  }
-  return 'none';
-}
-
-// Kirim pesan order ke WhatsApp
+// Kirim pesan ke WhatsApp
 function submitOrder() {
   if (!validateOrderForm()) return;
 
-  const name = document.getElementById('name').value;
-  const menu = document.getElementById('menu').value;
-  const toppingType = getSelectedToppingType();
-  const boxSize = document.getElementById('boxSize').value;
-  const qty = document.getElementById('qty').value;
-  const totalPrice = document.getElementById('totalDisplay').innerText;
+  const { name, menu, toppingType, boxSize, qty, totalPrice } = getOrderFormData();
 
   const toppingsSelected = Array.from(document.querySelectorAll('.topping:checked'))
     .map(topping => topping.value).join(', ') || 'Tidak ada topping';
 
   const orderMessage = `
-    Halo, saya ingin pesan Pukis Lumer Aulia:
-    - Nama: ${name}
-    - Jenis Pukis: ${menu === 'original' ? 'Pukis Original' : 'Pukis Pandan'}
-    - Topping: ${toppingType === 'none' ? 'Tanpa Topping' : toppingsSelected}
-    - Ukuran Kotak: ${boxSize === '5' ? 'Kecil (5 pcs)' : 'Besar (10 pcs)'}
-    - Jumlah Kotak: ${qty}
-    - Total Harga: ${totalPrice}
+Halo, saya ingin pesan Pukis Lumer Aulia:
+- Nama: ${name}
+- Jenis Pukis: ${menu === 'original' ? 'Pukis Original' : 'Pukis Pandan'}
+- Topping: ${toppingType === 'none' ? 'Tanpa Topping' : toppingsSelected}
+- Ukuran Kotak: ${boxSize === '5' ? 'Kecil (5 pcs)' : 'Besar (10 pcs)'}
+- Jumlah Kotak: ${qty}
+- Total Harga: ${totalPrice}
   `;
 
   const encodedMessage = encodeURIComponent(orderMessage);
@@ -62,12 +63,9 @@ function submitOrder() {
   window.open(whatsappUrl, '_blank');
 }
 
-// Update total harga
+// Hitung total harga
 function updateTotalPrice() {
-  const menu = document.getElementById('menu').value;
-  const toppingType = getSelectedToppingType();
-  const boxSize = document.getElementById('boxSize').value;
-  const qty = parseInt(document.getElementById('qty').value) || 0;
+  const { menu, toppingType, boxSize, qty } = getOrderFormData();
 
   const priceData = {
     original: {
@@ -82,12 +80,13 @@ function updateTotalPrice() {
     }
   };
 
-  const price = priceData[menu][toppingType][parseInt(boxSize)] || 0;
-  const totalPrice = price * qty;
-  document.getElementById('totalDisplay').innerHTML = `<strong>Total Harga:</strong> Rp ${totalPrice.toLocaleString()}`;
+  const price = priceData[menu]?.[toppingType]?.[parseInt(boxSize)] || 0;
+  const total = price * (parseInt(qty) || 0);
+
+  document.getElementById('totalDisplay').innerHTML = `<strong>Total Harga:</strong> Rp ${total.toLocaleString()}`;
 }
 
-// Tampilkan topping berdasarkan tipe
+// Tampilkan pilihan topping berdasarkan tipe
 function displayToppings(toppingType) {
   const toppingArea = document.getElementById('toppingArea');
   toppingArea.innerHTML = '';
@@ -116,7 +115,7 @@ function updateToppingStyles() {
   });
 }
 
-// Testimoni form
+// Tambahkan testimoni
 document.getElementById("testimoniForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const nama = document.getElementById("nama").value;
@@ -129,7 +128,7 @@ document.getElementById("testimoniForm").addEventListener("submit", function(e) 
   this.reset();
 });
 
-// Toggle menu button
+// Toggle menu navigasi mengambang
 function toggleMenu(btn) {
   const menu = document.querySelector(".floating-menu");
   menu.classList.toggle("show");
@@ -138,12 +137,25 @@ function toggleMenu(btn) {
   }
 }
 
-// Event bindings
+// Toggle ikon media sosial dengan aksesibilitas
+const toggleBtn = document.getElementById("toggleShareBtn");
+const floatingIcons = document.getElementById("floatingIcons");
+
+if (toggleBtn && floatingIcons) {
+  toggleBtn.addEventListener("click", () => {
+    floatingIcons.classList.toggle("show");
+    const isShown = floatingIcons.classList.contains("show");
+    floatingIcons.setAttribute("aria-hidden", !isShown);
+  });
+}
+
+// Event bindings saat halaman dimuat
 window.addEventListener('DOMContentLoaded', () => {
   updateTotalPrice();
   updateToppingStyles();
 });
 
+// Event listeners untuk perubahan input
 document.querySelectorAll('input[name="toppingType"]').forEach(radio => {
   radio.addEventListener('change', (e) => {
     displayToppings(e.target.value);
@@ -155,16 +167,8 @@ document.getElementById('menu').addEventListener('change', updateTotalPrice);
 document.getElementById('boxSize').addEventListener('change', updateTotalPrice);
 document.getElementById('qty').addEventListener('input', updateTotalPrice);
 
+// Submit order ke WhatsApp
 document.getElementById('orderForm').addEventListener('submit', (e) => {
   e.preventDefault();
   submitOrder();
 });
-// Toggle tombol share mengambang
-const toggleBtn = document.getElementById("toggleShareBtn");
-const floatingIcons = document.getElementById("floatingIcons");
-
-if (toggleBtn && floatingIcons) {
-  toggleBtn.addEventListener("click", () => {
-    floatingIcons.classList.toggle("show");
-  });
-}
