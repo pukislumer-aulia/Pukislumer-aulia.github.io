@@ -40,13 +40,17 @@ h1, h2, h3 {
 }
 
 @keyframes scroll-left {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 /* === FORM TESTIMONI === */
 #form-testimoni {
-  background-color: #add8e6; /* Biru muda */
+  background-color: #ffc0cb; /* Pink cerah */
   padding: 30px;
   text-align: center;
 }
@@ -94,7 +98,7 @@ button:hover {
 }
 
 #listTestimoni li {
-  background: #fff;
+  background: #add8e6; /* Biru muda */
   border: 1px solid #eee;
   padding: 15px;
   margin: 10px auto;
