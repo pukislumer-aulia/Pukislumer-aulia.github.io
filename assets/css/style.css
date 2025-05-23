@@ -2,7 +2,7 @@
 body {
   font-family: sans-serif;
   padding: 20px;
-  background: #fff8e1;
+  background: #ffc0cb; /* Pink cerah */
   font-size: 1.05rem;
   line-height: 1.6;
 }
@@ -23,7 +23,7 @@ h1, h2, h3 {
 .promo-running-text {
   width: 100%;
   overflow: hidden;
-  background-color: #fff4e6;
+  background-color: #40e0d0; /* Hijau tosca */
   border-top: 2px solid red;
   border-bottom: 2px solid red;
   padding: 10px 0;
@@ -40,17 +40,13 @@ h1, h2, h3 {
 }
 
 @keyframes scroll-left {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
 }
 
 /* === FORM TESTIMONI === */
 #form-testimoni {
-  background-color: #fff8f0;
+  background-color: #add8e6; /* Biru muda */
   padding: 30px;
   text-align: center;
 }
@@ -257,7 +253,9 @@ button:hover {
     height: 40px;
     font-size: 18px;
   }
+}
 
+/* === QRIS SECTION === */
 .qris-section {
   text-align: center;
   margin: 40px auto;
