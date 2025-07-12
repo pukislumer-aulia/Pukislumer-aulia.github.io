@@ -152,6 +152,33 @@ button:hover {
   text-decoration: underline;
 }
 
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.gallery-item {
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.responsive-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
 /* === TOMBOL TOGGLE FLOATING SHARE === */
 .toggle-float-btn {
   position: fixed;
