@@ -1,118 +1,72 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin - Pukis Lumer Aulia</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .admin-wrapper { max-width: 900px; margin: auto; }
-    h1, h2 { font-family: 'Kanit', sans-serif; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    table, th, td { border: 1px solid #ccc; }
-    th, td { padding: 8px; text-align: center; }
-    #logoutBtn { background: crimson; color: white; padding: 8px 16px; border: none; cursor: pointer; border-radius: 6px; }
-    #logoutBtn:hover { background: darkred; }
-    .testimonial-card { background: #f4f4f4; padding: 10px; margin: 8px 0; border-radius: 6px; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 4px; }
+    button { margin-top: 15px; padding: 10px 15px; background: green; color: white; border: none; border-radius: 5px; }
   </style>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
-  <div class="admin-wrapper">
-    <h1>Panel Admin</h1>
-    <button id="logoutBtn">Logout</button>
+  <h2>Admin - Edit Konten Website</h2>
+  <form id="formAbout">
+    <label>Judul</label><input id="judul" type="text">
+    <label>Sapaan</label><input id="sapaan" type="text">
+    <label>Doa</label><input id="doa" type="text">
+    <label>Kota</label><input id="kota" type="text">
+    <label>Serambi</label><input id="serambi" type="text">
+    <label>Ajakan</label><input id="ajak" type="text">
+    <label>Jam Operasional</label><input id="jam" type="text">
+    <label>Best Seller</label><input id="best" type="text">
+    <label>Lokasi</label><textarea id="lokasi"></textarea>
+    <label>Ojol</label><input id="ojol" type="text">
+    <label>Alasan</label><textarea id="alasan"></textarea>
+    <label>Fakta 1</label><input id="fact1" type="text">
+    <label>Fakta 2</label><input id="fact2" type="text">
+    <label>Fakta 3</label><input id="fact3" type="text">
+    <label>Fakta 4</label><input id="fact4" type="text">
+    <label>Fakta 5</label><input id="fact5" type="text">
+    <label>Fakta 6</label><input id="fact6" type="text">
+    <button type="button" onclick="simpan()">Simpan</button>
+  </form>
 
-    <section class="order-list">
-      <h2>Daftar Pesanan</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Jenis</th>
-            <th>Topping</th>
-            <th>Ukuran</th>
-            <th>Jumlah</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody id="orderTableBody">
-          <!-- Data pesanan akan muncul di sini -->
-        </tbody>
-      </table>
-    </section>
-
-    <section class="testimonial-section">
-      <h2>Testimoni Pelanggan</h2>
-      <div id="testimonialList">
-        <!-- Testimoni ditampilkan di sini -->
-      </div>
-    </section>
-  </div>
-
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    // 🔹 Firebase Config (punya kamu)
+  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
-      authDomain: "pukis-lumer-aulia.firebaseapp.com",
-      projectId: "pukis-lumer-aulia",
-      storageBucket: "pukis-lumer-aulia.appspot.com",
-      messagingSenderId: "1059510074119",
-      appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
-      measurementId: "G-NZY82GKPXS"
+      apiKey: "API_KEY_KAMU",
+      authDomain: "PROJECT_ID.firebaseapp.com",
+      projectId: "PROJECT_ID"
     };
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Proteksi halaman: hanya bisa diakses setelah login
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html"; 
+    // Load data awal
+    db.collection("settings").doc("about").get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        for (let key in data) {
+          if (document.getElementById(key)) {
+            document.getElementById(key).value = data[key];
+          }
+        }
       }
     });
 
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth).then(() => {
-        window.location.href = "login.html";
+    // Simpan data
+    function simpan() {
+      const formData = {};
+      document.querySelectorAll("#formAbout input, #formAbout textarea").forEach(el => {
+        formData[el.id] = el.value;
       });
-    });
-
-    // 🔹 Dummy data pesanan (sementara, nanti bisa dari Firestore)
-    const orders = [
-      { nama: "Rina", jenis: "Pukis Lumer", topping: "Keju", ukuran: "Medium", jumlah: 2, total: "20K" },
-      { nama: "Budi", jenis: "Pukis Lumer", topping: "Coklat", ukuran: "Large", jumlah: 1, total: "15K" }
-    ];
-    const orderTableBody = document.getElementById("orderTableBody");
-    orders.forEach(o => {
-      const row = `<tr>
-        <td>${o.nama}</td>
-        <td>${o.jenis}</td>
-        <td>${o.topping}</td>
-        <td>${o.ukuran}</td>
-        <td>${o.jumlah}</td>
-        <td>${o.total}</td>
-      </tr>`;
-      orderTableBody.innerHTML += row;
-    });
-
-    // 🔹 Dummy testimoni
-    const testimonials = [
-      { nama: "Siti", pesan: "Pukisnya enak banget, lumer di mulut!" },
-      { nama: "Andi", pesan: "Harga murah, rasa mantap." }
-    ];
-    const testimonialList = document.getElementById("testimonialList");
-    testimonials.forEach(t => {
-      testimonialList.innerHTML += `
-        <div class="testimonial-card">
-          <strong>${t.nama}</strong><br>
-          <em>"${t.pesan}"</em>
-        </div>`;
-    });
+      db.collection("settings").doc("about").set(formData).then(() => {
+        alert("Konten berhasil diperbarui!");
+      });
+    }
   </script>
 </body>
 </html>
