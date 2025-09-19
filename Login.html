@@ -5,12 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Admin - Pukis Lumer Aulia</title>
   <style>
-    body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f9f9f9; }
-    .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center; }
-    input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
-    button { background: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; }
-    button:hover { background: #218838; }
-    p { color: red; }
+    body {
+      font-family: Arial;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f9f9f9;
+      margin: 0;
+    }
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 300px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+    p {
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -40,13 +73,22 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // 🔒 Email admin khusus (hanya ini yang bisa masuk)
+    const ADMIN_EMAIL = "admin@email.com"; 
+
     document.getElementById("loginBtn").addEventListener("click", () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
       signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          window.location.href = "admin.html"; // redirect ke admin
+        .then(userCredential => {
+          if (userCredential.user.email === ADMIN_EMAIL) {
+            // Simpan status login di localStorage
+            localStorage.setItem("isAdmin", "true");
+            window.location.href = "admin.html"; 
+          } else {
+            document.getElementById("msg").innerText = "❌ Akses ditolak! Bukan admin.";
+          }
         })
         .catch(err => {
           document.getElementById("msg").innerText = "Login gagal: " + err.message;
