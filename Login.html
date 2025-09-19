@@ -5,45 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Admin - Pukis Lumer Aulia</title>
   <style>
-    body {
-      font-family: Arial;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #f9f9f9;
-      margin: 0;
-    }
-    .login-box {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
-      width: 300px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background: #28a745;
-      color: white;
-      border: none;
-      padding: 10px;
-      width: 100%;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #218838;
-    }
-    p {
-      color: red;
-    }
+    body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f9f9f9; }
+    .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
+    button { background: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #218838; }
+    p { color: red; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -58,37 +25,30 @@
   <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } 
-      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // 🔹 Ganti dengan konfigurasi Firebase project kamu
+    // 🔹 Firebase Config (punya kamu)
     const firebaseConfig = {
-      apiKey: "API_KEY_KAMU",
-      authDomain: "pukis-lumer.firebaseapp.com",
-      projectId: "pukis-lumer",
-      storageBucket: "pukis-lumer.appspot.com",
-      messagingSenderId: "xxxxxxx",
-      appId: "1:xxxxxx:web:xxxxxxx"
+      apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
+      authDomain: "pukis-lumer-aulia.firebaseapp.com",
+      projectId: "pukis-lumer-aulia",
+      storageBucket: "pukis-lumer-aulia.appspot.com",
+      messagingSenderId: "1059510074119",
+      appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
+      measurementId: "G-NZY82GKPXS"
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // 🔒 Email admin khusus (hanya ini yang bisa masuk)
-    const ADMIN_EMAIL = "admin@email.com"; 
-
+    // Login
     document.getElementById("loginBtn").addEventListener("click", () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
       signInWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
-          if (userCredential.user.email === ADMIN_EMAIL) {
-            // Simpan status login di localStorage
-            localStorage.setItem("isAdmin", "true");
-            window.location.href = "admin.html"; 
-          } else {
-            document.getElementById("msg").innerText = "❌ Akses ditolak! Bukan admin.";
-          }
+        .then(() => {
+          window.location.href = "admin.html"; 
         })
         .catch(err => {
           document.getElementById("msg").innerText = "Login gagal: " + err.message;
