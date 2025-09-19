@@ -3,57 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Admin - Pukis Lumer Aulia</title>
+  <title>Login Admin</title>
   <style>
-    body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f9f9f9; }
-    .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center; width: 300px; }
-    input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
-    button { background: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; }
-    button:hover { background: #218838; }
-    p { color: red; font-size: 14px; }
+    body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #ffe0e0; }
+    .login { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    input { display: block; width: 100%; margin: 10px 0; padding: 8px; }
+    button { padding: 8px 12px; background: green; color: white; border: none; cursor: pointer; border-radius: 5px; }
   </style>
 </head>
 <body>
-  <div class="login-box">
+  <div class="login">
     <h2>Login Admin</h2>
-    <input type="email" id="email" placeholder="Email Admin" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button id="loginBtn">Login</button>
-    <p id="msg"></p>
+    <input type="password" id="password" placeholder="Masukkan Password">
+    <button onclick="login()">Login</button>
   </div>
-
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    // 🔹 Firebase Config (punya kamu)
-    const firebaseConfig = {
-      apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
-      authDomain: "pukis-lumer-aulia.firebaseapp.com",
-      projectId: "pukis-lumer-aulia",
-      storageBucket: "pukis-lumer-aulia.appspot.com",
-      messagingSenderId: "1059510074119",
-      appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
-      measurementId: "G-NZY82GKPXS"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Login
-    document.getElementById("loginBtn").addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          window.location.href = "admin.html"; 
-        })
-        .catch(err => {
-          document.getElementById("msg").innerText = "Login gagal: " + err.message;
-        });
-    });
+  <script>
+    function login() {
+      const pw = document.getElementById('password').value;
+      if (pw === "admin123") { // password bisa diganti
+        window.location.href = "admin.html";
+      } else {
+        alert("Password salah!");
+      }
+    }
   </script>
 </body>
 </html>
