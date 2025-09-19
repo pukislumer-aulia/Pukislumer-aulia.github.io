@@ -5,6 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pukis Lumer Aulia</title>
   <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pukis Lumer Aulia</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #ffe0e0; color: #000; }
+    .container { padding: 20px; }
+    h2 { color: orange; text-align: center; }
+    p { margin: 6px 0; }
+    .ungu { color: purple; font-weight: bold; }
+    .hijau { color: green; font-weight: bold; }
+    .kuning { color: orange; font-weight: bold; }
+    .admin-btn {
+      position: fixed; left: 20px; bottom: 20px; background: red; color: #fff; 
+      padding: 10px 15px; border-radius: 8px; text-decoration: none;
+    }
+  </style>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
 
   <!-- Open Graph (Facebook, Instagram, WhatsApp) -->
 <meta property="og:type" content="website">
@@ -99,31 +119,68 @@
     </div>
     <img src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img">
   </div>
+  
+  <div class="container">
+    <h2 id="judul">PUKIS LUMER AULIA</h2>
+    <p id="sapaan"></p>
+    <p id="doa"></p>
+    <p id="kota"></p>
+    <p id="serambi"></p>
+    <p id="ajak"></p>
+    <p class="ungu" id="jam"></p>
+    <p class="hijau" id="best"></p>
+    <p id="lokasi"></p>
+    <p id="ojol"></p>
+    <h3 class="kuning">Kenapa Pilih Pukis Lumer Aulia?</h3>
+    <p id="alasan"></p>
+    <h3 class="kuning">Fakta Unik Tentang Kami</h3>
+    <ul>
+      <li id="fact1"></li>
+      <li id="fact2"></li>
+      <li id="fact3"></li>
+      <li id="fact4"></li>
+      <li id="fact5"></li>
+      <li id="fact6"></li>
+    </ul>
+  </div>
 
-  <h1>PUKIS LUMER AULIA</h1>
-  <p><strong style="color: #002147;">Assalamu'alaikum warahmatullahi wabarakatuh</strong></p>
-  <p><strong style="color: #002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</strong></p>
-  <p><strong style="color: #800020;">Padang Panjang Kota Kuliner.</strong></p>
-  <p><strong style="color: #800020;">Kota Serambi Mekkah orang Mengenalnya.</strong></p>
-  <p><strong style="color: #800020;">Kalau main ke Pasar Kuliner</strong></p>  
-  <p><strong style="color: #800020;">Wajib mampir ke PUKIS LUMER AULIA</strong></p>
-  <p><strong style="color: #9370DB;">Jam Operasional:</strong> <span style="color: #9370DB;">16.00 – 23.59 WIB (selama persediaan ada)</span></p>
-  <p><strong style="color: #6B8E23;">Best Seller:</strong> <span style="color: #6B8E23;">Double Topping Vanilla Oreo vs Cokelat Kacang</span></p>
-  <p><strong style="color: #800020;">Lokasi:</strong> <span style="color: #800020;">Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</span></p>
-  <p>Tersedia di Maxim, Food, GrabFood, dan GoFood!</p>
+  <!-- Tombol Admin -->
+  <a href="login.html" class="admin-btn">Admin</a>
 
-  <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
-  <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa luar biasa. Tersedia berbagai varian topping favorit semua umur!</p>
+  <script>
+    // Konfigurasi Firebase
+    const firebaseConfig = {
+      apiKey: "API_KEY_KAMU",
+      authDomain: "PROJECT_ID.firebaseapp.com",
+      projectId: "PROJECT_ID"
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-  <h2>Fakta Unik Tentang Kami</h2>
-  <ul style="color: #2E8B57;">
-    <li>Resep adonan spesial keluarga sejak 2023!</li>
-    <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
-    <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
-    <li>Lebih dari 10 varian topping siap setiap hari.</li>
-    <li>100% bahan premium tanpa pengawet.</li>
-    <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
-  </ul>
+    // Ambil data "about" dari Firestore
+    db.collection("settings").doc("about").get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        document.getElementById("judul").innerText = data.judul;
+        document.getElementById("sapaan").innerText = data.sapaan;
+        document.getElementById("doa").innerText = data.doa;
+        document.getElementById("kota").innerText = data.kota;
+        document.getElementById("serambi").innerText = data.serambi;
+        document.getElementById("ajak").innerText = data.ajak;
+        document.getElementById("jam").innerText = "Jam Operasional: " + data.jam;
+        document.getElementById("best").innerText = "Best Seller: " + data.best;
+        document.getElementById("lokasi").innerText = "Lokasi: " + data.lokasi;
+        document.getElementById("ojol").innerText = data.ojol;
+        document.getElementById("alasan").innerText = data.alasan;
+        document.getElementById("fact1").innerText = data.fact1;
+        document.getElementById("fact2").innerText = data.fact2;
+        document.getElementById("fact3").innerText = data.fact3;
+        document.getElementById("fact4").innerText = data.fact4;
+        document.getElementById("fact5").innerText = data.fact5;
+        document.getElementById("fact6").innerText = data.fact6;
+      }
+    });
+  </script>
 
 
 <h2>Galeri</h2>
