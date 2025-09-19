@@ -365,15 +365,27 @@
       </a>
     </p>
   </footer>
-<!-- Link admin (pojok kiri bawah) -->
-<a href="login.html" style="
-   position: fixed;
-   bottom: 10px;
-   left: 10px;
-   font-size: 12px;
-   color: #aaa;
-   text-decoration: none;">
-   Admin
-</a>
+<!-- 🔹 Tombol Admin (kiri bawah) -->
+<a href="login.html" class="admin-btn">Admin</a>
+
+<style>
+  .admin-btn {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    background: #343a40;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s ease;
+    z-index: 9999;
+  }
+  .admin-btn:hover {
+    background: #212529;
+  }
+</style>
 </body>
 </html>
