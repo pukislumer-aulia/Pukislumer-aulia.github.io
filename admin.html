@@ -6,10 +6,22 @@
   <title>Admin - Pukis Lumer Aulia</title>
   <link rel="stylesheet" href="assets/css/admin.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .admin-wrapper { max-width: 900px; margin: auto; }
+    h1, h2 { font-family: 'Kanit', sans-serif; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 8px; text-align: center; }
+    #logoutBtn { background: crimson; color: white; padding: 8px 16px; border: none; cursor: pointer; border-radius: 6px; }
+    #logoutBtn:hover { background: darkred; }
+    .testimonial-card { background: #f4f4f4; padding: 10px; margin: 8px 0; border-radius: 6px; }
+  </style>
 </head>
 <body>
   <div class="admin-wrapper">
     <h1>Panel Admin</h1>
+    <button id="logoutBtn">Logout</button>
 
     <section class="order-list">
       <h2>Daftar Pesanan</h2>
@@ -38,7 +50,72 @@
     </section>
   </div>
 
-  <script src="assets/js/admin.js"></script>
-  <script src="assets/js/testimoni.js"></script>
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } 
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // 🔹 Ganti dengan konfigurasi project Firebase kamu
+    const firebaseConfig = {
+      apiKey: "API_KEY_KAMU",
+      authDomain: "pukis-lumer.firebaseapp.com",
+      projectId: "pukis-lumer",
+      storageBucket: "pukis-lumer.appspot.com",
+      messagingSenderId: "xxxxxxx",
+      appId: "1:xxxxxx:web:xxxxxxx"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Proteksi halaman: hanya user login bisa masuk
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html"; 
+      }
+    });
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    });
+
+    // 🔹 Contoh dummy data pesanan (nantinya bisa ambil dari Firestore)
+    const orders = [
+      { nama: "Rina", jenis: "Pukis Lumer", topping: "Keju", ukuran: "Medium", jumlah: 2, total: "20K" },
+      { nama: "Budi", jenis: "Pukis Lumer", topping: "Coklat", ukuran: "Large", jumlah: 1, total: "15K" }
+    ];
+
+    const orderTableBody = document.getElementById("orderTableBody");
+    orders.forEach(o => {
+      const row = `<tr>
+        <td>${o.nama}</td>
+        <td>${o.jenis}</td>
+        <td>${o.topping}</td>
+        <td>${o.ukuran}</td>
+        <td>${o.jumlah}</td>
+        <td>${o.total}</td>
+      </tr>`;
+      orderTableBody.innerHTML += row;
+    });
+
+    // 🔹 Contoh dummy testimoni
+    const testimonials = [
+      { nama: "Siti", pesan: "Pukisnya enak banget, lumer di mulut!" },
+      { nama: "Andi", pesan: "Harga murah, rasa mantap." }
+    ];
+
+    const testimonialList = document.getElementById("testimonialList");
+    testimonials.forEach(t => {
+      testimonialList.innerHTML += `
+        <div class="testimonial-card">
+          <strong>${t.nama}</strong><br>
+          <em>"${t.pesan}"</em>
+        </div>`;
+    });
+  </script>
 </body>
 </html>
