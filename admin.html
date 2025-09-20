@@ -34,30 +34,23 @@
     <label>Fakta 4 <input type="text" id="fakta4"></label>
     <label>Fakta 5 <input type="text" id="fakta5"></label>
     <label>Fakta 6 <input type="text" id="fakta6"></label>
+
+    <!-- tambahan -->
+    <label>Promo Berjalan <input type="text" id="promo"></label>
+    <label>Testimoni <textarea id="testimoni"></textarea></label>
+    <label>Share Button (Teks / Link) <input type="text" id="share"></label>
+    <label>Footer <input type="text" id="footer"></label>
+
     <button type="button" onclick="saveContent()">Simpan</button>
     <button type="button" class="logout" onclick="logout()">Logout</button>
   </form>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { db, auth } from "./firebase.js";
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
-      authDomain: "pukis-lumer-aulia.firebaseapp.com",
-      projectId: "pukis-lumer-aulia",
-      storageBucket: "pukis-lumer-aulia.appspot.com",
-      messagingSenderId: "1059510074119",
-      appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
-      measurementId: "G-NZY82GKPXS"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    // Cek apakah user login
+    // cek login
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = "login.html";
@@ -66,7 +59,7 @@
       }
     });
 
-    // Ambil data awal
+    // ambil data awal
     async function loadContent() {
       const docRef = doc(db, "content", "about");
       const docSnap = await getDoc(docRef);
@@ -80,18 +73,18 @@
       }
     }
 
-    // Simpan ke Firestore
+    // simpan ke firestore
     window.saveContent = async function() {
+      const fields = ["judul","sapaan","doa","kota","serambi","ajakan","jam","bestseller","lokasi","ojol","alasan",
+        "fakta1","fakta2","fakta3","fakta4","fakta5","fakta6","promo","testimoni","share","footer"];
       const data = {};
-      ["judul","sapaan","doa","kota","serambi","ajakan","jam","bestseller","lokasi","ojol","alasan","fakta1","fakta2","fakta3","fakta4","fakta5","fakta6"].forEach(id=>{
-        data[id] = document.getElementById(id).value;
-      });
+      fields.forEach(id => { data[id] = document.getElementById(id).value; });
 
       await setDoc(doc(db, "content", "about"), data);
       alert("Konten berhasil disimpan!");
     }
 
-    // Logout
+    // logout
     window.logout = function() {
       signOut(auth).then(() => {
         window.location.href = "login.html";
