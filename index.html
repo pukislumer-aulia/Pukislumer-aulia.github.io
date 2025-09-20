@@ -152,21 +152,85 @@
   <div class="floating-message">Pesan Sekarang!</div>
   <a href="#formPukis" class="float-btn"><i class="fas fa-shopping-cart"></i></a>
 
-  <!-- 🔹 Testimoni (Firebase editable) -->
-  <h2>Testimoni Pelanggan</h2>
-  <div id="testimoniContainer">
-    <blockquote>"Pukisnya enak banget, topping melimpah!"</blockquote>
-    <blockquote>"Anak-anak suka, harganya pas di kantong."</blockquote>
-  </div>
+<!-- Form Testimoni -->
+  <section id="form-testimoni">
+  <h2>Tulis Testimoni Kamu tentang Pukis Lumer Aulia!</h2>
+  <form id="testimoniForm">
+    <input type="text" id="nama" placeholder="Nama Kamu" required>
+    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>  <div id="daftarTestimoni">
+    <h3>Testimoni:</h3>
+    <ul id="listTestimoni">
+      <!-- Testimoni palsu -->
+      <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+      <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+      <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+      <li><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"</li>
+    </ul>
+    <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+      Hapus Semua Testimoni
+    </button>
+<!-- Pembayaran via QRIS -->
+<div class="qris-section">
+  <h3>Bayar Lebih Mudah dengan QRIS</h3>
+  <p>Scan kode QR di bawah ini untuk membayar pesanan kamu:</p>
+  <img src="assets/images/qris-pukis.jpg" alt="QRIS Pukis Lumer Aulia">
+</div>
+    
+    <div class="share-links" style="text-align: center; margin: 30px 0;">
+  <h3>Bagikan Website Pukis Lumer Aulia:</h3>
+  <a href="https://wa.me/?text=https://pukislumer-aulia.github.io/" target="_blank" class="fa-brands fa-whatsapp" style="font-size: 24px; margin: 0 10px;" title="Bagikan via WhatsApp"></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://pukislumer-aulia.github.io/" target="_blank" class="fa-brands fa-facebook" style="font-size: 24px; margin: 0 10px;" title="Bagikan ke Facebook"></a>
+  <a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io/&text=Yuk%20coba%20Pukis%20Lumer%20Aulia!" target="_blank" class="fa-brands fa-twitter" style="font-size: 24px; margin: 0 10px;" title="Bagikan ke Twitter"></a>
+  <a href="https://t.me/share/url?url=https://pukislumer-aulia.github.io/&text=Yuk%20coba%20Pukis%20Lumer%20Aulia!" target="_blank" class="fa-brands fa-telegram" style="font-size: 24px; margin: 0 10px;" title="Bagikan ke Telegram"></a>
+  <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://pukislumer-aulia.github.io/" target="_blank" class="fa-brands fa-linkedin" style="font-size: 24px; margin: 0 10px;" title="Bagikan ke LinkedIn"></a>
+    </div>
+    
+<!-- Tombol & Ikon Share Mengambang -->
+<div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
+  <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank" aria-label="WhatsApp" rel="noopener noreferrer">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+  <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank" aria-label="Facebook" rel="noopener noreferrer">
+    <i class="fa-brands fa-facebook-f"></i>
+  </a>
+  <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
+    <i class="fa-brands fa-instagram"></i>
+  </a>
+  <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank" aria-label="Twitter" rel="noopener noreferrer">
+    <i class="fa-brands fa-twitter"></i>
+  </a>
+  <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank" aria-label="TikTok" rel="noopener noreferrer">
+    <i class="fa-brands fa-tiktok"></i>
+  </a>
+</div>
 
-  <!-- 🔹 Share Button -->
-  <h2>Bagikan Website Ini</h2>
-  <div class="share-buttons">
-    <a id="shareWa" href="#" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-    <a id="shareFb" href="#" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
-    <a id="shareTw" href="#" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
-  </div>
+<div class="toggle-float-btn" id="toggleShareBtn" aria-label="Bagikan">
+  <i class="fa-solid fa-share-nodes"></i>
+</div>
 
+<script>
+  const toggleBtn = document.getElementById("toggleShareBtn");
+  const floatingIcons = document.getElementById("floatingIcons");
+
+  toggleBtn.addEventListener("click", () => {
+    floatingIcons.classList.toggle("show");
+    const isShown = floatingIcons.classList.contains("show");
+    floatingIcons.setAttribute("aria-hidden", !isShown);
+  });
+</script>
+    
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Pukis Lumer Aulia. All rights reserved.</p>
+    <p>
+      Kunjungi lokasi kami:
+      <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" rel="noopener noreferrer" class="map-link">
+        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Lokasi Pukis Lumer Aulia" width="32" height="32" />
+      </a>
+    </p>
+  </footer>
   <!-- 🔹 Firebase + Script -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
