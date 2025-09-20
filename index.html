@@ -38,6 +38,7 @@
 </head>
 <body>
 
+  <marquee id="promo">Promo spesial hari ini!</marquee>
   <!-- 🔹 Promo Kupon (Firebase editable) -->
   <div class="promo-image">
     <img id="promoImage" src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
@@ -144,6 +145,9 @@
 
     <button type="submit">Kirim Pesanan via WhatsApp</button>
   </form>
+  <div class="share">
+  <a id="share" href="#" target="_blank">Bagikan ke teman</a>
+  </div>
 
   <div class="floating-message">Pesan Sekarang!</div>
   <a href="#formPukis" class="float-btn"><i class="fas fa-shopping-cart"></i></a>
@@ -203,6 +207,10 @@
         if (data.footer) document.getElementById("footerText").innerText = data.footer;
 
         // Testimoni (array di Firebase)
+        <section id="testimoniSection">
+  <h2>Apa kata pelanggan?</h2>
+  <p id="testimoni">Pukisnya enak banget, lumer di mulut 😍</p>
+</section>
         if (data.testimoni && Array.isArray(data.testimoni)) {
           const testimoniContainer = document.getElementById("testimoniContainer");
           testimoniContainer.innerHTML = "";
@@ -304,5 +312,8 @@
 
   <!-- Firebase -->
   <script type="module" src="firebase.js"></script>
+  <footer>
+  <p id="footer">© 2025 Pukis Lumer Aulia</p>
+  </footer>
 </body>
 </html>
