@@ -205,12 +205,6 @@
         if (data.alasan) document.getElementById("alasanText").innerText = data.alasan;
         if (data.promoText) document.getElementById("promoText").innerText = data.promoText;
         if (data.footer) document.getElementById("footerText").innerText = data.footer;
-
-        // Testimoni (array di Firebase)
-        <section id="testimoniSection">
-  <h2>Apa kata pelanggan?</h2>
-  <p id="testimoni">Pukisnya enak banget, lumer di mulut 😍</p>
-</section>
         if (data.testimoni && Array.isArray(data.testimoni)) {
           const testimoniContainer = document.getElementById("testimoniContainer");
           testimoniContainer.innerHTML = "";
@@ -316,18 +310,12 @@
 
   const btnAdmin = document.getElementById("btnAdmin");
 
-  // Pastikan status login sudah siap sebelum klik tombol
   let userReady = false;
   let currentUser = null;
 
   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      userReady = true;
-      currentUser = user;
-    } else {
-      userReady = true;
-      currentUser = null;
-    }
+    userReady = true;
+    currentUser = user;
   });
 
   btnAdmin.addEventListener("click", () => {
@@ -335,34 +323,10 @@
       alert("Sedang memeriksa status login, tunggu sebentar...");
       return;
     }
-
-    if (currentUser) {
-      window.location.href = "admin.html";
-    } else {
-      window.location.href = "login.html";
-    }
-  });
-</script>
-<script type="module">
-  import { auth } from "./firebase.js"; // pastikan firebase.js sudah memuat getAuth
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-  const btnAdmin = document.getElementById("btnAdmin");
-
-  btnAdmin.addEventListener("click", () => {
-    const user = auth.currentUser;
-    if (user) {
-      // user sudah login → langsung ke admin.html
-      window.location.href = "admin.html";
-    } else {
-      // user belum login → diarahkan ke login.html
-      window.location.href = "login.html";
-    }
+    window.location.href = currentUser ? "admin.html" : "login.html";
   });
 </script>
 
-  <!-- Firebase -->
-  <script type="module" src="firebase.js"></script>
   <footer>
   <p id="footer">© 2025 Pukis Lumer Aulia</p>
   </footer>
