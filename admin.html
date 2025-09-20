@@ -35,7 +35,6 @@
     <label>Fakta 5 <input type="text" id="fakta5"></label>
     <label>Fakta 6 <input type="text" id="fakta6"></label>
 
-    <!-- tambahan -->
     <label>Promo Berjalan <input type="text" id="promo"></label>
     <label>Testimoni <textarea id="testimoni"></textarea></label>
     <label>Share Button (Teks / Link) <input type="text" id="share"></label>
@@ -50,16 +49,20 @@
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    // cek login
+    // cek login, pastikan user siap sebelum load
     onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-      } else {
+      if (user) {
         loadContent();
+      } else {
+        // delay sebentar untuk memastikan persistence siap
+        setTimeout(() => {
+          if (!auth.currentUser) {
+            window.location.href = "login.html";
+          }
+        }, 300);
       }
     });
 
-    // ambil data awal
     async function loadContent() {
       const docRef = doc(db, "content", "about");
       const docSnap = await getDoc(docRef);
@@ -73,7 +76,6 @@
       }
     }
 
-    // simpan ke firestore
     window.saveContent = async function() {
       const fields = ["judul","sapaan","doa","kota","serambi","ajakan","jam","bestseller","lokasi","ojol","alasan",
         "fakta1","fakta2","fakta3","fakta4","fakta5","fakta6","promo","testimoni","share","footer"];
@@ -84,7 +86,6 @@
       alert("Konten berhasil disimpan!");
     }
 
-    // logout
     window.logout = function() {
       signOut(auth).then(() => {
         window.location.href = "login.html";
