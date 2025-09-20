@@ -203,7 +203,7 @@
       if (data.alasan) document.getElementById("alasanText")?.innerText = data.alasan;
       if (data.promoText) document.getElementById("promoText")?.innerText = data.promoText;
       if (data.footer) document.getElementById("footerText")?.innerText = data.footer;
-
+      if (data.promo) document.getElementById("promo")?.innerText = data.promo;
       if (data.testimoni && Array.isArray(data.testimoni)) {
         const testimoniContainer = document.getElementById("testimoniContainer");
         if (testimoniContainer) {
@@ -330,7 +330,7 @@
 </script>
 
   <footer>
-  <p id="footer">© 2025 Pukis Lumer Aulia</p>
+  <p id="footerText">© 2025 Pukis Lumer Aulia</p>
   </footer>
 </body>
 </html>
