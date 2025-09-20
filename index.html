@@ -168,40 +168,45 @@
   </div>
 
   <!-- 🔹 Firebase + Script -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    
-Konfigurasi Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
-      authDomain: "pukis-lumer-aulia.firebaseapp.com",
-      projectId: "pukis-lumer-aulia",
-      storageBucket: "pukis-lumer-aulia.appspot.com",
-      messagingSenderId: "1059510074119",
-      appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
-      measurementId: "G-NZY82GKPXS"
-    };
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  // 🔹 Konfigurasi Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
+    authDomain: "pukis-lumer-aulia.firebaseapp.com",
+    projectId: "pukis-lumer-aulia",
+    storageBucket: "pukis-lumer-aulia.appspot.com",
+    messagingSenderId: "1059510074119",
+    appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
+    measurementId: "G-NZY82GKPXS"
+  };
 
-    // 🔹 Ambil data dari Firestore (content/about)
-    async function loadContent() {
-      const docRef = doc(db, "content", "about");
-      const snap = await getDoc(docRef);
-      if (snap.exists()) {
-        const data = snap.data();
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-        if (data.judul) document.getElementById("judulUtama").innerText = data.judul;
-        if (data.sapaan) document.getElementById("sapaan").innerText = data.sapaan;
-        if (data.doa) document.getElementById("doa").innerText = data.doa;
-        if (data.lokasi) document.getElementById("lokasi").innerText = data.lokasi;
-        if (data.ojol) document.getElementById("ojol").innerText = data.ojol;
-        if (data.alasan) document.getElementById("alasanText").innerText = data.alasan;
-        if (data.promoText) document.getElementById("promoText").innerText = data.promoText;
-        if (data.footer) document.getElementById("footerText").innerText = data.footer;
-        if (data.testimoni && Array.isArray(data.testimoni)) {
-          const testimoniContainer = document.getElementById("testimoniContainer");
+  // 🔹 Ambil data dari Firestore (content/about)
+  async function loadContent() {
+    const docRef = doc(db, "content", "about");
+    const snap = await getDoc(docRef);
+
+    if (snap.exists()) {
+      const data = snap.data();
+
+      // Gunakan optional chaining ? untuk menghindari error jika elemen tidak ada
+      if (data.judul) document.getElementById("judulUtama")?.innerText = data.judul;
+      if (data.sapaan) document.getElementById("sapaan")?.innerText = data.sapaan;
+      if (data.doa) document.getElementById("doa")?.innerText = data.doa;
+      if (data.lokasi) document.getElementById("lokasi")?.innerText = data.lokasi;
+      if (data.ojol) document.getElementById("ojol")?.innerText = data.ojol;
+      if (data.alasan) document.getElementById("alasanText")?.innerText = data.alasan;
+      if (data.promoText) document.getElementById("promoText")?.innerText = data.promoText;
+      if (data.footer) document.getElementById("footerText")?.innerText = data.footer;
+
+      if (data.testimoni && Array.isArray(data.testimoni)) {
+        const testimoniContainer = document.getElementById("testimoniContainer");
+        if (testimoniContainer) {
           testimoniContainer.innerHTML = "";
           data.testimoni.forEach(t => {
             const bq = document.createElement("blockquote");
@@ -211,8 +216,10 @@ Konfigurasi Firebase
         }
       }
     }
-    loadContent();
-  </script>
+  }
+
+  loadContent();
+</script>
 
   <!-- 🔹 Script Form Pemesanan -->
   <script>
