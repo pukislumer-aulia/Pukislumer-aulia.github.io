@@ -311,6 +311,39 @@
 </a>
 
 <script type="module">
+  import { auth } from "./firebase.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+  const btnAdmin = document.getElementById("btnAdmin");
+
+  // Pastikan status login sudah siap sebelum klik tombol
+  let userReady = false;
+  let currentUser = null;
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      userReady = true;
+      currentUser = user;
+    } else {
+      userReady = true;
+      currentUser = null;
+    }
+  });
+
+  btnAdmin.addEventListener("click", () => {
+    if (!userReady) {
+      alert("Sedang memeriksa status login, tunggu sebentar...");
+      return;
+    }
+
+    if (currentUser) {
+      window.location.href = "admin.html";
+    } else {
+      window.location.href = "login.html";
+    }
+  });
+</script>
+<script type="module">
   import { auth } from "./firebase.js"; // pastikan firebase.js sudah memuat getAuth
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
