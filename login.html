@@ -21,7 +21,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
@@ -36,18 +36,24 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    window.login = function() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    // Jika user sudah login, langsung ke admin
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "admin.html";
+      }
+    });
 
-      // atur persistence supaya login bertahan
+    window.login = function() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!email || !password) {
+        alert("Email dan password harus diisi!");
+        return;
+      }
+
       setPersistence(auth, browserLocalPersistence)
-        .then(() => {
-          return signInWithEmailAndPassword(auth, email, password);
-        })
-        .then(() => {
-          window.location.href = "admin.html";
-        })
+        .then(() => signInWithEmailAndPassword(auth, email, password))
         .catch((error) => {
           alert("Login gagal: " + error.message);
         });
