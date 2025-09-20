@@ -145,12 +145,7 @@
 
     <button type="submit">Kirim Pesanan via WhatsApp</button>
   </form>
-  <div class="share">
-  <a id="share" href="#" target="_blank">Bagikan ke teman</a>
-  </div>
-
-  <div class="floating-message">Pesan Sekarang!</div>
-  <a href="#formPukis" class="float-btn"><i class="fas fa-shopping-cart"></i></a>
+ <a href="#formPukis" class="float-btn"><i class="fas fa-shopping-cart"></i></a>
 
 <!-- Form Testimoni -->
   <section id="form-testimoni">
@@ -221,16 +216,7 @@
   });
 </script>
     
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 Pukis Lumer Aulia. All rights reserved.</p>
-    <p>
-      Kunjungi lokasi kami:
-      <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" rel="noopener noreferrer" class="map-link">
-        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Lokasi Pukis Lumer Aulia" width="32" height="32" />
-      </a>
-    </p>
-  </footer>
+
   <!-- 🔹 Firebase + Script -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -414,9 +400,15 @@ if (data.galeri && Array.isArray(data.galeri)) {
     window.location.href = currentUser ? "admin.html" : "login.html";
   });
 </script>
-
+<!-- Footer -->
   <footer>
-  <p id="footerText">© 2025 Pukis Lumer Aulia</p>
+    <p id="footerText">© 2025 Pukis Lumer Aulia</p>
+        <p>
+      Kunjungi lokasi kami:
+      <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" rel="noopener noreferrer" class="map-link">
+        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Lokasi Pukis Lumer Aulia" width="32" height="32" />
+      </a>
+    </p>
   </footer>
 </body>
 </html>
