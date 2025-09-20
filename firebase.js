@@ -94,3 +94,11 @@ export {
   loginEmailPassword,
   logout
 };
+
+// Load
+document.getElementById("promoImageInput").value = about.promoImage || "";
+document.getElementById("galeriInput").value = Array.isArray(about.galeri) ? about.galeri.join("|") : "";
+
+// Simpan
+data.promoImage = document.getElementById("promoImageInput").value;
+data.galeri = document.getElementById("galeriInput").value.split("|").map(u => u.trim());
