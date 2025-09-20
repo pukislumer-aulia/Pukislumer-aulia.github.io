@@ -1,15 +1,13 @@
 // firebase.js
-// Import Firebase SDK terbaru
+// 🔹 Import Firebase SDK terbaru
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-// 🔹 Ganti dengan konfigurasi Firebase milik kamu
+// 🔹 Konfigurasi Firebase (ganti sesuai project mu)
 const firebaseConfig = {
   apiKey: "API_KEY_KAMU",
   authDomain: "PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://PROJECT_ID.firebaseio.com",
   projectId: "PROJECT_ID",
   storageBucket: "PROJECT_ID.appspot.com",
   messagingSenderId: "SENDER_ID",
@@ -18,16 +16,47 @@ const firebaseConfig = {
 
 // 🔹 Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
+const auth = getAuth(app);
 
-// 🔹 Ekspor layanan Firebase
-const db = getDatabase(app);       // Realtime Database
-const firestore = getFirestore(app); // Firestore (untuk konten)
-const auth = getAuth(app);         // Authentication
+// 🔹 ===========================
+// 🔹 Helper Firestore Functions
+// 🔹 ===========================
 
-// 🔹 Fungsi cek login aman (opsional, bisa dipakai di index/admin)
+// Ambil satu dokumen
+async function getDocData(collectionName, docId) {
+  try {
+    const docRef = doc(firestore, collectionName, docId);
+    const snap = await getDoc(docRef);
+    return snap.exists() ? snap.data() : null;
+  } catch (err) {
+    console.error("Error getting doc:", err);
+    return null;
+  }
+}
+
+// Ambil semua dokumen dari collection
+async function getCollectionData(collectionName) {
+  try {
+    const colRef = collection(firestore, collectionName);
+    const snapshot = await getDocs(colRef);
+    const data = [];
+    snapshot.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
+    return data;
+  } catch (err) {
+    console.error("Error getting collection:", err);
+    return [];
+  }
+}
+
+// ===========================
+// 🔹 Authentication Helper
+// ===========================
+
+// Cek login dan redirect jika belum login
 function checkLoginRedirect(redirectIfNotLoggedIn = "login.html") {
   return new Promise((resolve) => {
-    auth.onAuthStateChanged(user => {
+    onAuthStateChanged(auth, user => {
       if (!user) {
         window.location.href = redirectIfNotLoggedIn;
       } else {
@@ -37,4 +66,31 @@ function checkLoginRedirect(redirectIfNotLoggedIn = "login.html") {
   });
 }
 
-export { db, firestore, auth, checkLoginRedirect };
+// Login email/password
+async function loginEmailPassword(email, password) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (err) {
+    console.error("Login failed:", err);
+    throw err;
+  }
+}
+
+// Logout
+function logout() {
+  return signOut(auth);
+}
+
+// ===========================
+// 🔹 Export semua service & helper
+// ===========================
+export {
+  firestore,
+  auth,
+  getDocData,
+  getCollectionData,
+  checkLoginRedirect,
+  loginEmailPassword,
+  logout
+};
