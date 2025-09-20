@@ -172,3 +172,26 @@ document.getElementById('orderForm').addEventListener('submit', (e) => {
   e.preventDefault();
   submitOrder();
 });
+import { db } from "./firebase.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+async function loadContent() {
+  const docRef = doc(db, "content", "about");
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+
+    // isi field ke elemen index.html
+    for (let key in data) {
+      if (document.getElementById(key)) {
+        if (key === "share") {
+          document.getElementById(key).href = data[key]; // kalau share link
+        } else {
+          document.getElementById(key).innerText = data[key];
+        }
+      }
+    }
+  }
+}
+
+loadContent();
