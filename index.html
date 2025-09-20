@@ -40,9 +40,9 @@
 
   <marquee id="promo">Promo spesial hari ini!</marquee>
   <!-- 🔹 Promo Kupon (Firebase editable) -->
-  <div class="promo-image">
-    <img id="promoImage" src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
-    <div class="promo-running-text">
+  <img id="promoImage" src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
+<div class="gallery-grid" id="galeriContainer"></div>
+   <div class="promo-running-text">
       <p id="promoText">
         Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!  
         Potongan Rp.2000 untuk pembelian pertama mu melalui website!  
@@ -217,7 +217,29 @@
       }
     }
   }
+// Promo image
+if (data.promoImage) {
+  const promoImg = document.getElementById("promoImage");
+  if (promoImg) promoImg.src = data.promoImage;
+}
 
+// Galeri
+if (data.galeri && Array.isArray(data.galeri)) {
+  const galeriContainer = document.getElementById("galeriContainer");
+  if (galeriContainer) {
+    galeriContainer.innerHTML = "";
+    data.galeri.forEach(imgUrl => {
+      const div = document.createElement("div");
+      div.className = "gallery-item";
+      const img = document.createElement("img");
+      img.src = imgUrl;
+      img.alt = "Galeri Pukis";
+      img.className = "responsive-img";
+      div.appendChild(img);
+      galeriContainer.appendChild(div);
+    });
+  }
+}
   loadContent();
 </script>
 
