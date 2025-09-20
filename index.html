@@ -6,215 +6,204 @@
   <title>Pukis Lumer Aulia</title>
   <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />
 
-  <!-- OG -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Pukis Lumer Aulia">
-  <meta property="og:description" content="Pukis Lumer kekinian dengan topping lumer dan rasa juara.">
-  <meta property="og:image" content="assets/images/pukis-og.png">
+  <meta property="og:description" content="Pukis Lumer kekinian dengan topping lumer dan rasa juara. Super lembut, empuk sampai besok!">
+  <meta property="og:image" content="https://pukislumer-aulia.github.io/assets/images/pukis-og.png">
   <meta property="og:url" content="https://pukislumer-aulia.github.io/">
 
-  <!-- Twitter -->
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pukis Lumer Aulia">
   <meta name="twitter:description" content="Pukis Lumer dengan isian lumer, enak, dan kekinian!">
-  <meta name="twitter:image" content="assets/images/pukis-og.png">
+  <meta name="twitter:image" content="https://pukislumer-aulia.github.io/assets/images/pukis-og.png">
+  <meta name="twitter:url" content="https://pukislumer-aulia.github.io/">
 
   <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/form-style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
+  <script src="assets/js/script.js" defer></script>
+
+  <style>
+    .responsive-img { max-width: 100%; height: auto; }
+    footer { background-color: #222; color: #fff; padding: 20px; text-align: center; font-family: Arial, sans-serif; }
+    .map-link img { width: 30px; vertical-align: middle; transition: transform 0.2s ease; }
+    .map-link:hover img { transform: scale(1.2); }
+    .admin-btn { position: fixed; bottom: 15px; left: 15px; background: #343a40; color: #fff; padding: 10px 16px; border-radius: 6px; font-size: 14px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: background 0.3s ease; z-index: 9999; }
+    .admin-btn:hover { background: #212529; }
+  </style>
 </head>
 <body>
 
-  <!-- Header / Promo -->
+  <!-- Promo -->
   <div class="promo-image">
     <img src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
     <div class="promo-running-text">
       <p>
         Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!
+        Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!, ikuti & bagikan Media Sosial Pukis Lumer Aulia, dapatkan potongan Rp.3.000,00!
       </p>
     </div>
     <img src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img">
   </div>
 
-  <!-- Konten Dinamis dari Firebase -->
-  <h1 id="judul">PUKIS LUMER AULIA</h1>
-  <p><strong id="sapaan"></strong></p>
-  <p><strong id="doa"></strong></p>
-  <p><strong id="kota"></strong></p>
-  <p><strong id="serambi"></strong></p>
-  <p><strong id="ajakan"></strong></p>
-  <p><strong>Jam Operasional:</strong> <span id="jam"></span></p>
-  <p><strong>Best Seller:</strong> <span id="bestseller"></span></p>
-  <p><strong>Lokasi:</strong> <span id="lokasi"></span></p>
-  <p id="ojol"></p>
+  <h1>PUKIS LUMER AULIA</h1>
+  <p><strong style="color: #002147;">Assalamu'alaikum warahmatullahi wabarakatuh</strong></p>
+  <p><strong style="color: #002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</strong></p>
+  <p><strong style="color: #800020;">Padang Panjang Kota Kuliner.</strong></p>
+  <p><strong style="color: #800020;">Kota Serambi Mekkah orang Mengenalnya.</strong></p>
+  <p><strong style="color: #800020;">Kalau main ke Pasar Kuliner</strong></p>  
+  <p><strong style="color: #800020;">Wajib mampir ke PUKIS LUMER AULIA</strong></p>
+  <p><strong style="color: #9370DB;">Jam Operasional:</strong> <span style="color: #9370DB;">16.00 – 23.59 WIB (selama persediaan ada)</span></p>
+  <p><strong style="color: #6B8E23;">Best Seller:</strong> <span style="color: #6B8E23;">Double Topping Vanilla Oreo vs Cokelat Kacang</span></p>
+  <p><strong style="color: #800020;">Lokasi:</strong> <span style="color: #800020;">Pasar Kuliner Padang Panjang, dekat Roti Tenonk, depan Aquarium (Cari Gerobak Pink)</span></p>
+  <p>Tersedia di Maxim, Food, GrabFood, dan GoFood!</p>
 
   <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
-  <p id="alasan"></p>
+  <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa luar biasa. Tersedia berbagai varian topping favorit semua umur!</p>
 
   <h2>Fakta Unik Tentang Kami</h2>
-  <ul>
-    <li id="fakta1"></li>
-    <li id="fakta2"></li>
-    <li id="fakta3"></li>
-    <li id="fakta4"></li>
-    <li id="fakta5"></li>
-    <li id="fakta6"></li>
+  <ul style="color: #2E8B57;">
+    <li>Resep adonan spesial keluarga sejak 2023!</li>
+    <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
+    <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
+    <li>Lebih dari 10 varian topping siap setiap hari.</li>
+    <li>100% bahan premium tanpa pengawet.</li>
+    <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
   </ul>
 
-  <!-- Galeri -->
   <h2>Galeri</h2>
   <div class="gallery-grid">
-    <div class="gallery-item"><img src="assets/images/pukis1.jpg" class="responsive-img" /></div>
-    <div class="gallery-item"><img src="assets/images/pukis2.jpg" class="responsive-img" /></div>
-    <div class="gallery-item"><img src="assets/images/pukis3.jpg" class="responsive-img" /></div>
-    <div class="gallery-item"><img src="assets/images/pukis4.jpg" class="responsive-img" /></div>
+    <div class="gallery-item"><img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img" /></div>
+    <div class="gallery-item"><img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img" /></div>
+    <div class="gallery-item"><img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img" /></div>
+    <div class="gallery-item"><img src="assets/images/pukis4.jpg" alt="Pukis 4" class="responsive-img" /></div>
+    <div class="gallery-item"><img src="assets/images/pukis5.jpg" alt="Pukis 5" class="responsive-img" /></div>
   </div>
-
-  <!-- Form Pemesanan -->
+  <!-- Form Pesanan -->
   <h2>Pesan Sekarang</h2>
-  <form id="orderForm" class="form-container">
-    <label>Nama <input type="text" id="nama" required></label>
-    <label>Nomor HP <input type="text" id="hp" required></label>
-    <label>Varian <input type="text" id="varian" required></label>
-    <label>Jumlah Box <input type="number" id="jumlah" required></label>
-    <button type="submit">Kirim Pesanan</button>
+  <form id="orderForm">
+    <label>Nama Lengkap:</label>
+    <input type="text" id="nama" required />
+
+    <label>Nomor WhatsApp:</label>
+    <input type="tel" id="whatsapp" placeholder="08xxxx" required />
+
+    <label>Pilih Varian:</label>
+    <select id="varian" required>
+      <option value="">-- Pilih Varian --</option>
+      <option value="Vanilla Oreo">Vanilla Oreo</option>
+      <option value="Cokelat Kacang">Cokelat Kacang</option>
+      <option value="Red Velvet Keju">Red Velvet Keju</option>
+      <option value="Pandan Cokelat">Pandan Cokelat</option>
+    </select>
+
+    <label>Topping Tambahan:</label>
+    <select id="topping">
+      <option value="">Tanpa Tambahan</option>
+      <option value="Keju">Keju</option>
+      <option value="Oreo">Oreo</option>
+      <option value="Kacang">Kacang</option>
+      <option value="Cokelat">Cokelat</option>
+    </select>
+
+    <label>Jumlah Box:</label>
+    <input type="number" id="jumlah" min="1" value="1" required />
+
+    <p><strong>Total Harga:</strong> <span id="total">Rp 15.000</span></p>
+    <button type="submit">Pesan via WhatsApp</button>
   </form>
 
   <!-- Testimoni -->
   <h2>Testimoni Pelanggan</h2>
-  <div id="testimoni-list"></div>
-  <form id="testimoniForm" class="form-container">
-    <label>Nama <input type="text" id="namaTesti" required></label>
-    <label>Pesan <textarea id="pesanTesti" required></textarea></label>
+  <div id="testimoni-list">
+    <p><em>"Pukisnya lembut banget dan toppingnya melimpah!"</em> – Rani</p>
+    <p><em>"Anak-anak suka sekali, pasti repeat order!"</em> – Budi</p>
+  </div>
+  <form id="testimoniForm">
+    <label>Tulis Testimoni:</label>
+    <textarea id="testimoniText" required></textarea>
     <button type="submit">Kirim Testimoni</button>
   </form>
 
-  <!-- Share -->
-  <h2>Bagikan ke Teman</h2>
-  <div class="share-buttons">
-    <a href="https://wa.me/?text=Pukis%20Lumer%20Aulia%20-%20enak%20banget!" target="_blank">
-      <i class="fab fa-whatsapp"></i> WhatsApp
-    </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=https://pukislumer-aulia.github.io" target="_blank">
-      <i class="fab fa-facebook"></i> Facebook
-    </a>
-    <a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io&text=Pukis%20Lumer%20Aulia%20-%20enak%20banget!" target="_blank">
-      <i class="fab fa-twitter"></i> Twitter
-    </a>
+  <!-- QRIS Pembayaran -->
+  <h2>Pembayaran QRIS</h2>
+  <p>Scan QRIS berikut untuk melakukan pembayaran:</p>
+  <img src="assets/images/qris.png" alt="QRIS Pukis Lumer Aulia" class="responsive-img" style="max-width:250px;" />
+
+  <!-- Share Button -->
+  <div class="share-container">
+    <button class="share-toggle"><i class="fas fa-share-alt"></i></button>
+    <div class="share-buttons">
+      <a href="https://wa.me/?text=Yuk+lihat+Pukis+Lumer+Aulia!+https://pukislumer-aulia.github.io/" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://pukislumer-aulia.github.io/" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://twitter.com/intent/tweet?url=https://pukislumer-aulia.github.io/&text=Pukis+Lumer+Aulia+enak+banget!" target="_blank"><i class="fab fa-twitter"></i></a>
+      <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
   </div>
 
   <!-- Footer -->
   <footer>
-    <p>&copy; <span id="year"></span> Pukis Lumer Aulia. Semua Hak Dilindungi.</p>
+    <p>&copy; 2025 Pukis Lumer Aulia. Semua Hak Dilindungi.</p>
+    <p>
+      <a href="https://maps.app.goo.gl/xyz" class="map-link" target="_blank">
+        <img src="assets/images/maps.png" alt="Maps" /> Lihat di Google Maps
+      </a>
+    </p>
   </footer>
 
   <!-- Tombol Admin -->
   <a href="login.html" class="admin-btn">Admin</a>
-  <style>
-    .admin-btn {
-      position: fixed;
-      bottom: 15px;
-      left: 15px;
-      background: #343a40;
-      color: #fff;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-size: 14px;
-      text-decoration: none;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      transition: background 0.3s ease;
-      z-index: 9999;
-    }
-    .admin-btn:hover { background: #212529; }
-  </style>
 
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <!-- Script -->
+  <script>
+    // Hitung Total Harga
+    const jumlahInput = document.getElementById("jumlah");
+    const totalEl = document.getElementById("total");
+    const toppingInput = document.getElementById("topping");
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
-      authDomain: "pukis-lumer-aulia.firebaseapp.com",
-      projectId: "pukis-lumer-aulia",
-      storageBucket: "pukis-lumer-aulia.appspot.com",
-      messagingSenderId: "1059510074119",
-      appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
-      measurementId: "G-NZY82GKPXS"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Load konten utama
-    async function loadContent() {
-      const docRef = doc(db, "content", "about");
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        for (let key in data) {
-          if (document.getElementById(key)) {
-            document.getElementById(key).innerText = data[key];
-          }
-        }
-      }
+    function updateTotal() {
+      const jumlah = parseInt(jumlahInput.value) || 1;
+      let harga = 15000;
+      if (toppingInput.value !== "") harga += 2000;
+      totalEl.textContent = "Rp " + (harga * jumlah).toLocaleString("id-ID");
     }
 
-    // Form Pesanan
-    const orderForm = document.getElementById("orderForm");
-    orderForm.addEventListener("submit", async (e) => {
+    jumlahInput.addEventListener("input", updateTotal);
+    toppingInput.addEventListener("change", updateTotal);
+
+    // Pesan via WhatsApp
+    document.getElementById("orderForm").addEventListener("submit", function(e){
       e.preventDefault();
       const nama = document.getElementById("nama").value;
-      const hp = document.getElementById("hp").value;
+      const wa = document.getElementById("whatsapp").value;
       const varian = document.getElementById("varian").value;
-      const jumlah = document.getElementById("jumlah").value;
+      const topping = document.getElementById("topping").value || "Tanpa Tambahan";
+      const jumlah = jumlahInput.value;
+      const total = totalEl.textContent;
 
-      await addDoc(collection(db, "pesanan"), {
-        nama, hp, varian, jumlah,
-        waktu: serverTimestamp()
-      });
-      alert("Pesanan berhasil dikirim!");
-      orderForm.reset();
+      const pesan = `Halo, saya ingin pesan:\n\nNama: ${nama}\nNo. WA: ${wa}\nVarian: ${varian}\nTopping: ${topping}\nJumlah: ${jumlah} box\nTotal: ${total}`;
+      window.open("https://wa.me/6281234567890?text=" + encodeURIComponent(pesan), "_blank");
     });
 
-    // Form Testimoni
-    const testimoniForm = document.getElementById("testimoniForm");
-    const testimoniList = document.getElementById("testimoni-list");
-
-    testimoniForm.addEventListener("submit", async (e) => {
+    // Testimoni
+    document.getElementById("testimoniForm").addEventListener("submit", function(e){
       e.preventDefault();
-      const nama = document.getElementById("namaTesti").value;
-      const pesan = document.getElementById("pesanTesti").value;
-
-      await addDoc(collection(db, "testimoni"), {
-        nama, pesan,
-        waktu: serverTimestamp()
-      });
-      alert("Testimoni berhasil dikirim!");
-      testimoniForm.reset();
-      loadTestimoni();
+      const text = document.getElementById("testimoniText").value;
+      const list = document.getElementById("testimoni-list");
+      const p = document.createElement("p");
+      p.innerHTML = `<em>"${text}"</em> – Pelanggan`;
+      list.appendChild(p);
+      document.getElementById("testimoniText").value = "";
     });
 
-    async function loadTestimoni() {
-      testimoniList.innerHTML = "";
-      const querySnap = await getDocs(collection(db, "testimoni"));
-      querySnap.forEach((doc) => {
-        const data = doc.data();
-        const div = document.createElement("div");
-        div.className = "testimoni-item";
-        div.innerHTML = `<p><strong>${data.nama}</strong>: ${data.pesan}</p>`;
-        testimoniList.appendChild(div);
-      });
-    }
-
-    // Footer tahun otomatis
-    document.getElementById("year").innerText = new Date().getFullYear();
-
-    // Load semua
-    loadContent();
-    loadTestimoni();
+    // Share toggle
+    document.querySelector(".share-toggle").addEventListener("click", function(){
+      document.querySelector(".share-buttons").classList.toggle("active");
+    });
   </script>
 </body>
 </html>
