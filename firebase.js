@@ -40,33 +40,9 @@ export function checkLoginRedirect(redirectUrl = "login.html") {
 }
 
 // ==========================================
-// 🔹 Helper: Ambil dokumen dari Firestore
-// ==========================================
-export async function getDocData(collectionName, docId) {
-  try {
-    const docRef = doc(db, collectionName, docId);
-    const snap = await getDoc(docRef);
-    return snap.exists() ? snap.data() : null;
-  } catch (err) {
-    console.error("Error getDocData:", err);
-    return null;
-  }
-}
-
-// ==========================================
-// 🔹 Helper: Update dokumen 'about' di Firestore
-// ==========================================
-export async function updateAboutData(data) {
-  try {
-    await setDoc(doc(db, "content", "about"), data);
-  } catch (err) {
-    console.error("Error updateAboutData:", err);
-    throw err;
-  }
-}
-
 // 🔹 Helper: Ambil dokumen konten generik
-export async function getContent(docId) {
+// ==========================================
+export async function getContent(docId = "about") {
   try {
     const docRef = doc(db, "content", docId);
     const snap = await getDoc(docRef);
@@ -77,13 +53,86 @@ export async function getContent(docId) {
   }
 }
 
+// ==========================================
 // 🔹 Helper: Update dokumen konten generik
-export async function updateContent(docId, data) {
+// ==========================================
+export async function updateContent(docId = "about", data) {
   try {
     await setDoc(doc(db, "content", docId), data);
   } catch (err) {
     console.error("Error updateContent:", err);
     throw err;
+  }
+}
+
+// ==========================================
+// 🔹 Helper: Load konten ke index.html (frontend)
+// ==========================================
+export async function loadHomePage() {
+  const data = await getContent("about");
+  if (!data) return;
+
+  // Mapping semua elemen yang ada di index.html
+  if (data.judul) document.getElementById("judulUtama").innerText = data.judul;
+  if (data.sapaan) document.getElementById("sambutan1").innerText = data.sapaan;
+  if (data.doa) document.getElementById("sambutan2").innerText = data.doa;
+  if (data.kota) document.getElementById("lokasi1").innerText = data.kota;
+  if (data.serambi) document.getElementById("lokasi2").innerText = data.serambi;
+  if (data.ajakan) document.getElementById("lokasi3").innerText = data.ajakan;
+  if (data.jam) document.getElementById("jamOperasional").innerText = data.jam;
+  if (data.bestseller) document.getElementById("bestSeller").innerText = data.bestseller;
+  if (data.lokasi) document.getElementById("lokasiTeks").innerText = data.lokasi;
+  if (data.ojol) document.getElementById("ojolText").innerText = data.ojol;
+  if (data.alasan) document.getElementById("kenapaText").innerText = data.alasan;
+
+  // Fakta list
+  const faktaList = [];
+  for (let i = 1; i <= 6; i++) {
+    if (data["fakta" + i]) faktaList.push(data["fakta" + i]);
+  }
+  const ulFakta = document.getElementById("faktaList");
+  if (ulFakta) {
+    ulFakta.innerHTML = "";
+    faktaList.forEach(f => {
+      const li = document.createElement("li");
+      li.innerText = f;
+      ulFakta.appendChild(li);
+    });
+  }
+
+  // Promo
+  if (data.promo) {
+    const promoEl = document.getElementById("promo");
+    if (promoEl) promoEl.innerText = data.promo;
+  }
+  if (data.promoImageInput) {
+    const promoImg = document.getElementById("promoImage");
+    if (promoImg) promoImg.src = data.promoImageInput;
+  }
+
+  // Galeri
+  if (data.galeriInput) {
+    const galeriContainer = document.getElementById("galeriContainer");
+    if (galeriContainer) {
+      galeriContainer.innerHTML = "";
+      data.galeriInput.split("|").forEach(url => {
+        if (url.trim() !== "") {
+          const div = document.createElement("div");
+          div.className = "gallery-item";
+          const img = document.createElement("img");
+          img.src = url.trim();
+          img.className = "responsive-img";
+          div.appendChild(img);
+          galeriContainer.appendChild(div);
+        }
+      });
+    }
+  }
+
+  // Footer
+  if (data.footer) {
+    const footerEl = document.getElementById("footerText");
+    if (footerEl) footerEl.innerText = data.footer;
   }
 }
 
