@@ -286,7 +286,39 @@ testimoniForm.addEventListener("submit", function(e){
     </a>
   </p>
 </footer>
+<!-- ================== FLOATING SHARE ICONS ================== -->
+<div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
+  <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank" aria-label="WhatsApp" rel="noopener noreferrer">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+  <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank" aria-label="Facebook" rel="noopener noreferrer">
+    <i class="fa-brands fa-facebook-f"></i>
+  </a>
+  <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
+    <i class="fa-brands fa-instagram"></i>
+  </a>
+  <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank" aria-label="Twitter" rel="noopener noreferrer">
+    <i class="fa-brands fa-twitter"></i>
+  </a>
+  <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank" aria-label="TikTok" rel="noopener noreferrer">
+    <i class="fa-brands fa-tiktok"></i>
+  </a>
+</div>
 
+<div class="toggle-float-btn" id="toggleShareBtn" aria-label="Bagikan">
+  <i class="fa-solid fa-share-nodes"></i>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById("toggleShareBtn");
+  const floatingIcons = document.getElementById("floatingIcons");
+
+  toggleBtn.addEventListener("click", () => {
+    floatingIcons.classList.toggle("show");
+    const isShown = floatingIcons.classList.contains("show");
+    floatingIcons.setAttribute("aria-hidden", !isShown);
+  });
+</script>
 <!-- Tombol Admin -->
 <a id="btnAdmin">🔑 Admin</a>
 
