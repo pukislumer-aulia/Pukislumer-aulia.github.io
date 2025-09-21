@@ -84,17 +84,23 @@
 <section id="form-pemesanan">
   <h2>Pemesanan Pukis Lumer Aulia</h2>
   <form id="formPukis">
-    <label>Nama Pemesan:<input type="text" id="namaPemesan" required></label>
-    <label>Jenis Pukis:
-      <input type="radio" name="jenis" value="original" checked> Original
-      <input type="radio" name="jenis" value="pandan"> Pandan
+    <!-- Nama Pemesan -->
+    <label>Nama Pemesan:
+      <input type="text" id="namaPemesan" placeholder="Nama Anda" required>
     </label>
-    <label>Topping:
-      <input type="radio" name="topping" value="non" checked> Non Topping
-      <input type="radio" name="topping" value="single"> Single Topping
-      <input type="radio" name="topping" value="double"> Double Topping
-    </label>
-    <!-- Single & Double topping groups -->
+
+    <!-- Jenis Pukis -->
+    <label>Jenis Pukis:</label>
+    <label><input type="radio" name="jenis" value="original" checked> Original</label>
+    <label><input type="radio" name="jenis" value="pandan"> Pandan</label>
+
+    <!-- Topping -->
+    <label>Topping:</label>
+    <label><input type="radio" name="topping" value="non" checked> Non Topping</label>
+    <label><input type="radio" name="topping" value="single"> Single Topping</label>
+    <label><input type="radio" name="topping" value="double"> Double Topping</label>
+
+    <!-- Single Topping -->
     <div id="singleToppingGroup" style="display:none;">
       <label>Pilih Rasa (Single):</label>
       <label><input type="checkbox" class="singleTopping" value="Coklat"> Coklat</label>
@@ -105,6 +111,8 @@
       <label><input type="checkbox" class="singleTopping" value="Bebas"> Bebas</label>
       <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>
     </div>
+
+    <!-- Double Topping -->
     <div id="doubleToppingGroup" style="display:none;">
       <label>Pilih Taburan (Double):</label>
       <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>
@@ -113,18 +121,111 @@
       <label><input type="checkbox" class="doubleTopping" value="Choco Chip"> Choco Chip</label>
       <label><input type="checkbox" class="doubleTopping" value="Oreo"> Oreo</label>
     </div>
+
+    <!-- Isi Box & Jumlah -->
     <label>Isi per Box:
       <select id="isiBox">
         <option value="5">5 pcs</option>
         <option value="10">10 pcs</option>
       </select>
     </label>
-    <label>Jumlah Box:<input type="number" id="jumlahBox" value="1" min="1"></label>
+    <label>Jumlah Box:
+      <input type="number" id="jumlahBox" value="1" min="1">
+    </label>
+
+    <!-- Total Harga -->
     <p>Total Harga: <span id="totalHarga">Rp0</span></p>
+
+    <!-- Submit -->
     <button type="submit">Kirim Pesanan via WhatsApp</button>
   </form>
 </section>
 
+<script>
+const hargaPukis = {
+  original: { non: {5: 10000, 10: 18000}, single: {5: 13000, 10: 25000}, double: {5: 15000, 10: 28000} },
+  pandan: { non: {5: 12000, 10: 22000}, single: {5: 15000, 10: 28000}, double: {5: 18000, 10: 32000} }
+};
+
+// ====== Fungsi tampil/sembunyikan topping ======
+function ubahTopping() {
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  document.getElementById("singleToppingGroup").style.display = (topping === "single" || topping === "double") ? "block" : "none";
+  document.getElementById("doubleToppingGroup").style.display = (topping === "double") ? "block" : "none";
+  hitungHarga();
+}
+
+// ====== Fungsi hitung total harga ======
+function hitungHarga() {
+  const jenis = document.querySelector('input[name="jenis"]:checked').value;
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  const isi = parseInt(document.getElementById("isiBox").value);
+  const jumlah = parseInt(document.getElementById("jumlahBox").value);
+  const hargaSatuan = hargaPukis[jenis][topping][isi] || 0;
+  const total = hargaSatuan * jumlah;
+  document.getElementById("totalHarga").innerText = `Rp${total.toLocaleString("id-ID")}`;
+}
+
+// ====== Ambil topping yang dicentang ======
+function getSelectedToppings(cls) {
+  return Array.from(document.querySelectorAll(cls + ':checked')).map(el => el.value);
+}
+
+// ====== Validasi topping ======
+function validasiTopping() {
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  const isi = parseInt(document.getElementById("isiBox").value);
+  const single = getSelectedToppings('.singleTopping');
+  const double = getSelectedToppings('.doubleTopping');
+
+  if (topping === 'single' && single.length > isi) {
+    alert(`Single topping maksimal ${isi} rasa.`);
+    return false;
+  }
+  if (topping === 'double' && (single.length > isi || double.length > isi)) {
+    alert(`Double topping maksimal ${isi} rasa dan ${isi} taburan.`);
+    return false;
+  }
+  return true;
+}
+
+// ====== Event listener ======
+document.querySelectorAll('input[name="jenis"], input[name="topping"], #isiBox, #jumlahBox').forEach(el => {
+  el.addEventListener('change', () => { ubahTopping(); hitungHarga(); });
+});
+document.querySelectorAll('.singleTopping, .doubleTopping').forEach(el => el.addEventListener('change', hitungHarga));
+
+// ====== Submit form ======
+document.getElementById("formPukis").addEventListener("submit", function(e) {
+  e.preventDefault();
+  if (!validasiTopping()) return;
+
+  const nama = document.getElementById("namaPemesan").value.trim();
+  const jenis = document.querySelector('input[name="jenis"]:checked').value;
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  const isi = document.getElementById("isiBox").value;
+  const jumlah = document.getElementById("jumlahBox").value;
+  const single = getSelectedToppings('.singleTopping').join(', ');
+  const double = getSelectedToppings('.doubleTopping').join(', ');
+  const totalText = document.getElementById("totalHarga").innerText;
+
+  let pesan = `Halo! Saya ingin memesan Pukis:
+- Nama: ${nama}
+- Jenis: ${jenis}
+- Topping: ${topping}
+- Isi per Box: ${isi} pcs
+- Jumlah Box: ${jumlah}`;
+  if (topping === 'single') pesan += `\n- Rasa: ${single}`;
+  if (topping === 'double') pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;
+  pesan += `\n${totalText}`;
+
+  const waURL = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
+  window.open(waURL, '_blank');
+});
+
+// ====== Inisialisasi ======
+window.addEventListener('load', () => { ubahTopping(); hitungHarga(); });
+</script>
 <!-- Form Testimoni -->
 <section id="form-testimoni">
   <h2>Tulis Testimoni Kamu!</h2>
