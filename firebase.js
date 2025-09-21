@@ -1,82 +1,80 @@
 // ==========================================
-// 🔹 admin.js
-// 🔹 Mengelola konten About, Promo, Galeri & Testimoni
+// 🔹 firebase.js
+// 🔹 Konfigurasi Firebase & helper untuk Admin / Frontend
 // ==========================================
 
-import { auth, checkLoginRedirect, getDocData, updateAboutData } from "./firebase.js";
+// 🔹 Import Firebase SDK
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // ==========================================
-// 🔹 Pastikan user sudah login
+// 🔹 Konfigurasi Firebase
 // ==========================================
-checkLoginRedirect();
+const firebaseConfig = {
+  apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
+  authDomain: "pukis-lumer-aulia.firebaseapp.com",
+  projectId: "pukis-lumer-aulia",
+  storageBucket: "pukis-lumer-aulia.appspot.com",
+  messagingSenderId: "1059510074119",
+  appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
+  measurementId: "G-NZY82GKPXS"
+};
 
 // ==========================================
-// 🔹 Ambil elemen input
+// 🔹 Inisialisasi App, Auth & Firestore
 // ==========================================
-const judulInput       = document.getElementById("judulInput");
-const sapaanInput      = document.getElementById("sapaanInput");
-const doaInput         = document.getElementById("doaInput");
-const lokasiInput      = document.getElementById("lokasiInput");
-const ojolInput        = document.getElementById("ojolInput");
-const alasanInput      = document.getElementById("alasanInput");
-const promoTextInput   = document.getElementById("promoTextInput");
-const promoImageInput  = document.getElementById("promoImageInput");
-const footerInput      = document.getElementById("footerInput");
-const testimoniInput   = document.getElementById("testimoniInput"); // Pisah baris
-const galeriInput      = document.getElementById("galeriInput");    // Pisah dengan "|"
-const btnSimpan        = document.getElementById("btnSimpan");
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 // ==========================================
-// 🔹 Load data awal dari Firestore
+// 🔹 Helper: Cek login & redirect jika belum
 // ==========================================
-async function loadAbout() {
-    const data = await getDocData("content", "about");
-    if (!data) return;
-
-    judulInput.value       = data.judul || "";
-    sapaanInput.value      = data.sapaan || "";
-    doaInput.value         = data.doa || "";
-    lokasiInput.value      = data.lokasi || "";
-    ojolInput.value        = data.ojol || "";
-    alasanInput.value      = data.alasan || "";
-    promoTextInput.value   = data.promoText || "";
-    promoImageInput.value  = data.promoImage || "";
-    footerInput.value      = data.footer || "";
-    testimoniInput.value   = Array.isArray(data.testimoni) ? data.testimoni.join("\n") : "";
-    galeriInput.value      = Array.isArray(data.galeri) ? data.galeri.join("|") : "";
+export function checkLoginRedirect(redirectUrl = "login.html") {
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = redirectUrl;
+    }
+  });
 }
 
-// Panggil load data saat halaman terbuka
-loadAbout();
+// ==========================================
+// 🔹 Helper: Ambil dokumen dari Firestore
+// ==========================================
+export async function getDocData(collectionName, docId) {
+  try {
+    const docRef = doc(db, collectionName, docId);
+    const snap = await getDoc(docRef);
+    return snap.exists() ? snap.data() : null;
+  } catch (err) {
+    console.error("Error getDocData:", err);
+    return null;
+  }
+}
 
 // ==========================================
-// 🔹 Simpan perubahan ke Firestore
+// 🔹 Helper: Update dokumen 'about' di Firestore
 // ==========================================
-btnSimpan.addEventListener("click", async () => {
+export async function updateAboutData(data) {
+  try {
+    await setDoc(doc(db, "content", "about"), data);
+  } catch (err) {
+    console.error("Error updateAboutData:", err);
+    throw err;
+  }
+}
 
-    const data = {
-        judul       : judulInput.value,
-        sapaan      : sapaanInput.value,
-        doa         : doaInput.value,
-        lokasi      : lokasiInput.value,
-        ojol        : ojolInput.value,
-        alasan      : alasanInput.value,
-        promoText   : promoTextInput.value,
-        promoImage  : promoImageInput.value,
-        footer      : footerInput.value,
-        testimoni   : testimoniInput.value.split("\n")
-                         .map(t => t.trim())
-                         .filter(t => t),
-        galeri      : galeriInput.value.split("|")
-                         .map(u => u.trim())
-                         .filter(u => u)
-    };
-
-    try {
-        await updateAboutData(data);
-        alert("✅ Data berhasil diperbarui!");
-    } catch (err) {
-        console.error(err);
-        alert("❌ Gagal memperbarui data. Cek console.");
-    }
-});
+// ==========================================
+// 🔹 Helper: Logout user
+// ==========================================
+export function logoutUser(redirectUrl = "login.html") {
+  signOut(auth)
+    .then(() => {
+      window.location.href = redirectUrl;
+    })
+    .catch(err => {
+      console.error("Logout error:", err);
+      alert("Gagal logout, cek console");
+    });
+}
