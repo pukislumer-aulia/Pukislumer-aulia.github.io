@@ -65,6 +65,28 @@ export async function updateAboutData(data) {
   }
 }
 
+// 🔹 Helper: Ambil dokumen konten generik
+export async function getContent(docId) {
+  try {
+    const docRef = doc(db, "content", docId);
+    const snap = await getDoc(docRef);
+    return snap.exists() ? snap.data() : {};
+  } catch (err) {
+    console.error("Error getContent:", err);
+    return {};
+  }
+}
+
+// 🔹 Helper: Update dokumen konten generik
+export async function updateContent(docId, data) {
+  try {
+    await setDoc(doc(db, "content", docId), data);
+  } catch (err) {
+    console.error("Error updateContent:", err);
+    throw err;
+  }
+}
+
 // ==========================================
 // 🔹 Helper: Logout user
 // ==========================================
