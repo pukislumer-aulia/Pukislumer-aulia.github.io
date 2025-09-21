@@ -259,6 +259,18 @@
     }
     window.location.href = currentUser ? "admin.html" : "login.html";
   });
+  import { getContent } from "./firebase.js";
+
+async function loadHomePage() {
+  const data = await getContent("homepage");
+  if (!data) return;
+
+  document.getElementById("judulUtama").innerText = data.judulUtama || "PUKIS LUMER AULIA";
+  document.getElementById("sambutan1").innerText = data.sambutan1 || "";
+  document.getElementById("sambutan2").innerText = data.sambutan2 || "";
+  // dst: mapping konten lain seperti lokasi, gallery, dsb.
+}
+loadHomePage();
 </script>
   </body>
   </html>
