@@ -53,32 +53,8 @@
   <p id="sambutan2"><strong style="color:#002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</strong></p>
   <p id="lokasi1"><strong style="color:#800020;">Padang Panjang Kota Kuliner.</strong></p>
   <p id="lokasi2"><strong style="color:#800020;">Kota Serambi Mekkah orang Mengenalnya.</strong></p>
-  <p id="lokasi3"><strong style="color:#800020;">Kalau main ke Pasar Kuliner</strong></p>
-  <p id="lokasi4"><strong style="color:#800020;">Wajib mampir ke PUKIS LUMER AULIA</strong></p>
-  <p id="jamOperasional"><strong style="color:#9370DB;">Jam Operasional:</strong> 16.00 – 23.59 WIB</p>
-  <p id="bestSeller"><strong style="color:#6B8E23;">Best Seller:</strong> Double Topping Vanilla Oreo vs Cokelat Kacang</p>
-  <p id="lokasiTeks"><strong style="color:#800020;">Lokasi:</strong> Pasar Kuliner Padang Panjang (Cari Gerobak Pink)</p>
-  <p id="ojolText">Tersedia di Maxim, Food, GrabFood, dan GoFood!</p>
-
-  <!-- 🔹 Alasan & Fakta -->
-  <h2 id="kenapaTitle">Kenapa Pilih Pukis Lumer Aulia?</h2>
-  <p id="kenapaText">Pukis kami dibuat dengan resep rahasia keluarga...</p>
-
-  <h2 id="faktaTitle">Fakta Unik Tentang Kami</h2>
-  <ul id="faktaList" style="color:#2E8B57;">
-    <li>Resep adonan spesial keluarga sejak 2023!</li>
-    <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
-    <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
-  </ul>
-<!-- 🔹 Galeri (Firebase editable) -->
-  <h2>Galeri</h2>
-  <div class="gallery-grid" id="galeriContainer">
-    <div class="gallery-item"><img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img"></div>
-    <div class="gallery-item"><img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img"></div>
-    <div class="gallery-item"><img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img"></div>
-  </div>
-
-  <!-- 🔹 Formulir Pemesanan -->
+<!-- ================== FORMULIR PEMESANAN ================== -->
+<section id="form-pemesanan">
   <h2>Pemesanan Pukis Lumer Aulia</h2>
   <form id="formPukis">
     <div class="form-group">
@@ -88,15 +64,15 @@
 
     <div class="form-group">
       <label>Jenis Pukis:</label>
-      <label><input type="radio" name="jenis" value="original" checked onchange="hitungHarga()"> Original</label>
-      <label><input type="radio" name="jenis" value="pandan" onchange="hitungHarga()"> Pandan</label>
+      <label><input type="radio" name="jenis" value="original" checked> Original</label>
+      <label><input type="radio" name="jenis" value="pandan"> Pandan</label>
     </div>
 
     <div class="form-group">
       <label>Topping:</label>
-      <label><input type="radio" name="topping" value="non" checked onchange="ubahTopping(); hitungHarga()"> Non Topping</label>
-      <label><input type="radio" name="topping" value="single" onchange="ubahTopping(); hitungHarga()"> Single Topping</label>
-      <label><input type="radio" name="topping" value="double" onchange="ubahTopping(); hitungHarga()"> Double Topping</label>
+      <label><input type="radio" name="topping" value="non" checked> Non Topping</label>
+      <label><input type="radio" name="topping" value="single"> Single Topping</label>
+      <label><input type="radio" name="topping" value="double"> Double Topping</label>
     </div>
 
     <div class="form-group" id="singleToppingGroup" style="display: none;">
@@ -125,7 +101,7 @@
 
     <div class="form-group">
       <label for="isiBox">Isi per Box:</label>
-      <select id="isiBox" onchange="hitungHarga()">
+      <select id="isiBox">
         <option value="5">5 pcs</option>
         <option value="10">10 pcs</option>
       </select>
@@ -133,7 +109,7 @@
 
     <div class="form-group">
       <label for="jumlahBox">Jumlah Box:</label>
-      <input type="number" id="jumlahBox" value="1" min="1" onchange="hitungHarga()">
+      <input type="number" id="jumlahBox" value="1" min="1">
     </div>
 
     <div class="form-group">
@@ -142,7 +118,124 @@
 
     <button type="submit">Kirim Pesanan via WhatsApp</button>
   </form>
-  <a href="#formPukis" class="float-btn"><i class="fas fa-shopping-cart"></i></a>
+</section>
+
+<script>
+const hargaPukis = {
+  original: { non: {5: 10000, 10: 18000}, single: {5: 13000, 10: 25000}, double: {5: 15000, 10: 28000} },
+  pandan: { non: {5: 12000, 10: 22000}, single: {5: 15000, 10: 28000}, double: {5: 18000, 10: 32000} }
+};
+
+// ====== Fungsi tampil/ sembunyikan topping ======
+function ubahTopping() {
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  document.getElementById("singleToppingGroup").style.display = (topping === "single" || topping === "double") ? "block" : "none";
+  document.getElementById("doubleToppingGroup").style.display = (topping === "double") ? "block" : "none";
+  hitungHarga(); // update harga saat toggle topping
+}
+
+// ====== Fungsi hitung total harga ======
+function hitungHarga() {
+  const jenis = document.querySelector('input[name="jenis"]:checked').value;
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  const isi = parseInt(document.getElementById("isiBox").value);
+  const jumlah = parseInt(document.getElementById("jumlahBox").value);
+  const hargaSatuan = hargaPukis[jenis][topping][isi] || 0;
+  const total = hargaSatuan * jumlah;
+  document.getElementById("totalHarga").innerText = `Rp${total.toLocaleString("id-ID")}`;
+}
+
+// ====== Ambil topping yang dicentang ======
+function getSelectedToppings(cls) {
+  return Array.from(document.querySelectorAll(cls + ':checked')).map(el => el.value);
+}
+
+// ====== Validasi jumlah topping ======
+function validasiTopping() {
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  const isi = parseInt(document.getElementById("isiBox").value);
+  const single = getSelectedToppings('.singleTopping');
+  const double = getSelectedToppings('.doubleTopping');
+
+  if (topping === 'single' && single.length > isi) {
+    alert(`Single topping maksimal ${isi} rasa.`);
+    return false;
+  }
+  if (topping === 'double') {
+    if (single.length > isi || double.length > isi) {
+      alert(`Double topping maksimal ${isi} rasa dan ${isi} taburan.`);
+      return false;
+    }
+  }
+  return true;
+}
+
+// ====== Event listener untuk live update ======
+document.querySelectorAll('input[name="jenis"], input[name="topping"], #isiBox, #jumlahBox').forEach(el => {
+  el.addEventListener('change', () => {
+    ubahTopping();
+    hitungHarga();
+  });
+});
+document.querySelectorAll('.singleTopping, .doubleTopping').forEach(el => {
+  el.addEventListener('change', hitungHarga);
+});
+
+// ====== Submit form ======
+document.getElementById("formPukis").addEventListener("submit", function(e) {
+  e.preventDefault();
+  if (!validasiTopping()) return;
+
+  const nama = document.getElementById("namaPemesan").value.trim();
+  if (!nama) { alert("Nama pemesan wajib diisi."); return; }
+
+  const jenis = document.querySelector('input[name="jenis"]:checked').value;
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  const isi = document.getElementById("isiBox").value;
+  const jumlah = document.getElementById("jumlahBox").value;
+  const single = getSelectedToppings('.singleTopping').join(', ');
+  const double = getSelectedToppings('.doubleTopping').join(', ');
+  const totalText = document.getElementById("totalHarga").innerText;
+
+  let pesan = `Halo! Saya ingin memesan Pukis:\n- Nama: ${nama}\n- Jenis: ${jenis}\n- Topping: ${topping}\n- Isi per Box: ${isi} pcs\n- Jumlah Box: ${jumlah}`;
+  if (topping === 'single') pesan += `\n- Rasa: ${single}`;
+  if (topping === 'double') pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;
+  pesan += `\n${totalText}`;
+
+  const waURL = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
+  window.open(waURL, '_blank');
+});
+
+// ====== Inisialisasi harga saat load ======
+window.addEventListener('load', () => {
+  ubahTopping();
+  hitungHarga();
+});
+    </script>  <p id="lokasi3"><strong style="color:#800020;">Kalau main ke Pasar Kuliner</strong></p>
+  <p id="lokasi4"><strong style="color:#800020;">Wajib mampir ke PUKIS LUMER AULIA</strong></p>
+  <p id="jamOperasional"><strong style="color:#9370DB;">Jam Operasional:</strong> 16.00 – 23.59 WIB</p>
+  <p id="bestSeller"><strong style="color:#6B8E23;">Best Seller:</strong> Double Topping Vanilla Oreo vs Cokelat Kacang</p>
+  <p id="lokasiTeks"><strong style="color:#800020;">Lokasi:</strong> Pasar Kuliner Padang Panjang (Cari Gerobak Pink)</p>
+  <p id="ojolText">Tersedia di Maxim, Food, GrabFood, dan GoFood!</p>
+
+  <!-- 🔹 Alasan & Fakta -->
+  <h2 id="kenapaTitle">Kenapa Pilih Pukis Lumer Aulia?</h2>
+  <p id="kenapaText">Pukis kami dibuat dengan resep rahasia keluarga...</p>
+
+  <h2 id="faktaTitle">Fakta Unik Tentang Kami</h2>
+  <ul id="faktaList" style="color:#2E8B57;">
+    <li>Resep adonan spesial keluarga sejak 2023!</li>
+    <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
+    <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
+  </ul>
+<!-- 🔹 Galeri (Firebase editable) -->
+  <h2>Galeri</h2>
+  <div class="gallery-grid" id="galeriContainer">
+    <div class="gallery-item"><img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img"></div>
+    <div class="gallery-item"><img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img"></div>
+    <div class="gallery-item"><img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img"></div>
+  </div>
+
 
 
 <!-- 🔹 Form Testimoni -->
