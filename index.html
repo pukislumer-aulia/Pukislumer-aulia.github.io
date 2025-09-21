@@ -79,29 +79,6 @@
     <div class="gallery-item"><img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img"></div>
     <div class="gallery-item"><img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img"></div>
   </div>
-
-
-<!-- 🔹 Form Testimoni -->
-  <section id="form-testimoni">
-    <h2>Tulis Testimoni Kamu!</h2>
-    <form id="testimoniForm">
-      <input type="text" id="nama" placeholder="Nama Kamu" required>
-      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
-      <button type="submit">Kirim Testimoni</button>
-    </form>
-
-    <div id="daftarTestimoni">
-      <h3>Testimoni:</h3>
-      <ul id="listTestimoni">
-        <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
-        <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
-        <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
-        <li><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"</li>
-      </ul>
-      <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
-        Hapus Semua Testimoni
-      </button>
-    </div>
 <!-- ================== FORMULIR PEMESANAN ================== -->
 <section id="form-pemesanan">
   <h2>Pemesanan Pukis Lumer Aulia</h2>
@@ -260,7 +237,30 @@ window.addEventListener('load', () => {
   ubahTopping();
   hitungHarga();
 });
-    </script>
+</script>
+
+<!-- 🔹 Form Testimoni -->
+  <section id="form-testimoni">
+    <h2>Tulis Testimoni Kamu!</h2>
+    <form id="testimoniForm">
+      <input type="text" id="nama" placeholder="Nama Kamu" required>
+      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+      <button type="submit">Kirim Testimoni</button>
+    </form>
+
+    <div id="daftarTestimoni">
+      <h3>Testimoni:</h3>
+      <ul id="listTestimoni">
+        <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+        <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+        <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+        <li><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"</li>
+      </ul>
+      <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+        Hapus Semua Testimoni
+      </button>
+    </div>
+
     <!-- 🔹 Pembayaran QRIS -->
     <div class="qris-section">
       <h3>Bayar Lebih Mudah dengan QRIS</h3>
@@ -321,8 +321,9 @@ window.addEventListener('load', () => {
 <!-- 🔹 Footer -->
 <footer>
   <!-- Hak cipta 2025 -->
-  <p id="footerText">© 2025 Pukis Lumer Aulia. Hak cipta dilindungi undang-undang.</p>
-
+  <p id="footerText">© 2025 Pukis Lumer Aulia.</p>
+  <p Hak cipta dilindungi undang-undang.</p>
+  
   <!-- Kunjungi lokasi -->
   <p>
     Kunjungi lokasi kami: 
