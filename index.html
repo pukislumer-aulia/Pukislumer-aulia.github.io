@@ -53,6 +53,55 @@
   <p id="sambutan2"><strong style="color:#002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</strong></p>
   <p id="lokasi1"><strong style="color:#800020;">Padang Panjang Kota Kuliner.</strong></p>
   <p id="lokasi2"><strong style="color:#800020;">Kota Serambi Mekkah orang Mengenalnya.</strong></p>
+<!
+
+    </script>  <p id="lokasi3"><strong style="color:#800020;">Kalau main ke Pasar Kuliner</strong></p>
+  <p id="lokasi4"><strong style="color:#800020;">Wajib mampir ke PUKIS LUMER AULIA</strong></p>
+  <p id="jamOperasional"><strong style="color:#9370DB;">Jam Operasional:</strong> 16.00 – 23.59 WIB</p>
+  <p id="bestSeller"><strong style="color:#6B8E23;">Best Seller:</strong> Double Topping Vanilla Oreo vs Cokelat Kacang</p>
+  <p id="lokasiTeks"><strong style="color:#800020;">Lokasi:</strong> Pasar Kuliner Padang Panjang (Cari Gerobak Pink)</p>
+  <p id="ojolText">Tersedia di Maxim, Food, GrabFood, dan GoFood!</p>
+
+  <!-- 🔹 Alasan & Fakta -->
+  <h2 id="kenapaTitle">Kenapa Pilih Pukis Lumer Aulia?</h2>
+  <p id="kenapaText">Pukis kami dibuat dengan resep rahasia keluarga...</p>
+
+  <h2 id="faktaTitle">Fakta Unik Tentang Kami</h2>
+  <ul id="faktaList" style="color:#2E8B57;">
+    <li>Resep adonan spesial keluarga sejak 2023!</li>
+    <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
+    <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
+  </ul>
+<!-- 🔹 Galeri (Firebase editable) -->
+  <h2>Galeri</h2>
+  <div class="gallery-grid" id="galeriContainer">
+    <div class="gallery-item"><img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img"></div>
+    <div class="gallery-item"><img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img"></div>
+    <div class="gallery-item"><img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img"></div>
+  </div>
+
+
+<!-- 🔹 Form Testimoni -->
+  <section id="form-testimoni">
+    <h2>Tulis Testimoni Kamu!</h2>
+    <form id="testimoniForm">
+      <input type="text" id="nama" placeholder="Nama Kamu" required>
+      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+      <button type="submit">Kirim Testimoni</button>
+    </form>
+
+    <div id="daftarTestimoni">
+      <h3>Testimoni:</h3>
+      <ul id="listTestimoni">
+        <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+        <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+        <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+        <li><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"</li>
+      </ul>
+      <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+        Hapus Semua Testimoni
+      </button>
+    </div>
 <!-- ================== FORMULIR PEMESANAN ================== -->
 <section id="form-pemesanan">
   <h2>Pemesanan Pukis Lumer Aulia</h2>
@@ -211,55 +260,7 @@ window.addEventListener('load', () => {
   ubahTopping();
   hitungHarga();
 });
-    </script>  <p id="lokasi3"><strong style="color:#800020;">Kalau main ke Pasar Kuliner</strong></p>
-  <p id="lokasi4"><strong style="color:#800020;">Wajib mampir ke PUKIS LUMER AULIA</strong></p>
-  <p id="jamOperasional"><strong style="color:#9370DB;">Jam Operasional:</strong> 16.00 – 23.59 WIB</p>
-  <p id="bestSeller"><strong style="color:#6B8E23;">Best Seller:</strong> Double Topping Vanilla Oreo vs Cokelat Kacang</p>
-  <p id="lokasiTeks"><strong style="color:#800020;">Lokasi:</strong> Pasar Kuliner Padang Panjang (Cari Gerobak Pink)</p>
-  <p id="ojolText">Tersedia di Maxim, Food, GrabFood, dan GoFood!</p>
-
-  <!-- 🔹 Alasan & Fakta -->
-  <h2 id="kenapaTitle">Kenapa Pilih Pukis Lumer Aulia?</h2>
-  <p id="kenapaText">Pukis kami dibuat dengan resep rahasia keluarga...</p>
-
-  <h2 id="faktaTitle">Fakta Unik Tentang Kami</h2>
-  <ul id="faktaList" style="color:#2E8B57;">
-    <li>Resep adonan spesial keluarga sejak 2023!</li>
-    <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
-    <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
-  </ul>
-<!-- 🔹 Galeri (Firebase editable) -->
-  <h2>Galeri</h2>
-  <div class="gallery-grid" id="galeriContainer">
-    <div class="gallery-item"><img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img"></div>
-    <div class="gallery-item"><img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img"></div>
-    <div class="gallery-item"><img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img"></div>
-  </div>
-
-
-
-<!-- 🔹 Form Testimoni -->
-  <section id="form-testimoni">
-    <h2>Tulis Testimoni Kamu!</h2>
-    <form id="testimoniForm">
-      <input type="text" id="nama" placeholder="Nama Kamu" required>
-      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
-      <button type="submit">Kirim Testimoni</button>
-    </form>
-
-    <div id="daftarTestimoni">
-      <h3>Testimoni:</h3>
-      <ul id="listTestimoni">
-        <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
-        <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
-        <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
-        <li><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"</li>
-      </ul>
-      <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
-        Hapus Semua Testimoni
-      </button>
-    </div>
-
+    </script>
     <!-- 🔹 Pembayaran QRIS -->
     <div class="qris-section">
       <h3>Bayar Lebih Mudah dengan QRIS</h3>
