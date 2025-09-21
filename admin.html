@@ -34,40 +34,38 @@
     <label>Fakta 4 <input type="text" id="fakta4"></label>
     <label>Fakta 5 <input type="text" id="fakta5"></label>
     <label>Fakta 6 <input type="text" id="fakta6"></label>
-
     <label>Promo Berjalan <input type="text" id="promo"></label>
     <label>Testimoni <textarea id="testimoni"></textarea></label>
     <label>Share Button (Teks / Link) <input type="text" id="share"></label>
     <label>Footer <input type="text" id="footer"></label>
+    <label>URL Promo Image <input type="text" id="promoImageInput" placeholder="https://..."></label>
+    <label>Galeri (pisahkan dengan | ) <textarea id="galeriInput" placeholder="URL1|URL2|URL3"></textarea></label>
 
-  <input type="text" id="promoImageInput" placeholder="URL Promo Image" />
-<textarea id="galeriInput" placeholder="URL Galeri, pisahkan dengan | "></textarea>  
-
-    <button type="button" onclick="saveContent()">Simpan</button>
-    <button type="button" class="logout" onclick="logout()">Logout</button>
+    <button type="button" id="saveBtn">💾 Simpan</button>
+    <button type="button" class="logout" id="logoutBtn">Logout</button>
   </form>
 
   <script type="module">
-    import { db, auth } from "./firebase.js";
-    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { auth, db } from "./firebase.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-    // cek login, pastikan user siap sebelum load
+    // =================================
+    // Cek login user, jika tidak login redirect
+    // =================================
     onAuthStateChanged(auth, (user) => {
       if (user) {
         loadContent();
       } else {
-        // delay sebentar untuk memastikan persistence siap
-        setTimeout(() => {
-          if (!auth.currentUser) {
-            window.location.href = "login.html";
-          }
-        }, 300);
+        window.location.href = "login.html";
       }
     });
 
+    // =================================
+    // Load konten Firestore ke input admin
+    // =================================
     async function loadContent() {
-      const docRef = doc(db, "content", "about");
+      const docRef = doc(db, "content", "about"); // gunakan "about" atau "homepage"
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -79,21 +77,38 @@
       }
     }
 
-    window.saveContent = async function() {
-      const fields = ["judul","sapaan","doa","kota","serambi","ajakan","jam","bestseller","lokasi","ojol","alasan",
-        "fakta1","fakta2","fakta3","fakta4","fakta5","fakta6","promo","testimoni","share","footer"];
+    // =================================
+    // Simpan konten ke Firestore
+    // =================================
+    document.getElementById("saveBtn").addEventListener("click", async () => {
+      const fields = [
+        "judul","sapaan","doa","kota","serambi","ajakan","jam","bestseller",
+        "lokasi","ojol","alasan","fakta1","fakta2","fakta3","fakta4","fakta5","fakta6",
+        "promo","testimoni","share","footer","promoImageInput","galeriInput"
+      ];
       const data = {};
       fields.forEach(id => { data[id] = document.getElementById(id).value; });
 
-      await setDoc(doc(db, "content", "about"), data);
-      alert("Konten berhasil disimpan!");
-    }
+      try {
+        await setDoc(doc(db, "content", "about"), data);
+        alert("Konten berhasil disimpan!");
+      } catch (err) {
+        console.error(err);
+        alert("Gagal menyimpan konten, cek console");
+      }
+    });
 
-    window.logout = function() {
+    // =================================
+    // Logout user
+    // =================================
+    document.getElementById("logoutBtn").addEventListener("click", () => {
       signOut(auth).then(() => {
         window.location.href = "login.html";
+      }).catch(err => {
+        console.error(err);
+        alert("Gagal logout, cek console");
       });
-    }
+    });
   </script>
 </body>
 </html>
