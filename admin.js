@@ -1,6 +1,11 @@
-// admin.js
-import {
+// ==========================================
+// 🔹 admin.js
+// Logic untuk halaman Admin (admin.html)
+// ==========================================
+
+import { 
   firestore,
+  auth,
   getDocData,
   setDocData,
   checkLoginRedirect,
@@ -8,70 +13,80 @@ import {
   defaultData
 } from "./firebase.js";
 
+// ID dokumen di Firestore (bebas, tapi konsisten)
+const CONTENT_DOC_ID = "main_content";
+
+// ==========================================
+// 🔹 DOM Elements
+// ==========================================
 const form = document.getElementById("adminForm");
-const btnSimpan = document.getElementById("btnSimpan");
-const btnReset = document.getElementById("btnReset");
-const btnLogout = document.getElementById("btnLogout");
+const logoutBtn = document.getElementById("logoutBtn");
+const resetBtn = document.getElementById("resetBtn"); // tombol kembali ke default
 
-// Pastikan hanya user login yang bisa masuk
-await checkLoginRedirect("login.html");
+// ==========================================
+// 🔹 Load Data dari Firestore
+// ==========================================
+async function loadContent() {
+  await checkLoginRedirect(); // pastikan admin login
 
-// 🔹 Load data ke form
-async function loadData() {
-  const about = await getDocData("content", "about");
-  const data = about || defaultData;
+  const data = await getDocData("content", CONTENT_DOC_ID);
+  const content = data || defaultData;
 
-  document.getElementById("judulInput").value = data.judul || "";
-  document.getElementById("sapaanInput").value = data.sapaan || "";
-  document.getElementById("doaInput").value = data.doa || "";
-  document.getElementById("lokasiInput").value = data.lokasi || "";
-  document.getElementById("ojolInput").value = data.ojol || "";
-  document.getElementById("alasanInput").value = data.alasan || "";
-  document.getElementById("promoTextInput").value = data.promoText || "";
-  document.getElementById("promoImageInput").value = data.promoImage || "";
-  document.getElementById("footerInput").value = data.footer || "";
-  document.getElementById("testimoniInput").value = (data.testimoni || []).join("\n");
-  document.getElementById("galeriInput").value = (data.galeri || []).join("|");
+  // Isi form dengan data
+  for (const key in content) {
+    const el = document.getElementById(key + "Input");
+    if (el) {
+      if (Array.isArray(content[key])) {
+        el.value = content[key].join("|");
+      } else {
+        el.value = content[key];
+      }
+    }
+  }
 }
 
-// 🔹 Simpan ke Firestore
-btnSimpan.addEventListener("click", async () => {
-  const data = {
-    judul: document.getElementById("judulInput").value,
-    sapaan: document.getElementById("sapaanInput").value,
-    doa: document.getElementById("doaInput").value,
-    lokasi: document.getElementById("lokasiInput").value,
-    ojol: document.getElementById("ojolInput").value,
-    alasan: document.getElementById("alasanInput").value,
-    promoText: document.getElementById("promoTextInput").value,
-    promoImage: document.getElementById("promoImageInput").value,
-    footer: document.getElementById("footerInput").value,
-    testimoni: document.getElementById("testimoniInput").value.split("\n").map(t => t.trim()).filter(Boolean),
-    galeri: document.getElementById("galeriInput").value.split("|").map(u => u.trim()).filter(Boolean),
-  };
+// ==========================================
+// 🔹 Simpan Data ke Firestore
+// ==========================================
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  try {
-    await setDocData("content", "about", data);
-    alert("Data berhasil disimpan!");
-  } catch (err) {
-    alert("Gagal menyimpan: " + err.message);
+  const data = {};
+  for (const key in defaultData) {
+    const el = document.getElementById(key + "Input");
+    if (el) {
+      if (el.value.includes("|")) {
+        data[key] = el.value.split("|").map(v => v.trim()).filter(v => v);
+      } else {
+        data[key] = el.value.trim();
+      }
+    }
+  }
+
+  await setDocData("content", CONTENT_DOC_ID, data);
+  alert("✅ Konten berhasil disimpan!");
+});
+
+// ==========================================
+// 🔹 Reset ke Default
+// ==========================================
+resetBtn.addEventListener("click", async () => {
+  if (confirm("Yakin ingin mengembalikan ke pengaturan default?")) {
+    await setDocData("content", CONTENT_DOC_ID, defaultData);
+    await loadContent();
+    alert("✅ Konten sudah dikembalikan ke default.");
   }
 });
 
-// 🔹 Reset ke default
-btnReset.addEventListener("click", async () => {
-  if (confirm("Kembalikan ke pengaturan default?")) {
-    await setDocData("content", "about", defaultData);
-    await loadData();
-    alert("Data dikembalikan ke default.");
-  }
-});
-
+// ==========================================
 // 🔹 Logout
-btnLogout.addEventListener("click", async () => {
+// ==========================================
+logoutBtn.addEventListener("click", async () => {
   await logout();
   window.location.href = "login.html";
 });
 
-// Jalankan load pertama
-loadData();
+// ==========================================
+// 🔹 Init
+// ==========================================
+loadContent();
