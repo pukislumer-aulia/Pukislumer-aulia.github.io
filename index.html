@@ -347,8 +347,31 @@ testimoniForm.addEventListener("submit", function(e){
     floatingIcons.setAttribute("aria-hidden", !isShown);
   });
 </script>
-  <!-- 🔹 Tombol Admin -->
-  <a id="btnAdmin">🔑 Admin</a>
+  <!-- Tombol Admin -->
+<a id="btnAdmin" href="login.html">🔑 Admin</a>
+
+<script type="module">
+  import { auth } from "./firebase.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+  const btnAdmin = document.getElementById("btnAdmin");
+  let userReady = false;
+  let currentUser = null;
+
+  onAuthStateChanged(auth, (user) => {
+    userReady = true;
+    currentUser = user;
+  });
+
+  btnAdmin.addEventListener("click", (e) => {
+    e.preventDefault(); // cegah reload default
+    if (!userReady) {
+      alert("Sedang memeriksa status login...");
+      return;
+    }
+    window.location.href = currentUser ? "admin.html" : "login.html";
+  });
+</script>
 
   <!-- 🔹 Script Frontend Firebase -->
   <script type="module">
