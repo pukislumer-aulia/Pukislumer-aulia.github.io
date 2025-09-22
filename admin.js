@@ -1,80 +1,77 @@
-// ==========================================
-// Admin.js
-// Modul JS untuk halaman admin.html
-// Tetap menggunakan field yang sama agar sinkron ke index.html
-// ==========================================
+// admin.js
+import {
+  firestore,
+  getDocData,
+  setDocData,
+  checkLoginRedirect,
+  logout,
+  defaultData
+} from "./firebase.js";
 
-import { auth, db } from "./firebase.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+const form = document.getElementById("adminForm");
+const btnSimpan = document.getElementById("btnSimpan");
+const btnReset = document.getElementById("btnReset");
+const btnLogout = document.getElementById("btnLogout");
 
-// ==========================================
-// 1️⃣ Cek login user
-// Jika user tidak login, redirect ke login.html
-// ==========================================
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    loadContent();
-  } else {
-    window.location.href = "login.html";
-  }
-});
+// Pastikan hanya user login yang bisa masuk
+await checkLoginRedirect("login.html");
 
-// ==========================================
-// 2️⃣ Load konten Firestore ke input admin
-// ==========================================
-async function loadContent() {
-  const docRef = doc(db, "content", "about"); // dokumen yang sama dengan frontend
-  try {
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      // Loop semua field dan isi input sesuai id
-      for (let key in data) {
-        const input = document.getElementById(key);
-        if (input) input.value = data[key];
-      }
-    }
-  } catch (err) {
-    console.error("Gagal load konten:", err);
-  }
+// 🔹 Load data ke form
+async function loadData() {
+  const about = await getDocData("content", "about");
+  const data = about || defaultData;
+
+  document.getElementById("judulInput").value = data.judul || "";
+  document.getElementById("sapaanInput").value = data.sapaan || "";
+  document.getElementById("doaInput").value = data.doa || "";
+  document.getElementById("lokasiInput").value = data.lokasi || "";
+  document.getElementById("ojolInput").value = data.ojol || "";
+  document.getElementById("alasanInput").value = data.alasan || "";
+  document.getElementById("promoTextInput").value = data.promoText || "";
+  document.getElementById("promoImageInput").value = data.promoImage || "";
+  document.getElementById("footerInput").value = data.footer || "";
+  document.getElementById("testimoniInput").value = (data.testimoni || []).join("\n");
+  document.getElementById("galeriInput").value = (data.galeri || []).join("|");
 }
 
-// ==========================================
-// 3️⃣ Simpan konten ke Firestore
-// ==========================================
-const saveBtn = document.getElementById("saveBtn");
-saveBtn.addEventListener("click", async () => {
-  const fields = [
-    "judul","sapaan","doa","kota","serambi","ajakan","jam","bestseller",
-    "lokasi","ojol","alasan","fakta1","fakta2","fakta3","fakta4","fakta5","fakta6",
-    "promo","testimoni","share","footer","promoImageInput","galeriInput"
-  ];
-
-  const data = {};
-  fields.forEach(id => {
-    const input = document.getElementById(id);
-    if (input) data[id] = input.value;
-  });
+// 🔹 Simpan ke Firestore
+btnSimpan.addEventListener("click", async () => {
+  const data = {
+    judul: document.getElementById("judulInput").value,
+    sapaan: document.getElementById("sapaanInput").value,
+    doa: document.getElementById("doaInput").value,
+    lokasi: document.getElementById("lokasiInput").value,
+    ojol: document.getElementById("ojolInput").value,
+    alasan: document.getElementById("alasanInput").value,
+    promoText: document.getElementById("promoTextInput").value,
+    promoImage: document.getElementById("promoImageInput").value,
+    footer: document.getElementById("footerInput").value,
+    testimoni: document.getElementById("testimoniInput").value.split("\n").map(t => t.trim()).filter(Boolean),
+    galeri: document.getElementById("galeriInput").value.split("|").map(u => u.trim()).filter(Boolean),
+  };
 
   try {
-    await setDoc(doc(db, "content", "about"), data);
-    alert("Konten berhasil disimpan!");
+    await setDocData("content", "about", data);
+    alert("Data berhasil disimpan!");
   } catch (err) {
-    console.error("Gagal menyimpan konten:", err);
-    alert("Gagal menyimpan konten, cek console");
+    alert("Gagal menyimpan: " + err.message);
   }
 });
 
-// ==========================================
-// 4️⃣ Logout user
-// ==========================================
-const logoutBtn = document.getElementById("logoutBtn");
-logoutBtn.addEventListener("click", () => {
-  signOut(auth)
-    .then(() => window.location.href = "login.html")
-    .catch(err => {
-      console.error("Gagal logout:", err);
-      alert("Gagal logout, cek console");
-    });
+// 🔹 Reset ke default
+btnReset.addEventListener("click", async () => {
+  if (confirm("Kembalikan ke pengaturan default?")) {
+    await setDocData("content", "about", defaultData);
+    await loadData();
+    alert("Data dikembalikan ke default.");
+  }
 });
+
+// 🔹 Logout
+btnLogout.addEventListener("click", async () => {
+  await logout();
+  window.location.href = "login.html";
+});
+
+// Jalankan load pertama
+loadData();
