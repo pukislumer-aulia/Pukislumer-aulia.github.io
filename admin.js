@@ -1,78 +1,72 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Pukis Lumer Aulia</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f8f8f8; padding: 20px; }
-    h1 { color: #d6336c; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
-    button { margin-top: 15px; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
-    #btnSimpan { background: #28a745; color: #fff; }
-    #btnReset { background: #ffc107; color: #000; }
-    #btnLogout { background: #dc3545; color: #fff; }
-  </style>
-</head>
-<body>
-  <h1>Admin Panel - Pukis Lumer Aulia</h1>
+import { 
+  firestore, setDocData, getDocData, checkLoginRedirect, logout, defaultData 
+} from "./firebase.js";
 
-  <form id="adminForm">
-    <label>Judul</label>
-    <input type="text" id="judulInput">
+// Pastikan admin login
+await checkLoginRedirect();
 
-    <label>Sapaan</label>
-    <input type="text" id="sapaanInput">
+const form = document.getElementById("adminForm");
 
-    <label>Doa</label>
-    <input type="text" id="doaInput">
+// 🔹 Load data dari Firestore
+async function loadData() {
+  let data = await getDocData("konten", "utama");
+  if (!data) data = defaultData;
 
-    <label>Lokasi</label>
-    <input type="text" id="lokasiInput">
+  document.getElementById("judulInput").value = data.judul;
+  document.getElementById("sapaanInput").value = data.sapaan;
+  document.getElementById("doaInput").value = data.doa;
+  document.getElementById("lokasiInput").value = data.lokasi;
+  document.getElementById("ajakanInput").value = data.ajakan;
+  document.getElementById("jamOperasionalInput").value = data.jamOperasional;
+  document.getElementById("bestSellerInput").value = data.bestSeller;
+  document.getElementById("alamatInput").value = data.alamat;
+  document.getElementById("ojolInput").value = data.ojol;
+  document.getElementById("alasanInput").value = data.alasan;
+  document.getElementById("faktaUnikInput").value = (data.faktaUnik || []).join("\n");
+  document.getElementById("promoTextInput").value = data.promoText;
+  document.getElementById("promoImageInput").value = data.promoImage;
+  document.getElementById("footerInput").value = data.footer;
+  document.getElementById("testimoniInput").value = (data.testimoni || []).join("\n");
+  document.getElementById("galeriInput").value = (data.galeri || []).join("|");
+}
 
-    <label>Ajakan</label>
-    <input type="text" id="ajakanInput">
+// 🔹 Simpan data ke Firestore
+document.getElementById("btnSimpan").addEventListener("click", async () => {
+  const newData = {
+    judul: document.getElementById("judulInput").value,
+    sapaan: document.getElementById("sapaanInput").value,
+    doa: document.getElementById("doaInput").value,
+    lokasi: document.getElementById("lokasiInput").value,
+    ajakan: document.getElementById("ajakanInput").value,
+    jamOperasional: document.getElementById("jamOperasionalInput").value,
+    bestSeller: document.getElementById("bestSellerInput").value,
+    alamat: document.getElementById("alamatInput").value,
+    ojol: document.getElementById("ojolInput").value,
+    alasan: document.getElementById("alasanInput").value,
+    faktaUnik: document.getElementById("faktaUnikInput").value.split("\n").filter(l => l.trim() !== ""),
+    promoText: document.getElementById("promoTextInput").value,
+    promoImage: document.getElementById("promoImageInput").value,
+    footer: document.getElementById("footerInput").value,
+    testimoni: document.getElementById("testimoniInput").value.split("\n").filter(l => l.trim() !== ""),
+    galeri: document.getElementById("galeriInput").value.split("|").map(g => g.trim()).filter(g => g !== "")
+  };
 
-    <label>Jam Operasional</label>
-    <input type="text" id="jamOperasionalInput">
+  await setDocData("konten", "utama", newData);
+  alert("✅ Konten berhasil disimpan!");
+});
 
-    <label>Best Seller</label>
-    <input type="text" id="bestSellerInput">
+// 🔹 Reset ke default
+document.getElementById("btnReset").addEventListener("click", async () => {
+  await setDocData("konten", "utama", defaultData);
+  await loadData();
+  alert("🔄 Konten dikembalikan ke default!");
+});
 
-    <label>Alamat</label>
-    <input type="text" id="alamatInput">
+// 🔹 Logout
+document.getElementById("btnLogout").addEventListener("click", async () => {
+  await logout();
+  window.location.href = "login.html";
+});
 
-    <label>Ojol</label>
-    <input type="text" id="ojolInput">
-
-    <label>Alasan</label>
-    <textarea id="alasanInput"></textarea>
-
-    <label>Fakta Unik (pisahkan dengan baris baru)</label>
-    <textarea id="faktaUnikInput"></textarea>
-
-    <label>Promo Text</label>
-    <input type="text" id="promoTextInput">
-
-    <label>Promo Image URL</label>
-    <input type="text" id="promoImageInput">
-
-    <label>Footer</label>
-    <textarea id="footerInput"></textarea>
-
-    <label>Testimoni (pisahkan dengan baris baru)</label>
-    <textarea id="testimoniInput"></textarea>
-
-    <label>Galeri (pisahkan dengan tanda |)</label>
-    <textarea id="galeriInput"></textarea>
-
-    <button type="button" id="btnSimpan">💾 Simpan</button>
-    <button type="button" id="btnReset">🔄 Kembali ke Default</button>
-    <button type="button" id="btnLogout">🚪 Logout</button>
-  </form>
-
-  <!-- Script -->
-  <script type="module" src="admin.js"></script>
-</body>
-</html>
+// Load awal
+loadData();
