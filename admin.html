@@ -3,115 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Edit Konten</title>
+  <title>Admin - Pukis Lumer Aulia</title>
   <style>
-    body { font-family: Arial; padding: 20px; background: #f0f0f0; }
-    h2 { color: #d6336c; }
-    label { display: block; margin-top: 10px; }
-    input, textarea { width: 100%; padding: 8px; margin-top: 5px; }
-    button { margin-top: 15px; padding: 10px; background: green; color: white; border: none; border-radius: 5px; cursor: pointer; }
-    .logout { background: red; margin-left: 10px; }
+    body { font-family: Arial, sans-serif; background: #f8f8f8; padding: 20px; }
+    h1 { color: #d6336c; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
+    button { margin-top: 15px; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+    #btnSimpan { background: #28a745; color: #fff; }
+    #btnReset { background: #ffc107; color: #000; }
+    #btnLogout { background: #dc3545; color: #fff; }
   </style>
 </head>
 <body>
-  <h2>Admin - Edit Konten Website</h2>
+  <h1>Admin Panel - Pukis Lumer Aulia</h1>
 
-  <form id="form">
-    <label>Judul <input type="text" id="judul"></label>
-    <label>Sapaan <input type="text" id="sapaan"></label>
-    <label>Doa <input type="text" id="doa"></label>
-    <label>Kota <input type="text" id="kota"></label>
-    <label>Serambi <input type="text" id="serambi"></label>
-    <label>Ajakan <input type="text" id="ajakan"></label>
-    <label>Jam Operasional <input type="text" id="jam"></label>
-    <label>Best Seller <input type="text" id="bestseller"></label>
-    <label>Lokasi <input type="text" id="lokasi"></label>
-    <label>Ojol <input type="text" id="ojol"></label>
-    <label>Alasan <textarea id="alasan"></textarea></label>
-    <label>Fakta 1 <input type="text" id="fakta1"></label>
-    <label>Fakta 2 <input type="text" id="fakta2"></label>
-    <label>Fakta 3 <input type="text" id="fakta3"></label>
-    <label>Fakta 4 <input type="text" id="fakta4"></label>
-    <label>Fakta 5 <input type="text" id="fakta5"></label>
-    <label>Fakta 6 <input type="text" id="fakta6"></label>
-    <label>Promo Berjalan <input type="text" id="promo"></label>
-    <label>Testimoni <textarea id="testimoni"></textarea></label>
-    <label>Share Button (Teks / Link) <input type="text" id="share"></label>
-    <label>Footer <input type="text" id="footer"></label>
-    <label>URL Promo Image <input type="text" id="promoImageInput" placeholder="https://..."></label>
-    <label>Galeri (pisahkan dengan | ) <textarea id="galeriInput" placeholder="URL1|URL2|URL3"></textarea></label>
+  <form id="adminForm">
+    <label>Judul</label>
+    <input type="text" id="judulInput">
 
-    <button type="button" id="saveBtn">💾 Simpan</button>
-    <button type="button" class="logout" id="logoutBtn">Logout</button>
-    <button type="button" id="btnReset" style="background: red; margin-left:10px;">
-  Reset ke Default
-    </button>
+    <label>Sapaan</label>
+    <input type="text" id="sapaanInput">
+
+    <label>Doa</label>
+    <input type="text" id="doaInput">
+
+    <label>Lokasi</label>
+    <input type="text" id="lokasiInput">
+
+    <label>Ojol</label>
+    <input type="text" id="ojolInput">
+
+    <label>Alasan</label>
+    <textarea id="alasanInput"></textarea>
+
+    <label>Promo Text</label>
+    <input type="text" id="promoTextInput">
+
+    <label>Promo Image URL</label>
+    <input type="text" id="promoImageInput">
+
+    <label>Footer</label>
+    <input type="text" id="footerInput">
+
+    <label>Testimoni (pisahkan dengan baris baru)</label>
+    <textarea id="testimoniInput"></textarea>
+
+    <label>Galeri (pisahkan dengan tanda |)</label>
+    <input type="text" id="galeriInput">
+
+    <button type="button" id="btnSimpan">💾 Simpan</button>
+    <button type="button" id="btnReset">🔄 Reset</button>
+    <button type="button" id="btnLogout">🚪 Logout</button>
   </form>
 
-  <script type="module">
-    import { auth, db } from "./firebase.js";
-    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
-    // =================================
-    // Cek login user, jika tidak login redirect
-    // =================================
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        loadContent();
-      } else {
-        window.location.href = "login.html";
-      }
-    });
-
-    // =================================
-    // Load konten Firestore ke input admin
-    // =================================
-    async function loadContent() {
-      const docRef = doc(db, "content", "about"); // gunakan "about" atau "homepage"
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        for (let key in data) {
-          if (document.getElementById(key)) {
-            document.getElementById(key).value = data[key];
-          }
-        }
-      }
-    }
-
-    // =================================
-    // Simpan konten ke Firestore
-    // =================================
-    document.getElementById("saveBtn").addEventListener("click", async () => {
-      const fields = [
-        "judul","sapaan","doa","kota","serambi","ajakan","jam","bestseller",
-        "lokasi","ojol","alasan","fakta1","fakta2","fakta3","fakta4","fakta5","fakta6",
-        "promo","testimoni","share","footer","promoImageInput","galeriInput"
-      ];
-      const data = {};
-      fields.forEach(id => { data[id] = document.getElementById(id).value; });
-
-      try {
-        await setDoc(doc(db, "content", "about"), data);
-        alert("Konten berhasil disimpan!");
-      } catch (err) {
-        console.error(err);
-        alert("Gagal menyimpan konten, cek console");
-      }
-    });
-
-    // =================================
-    // Logout user
-    // =================================
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth).then(() => {
-        window.location.href = "login.html";
-      }).catch(err => {
-        console.error(err);
-        alert("Gagal logout, cek console");
-      });
-    });
-  </script>
+  <!-- Script -->
+  <script type="module" src="admin.js"></script>
 </body>
 </html>
