@@ -1,64 +1,51 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Admin - Pukis Lumer Aulia</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Kanit', sans-serif;
-      display: flex; justify-content: center; align-items: center;
-      height: 100vh; background: #ffe0e0; margin: 0;
-    }
-    .login-box {
-      background: #fff; padding: 25px; border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      width: 320px; text-align: center;
-    }
-    h2 { margin-bottom: 20px; color: #d6336c; }
-    input {
-      width: 100%; padding: 10px; margin: 8px 0;
-      border: 1px solid #ccc; border-radius: 8px;
-    }
-    button {
-      width: 100%; padding: 10px; margin-top: 10px;
-      border: none; border-radius: 8px;
-      background: #d6336c; color: #fff; font-weight: 600;
-      cursor: pointer;
-    }
-    button:hover { background: #b02a56; }
-    .error { color: red; margin-top: 10px; }
+    body { font-family: Arial, sans-serif; background: #ffe6f0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .login-box { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 320px; }
+    h1 { text-align: center; color: #d6336c; margin-bottom: 20px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
+    button { width: 100%; margin-top: 15px; padding: 10px; border: none; border-radius: 5px; background: #d6336c; color: white; font-weight: bold; cursor: pointer; }
+    button:hover { background: #b2224d; }
+    .error { color: red; margin-top: 10px; text-align: center; }
   </style>
 </head>
 <body>
   <div class="login-box">
-    <h2>Login Admin</h2>
+    <h1>Login Admin</h1>
     <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
+      <label>Email</label>
+      <input type="email" id="email" required>
+
+      <label>Password</label>
+      <input type="password" id="password" required>
+
       <button type="submit">Login</button>
+      <p id="errorMsg" class="error"></p>
     </form>
-    <div class="error" id="errorMsg"></div>
   </div>
 
-  <!-- 🔹 Firebase & Login Script -->
   <script type="module">
     import { loginEmailPassword } from "./firebase.js";
 
-    const loginForm = document.getElementById("loginForm");
+    const form = document.getElementById("loginForm");
     const errorMsg = document.getElementById("errorMsg");
 
-    loginForm.addEventListener("submit", async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       errorMsg.textContent = "";
 
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
       try {
         await loginEmailPassword(email, password);
-        window.location.href = "admin.html"; // redirect sukses
+        window.location.href = "admin.html";
       } catch (err) {
         errorMsg.textContent = "❌ Login gagal: " + err.message;
       }
