@@ -1,10 +1,22 @@
-// firebase.js
+// ==========================================
+// 🔹 firebase.js
+// Konfigurasi Firebase & helper untuk Admin / Frontend
+// ==========================================
+
 // 🔹 Import Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { 
+  getFirestore, doc, getDoc, setDoc, collection, getDocs 
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { 
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut 
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-// 🔹 Konfigurasi Firebase (ganti sesuai project mu)
+// ==========================================
+// 🔹 Konfigurasi Firebase
+// Ganti isi firebaseConfig sesuai dengan konfigurasi project Firebase milikmu
+// (bisa dilihat di Project Settings > General > SDK setup and configuration)
+// ==========================================
 const firebaseConfig = {
   apiKey: "API_KEY_KAMU",
   authDomain: "PROJECT_ID.firebaseapp.com",
@@ -14,14 +26,16 @@ const firebaseConfig = {
   appId: "APP_ID"
 };
 
+// ==========================================
 // 🔹 Inisialisasi
+// ==========================================
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 const auth = getAuth(app);
 
-// ===========================
+// ==========================================
 // 🔹 Firestore Helpers
-// ===========================
+// ==========================================
 async function getDocData(collectionName, docId) {
   const snap = await getDoc(doc(firestore, collectionName, docId));
   return snap.exists() ? snap.data() : null;
@@ -37,9 +51,9 @@ async function getCollectionData(collectionName) {
   return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
-// ===========================
+// ==========================================
 // 🔹 Auth Helpers
-// ===========================
+// ==========================================
 function checkLoginRedirect(redirectIfNotLoggedIn = "login.html") {
   return new Promise((resolve) => {
     onAuthStateChanged(auth, user => {
@@ -61,26 +75,46 @@ function logout() {
   return signOut(auth);
 }
 
-// ===========================
-// 🔹 Default Data
-// ===========================
+// ==========================================
+// 🔹 Default Data (Konten Utama)
+// ==========================================
 const defaultData = {
-  judul: "Pukis Lumer Aulia",
-  sapaan: "Selamat datang di Pukis Lumer Aulia!",
-  doa: "Semoga berkah selalu.",
-  lokasi: "Padang Panjang",
-  ojol: "Tersedia di GoFood & GrabFood",
-  alasan: "Rasa autentik dengan topping melimpah.",
+  judul: "PUKIS LUMER AULIA",
+  sapaan: "Assalamu'alaikum warahmatullahi wabarakatuh",
+  doa: "Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.",
+
+  lokasi: "Padang Panjang Kota Kuliner. Kota Serambi Mekkah orang mengenalnya.",
+  ajakan: "Kalau main ke Pasar Kuliner, wajib cobain ke PUKIS LUMER AULIA",
+  jamOperasional: "16.00 – 23.59 WIB",
+  bestSeller: "Double Topping Vanilla Oreo vs Cokelat Kacang",
+  alamat: "Pasar Kuliner Padang Panjang (Cari Gerobak Pink)",
+  ojol: "Tersedia di Maxim, Food, GrabFood, dan GoFood!",
+
+  alasan: "Kenapa Pilih Pukis Lumer Aulia? Pukis kami dibuat dengan resep rahasia keluarga...",
+  faktaUnik: [
+    "Resep adonan spesial keluarga sejak 2023!",
+    "Pionir Pukis Lumer kekinian di Padang Panjang.",
+    "Tekstur lembut sempurna berkat teknik panggang tradisional.",
+    "100% Tanpa Bahan Pengawet.",
+    "Lebih dari 10 Varian Topping setiap hari.",
+    "Jajanan No #1 di Padang Panjang.",
+    "Jajan Bergizi Karena Dibuat Dari Bahan Premium."
+  ],
+
   promoText: "Promo spesial minggu ini!",
   promoImage: "",
+
   footer: "© 2025 Pukis Lumer Aulia - Hak cipta dilindungi UU",
-  testimoni: ["Enak banget!", "Lembut dan lumer di mulut!"],
+  testimoni: [
+    "Enak banget!",
+    "Lembut dan lumer di mulut!"
+  ],
   galeri: []
 };
 
-// ===========================
+// ==========================================
 // 🔹 Export
-// ===========================
+// ==========================================
 export {
   firestore,
   auth,
