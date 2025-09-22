@@ -44,15 +44,14 @@
 </head>
 <body>
   <!-- 🔹 Promo Marquee & Kupon -->
-
   <marquee id="promo">Promo spesial hari ini!</marquee>
   <img id="promoImage" src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
-     <div class="promo-running-text">
-‎      <p>
-‎        Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!
-‎        Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!, ikuti & bagikan Media Sosial Pukis Lumer Aulia, dapatkan potongan Rp.3.000,00!
-‎      </p>
-‎    </div>
+  <div class="promo-running-text">
+    <p id="promoText">
+      Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!
+      Potongan Rp.2000 untuk pembelian pertama mu melalui website Pukis Lumer Aulia!, ikuti & bagikan Media Sosial Pukis Lumer Aulia, dapatkan potongan Rp.3.000,00!
+    </p>
+  </div>
 
   <!-- 🔹 Header Image -->
   <img id="headerImage" src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img">
@@ -69,6 +68,7 @@
   <p id="bestSeller"><strong style="color:#6B8E23;">Best Seller:</strong> Double Topping Vanilla Oreo vs Cokelat Kacang</p>
   <p id="lokasiTeks"><strong style="color:#800020;">Lokasi:</strong> Pasar Kuliner Padang Panjang (Cari Gerobak Pink)</p>
   <p id="ojolText">Tersedia di Maxim, Food, GrabFood, dan GoFood!</p>
+
   <!-- 🔹 Alasan & Fakta -->
   <h2 id="kenapaTitle">Kenapa Pilih Pukis Lumer Aulia?</h2>
   <p id="kenapaText">Pukis kami dibuat dengan resep rahasia keluarga...</p>
@@ -84,14 +84,19 @@
     <li>Jajan Bergizi Karena Dibuat Dari Bahan Premium</li>
   </ul>
 
-  <!-- 🔹 Galeri (Firebase editable) -->
+  <!-- 🔹 Galeri -->
   <h2>Galeri</h2>
   <div class="gallery-grid" id="galeriContainer">
     <div class="gallery-item"><img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img"></div>
     <div class="gallery-item"><img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img"></div>
     <div class="gallery-item"><img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img"></div>
   </div>
-  <!-- ================== FORMULIR PEMESANAN ================== -->
+
+  <!-- 🔹 Form Pemesanan (tetap sama seperti versi kamu) -->
+  <!-- ... (ISI FORM PEMESANAN TIDAK DIUBAH, sesuai yang kamu kirim) ... -->
+Form pemesanan 
+
+<!-- ================== FORMULIR PEMESANAN ================== -->
 <section id="form-pemesanan">
   <h2>Pemesanan Pukis Lumer Aulia</h2>
   <form id="formPukis">
@@ -121,6 +126,292 @@
       <label><input type="checkbox" class="singleTopping" value="Vanilla"> Vanilla</label>
       <label><input type="checkbox" class="singleTopping" value="Bebas"> Bebas</label>
       <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>
+    </div>
+
+    <!-- Double Topping -->
+    <div id="doubleToppingGroup" style="display:none;">
+      <label>Pilih Taburan (Double):</label>
+      <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>
+      <label><input type="checkbox" class="doubleTopping" value="Keju"> Keju</label>
+      <label><input type="checkbox" class="doubleTopping" value="Kacang"> Kacang</label>
+      <label><input type="checkbox" class="doubleTopping" value="Choco Chip"> Choco Chip</label>
+      <label><input type="checkbox" class="doubleTopping" value="Oreo"> Oreo</label>
+    </div>
+
+    <!-- Isi Box & Jumlah -->
+    <label>Isi per Box:
+      <select id="isiBox">
+        <option value="5">5 pcs</option>
+        <option value="10">10 pcs</option>
+      </select>
+    </label>
+    <label>Jumlah Box:
+      <input type="number" id="jumlahBox" value="1" min="1">
+    </label>
+
+    <!-- Total Harga -->
+    <p>Total Harga: <span id="totalHarga">Rp0</span></p>
+
+    <!-- Submit -->
+    <button type="submit">Kirim Pesanan via WhatsApp</button>
+  </form>
+</section>
+
+<script>
+const hargaPukis = {
+  original: { non: {5: 10000, 10: 18000}, single: {5: 13000, 10: 25000}, double: {5: 15000, 10: 28000} },
+  pandan: { non: {5: 12000, 10: 22000}, single: {5: 15000, 10: 28000}, double: {5: 18000, 10: 32000} }
+};
+
+// ====== Fungsi tampil/sembunyikan topping ======
+function ubahTopping() {
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  document.getElementById("singleToppingGroup").style.display = (topping === "single" || topping === "double") ? "block" : "none";
+  document.getElementById("doubleToppingGroup").style.display = (topping === "double") ? "block" : "none";
+  hitungHarga();
+}
+
+// ====== Fungsi hitung total harga ======
+function hitungHarga() {
+  const jenis = document.querySelector('input[name="jenis"]:checked').value;
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  const isi = parseInt(document.getElementById("isiBox").value);
+  const jumlah = parseInt(document.getElementById("jumlahBox").value);
+  const hargaSatuan = hargaPukis[jenis][topping][isi] || 0;
+  const total = hargaSatuan * jumlah;
+  document.getElementById("totalHarga").innerText = `Rp${total.toLocaleString("id-ID")}`;
+}
+
+// ====== Ambil topping yang dicentang ======
+function getSelectedToppings(cls) {
+  return Array.from(document.querySelectorAll(cls + ':checked')).map(el => el.value);
+}
+
+// ====== Validasi topping ======
+function validasiTopping() {
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  const isi = parseInt(document.getElementById("isiBox").value);
+  const single = getSelectedToppings('.singleTopping');
+  const double = getSelectedToppings('.doubleTopping');
+
+  if (topping === 'single' && single.length > isi) {
+    alert(`Single topping maksimal ${isi} rasa.`);
+    return false;
+  }
+  if (topping === 'double' && (single.length > isi || double.length > isi)) {
+    alert(`Double topping maksimal ${isi} rasa dan ${isi} taburan.`);
+    return false;
+  }
+  return true;
+}
+
+// ====== Event listener ======
+document.querySelectorAll('input[name="jenis"], input[name="topping"], #isiBox, #jumlahBox').forEach(el => {
+  el.addEventListener('change', () => { ubahTopping(); hitungHarga(); });
+});
+document.querySelectorAll('.singleTopping, .doubleTopping').forEach(el => el.addEventListener('change', hitungHarga));
+
+// ====== Submit form ======
+document.getElementById("formPukis").addEventListener("submit", function(e) {
+  e.preventDefault();
+  if (!validasiTopping()) return;
+
+  const nama = document.getElementById("namaPemesan").value.trim();
+  const jenis = document.querySelector('input[name="jenis"]:checked').value;
+  const topping = document.querySelector('input[name="topping"]:checked').value;
+  const isi = document.getElementById("isiBox").value;
+  const jumlah = document.getElementById("jumlahBox").value;
+  const single = getSelectedToppings('.singleTopping').join(', ');
+  const double = getSelectedToppings('.doubleTopping').join(', ');
+  const totalText = document.getElementById("totalHarga").innerText;
+
+  let pesan = `Halo! Saya ingin memesan Pukis:
+- Nama: ${nama}
+- Jenis: ${jenis}
+- Topping: ${topping}
+- Isi per Box: ${isi} pcs
+- Jumlah Box: ${jumlah}`;
+  if (topping === 'single') pesan += `\n- Rasa: ${single}`;
+  if (topping === 'double') pesan += `\n- Rasa: ${single}\n- Taburan: ${double}`;
+  pesan += `\n${totalText}`;
+
+  const waURL = `https://wa.me/6281296668670?text=${encodeURIComponent(pesan)}`;
+  window.open(waURL, '_blank');
+});
+
+// ====== Inisialisasi ======
+window.addEventListener('load', () => { ubahTopping(); hitungHarga(); });
+      </script>
+  <!-- 🔹 Testimoni -->
+  <!-- ... (FORM TESTIMONI sesuai yang kamu kirim) ... -->
+<!-- ================== FORM TESTIMONI ================== -->
+<section id="form-testimoni">
+  <h2>Tulis Testimoni Kamu!</h2>
+  <form id="testimoniForm">
+    <input type="text" id="nama" placeholder="Nama Kamu" required>
+    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>
+
+  <div id="daftarTestimoni">
+    <h3>Testimoni:</h3>
+    <ul id="listTestimoni">
+      <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+      <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+      <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+      <li><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"</li>
+    </ul>
+    <button onclick="hapusSemuaTestimoni()" 
+            style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+      Hapus Semua Testimoni
+    </button>
+  </div>
+</section>
+
+<script>
+// Simpan testimoni baru dan tampilkan
+const testimoniForm = document.getElementById("testimoniForm");
+const listTestimoni = document.getElementById("listTestimoni");
+
+function hapusSemuaTestimoni() {
+  if(confirm("Apakah Anda yakin ingin menghapus semua testimoni?")) {
+    listTestimoni.innerHTML = "";
+  }
+}
+
+testimoniForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  const nama = document.getElementById("nama").value.trim();
+  const pesan = document.getElementById("pesan").value.trim();
+  if(!nama || !pesan) return;
+
+  const li = document.createElement("li");
+  li.innerHTML = `<strong>${nama}</strong><br>"${pesan}"`;
+  listTestimoni.appendChild(li);
+
+  // reset form
+  testimoniForm.reset();
+});
+</script>
+  <!-- 🔹 QRIS -->
+  <div class="qris-section">
+    <h3>Bayar Lebih Mudah dengan QRIS</h3>
+    <p>Scan kode QR di bawah ini untuk membayar pesanan kamu:</p>
+    <img src="assets/images/qris-pukis.jpg" alt="QRIS Pukis Lumer Aulia">
+  </div>
+
+  <!-- 🔹 Footer -->
+  <footer>
+    <p id="footerText">© 2025 Pukis Lumer Aulia.</p>
+    <p>Hak cipta dilindungi undang-undang.</p>
+    <p>
+      Kunjungi lokasi kami: 
+      <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" class="map-link">
+        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Lokasi" width="32" height="32" />
+      </a>
+    </p>
+  </footer>
+
+  <!-- 🔹 Floating Share -->
+  <!-- ... (FLOATING ICONS sesuai kode kamu) ... -->
+<!-- ================== FLOATING SHARE ICONS ================== -->
+<div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
+  <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank" aria-label="WhatsApp" rel="noopener noreferrer">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+  <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank" aria-label="Facebook" rel="noopener noreferrer">
+    <i class="fa-brands fa-facebook-f"></i>
+  </a>
+  <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
+    <i class="fa-brands fa-instagram"></i>
+  </a>
+  <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank" aria-label="Twitter" rel="noopener noreferrer">
+    <i class="fa-brands fa-twitter"></i>
+  </a>
+  <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank" aria-label="TikTok" rel="noopener noreferrer">
+    <i class="fa-brands fa-tiktok"></i>
+  </a>
+</div>
+
+<div class="toggle-float-btn" id="toggleShareBtn" aria-label="Bagikan">
+  <i class="fa-solid fa-share-nodes"></i>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById("toggleShareBtn");
+  const floatingIcons = document.getElementById("floatingIcons");
+
+  toggleBtn.addEventListener("click", () => {
+    floatingIcons.classList.toggle("show");
+    const isShown = floatingIcons.classList.contains("show");
+    floatingIcons.setAttribute("aria-hidden", !isShown);
+  });
+</script>
+  <!-- 🔹 Tombol Admin -->
+  <a id="btnAdmin">🔑 Admin</a>
+
+  <!-- 🔹 Script Frontend Firebase -->
+  <script type="module">
+    import { auth, getContent } from "./firebase.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    const btnAdmin = document.getElementById("btnAdmin");
+    let userReady = false;
+    let currentUser = null;
+
+    onAuthStateChanged(auth, (user) => {
+      userReady = true;
+      currentUser = user;
+    });
+
+    btnAdmin.addEventListener("click", () => {
+      if (!userReady) {
+        alert("Sedang memeriksa status login...");
+        return;
+      }
+      window.location.href = currentUser ? "admin.html" : "login.html";
+    });
+
+    // 🔹 Load konten dari Firebase
+    async function loadHomePage() {
+      const data = await getContent("homepage");
+      if (!data) return;
+
+      document.getElementById("judulUtama").innerText = data.judulUtama || "PUKIS LUMER AULIA";
+      document.getElementById("sambutan1").innerText = data.sambutan1 || "";
+      document.getElementById("sambutan2").innerText = data.sambutan2 || "";
+      document.getElementById("lokasi1").innerText = data.lokasi1 || "";
+      document.getElementById("lokasi2").innerText = data.lokasi2 || "";
+      document.getElementById("lokasi3").innerText = data.lokasi3 || "";
+      document.getElementById("lokasi4").innerText = data.lokasi4 || "";
+      document.getElementById("jamOperasional").innerText = data.jamOperasional || "";
+      document.getElementById("bestSeller").innerText = data.bestSeller || "";
+      document.getElementById("lokasiTeks").innerText = data.lokasiTeks || "";
+      document.getElementById("ojolText").innerText = data.ojolText || "";
+      document.getElementById("kenapaText").innerText = data.kenapaText || "";
+
+      // Galeri
+      if (data.galeri && data.galeri.length > 0) {
+        const galeriContainer = document.getElementById("galeriContainer");
+        galeriContainer.innerHTML = "";
+        data.galeri.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "gallery-item";
+          div.innerHTML = `<img src="${item}" class="responsive-img" alt="Galeri Pukis">`;
+          galeriContainer.appendChild(div);
+        });
+      }
+
+      // Promo
+      document.getElementById("promo").innerText = data.promoText || "Promo spesial hari ini!";
+      document.getElementById("promoImage").src = data.promoImage || "assets/images/kupon1.jpg";
+      document.getElementById("promoText").innerText = data.promoRunning || "";
+    }
+
+    window.addEventListener("load", loadHomePage);
+  </script>
+</body>
+</html>      <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>
     </div>
 
     <!-- Double Topping -->
