@@ -3,7 +3,7 @@
 // Konfigurasi Firebase & helper untuk Admin / Frontend
 // ==========================================
 
-// 🔹 Import Firebase SDK
+// 🔹 Import Firebase SDK (pakai versi stabil 10.14.1)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { 
   getFirestore, doc, getDoc, setDoc, collection, getDocs 
@@ -19,7 +19,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
   authDomain: "pukis-lumer-aulia.firebaseapp.com",
   projectId: "pukis-lumer-aulia",
-  storageBucket: "pukis-lumer-aulia.appspot.com", // ✅ fix .appspot.com
+  storageBucket: "pukis-lumer-aulia.appspot.com", // ✅ fix domain
   messagingSenderId: "1059510074119",
   appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
   measurementId: "G-NZY82GKPXS"
@@ -36,18 +36,32 @@ const auth = getAuth(app);
 // 🔹 Firestore Helpers
 // ==========================================
 async function getDocData(collectionName, docId) {
-  const snap = await getDoc(doc(firestore, collectionName, docId));
-  return snap.exists() ? snap.data() : null;
+  try {
+    const snap = await getDoc(doc(firestore, collectionName, docId));
+    return snap.exists() ? snap.data() : null;
+  } catch (err) {
+    console.error("❌ Gagal ambil data:", err);
+    return null;
+  }
 }
 
 async function setDocData(collectionName, docId, data) {
-  await setDoc(doc(firestore, collectionName, docId), data, { merge: true });
+  try {
+    await setDoc(doc(firestore, collectionName, docId), data, { merge: true });
+  } catch (err) {
+    console.error("❌ Gagal simpan data:", err);
+  }
 }
 
 async function getCollectionData(collectionName) {
-  const colRef = collection(firestore, collectionName);
-  const snapshot = await getDocs(colRef);
-  return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  try {
+    const colRef = collection(firestore, collectionName);
+    const snapshot = await getDocs(colRef);
+    return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (err) {
+    console.error("❌ Gagal ambil koleksi:", err);
+    return [];
+  }
 }
 
 // ==========================================
@@ -55,7 +69,7 @@ async function getCollectionData(collectionName) {
 // ==========================================
 function checkLoginRedirect(redirectIfNotLoggedIn = "login.html") {
   return new Promise((resolve) => {
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = redirectIfNotLoggedIn;
       } else {
@@ -66,8 +80,13 @@ function checkLoginRedirect(redirectIfNotLoggedIn = "login.html") {
 }
 
 async function loginEmailPassword(email, password) {
-  const userCredential = await signInWithEmailAndPassword(auth, email, password);
-  return userCredential.user;
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (err) {
+    console.error("❌ Login gagal:", err);
+    throw err;
+  }
 }
 
 function logout() {
