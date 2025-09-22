@@ -1,92 +1,78 @@
-// ==========================================
-// 🔹 admin.js
-// Logic untuk halaman Admin (admin.html)
-// ==========================================
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Pukis Lumer Aulia</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f8f8; padding: 20px; }
+    h1 { color: #d6336c; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
+    button { margin-top: 15px; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+    #btnSimpan { background: #28a745; color: #fff; }
+    #btnReset { background: #ffc107; color: #000; }
+    #btnLogout { background: #dc3545; color: #fff; }
+  </style>
+</head>
+<body>
+  <h1>Admin Panel - Pukis Lumer Aulia</h1>
 
-import { 
-  firestore,
-  auth,
-  getDocData,
-  setDocData,
-  checkLoginRedirect,
-  logout,
-  defaultData
-} from "./firebase.js";
+  <form id="adminForm">
+    <label>Judul</label>
+    <input type="text" id="judulInput">
 
-// ID dokumen di Firestore (bebas, tapi konsisten)
-const CONTENT_DOC_ID = "main_content";
+    <label>Sapaan</label>
+    <input type="text" id="sapaanInput">
 
-// ==========================================
-// 🔹 DOM Elements
-// ==========================================
-const form = document.getElementById("adminForm");
-const logoutBtn = document.getElementById("logoutBtn");
-const resetBtn = document.getElementById("resetBtn"); // tombol kembali ke default
+    <label>Doa</label>
+    <input type="text" id="doaInput">
 
-// ==========================================
-// 🔹 Load Data dari Firestore
-// ==========================================
-async function loadContent() {
-  await checkLoginRedirect(); // pastikan admin login
+    <label>Lokasi</label>
+    <input type="text" id="lokasiInput">
 
-  const data = await getDocData("content", CONTENT_DOC_ID);
-  const content = data || defaultData;
+    <label>Ajakan</label>
+    <input type="text" id="ajakanInput">
 
-  // Isi form dengan data
-  for (const key in content) {
-    const el = document.getElementById(key + "Input");
-    if (el) {
-      if (Array.isArray(content[key])) {
-        el.value = content[key].join("|");
-      } else {
-        el.value = content[key];
-      }
-    }
-  }
-}
+    <label>Jam Operasional</label>
+    <input type="text" id="jamOperasionalInput">
 
-// ==========================================
-// 🔹 Simpan Data ke Firestore
-// ==========================================
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+    <label>Best Seller</label>
+    <input type="text" id="bestSellerInput">
 
-  const data = {};
-  for (const key in defaultData) {
-    const el = document.getElementById(key + "Input");
-    if (el) {
-      if (el.value.includes("|")) {
-        data[key] = el.value.split("|").map(v => v.trim()).filter(v => v);
-      } else {
-        data[key] = el.value.trim();
-      }
-    }
-  }
+    <label>Alamat</label>
+    <input type="text" id="alamatInput">
 
-  await setDocData("content", CONTENT_DOC_ID, data);
-  alert("✅ Konten berhasil disimpan!");
-});
+    <label>Ojol</label>
+    <input type="text" id="ojolInput">
 
-// ==========================================
-// 🔹 Reset ke Default
-// ==========================================
-resetBtn.addEventListener("click", async () => {
-  if (confirm("Yakin ingin mengembalikan ke pengaturan default?")) {
-    await setDocData("content", CONTENT_DOC_ID, defaultData);
-    await loadContent();
-    alert("✅ Konten sudah dikembalikan ke default.");
-  }
-});
+    <label>Alasan</label>
+    <textarea id="alasanInput"></textarea>
 
-// ==========================================
-// 🔹 Logout
-// ==========================================
-logoutBtn.addEventListener("click", async () => {
-  await logout();
-  window.location.href = "login.html";
-});
+    <label>Fakta Unik (pisahkan dengan baris baru)</label>
+    <textarea id="faktaUnikInput"></textarea>
 
-// ==========================================
-// 🔹 Init
-// ==========================================
-loadContent();
+    <label>Promo Text</label>
+    <input type="text" id="promoTextInput">
+
+    <label>Promo Image URL</label>
+    <input type="text" id="promoImageInput">
+
+    <label>Footer</label>
+    <textarea id="footerInput"></textarea>
+
+    <label>Testimoni (pisahkan dengan baris baru)</label>
+    <textarea id="testimoniInput"></textarea>
+
+    <label>Galeri (pisahkan dengan tanda |)</label>
+    <textarea id="galeriInput"></textarea>
+
+    <button type="button" id="btnSimpan">💾 Simpan</button>
+    <button type="button" id="btnReset">🔄 Kembali ke Default</button>
+    <button type="button" id="btnLogout">🚪 Logout</button>
+  </form>
+
+  <!-- Script -->
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
