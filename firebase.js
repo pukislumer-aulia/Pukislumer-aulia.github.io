@@ -13,17 +13,16 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 // ==========================================
-// 🔹 Konfigurasi Firebase
-// Ganti isi firebaseConfig sesuai dengan konfigurasi project Firebase milikmu
-// (bisa dilihat di Project Settings > General > SDK setup and configuration)
+// 🔹 Konfigurasi Firebase (copy dari Project Settings > Config)
 // ==========================================
 const firebaseConfig = {
-  apiKey: "API_KEY_KAMU",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-  projectId: "PROJECT_ID",
-  storageBucket: "PROJECT_ID.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+  apiKey: "AIzaSyAnbQ7lq8YO7j2CF-nyoEhd9vckN7P1IWA",
+  authDomain: "pukis-lumer-aulia.firebaseapp.com",
+  projectId: "pukis-lumer-aulia",
+  storageBucket: "pukis-lumer-aulia.appspot.com", // ✅ fix .appspot.com
+  messagingSenderId: "1059510074119",
+  appId: "1:1059510074119:web:06b32f510a3d038324a3a2",
+  measurementId: "G-NZY82GKPXS"
 };
 
 // ==========================================
