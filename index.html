@@ -1077,5 +1077,435 @@ function formatRp(n) {
   return "Rp " + n.toLocaleString("id-ID");
 }
                 </script>
+
+  <!-- ========================= -->
+<!-- BAGIAN 3 — FORM PEMESANAN -->
+<!-- ========================= -->
+
+<div class="order-container">
+    <h2>Form Pemesanan Pukis Lumer Aulia</h2>
+
+    <form id="orderForm">
+        
+        <!-- Nama -->
+        <label>Nama Pembeli:</label>
+        <input type="text" id="namaPembeli" required>
+
+        <!-- Nomor HP -->
+        <label>No. HP:</label>
+        <input type="text" id="noHP" required>
+
+        <!-- Jenis Pukis -->
+        <label>Jenis Pukis:</label>
+        <select id="jenisPukis" required>
+            <option value="">-- Pilih --</option>
+            <option value="Original">Original</option>
+            <option value="Pandan">Pandan</option>
+        </select>
+
+        <!-- Ukuran Box -->
+        <label>Ukuran Box:</label>
+        <select id="ukuranBox" required>
+            <option value="">-- Pilih --</option>
+            <option value="Kecil">Box Kecil</option>
+            <option value="Besar">Box Besar</option>
+        </select>
+
+        <!-- Topping -->
+        <label>Topping:</label>
+        <select id="topping" required>
+            <option value="">-- Pilih --</option>
+            <option value="Non Topping">Non Topping</option>
+            <option value="Single Topping">Single Topping</option>
+            <option value="Double Topping">Double Topping</option>
+        </select>
+
+        <!-- Jumlah -->
+        <label>Jumlah Box:</label>
+        <input type="number" id="jumlah" min="1" value="1" required>
+
+        <!-- Alamat -->
+        <label>Alamat:</label>
+        <textarea id="alamat" required></textarea>
+
+        <!-- Tombol Submit -->
+        <button type="submit" id="btnPesan">Buat Nota & Kirim WA</button>
+    </form>
+
+    <p style="font-size:12px; margin-top:10px; opacity:0.7;">
+        Setelah klik, sistem akan membuat nota PDF otomatis & membuka WhatsApp admin.
+    </p>
+</div>
+
+<style>
+    .order-container {
+        max-width: 420px;
+        margin: auto;
+        padding: 15px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ddd;
+        font-family: Arial;
+    }
+    label { font-weight: bold; margin-top: 10px; display: block; }
+    input, select, textarea {
+        width: 100%; padding: 8px; margin-top: 5px;
+        border-radius: 6px; border: 1px solid #ccc;
+    }
+    button {
+        width: 100%; padding: 10px; margin-top: 15px;
+        background: #28a745; color: white;
+        border: none; border-radius: 6px;
+        font-size: 16px;
+    }
+</style>
+
+
+<!-- ============================= -->
+<!-- jsPDF untuk membuat PDF nota -->
+<!-- ============================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+const { jsPDF } = window.jspdf;
+
+/* =================================
+   FUNGSI BUAT NOTA / BON PDF SEDERHANA
+================================== */
+function createAndDownloadPDF(order) {
+  try {
+    const doc = new jsPDF({ unit: "pt", format: "A4" });
+    let y = 40;
+    const left = 40;
+    const L = (t) => doc.text(t, left, y);
+
+    doc.setFontSize(14);
+    doc.setFont(undefined, "bold");
+    L("PUKIS LUMER AULIA");
+    y += 20;
+
+    doc.setFontSize(10);
+    doc.setFont("normal");
+    L("Jl. Pasar Kuliner — Padang Panjang, Sumbar");
+    y += 25;
+
+    doc.setFontSize(12);
+    doc.setFont(undefined, "bold");
+    L(`INVOICE: ${order.invoiceID}`);
+    y += 18;
+
+    doc.setFont("normal");
+    L(`Tanggal: ${new Date(order.createdAt).toLocaleString()}`);
+    y += 15;
+
+    L(`Nama Pemesan: ${order.nama}`);
+    y += 15;
+
+    L(`Nomor WA: ${order.buyerWA}`);
+    y += 20;
+
+    doc.line(left, y, 550, y);
+    y += 20;
+
+    // Detail
+    doc.setFont(undefined, "bold");
+    L("DETAIL PESANAN:");
+    y += 18;
+
+    doc.setFont("normal");
+    L(`Jenis Pukis : ${order.jenis}`);
+    y += 16;
+
+    L(`Ukuran Box : ${order.ukuran}`);
+    y += 16;
+
+    L(`Topping : ${order.toppingMode}`);
+    y += 16;
+
+    L(`Isi per Box : ${order.isiPerBox} pcs`);
+    y += 16;
+
+    L(`Jumlah Box : ${order.jumlahBox}`);
+    y += 20;
+
+    doc.setFont(undefined, "bold");
+    L("HARGA:");
+    y += 18;
+    doc.setFont("normal");
+
+    L(`Harga per Box: ${formatRp(order.pricePerBox)}`);
+    y += 16;
+
+    L(`Subtotal: ${formatRp(order.subTotal)}`);
+    y += 16;
+
+    doc.setFont(undefined, "bold");
+    L(`TOTAL BAYAR: ${formatRp(order.grandTotal)}`);
+    y += 30;
+
+    doc.setFontSize(10);
+    doc.setFont("normal");
+    L("Terima kasih sudah memesan Pukis Lumer Aulia!");
+    y += 14;
+    L("Simpan bon ini sebagai bukti pemesanan.");
+
+    doc.save(order.invoiceID + ".pdf");
+
+  } catch (err) {
+    console.error("Gagal membuat PDF:", err);
+  }
+}
+
+function formatRp(n) {
+  return "Rp " + n.toLocaleString("id-ID");
+}
+</script>
+
+
+<!-- =============================== -->
+<!-- HARGA PUKIS OTOMATIS           -->
+<!-- =============================== -->
+<script>
+const hargaPukis = {
+  Original: {
+    Kecil: {
+      "Non Topping": 10000,
+      "Single Topping": 13000,
+      "Double Topping": 15000
+    },
+    Besar: {
+      "Non Topping": 18000,
+      "Single Topping": 25000,
+      "Double Topping": 28000
+    }
+  },
+  Pandan: {
+    Kecil: {
+      "Non Topping": 13000,
+      "Single Topping": 15000,
+      "Double Topping": 18000
+    },
+    Besar: {
+      "Non Topping": 25000,
+      "Single Topping": 28000,
+      "Double Topping": 32000
+    }
+  }
+};
+
+
+/* =================================
+   SUBMIT FORM -> BUAT PDF + WA
+================================== */
+document.getElementById("orderForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    let nama = namaPembeli.value.trim();
+    let hp = noHP.value.trim();
+    let jenis = jenisPukis.value;
+    let ukuran = ukuranBox.value;
+    let topping = topping.value;
+    let jumlah = Number(document.getElementById("jumlah").value);
+    let alamat = document.getElementById("alamat").value.trim();
+
+    let pricePerBox = hargaPukis[jenis][ukuran][topping];
+    let subTotal = pricePerBox * jumlah;
+
+    let invoiceID = "INV-" + Date.now();
+
+    const order = {
+        invoiceID,
+        createdAt: Date.now(),
+        nama,
+        buyerWA: hp,
+        jenis,
+        ukuran,
+        toppingMode: topping,
+        isiPerBox: ukuran === "Kecil" ? 6 : 12,
+        jumlahBox: jumlah,
+        pricePerBox,
+        subTotal,
+        grandTotal: subTotal,
+        alamat
+    };
+
+    createAndDownloadPDF(order);
+
+    let admin = "6281296668670";
+
+    let pesan = 
+`Halo Admin Pukis Lumer Aulia,
+Saya ingin memesan:
+
+Nama: ${nama}
+WA: ${hp}
+Alamat: ${alamat}
+
+Pesanan:
+- Jenis: ${jenis}
+- Ukuran Box: ${ukuran}
+- Topping: ${topping}
+- Jumlah Box: ${jumlah}
+
+Total Bayar: Rp ${subTotal.toLocaleString("id-ID")}
+
+Invoice: ${invoiceID}
+
+(Saya sudah menerima nota PDF)
+`;
+
+    window.location.href =
+        "https://wa.me/" + admin + "?text=" + encodeURIComponent(pesan);
+});
+</script>
+
+
+<!-- ================== FORM TESTIMONI ================== -->
+<section id="form-testimoni">
+  <h2>Tulis Testimoni Kamu!</h2>
+  <form id="testimoniForm">
+    <input type="text" id="nama" placeholder="Nama Kamu" required>
+    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>
+
+  <div id="daftarTestimoni">
+    <h3>Testimoni:</h3>
+    <ul id="listTestimoni">
+      <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah!"</li>
+      <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap!"</li>
+      <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak, anak-anak suka!"</li>
+      <li><strong>Maulana, Padang Panjang</strong><br>"Topping gak pelit, penjual ramah."</li>
+    </ul>
+    <button onclick="hapusSemuaTestimoni()" 
+            style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+      Hapus Semua Testimoni
+    </button>
+  </div>
+</section>
+
+<script>
+const testimoniForm = document.getElementById("testimoniForm");
+const listTestimoni = document.getElementById("listTestimoni");
+
+function hapusSemuaTestimoni() {
+  if(confirm("Apakah Anda yakin ingin menghapus semua testimoni?")) {
+    listTestimoni.innerHTML = "";
+  }
+}
+
+testimoniForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  const nama = document.getElementById("nama").value.trim();
+  const pesan = document.getElementById("pesan").value.trim();
+  if(!nama || !pesan) return;
+
+  const li = document.createElement("li");
+  li.innerHTML = `<strong>${nama}</strong><br>"${pesan}"`;
+  listTestimoni.appendChild(li);
+
+  testimoniForm.reset();
+});
+</script>
+
+
+<!-- 🔹 QRIS -->
+<div class="qris-section">
+  <h3>Bayar Lebih Mudah dengan QRIS</h3>
+  <p>Scan kode QR di bawah ini untuk membayar pesanan kamu:</p>
+  <img src="assets/images/qris-pukis.jpg" alt="QRIS Pukis Lumer Aulia">
+</div>
+
+
+<!-- 🔹 Footer -->
+<footer>
+  <p id="footerText">© 2025 Pukis Lumer Aulia.</p>
+  <p>Hak cipta dilindungi undang-undang.</p>
+  <p>
+    Kunjungi lokasi kami: 
+    <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" class="map-link">
+      <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Lokasi" width="32">
+    </a>
+  </p>
+</footer>
+
+
+<!-- ================== FLOATING SHARE ICONS ================== -->
+<div class="floating-icons-container" id="floatingIcons">
+  <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+  <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank">
+    <i class="fa-brands fa-facebook-f"></i>
+  </a>
+  <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank">
+    <i class="fa-brands fa-instagram"></i>
+  </a>
+  <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank">
+    <i class="fa-brands fa-twitter"></i>
+  </a>
+  <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank">
+    <i class="fa-brands fa-tiktok"></i>
+  </a>
+</div>
+
+<div class="toggle-float-btn" id="toggleShareBtn">
+  <i class="fa-solid fa-share-nodes"></i>
+</div>
+
+<script>
+const toggleBtn = document.getElementById("toggleShareBtn");
+const floatingIcons = document.getElementById("floatingIcons");
+
+toggleBtn.addEventListener("click", () => {
+  floatingIcons.classList.toggle("show");
+});
+</script>
+
+
+<!-- Tombol Admin -->
+<a id="btnAdmin" href="login.html">🔑 Admin</a>
+
+<script type="module">
+  import { auth } from "./firebase.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+  const btnAdmin = document.getElementById("btnAdmin");
+  let userReady = false;
+  let currentUser = null;
+
+  onAuthStateChanged(auth, (user) => {
+    userReady = true;
+    currentUser = user;
+  });
+
+  btnAdmin.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!userReady) {
+      alert("Sedang memeriksa status login...");
+      return;
+    }
+    window.location.href = currentUser ? "admin.html" : "login.html";
+  });
+</script>
+
+
+<!-- Frontend Firebase Loader -->
+<script type="module">
+  import { auth, getContent } from "./firebase.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+  async function loadHomePage() {
+      const data = await getContent("homepage");
+      if (!data) return;
+
+      // Auto isi konten (tidak mengganggu form pemesanan)
+      if (data.promoImage)
+        document.getElementById("promoImage").src = data.promoImage;
+  }
+
+  window.addEventListener("load", loadHomePage);
+</script>
+
 </body>
 </html>
