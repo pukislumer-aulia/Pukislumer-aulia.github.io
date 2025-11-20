@@ -880,5 +880,202 @@ toggleBtn.addEventListener("click", () => {
 <!-- ===================================================== -->
 <!-- ===================== HTML END ======================= -->
 <!-- ===================================================== -->
+  <!-- ========================= -->
+<!-- BAGIAN 3 — FORM PEMESANAN -->
+<!-- ========================= -->
+
+<div class="order-container">
+    <h2>Form Pemesanan Pukis Lumer Aulia</h2>
+
+    <form id="orderForm">
+        
+        <!-- Nama -->
+        <label>Nama Pembeli:</label>
+        <input type="text" id="namaPembeli" required>
+
+        <!-- Nomor HP -->
+        <label>No. HP:</label>
+        <input type="text" id="noHP" required>
+
+        <!-- Jenis Pukis -->
+        <label>Jenis Pukis:</label>
+        <select id="jenisPukis" required>
+            <option value="">-- Pilih --</option>
+            <option value="Original">Original</option>
+            <option value="Pandan">Pandan</option>
+        </select>
+
+        <!-- Ukuran Box -->
+        <label>Ukuran Box:</label>
+        <select id="ukuranBox" required>
+            <option value="">-- Pilih --</option>
+            <option value="Kecil">Box Kecil</option>
+            <option value="Besar">Box Besar</option>
+        </select>
+
+        <!-- Topping -->
+        <label>Topping:</label>
+        <select id="topping" required>
+            <option value="">-- Pilih --</option>
+            <option value="Non Topping">Non Topping</option>
+            <option value="Single Topping">Single Topping</option>
+            <option value="Double Topping">Double Topping</option>
+        </select>
+
+        <!-- Jumlah -->
+        <label>Jumlah Box:</label>
+        <input type="number" id="jumlah" min="1" value="1" required>
+
+        <!-- Alamat -->
+        <label>Alamat:</label>
+        <textarea id="alamat" required></textarea>
+
+        <!-- Tombol Submit -->
+        <button type="submit" id="btnPesan">Buat Nota & Kirim WA</button>
+    </form>
+
+    <p style="font-size:12px; margin-top:10px; opacity:0.7;">
+        Setelah klik, sistem akan membuat nota PDF otomatis & membuka WhatsApp admin.
+    </p>
+</div>
+
+<style>
+    .order-container {
+        max-width: 420px;
+        margin: auto;
+        padding: 15px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ddd;
+        font-family: Arial;
+    }
+    label { font-weight: bold; margin-top: 10px; display: block; }
+    input, select, textarea {
+        width: 100%; padding: 8px; margin-top: 5px;
+        border-radius: 6px; border: 1px solid #ccc;
+    }
+    button {
+        width: 100%; padding: 10px; margin-top: 15px;
+        background: #28a745; color: white;
+        border: none; border-radius: 6px;
+        font-size: 16px;
+    }
+</style>
+  <!-- jsPDF untuk membuat PDF nota -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+const { jsPDF } = window.jspdf;
+
+/* ================================
+   FUNGSI BUAT & DOWNLOAD PDF NOTA
+================================= */
+function createAndDownloadPDF(order) {
+  try {
+    const doc = new jsPDF({ unit: "pt", format: "A4" });
+    let y = 40;
+    const left = 40;
+    const L = (t) => doc.text(t, left, y);
+
+    doc.setFontSize(14);
+    doc.setFont(undefined, "bold");
+    L("PUKIS LUMER AULIA");
+    y += 20;
+
+    doc.setFontSize(10);
+    doc.setFont(undefined, "normal");
+    L("Jl. Pasar Kuliner — Padang Panjang, Sumbar");
+    y += 25;
+
+    doc.setFontSize(12);
+    doc.setFont(undefined, "bold");
+    L(`INVOICE: ${order.invoiceID}`);
+    y += 18;
+
+    doc.setFont(undefined, "normal");
+    L(`Tanggal: ${new Date(order.createdAt).toLocaleString()}`);
+    y += 15;
+
+    L(`Nama Pemesan: ${order.nama}`);
+    y += 15;
+
+    if (order.buyerWA) {
+      L(`Nomor WA: ${order.buyerWA}`);
+      y += 20;
+    }
+
+    doc.line(left, y, 550, y);
+    y += 20;
+
+    // Detail pesanan
+    doc.setFont(undefined, "bold");
+    L("DETAIL PESANAN:");
+    y += 18;
+    doc.setFont(undefined, "normal");
+
+    L(`Jenis Pukis : ${order.jenis}`);
+    y += 16;
+
+    L(`Topping     : ${order.toppingMode}`);
+    y += 16;
+
+    L(`Isi/Box     : ${order.isiPerBox} pcs`);
+    y += 16;
+
+    if (order.singleList) {
+      L(`Rasa        : ${order.singleList}`);
+      y += 16;
+    }
+
+    if (order.doubleList) {
+      L(`Taburan     : ${order.doubleList}`);
+      y += 16;
+    }
+
+    L(`Jumlah Box  : ${order.jumlahBox}`);
+    y += 20;
+
+    // Harga
+    doc.setFont(undefined, "bold");
+    L("HARGA:");
+    y += 18;
+    doc.setFont(undefined, "normal");
+
+    L(`Harga per Box: ${formatRp(order.pricePerBox)}`);
+    y += 16;
+
+    L(`Subtotal     : ${formatRp(order.subTotal)}`);
+    y += 16;
+
+    if (order.discount && order.discount > 0) {
+      L(`Diskon       : -${formatRp(order.discount)}`);
+      y += 16;
+    }
+
+    doc.setFont(undefined, "bold");
+    L(`TOTAL BAYAR  : ${formatRp(order.grandTotal)}`);
+    y += 30;
+
+    doc.setFontSize(10);
+    doc.setFont(undefined, "normal");
+    L("Terima kasih sudah memesan Pukis Lumer Aulia!");
+    y += 14;
+    L("Simpan bon ini sebagai bukti pemesanan.");
+
+    // Download file PDF
+    const filename = `${order.invoiceID}.pdf`;
+    doc.save(filename);
+
+  } catch (err) {
+    console.error("Gagal membuat PDF:", err);
+  }
+}
+
+/* ================================
+  FORMAT RUPIAH
+================================= */
+function formatRp(n) {
+  return "Rp " + n.toLocaleString("id-ID");
+}
+                </script>
 </body>
 </html>
