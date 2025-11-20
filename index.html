@@ -344,72 +344,67 @@ testimoniForm.addEventListener("submit", function(e){
     floatingIcons.setAttribute("aria-hidden", !isShown);
   });
 </script>
-  <!-- Tombol Admin -->
-<a id="btnAdmin" href="login.html">🔑 Admin</a>
+  <!-- 🔑 Tombol Admin -->
+<a id="btnAdmin" href="#">🔑 Admin</a>
 
+<!-- 🔹 Script Firebase Gabungan (ADMIN + LOAD HOME PAGE) -->
 <script type="module">
-  import { auth } from "./firebase.js";
+  import { auth, getContent } from "./firebase.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
   const btnAdmin = document.getElementById("btnAdmin");
   let userReady = false;
   let currentUser = null;
 
+  // 🔹 Cek status login sekali saja
   onAuthStateChanged(auth, (user) => {
     userReady = true;
     currentUser = user;
   });
 
+  // 🔹 Klik tombol Admin: arahkan ke login atau dashboard
   btnAdmin.addEventListener("click", (e) => {
-    e.preventDefault(); // cegah reload default
+    e.preventDefault();
     if (!userReady) {
       alert("Sedang memeriksa status login...");
       return;
     }
     window.location.href = currentUser ? "admin.html" : "login.html";
   });
-</script>
 
-  <!-- 🔹 Script Frontend Firebase -->
-  <script type="module">
-    import { auth, getContent } from "./firebase.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+  // ======================================================
+  // 🔹 LOAD KONTEN DARI FIREBASE KE HALAMAN UTAMA
+  // ======================================================
+  async function loadHomePage() {
+    const data = await getContent("homepage");
+    if (!data) return;
 
-    const btnAdmin = document.getElementById("btnAdmin");
-    let userReady = false;
-    let currentUser = null;
+    const fields = [
+      "judulUtama",
+      "sambutan1",
+      "sambutan2",
+      "lokasi1",
+      "lokasi2",
+      "lokasi3",
+      "lokasi4",
+      "jamOperasional",
+      "bestSeller",
+      "lokasiTeks",
+      "ojolText",
+      "kenapaText"
+    ];
 
-    onAuthStateChanged(auth, (user) => {
-      userReady = true;
-      currentUser = user;
-    });
-
-    btnAdmin.addEventListener("click", () => {
-      if (!userReady) {
-        alert("Sedang memeriksa status login...");
-        return;
+    fields.forEach(id => {
+      if (document.getElementById(id)) {
+        document.getElementById(id).innerText = data[id] || "";
       }
-      window.location.href = currentUser ? "admin.html" : "login.html";
     });
+  }
 
-    // 🔹 Load konten dari Firebase
-    async function loadHomePage() {
-      const data = await getContent("homepage");
-      if (!data) return;
-
-      document.getElementById("judulUtama").innerText = data.judulUtama || "PUKIS LUMER AULIA";
-      document.getElementById("sambutan1").innerText = data.sambutan1 || "";
-      document.getElementById("sambutan2").innerText = data.sambutan2 || "";
-      document.getElementById("lokasi1").innerText = data.lokasi1 || "";
-      document.getElementById("lokasi2").innerText = data.lokasi2 || "";
-      document.getElementById("lokasi3").innerText = data.lokasi3 || "";
-      document.getElementById("lokasi4").innerText = data.lokasi4 || "";
-      document.getElementById("jamOperasional").innerText = data.jamOperasional || "";
-      document.getElementById("bestSeller").innerText = data.bestSeller || "";
-      document.getElementById("lokasiTeks").innerText = data.lokasiTeks || "";
-      document.getElementById("ojolText").innerText = data.ojolText || "";
-      document.getElementById("kenapaText").innerText = data.kenapaText || "";
-
+  // Jalankan loader
+  loadHomePage();
+</script>
+  
       // Galeri
       if (data.galeri && data.galeri.length > 0) {
         const galeriContainer = document.getElementById("galeriContainer");
