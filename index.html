@@ -549,175 +549,336 @@ function hitungHargaUltra() {
       discountText = `- ${formatRp(discount)} (${code})`;
     } else {
       discountText = "Kode tidak valid";
-    }
+<!-- ========================= -->
+<!-- ========= ORDER ========= -->
+<!-- ========================= -->
+
+<section id="order" class="order-section">
+  <h2>Form Pemesanan Pukis Lumer Aulia</h2>
+
+  <form id="orderForm">
+    <!-- Nama Pemesan -->
+    <label>Nama Pemesan:</label>
+    <input type="text" id="namaPemesan" required />
+
+    <!-- Nomor HP -->
+    <label>Nomor HP:</label>
+    <input type="tel" id="nomorHP" required />
+
+    <!-- Jenis Pukis -->
+    <label>Jenis Pukis:</label>
+    <select id="jenisPukis" required>
+      <option value="">-- Pilih --</option>
+      <option value="original">Original</option>
+      <option value="pandan">Pandan</option>
+    </select>
+
+    <!-- Ukuran Box -->
+    <label>Ukuran Box:</label>
+    <select id="ukuranBox" required>
+      <option value="">-- Pilih --</option>
+      <option value="kecil">Box Kecil</option>
+      <option value="besar">Box Besar</option>
+    </select>
+
+    <!-- Topping -->
+    <label>Topping:</label>
+    <select id="topping" required>
+      <option value="">-- Pilih --</option>
+      <option value="non">Non Topping</option>
+      <option value="single">Single Topping</option>
+      <option value="double">Double Topping</option>
+    </select>
+
+    <!-- Jumlah Box -->
+    <label>Jumlah Box:</label>
+    <input type="number" id="jumlah" value="1" min="1" required />
+
+    <!-- Total Otomatis -->
+    <label>Total Harga:</label>
+    <input type="text" id="totalHarga" readonly />
+
+    <!-- Tombol -->
+    <button type="button" onclick="kirimPesanan()">Kirim Pesanan</button>
+  </form>
+
+  <br />
+
+  <!-- ========================= -->
+  <!--   NOTA KELUAR DI SINI    -->
+  <!-- ========================= -->
+  <div id="invoiceResult"></div>
+</section>
+
+<script>
+// ================================
+//           HARGA RESMI
+// ================================
+const hargaList = {
+  original: {
+    kecil:   { non:10000, single:13000, double:15000 },
+    besar:   { non:18000, single:25000, double:28000 }
+  },
+  pandan: {
+    kecil:   { non:13000, single:15000, double:18000 },
+    besar:   { non:25000, single:28000, double:32000 }
   }
+};
 
-  const grandTotal = Math.max(0, subTotal - discount);
+// Hitung otomatis
+document.querySelectorAll("#jenisPukis,#ukuranBox,#topping,#jumlah")
+  .forEach(e => e.addEventListener("change", updateTotal));
 
-  // tampilkan di UI ringkasan form
-  document.getElementById("totalHarga").innerText = formatRp(pricePerBox); // jika kamu masih pakai totalHarga sebelumnya
-  document.getElementById("pricePerBox").innerText = formatRp(pricePerBox);
-  document.getElementById("subTotal").innerText = formatRp(subTotal);
-  document.getElementById("discountText").innerText = discountText;
-  document.getElementById("grandTotal").innerText = formatRp(grandTotal);
+function updateTotal() {
+  let jenis = document.getElementById("jenisPukis").value;
+  let ukuran = document.getElementById("ukuranBox").value;
+  let topping = document.getElementById("topping").value;
+  let jml = parseInt(document.getElementById("jumlah").value);
 
-  // kembalikan object untuk penggunaan lain
-  return { pricePerBox, subTotal, discount, grandTotal, jenis, toppingMode, isi, jumlahBox };
+  if (!jenis || !ukuran || !topping || !jml) return;
+
+  let harga = hargaList[jenis][ukuran][topping];
+  document.getElementById("totalHarga").value = "Rp " + (harga * jml).toLocaleString();
 }
 
-/* ================== Integrasi dengan event yang sudah ada =============== */
-// panggil hitungHargaUltra saat pilihan berubah
-document.querySelectorAll('input[name="jenis"], input[name="topping"], #isiBox, #jumlahBox, #couponCode').forEach(el => {
-  if (el) el.addEventListener('change', hitungHargaUltra);
-});
-// juga untuk topping checkbox (kalau ada)
-document.querySelectorAll('.singleTopping, .doubleTopping').forEach(el => {
-  if (el) el.addEventListener('change', hitungHargaUltra);
-});
+// ================================
+//     GENERATE NOMOR INVOICE
+// ================================
+function generateInvoice() {
+  let d = new Date();
+  return "INV" + d.getFullYear() + (d.getMonth()+1) + d.getDate() + "-" + d.getTime();
+}
 
-// inisialisasi saat load
-window.addEventListener('load', () => { setTimeout(hitungHargaUltra, 120); });
-<input type="text" id="couponCode" placeholder="Masukkan kode kupon (opsional)" class="w-full p-3 border rounded-lg" />
-/* ================== Submit -> Nota, simpan & kirim WA ================== */
-document.getElementById("formPukis")?.addEventListener("submit", function(e) {
+// ================================
+//     KIRIM & TAMPILKAN NOTA
+// ================================
+function kirimPesanan() {
+  let nama = document.getElementById("namaPemesan").value;
+  let hp = document.getElementById("nomorHP").value;
+  let jenis = document.getElementById("jenisPukis").value;
+  let ukuran = document.getElementById("ukuranBox").value;
+  let topping = document.getElementById("topping").value;
+  let jml = document.getElementById("jumlah").value;
+  let total = document.getElementById("totalHarga").value;
+
+  let invoice = generateInvoice();
+
+  // ============================
+  //        NOTA ONLINE
+  // ============================
+  document.getElementById("invoiceResult").innerHTML = `
+    <div class='invoice-box'>
+      <h3>Nota Pemesanan</h3>
+      <p><b>No Invoice:</b> ${invoice}</p>
+      <p><b>Nama:</b> ${nama}</p>
+      <p><b>HP:</b> ${hp}</p>
+      <p><b>Jenis:</b> ${jenis}</p>
+      <p><b>Ukuran:</b> ${ukuran}</p>
+      <p><b>Topping:</b> ${topping}</p>
+      <p><b>Jumlah:</b> ${jml}</p>
+      <p><b>Total Bayar:</b> ${total}</p>
+
+      <br><b>QRIS Pembayaran:</b><br>
+      <img src="qris.jpg" width="220" />
+      <p><small>* QRIS otomatis terisi nominal saat scan</small></p>
+    </div>
+  `;
+
+  // ============================
+  //       WHATSAPP ADMIN
+  // ============================
+  let wa = "6281296668670";
+
+  let pesan =
+`Halo Admin, saya ingin memesan Pukis:
+
+Nama: ${nama}
+HP: ${hp}
+Invoice: ${invoice}
+
+Pesanan:
+- Jenis: ${jenis}
+- Ukuran: ${ukuran}
+- Topping: ${topping}
+- Jumlah: ${jml}
+Total: ${total}
+
+Terima kasih 🙏`;
+
+  window.open("https://wa.me/" + wa + "?text=" + encodeURIComponent(pesan));
+}
+</script>
+
+  <!-- ===================================================== -->
+<!-- ================== FORM TESTIMONI ================== -->
+<!-- ===================================================== -->
+<section id="form-testimoni">
+  <h2>Tulis Testimoni Kamu!</h2>
+
+  <form id="testimoniForm">
+    <input type="text" id="nama" placeholder="Nama Kamu" required>
+    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>
+
+  <div id="daftarTestimoni">
+    <h3>Testimoni:</h3>
+    <ul id="listTestimoni">
+      <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+      <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+      <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+      <li><strong>Maulana, Padang Panjang</strong><br>"Topping nya gak pelit, pelayanannya juga ramah."</li>
+    </ul>
+
+    <button onclick="hapusSemuaTestimoni()" 
+            style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+      Hapus Semua Testimoni
+    </button>
+  </div>
+</section>
+
+<script>
+// ================== TESTIMONI SCRIPT ==================
+const testimoniForm = document.getElementById("testimoniForm");
+const listTestimoni = document.getElementById("listTestimoni");
+
+function hapusSemuaTestimoni() {
+  if (confirm("Hapus semua testimoni?")) listTestimoni.innerHTML = "";
+}
+
+testimoniForm.addEventListener("submit", function(e){
   e.preventDefault();
-  // validasi topping (pakai fungsi validasiTopping milikmu)
-  if (typeof validasiTopping === 'function' && !validasiTopping()) return;
+  const nama = document.getElementById("nama").value.trim();
+  const pesan = document.getElementById("pesan").value.trim();
+  if (!nama || !pesan) return;
 
-  const nama = document.getElementById("namaPemesan")?.value?.trim() || document.getElementById("nama")?.value?.trim();
-  const waBuyerRaw = document.getElementById("wa")?.value || document.getElementById("waPemesan")?.value || "";
-  const buyerWA = waBuyerRaw.toString().replace(/\s/g, "");
-  const coupon = document.getElementById("couponCode") ? document.getElementById("couponCode").value.trim().toUpperCase() : "";
+  const li = document.createElement("li");
+  li.innerHTML = `<strong>${nama}</strong><br>"${pesan}"`;
+  listTestimoni.appendChild(li);
 
-  // hitung ulang untuk memastikan angka
-  const calc = hitungHargaUltra();
+  testimoniForm.reset();
+});
+</script>
 
-  // generate invoice id & order object
-  const invoiceID = generateInvoiceID();
-  const order = {
-    invoiceID,
-    nama,
-    buyerWA,
-    jenis: calc.jenis,
-    toppingMode: calc.toppingMode,
-    isiPerBox: calc.isi,
-    jumlahBox: calc.jumlahBox,
-    pricePerBox: calc.pricePerBox,
-    subTotal: calc.subTotal,
-    discount: calc.discount,
-    grandTotal: calc.grandTotal,
-    coupon: coupon || null,
-    createdAt: new Date().toISOString()
-  };
 
-  // simpan ke localStorage (fallback)
-  localStorage.setItem(`order_${invoiceID}`, JSON.stringify(order));
+<!-- ===================================================== -->
+<!-- ================== QRIS SECTION ====================== -->
+<!-- ===================================================== -->
+<div class="qris-section">
+  <h3>Bayar Lebih Mudah dengan QRIS</h3>
+  <p>Scan kode QR berikut untuk membayar pesanan kamu:</p>
+  <img src="assets/images/qris-pukis.jpg" alt="QRIS Pukis Lumer Aulia">
+</div>
 
-  // Jika kamu punya fungsi penyimpanan ke Firebase di firebase.js, panggil di sini (opsional)
-  // contoh: window.saveOrderToFirebase && window.saveOrderToFirebase(order);
-  if (window.saveOrderToFirebase && typeof window.saveOrderToFirebase === "function") {
-    window.saveOrderToFirebase(order).catch(err => console.warn("Simpan ke Firebase gagal:", err));
+
+<!-- ===================================================== -->
+<!-- ======================= FOOTER ======================= -->
+<!-- ===================================================== -->
+<footer>
+  <p id="footerText">© 2025 Pukis Lumer Aulia.</p>
+  <p>Hak cipta dilindungi undang-undang.</p>
+  <p>
+    Kunjungi lokasi kami:
+    <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" class="map-link">
+      <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" width="32" height="32" alt="Lokasi">
+    </a>
+  </p>
+</footer>
+
+
+<!-- ===================================================== -->
+<!-- ================== FLOATING SHARE =================== -->
+<!-- ===================================================== -->
+<div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
+  <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+  <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+  <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+  <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+  <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+</div>
+
+<div class="toggle-float-btn" id="toggleShareBtn">
+  <i class="fa-solid fa-share-nodes"></i>
+</div>
+
+<script>
+const toggleBtn = document.getElementById("toggleShareBtn");
+const floatingIcons = document.getElementById("floatingIcons");
+
+toggleBtn.addEventListener("click", () => {
+  floatingIcons.classList.toggle("show");
+});
+</script>
+
+
+<!-- ===================================================== -->
+<!-- ================== ADMIN BUTTON ====================== -->
+<!-- ===================================================== -->
+
+<a id="btnAdmin" href="login.html">🔑 Admin</a>
+
+
+<!-- ===================================================== -->
+<!-- =================== FIREBASE LOAD ==================== -->
+<!-- ===================================================== -->
+<script type="module">
+  import { auth, getContent } from "./firebase.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+  const btnAdmin = document.getElementById("btnAdmin");
+  let userReady = false;
+  let currentUser = null;
+
+  onAuthStateChanged(auth, (user) => {
+    userReady = true;
+    currentUser = user;
+  });
+
+  btnAdmin.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!userReady) { alert("Memeriksa status login..."); return; }
+    window.location.href = currentUser ? "admin.html" : "login.html";
+  });
+
+  // ================== LOAD KONTEN HOMEPAGE ==================
+  async function loadHomePage() {
+    const data = await getContent("homepage");
+    if (!data) return;
+
+    document.getElementById("judulUtama").innerText = data.judulUtama || "PUKIS LUMER AULIA";
+    document.getElementById("sambutan1").innerText = data.sambutan1 || "";
+    document.getElementById("sambutan2").innerText = data.sambutan2 || "";
+    document.getElementById("lokasi1").innerText = data.lokasi1 || "";
+    document.getElementById("lokasi2").innerText = data.lokasi2 || "";
+    document.getElementById("lokasi3").innerText = data.lokasi3 || "";
+    document.getElementById("lokasi4").innerText = data.lokasi4 || "";
+    document.getElementById("jamOperasional").innerText = data.jamOperasional || "";
+    document.getElementById("bestSeller").innerText = data.bestSeller || "";
+    document.getElementById("lokasiTeks").innerText = data.lokasiTeks || "";
+    document.getElementById("ojolText").innerText = data.ojolText || "";
+    document.getElementById("kenapaText").innerText = data.kenapaText || "";
+
+    // Galeri
+    if (data.galeri?.length > 0) {
+      const galeriContainer = document.getElementById("galeriContainer");
+      galeriContainer.innerHTML = "";
+      data.galeri.forEach(url => {
+        galeriContainer.innerHTML += `<div class="gallery-item"><img src="${url}" class="responsive-img"></div>`;
+      });
+    }
+
+    // Promo
+    document.getElementById("promo").innerText = data.promoText || "";
+    document.getElementById("promoImage").src = data.promoImage || "assets/images/kupon1.jpg";
+    document.getElementById("promoText").innerText = data.promoRunning || "";
   }
 
-  // RENDER nota di popup
-  renderNota(order);
+  window.addEventListener("load", loadHomePage);
+</script>
 
-  // show popup
-  document.getElementById("notaContainer").style.display = "flex";
-  // simpan di memori global untuk tombol WA/cetak
-  window._lastOrder = order;
-});
 
-/* ================== RENDER NOTA ================== */
-function renderNota(order) {
-  const header = document.getElementById("notaHeader");
-  header.innerHTML = `<div><strong>No. Invoice:</strong> ${order.invoiceID}</div>
-                      <div><strong>Tanggal:</strong> ${new Date(order.createdAt).toLocaleString()}</div>`;
-
-  const items = document.getElementById("notaItems");
-  items.innerHTML = `
-    <div><strong>Nama:</strong> ${order.nama}</div>
-    <div><strong>Jenis:</strong> ${order.jenis}</div>
-    <div><strong>Topping Mode:</strong> ${order.toppingMode}</div>
-    <div><strong>Isi per Box:</strong> ${order.isiPerBox} pcs</div>
-    <div><strong>Jumlah Box:</strong> ${order.jumlahBox}</div>
-  `;
-
-  const summary = document.getElementById("notaSummary");
-  summary.innerHTML = `
-    <div>Harga per Box: <strong>${formatRp(order.pricePerBox)}</strong></div>
-    <div>Subtotal: ${formatRp(order.subTotal)}</div>
-    <div>Diskon: -${formatRp(order.discount || 0)}</div>
-    <div style="font-size:18px;margin-top:8px;">Total Bayar: <strong>${formatRp(order.grandTotal)}</strong></div>
-  `;
-
-  // QRIS nominal
-  document.getElementById("qrisAmount").innerText = formatRp(order.grandTotal);
-}
-
-/* ================== Tombol popup ================== */
-document.getElementById("closeNota")?.addEventListener("click", () => {
-  document.getElementById("notaContainer").style.display = "none";
-});
-
-document.getElementById("printNota")?.addEventListener("click", () => {
-  // print area: buat window baru berisi nota
-  const w = window.open("", "_blank");
-  const notaHtml = `
-    <html><head><title>Nota ${window._lastOrder?.invoiceID || ""}</title></head>
-    <body>${document.getElementById("notaContainer").querySelector('div').outerHTML}</body></html>`;
-  w.document.write(notaHtml);
-  w.document.close();
-  w.focus();
-  setTimeout(()=>{ w.print(); w.close(); }, 400);
-});
-
-/* KIRIM ke Pembeli (WA) */
-document.getElementById("sendBuyerWA")?.addEventListener("click", () => {
-  const o = window._lastOrder;
-  if (!o) return alert("Tidak ada order");
-  // format nomor pembeli (jika kosong, kirim via admin WA)
-  let buyerNumber = o.buyerWA || "";
-  let waUrl;
-  const message =
-`Terima kasih telah memesan Pukis Lumer Aulia!
-No. Invoice: ${o.invoiceID}
-Nama: ${o.nama}
-Pesanan: ${o.jumlahBox} box (${o.isiPerBox} pcs)
-Total: ${formatRp(o.grandTotal)}
-Silakan bayar via QRIS di halaman berikut.`;
-  if (buyerNumber && /^0/.test(buyerNumber)) buyerNumber = buyerNumber.replace(/^0/,'62');
-  if (buyerNumber.startsWith("62")) {
-    waUrl = `https://wa.me/${buyerNumber}?text=${encodeURIComponent(message)}`;
-  } else {
-    waUrl = `https://wa.me/${ADMIN_WA_NUMBER}?text=${encodeURIComponent("(Kirim ke buyer) " + message + "\nNomor buyer: "+ buyerNumber)}`;
-  }
-  window.open(waUrl, "_blank");
-});
-
-/* KIRIM ke Admin (WA) */
-document.getElementById("sendAdminWA")?.addEventListener("click", () => {
-  const o = window._lastOrder;
-  if (!o) return alert("Tidak ada order");
-  const message =
-`📌 PESAN BARU
-No: ${o.invoiceID}
-Nama: ${o.nama}
-Pesanan: ${o.jumlahBox} box (${o.isiPerBox} pcs)
-Total: ${formatRp(o.grandTotal)}
-WA Buyer: ${o.buyerWA || '-'}`;
-  const waAdminUrl = `https://wa.me/${ADMIN_WA_NUMBER}?text=${encodeURIComponent(message)}`;
-  window.open(waAdminUrl, "_blank");
-});
-
-/* ================== Optional: Generate QRIS payload (placeholder) ================== */
-/*
-  Untuk QRIS dinamis memerlukan library atau pembuatan payload sesuai format EMV QRIS.
-  Di versi cepat ini kita tampilkan gambar QRIS statis dan nominal.
-  Jika mau QRIS dinamis (scan => nominal terisi otomatis di apps bank),
-  kita perlu generate payload dan render QR code (bisa pakai library qrcode.js)
-  atau panggil API pihak ketiga. Saya bisa tambahkan jika kamu mau.
-*/
-  </script>
+<!-- ===================================================== -->
+<!-- ===================== HTML END ======================= -->
+<!-- ===================================================== -->
 </body>
 </html>
