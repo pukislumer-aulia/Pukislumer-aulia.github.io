@@ -58,3 +58,65 @@ document.getElementById("formUltra")?.addEventListener("submit", async function(
   const waMessage = `Halo! Saya ingin memesan Pukis:\n- Nama: ${order.nama}\n- Jenis: ${order.jenis}\n- Topping: ${order.toppingMode}\n- Isi per Box: ${order.isiPerBox} pcs\n- Jumlah Box: ${order.jumlahBox}\n- Rasa: ${order.singleList || '-'}\n- Taburan: ${order.doubleList || '-'}\nTotal: ${formatRp(order.grandTotal)}\nNo. Invoice: ${order.invoiceID}\nNomor WA pembeli: ${order.buyerWA}\n`;
   window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(waMessage)}`, '_blank');
 });
+import { jsPDF } from "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+
+// fungsi buat nota premium
+export function generatePremiumNota(order) {
+    const doc = new jsPDF();
+
+    // ========== WATERMARK EMAS ========== 
+    doc.setFontSize(40);
+    doc.setTextColor(212, 175, 55); // Gold
+    doc.text("PUKIS LUMER AULIA", 20, 150, {
+        angle: 45,
+        opacity: 0.15
+    });
+
+    // ========== LOGO (posisi kiri atas) ========== 
+    doc.addImage("assets/images/logo.png", "PNG", 15, 10, 35, 35);
+
+    // ========== JUDUL ========== 
+    doc.setFontSize(18);
+    doc.setTextColor(40, 40, 40);
+    doc.text("INVOICE PEMBELIAN", 105, 20, null, null, "center");
+
+    // ========== NOMOR INVOICE ========== 
+    doc.setFontSize(12);
+    doc.text(`Invoice: ${order.invoiceID}`, 105, 28, null, null, "center");
+
+    // ========== INFORMASI PEMBELI ==========
+    doc.setFontSize(12);
+    doc.text(`Nama: ${order.nama}`, 15, 55);
+    doc.text(`WA: ${order.buyerWA}`, 15, 62);
+
+    // ========== TABEL PESANAN ========== 
+    doc.autoTable({
+        startY: 75,
+        head: [["Keterangan", "Isi"]],
+        body: [
+            ["Jenis", order.jenis],
+            ["Isi/Box", order.isiPerBox + " pcs"],
+            ["Jumlah Box", order.jumlahBox],
+            ["Topping Mode", order.toppingMode],
+            ["Rasa Single", order.singleList || "-"],
+            ["Taburan Double", order.doubleList || "-"],
+            ["Harga/Box", "Rp " + order.pricePerBox.toLocaleString()],
+            ["Subtotal", "Rp " + order.subTotal.toLocaleString()],
+            ["Diskon", order.discount ? "Rp " + order.discount : "-"],
+            ["Total Bayar", "Rp " + order.grandTotal.toLocaleString()],
+        ],
+        theme: "grid",
+        headStyles: { fillColor: [212, 175, 55] },  // Gold
+        styles: { fontSize: 11 }
+    });
+
+    // ========== TTD DIGITAL ========== 
+    doc.addImage("assets/images/ttd.png", "PNG", 140, 220, 40, 20);
+    doc.text("Admin Pukis Lumer Aulia", 145, 245);
+
+    // ========== FOOTER ========== 
+    doc.setFontSize(10);
+    doc.text("Terima kasih atas pesanan Anda!", 105, 285, null, null, "center");
+
+    return doc;
+}
