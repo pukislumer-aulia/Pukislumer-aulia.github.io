@@ -415,93 +415,153 @@ document.getElementById('notaSendAdmin').addEventListener('click', ()=>{
   alert('WA admin akan dibuka (jika belum).');
   // nothing else: main WA already opened on submit
 });
-    </script>
-<!-- PART 5: TESTIMONI, QRIS, MAP -->
-    <section id="testimoni">
-      <h2>Tulis Testimoni Kamu!</h2>
-      <form id="testimoniForm">
-        <input type="text" id="testiNama" placeholder="Nama Kamu" required style="margin-bottom:6px">
-        <textarea id="testiPesan" placeholder="Tulis testimoni..." required style="width:100%;min-height:70px"></textarea>
-        <button type="submit" style="margin-top:8px">Kirim Testimoni</button>
-      </form>
+<!-- ================== FORM TESTIMONI (PERTAHANKAN BAGIAN 1) ================== -->
+<section id="form-testimoni">
+  <h2>Tulis Testimoni Kamu!</h2>
 
-      <div id="daftarTestimoni" style="margin-top:12px">
-        <h3>Testimoni:</h3>
-        <ul id="listTestimoni">
-          <li><strong>Anggi</strong><br>“Pukisnya lembut dan toppingnya melimpah!”</li>
-          <li><strong>Wenni</strong><br>“Rasa pandan-nya mantap!”</li>
-        </ul>
-      </div>
-    </section>
+  <form id="testimoniForm">
+    <input type="text" id="nama" placeholder="Nama Kamu" required>
+    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>
 
-    <section id="qris">
-      <h2>QRIS</h2>
-      <p>Scan untuk bayar:</p>
-      <img src="assets/images/qris-pukis.jpg" alt="QRIS" style="max-width:220px;border-radius:8px">
-    </section>
+  <div id="daftarTestimoni">
+    <h3>Testimoni:</h3>
+    <ul id="listTestimoni">
+      <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+      <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+      <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+      <li><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, topping-nya gak pelit, penjual juga ramah."</li>
+    </ul>
 
-    <section id="lokasi">
-      <h2>Lokasi Kami</h2>
-      <p>Pasar Kuliner Padang Panjang (Gerobak Pink)</p>
-      <iframe src="https://www.google.com/maps?q=-0.46396,100.39405&z=15&output=embed" style="width:100%;height:260px;border:0;border-radius:8px"></iframe>
-    </section>
+    <button onclick="hapusSemuaTestimoni()"
+      style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+      Hapus Semua Testimoni
+    </button>
+  </div>
+</section>
 
 <script>
-/* Testimoni simple - simpan lokal */
-document.getElementById('testimoniForm').addEventListener('submit', function(e){
+const testimoniForm = document.getElementById("testimoniForm");
+const listTestimoni = document.getElementById("listTestimoni");
+
+function hapusSemuaTestimoni() {
+  if (confirm("Apakah Anda yakin ingin menghapus semua testimoni?")) {
+    listTestimoni.innerHTML = "";
+  }
+}
+
+testimoniForm.addEventListener("submit", function (e) {
   e.preventDefault();
-  const nama = document.getElementById('testiNama').value.trim();
-  const pesan = document.getElementById('testiPesan').value.trim();
-  if(!nama||!pesan) return;
-  const li = document.createElement('li'); li.innerHTML = `<strong>${nama}</strong><br>"${pesan}"`;
-  document.getElementById('listTestimoni').insertBefore(li, document.getElementById('listTestimoni').firstChild);
-  document.getElementById('testimoniForm').reset();
+  const nama = document.getElementById("nama").value.trim();
+  const pesan = document.getElementById("pesan").value.trim();
+  if (!nama || !pesan) return;
+
+  const li = document.createElement("li");
+  li.innerHTML = `<strong>${nama}</strong><br>"${pesan}"`;
+  listTestimoni.appendChild(li);
+  testimoniForm.reset();
 });
 </script>
-<!-- PART 6: FOOTER, FLOATING SHARE, ADMIN, FIREBASE LOADER, END -->
-    <footer style="margin-top:18px;padding:12px;background:#222;color:#fff;border-radius:8px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-        <div>© 2025 Pukis Lumer Aulia</div>
-        <div>Kontak Admin: <a href="https://wa.me/6281296668670" style="color:#fff">6281296668670</a></div>
-      </div>
-    </footer>
 
-    <!-- Floating share icons -->
-    <div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
-      <a class="floating-icon" href="https://wa.me/6281296668670" title="WhatsApp" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-      <a class="floating-icon" href="https://www.instagram.com/pukis.lumer_aulia" title="Instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-      <a class="floating-icon" href="https://www.tiktok.com/@pukislumer.aulia" title="TikTok" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-    </div>
+<!-- ================== QRIS (DARI BAGIAN 1 & BAGIAN 2, TANPA DUPLIKAT) ================== -->
+<section class="qris-section" id="qris">
+  <h3>Bayar Lebih Mudah dengan QRIS</h3>
+  <p>Scan kode QR di bawah ini untuk membayar pesanan kamu:</p>
+  <img src="assets/images/qris-pukis.jpg" alt="QRIS Pukis Lumer Aulia" style="max-width:260px;border-radius:10px;">
+</section>
 
-    <div id="toggleShareBtn" style="position:fixed;right:18px;bottom:38px;background:#fff;border-radius:10px;padding:8px;box-shadow:0 10px 20px rgba(0,0,0,.12);cursor:pointer">
-      <i class="fa-solid fa-share-nodes"></i>
-    </div>
+<!-- ================== LOKASI (PERTAHANKAN BAGIAN 2 KARENA LEBIH JELAS) ================== -->
+<section id="lokasi">
+  <h2>Lokasi Kami</h2>
+  <p>Pasar Kuliner Padang Panjang (Gerobak Pink)</p>
+  <iframe src="https://www.google.com/maps?q=-0.46396,100.39405&z=15&output=embed"
+    style="width:100%;height:260px;border:0;border-radius:8px"></iframe>
+</section>
 
-    <a id="btnAdmin" href="login.html">🔑 Admin</a>
+<!-- ================== FOOTER (GABUNGKAN, TANPA DUPLIKAT) ================== -->
+<footer style="margin-top:18px;padding:12px;background:#222;color:#fff;border-radius:8px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <div>© 2025 Pukis Lumer Aulia</div>
+    <div>Kontak Admin: <a href="https://wa.me/6281296668670" style="color:#fff">6281296668670</a></div>
+  </div>
 
-    <script>
-      // toggle floating icons
-      document.getElementById('toggleShareBtn').addEventListener('click', ()=>{
-        const el = document.getElementById('floatingIcons');
-        el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
-      });
-    </script>
+  <p style="margin-top:6px">Hak cipta dilindungi undang-undang.</p>
 
-    <!-- Firebase loader (optional) - only import if firebase.js exists -->
-    <script type="module">
+  <p>
+    Kunjungi lokasi kami:
+    <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" class="map-link">
+      <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" width="32">
+    </a>
+  </p>
+</footer>
+
+<!-- ================== FLOATING SHARE ICONS (PERTAHANKAN BAGIAN 1 – LEBIH LENGKAP) ================== -->
+<div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
+  <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+  <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+  <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+  <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+  <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+</div>
+
+<div class="toggle-float-btn" id="toggleShareBtn">
+  <i class="fa-solid fa-share-nodes"></i>
+</div>
+
+<script>
+const toggleBtn = document.getElementById("toggleShareBtn");
+const floatingIcons = document.getElementById("floatingIcons");
+
+toggleBtn.addEventListener("click", () => {
+  floatingIcons.classList.toggle("show");
+});
+</script>
+
+<!-- ================== TOMBOL ADMIN (DARI BAGIAN 1) ================== -->
+<a id="btnAdmin" href="login.html">🔑 Admin</a>
+
+<script type="module">
+  import { auth } from "./firebase.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+  const btnAdmin = document.getElementById("btnAdmin");
+  let userReady = false;
+  let currentUser = null;
+
+  onAuthStateChanged(auth, (user) => {
+    userReady = true;
+    currentUser = user;
+  });
+
+  btnAdmin.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!userReady) {
+      alert("Sedang memeriksa status login...");
+      return;
+    }
+    window.location.href = currentUser ? "admin.html" : "login.html";
+  });
+</script>
+
+<!-- ================== FIREBASE LOADER (DIGABUNG & DIRAPIKAN) ================== -->
+<script type="module">
+  try {
+    import { getContent } from "./firebase.js";
+
+    async function loadHomePage() {
       try {
-        import { getContent } from './firebase.js';
-        async function loadHomePage() {
-          try {
-            const data = await getContent('homepage');
-            if (!data) return;
-            if (data.promoImage && document.querySelector('#promoImage')) document.querySelector('#promoImage').src = data.promoImage;
-          } catch(e){ console.warn('firebase load failed', e); }
-        }
-        window.addEventListener('load', loadHomePage);
-      } catch(e){}
-    </script>
+        const data = await getContent("homepage");
+        if (!data) return;
 
-  </div> <!-- .container -->
+        if (data.promoImage && document.querySelector("#promoImage"))
+          document.querySelector("#promoImage").src = data.promoImage;
+      } catch (e) { console.warn("firebase load failed", e); }
+    }
+
+    window.addEventListener("load", loadHomePage);
+  } catch (e) {}
+</script>
+
 </body>
 </html>
