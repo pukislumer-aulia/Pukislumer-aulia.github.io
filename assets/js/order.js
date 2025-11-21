@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         calculatePrice(); // Update harga saat topping mode berubah
     }
 
-    $('input[name="ultraToppingMode"]').forEach(r => {
+    Array.from($('input[name="ultraToppingMode"]')).forEach(r => {
         r.addEventListener("change", () => {
             updateToppingDisplay();
             calculatePrice();
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
         calculatePrice();
     }
 
-    $$('.ultraTopping, .ultraTaburan').forEach(cb => {
+    Array.from($$('.ultraTopping, .ultraTaburan')).forEach(cb => {
         cb.addEventListener("change", toppingTaburanHandler);
     });
 
@@ -159,9 +159,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // ====== UPDATE HARGA OTOMATIS ======
     ultraIsi.addEventListener("change", calculatePrice);
     ultraJumlah.addEventListener("input", calculatePrice);
-    $('input[name="ultraJenis"]').forEach(r => r.addEventListener("change", calculatePrice));
-    $('input[name="ultraToppingMode"]').forEach(r => r.addEventListener("change", calculatePrice));
-    calculatePrice();
+    Array.from($('input[name="ultraJenis"]')).forEach(r => r.addEventListener("change", calculatePrice));
+    Array.from($('input[name="ultraToppingMode"]')).forEach(r => r.addEventListener("change", calculatePrice));
 
     // ================= order.js – Bagian 2 =================
     // ====== POPUP NOTA ======
@@ -247,12 +246,44 @@ document.addEventListener("DOMContentLoaded", () => {
             jumlahBox,
             total
         } = dataPesanan;
+
         let toppingText = topping.length > 0 ? topping.join(", ") : "-";
         let taburanText = taburan.length > 0 ? taburan.join(", ") : "-";
-        let msg = `Halo! Saya ingin memesan Pukis:\\\\\\\\n` + `Nama: ${nama}\\\\\\\\n` + `Jenis: ${jenis}\\\\\\\\n` + `${mode === "double" ? `Topping: ${toppingText}\\\\\\\\nTaburan: ${taburanText}\\\\\\\\n` : mode === "single" ? `Topping: ${toppingText}\\\\\\\\n` : ''}` + `Isi per Box: ${isi} pcs\\\\\\\\n` + `Jumlah Box: ${jumlahBox} box\\\\\\\\n` + `Harga: ${formatRp(total)}\\\\\\\\n` + `\\\\\\\\n` + `Jenis Pukis:\\\\\\\\n` + `1. Original\\\\\\\\n` + `2. Pandan\\\\\\\\n` + `Topping:\\\\\\\\n` + `a. Non Topping\\\\\\\\n` + `b. Single Topping, bisa pilih maksimal 5 Topping (coklat, tiramisu, vanilla, stroberi, cappucino)\\\\\\\\n` + `c. Duoble topping, bisa pilih maksimal 5 Topping single (coklat, tiramisu, vanilla, stroberi, cappucino) dan sekaligus bisa pilih maksimal 5 taburan (meses, keju, kacang, choco chip, Oreo)\\\\\\\\n` + `Harga sesuai isi per Box:\\\\\\\\n` + `Original:\\\\\\\\n` + `box kecil Non topping = 10.000\\\\\\\\n` + `box kecil single topping = 13.000\\\\\\\\n` + `box kecil duoble topping = 15.000\\\\\\\\n` + `Box besar Non Topping = 18.000\\\\\\\\n` + `box besar single topping = 25.000\\\\\\\\n` + `box besar duoble topping = 28.000\\\\\\\\n` + `Pandan:\\\\\\\\n` + `box kecil Non topping = 13.000\\\\\\\\n` + `box kecil single topping = 15.000\\\\\\\\n` + `box kecil duoble topping = 18.000\\\\\\\\n` + `Box besar Non Topping = 25.000\\\\\\\\n` + `box besar single topping = 28.000\\\\\\\\n` + `box besar duoble topping = 32.000`;
+        let msg = `Halo! Saya ingin memesan Pukis:\n` +
+            `Nama: ${nama}\n` +
+            `Jenis: ${jenis}\n` +
+            `${mode === "double" ? `Topping: ${toppingText}\nTaburan: ${taburanText}\n` : mode === "single" ? `Topping: ${toppingText}\n` : ''}` +
+            `Isi per Box: ${isi} pcs\n` +
+            `Jumlah Box: ${jumlahBox} box\n` +
+            `Harga: ${formatRp(total)}\n` +
+            `\n` +
+            `Jenis Pukis:\n` +
+            `1. Original\n` +
+            `2. Pandan\n` +
+            `Topping:\n` +
+            `a. Non Topping\n` +
+            `b. Single Topping, bisa pilih maksimal 5 Topping (coklat, tiramisu, vanilla, stroberi, cappucino)\n` +
+            `c. Double topping, bisa pilih maksimal 5 Topping single (coklat, tiramisu, vanilla, stroberi, cappucino) dan sekaligus bisa pilih maksimal 5 taburan (meses, keju, kacang, choco chip, Oreo)\n` +
+            `Harga sesuai isi per Box:\n` +
+            `Original:\n` +
+            `box kecil Non topping = 10.000\n` +
+            `box kecil single topping = 13.000\n` +
+            `box kecil double topping = 15.000\n` +
+            `Box besar Non Topping = 18.000\n` +
+            `box besar single topping = 25.000\n` +
+            `box besar double topping = 28.000\n` +
+            `Pandan:\n` +
+            `box kecil Non topping = 13.000\n` +
+            `box kecil single topping = 15.000\n` +
+            `box kecil double topping = 18.000\n` +
+            `Box besar Non Topping = 25.000\n` +
+            `box besar single topping = 28.000\n` +
+            `box besar double topping = 32.000`;
         const encodedMsg = encodeURIComponent(msg);
         window.open(`https://wa.me/${ADMIN_WA}?text=${encodedMsg}`, '_blank');
     });
+
+    calculatePrice();
 });
 
 async function generatePdf(data) {
@@ -409,6 +440,6 @@ async function generatePdf(data) {
 
     // Simpan PDF
     pdf.save(`Nota_PukisLumer_${Nama}.pdf`);
-            }
+}
 
 
