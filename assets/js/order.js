@@ -166,20 +166,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ====== Cetak / Download PDF ======
     notaPrint.addEventListener("click", () => {
+        const data = calculatePrice();
+        const nama = ultraNama.value.trim() || "-";
+        const wa = ultraWA.value.trim() || "-";
+        let toppingSelected = [];
+        let taburanSelected = [];
+
+        if (data.mode === "double") {
+            toppingSelected = getCheckedValues('input.ultraSingle');
+            taburanSelected = getCheckedValues('input.ultraDouble');
+        } else if (data.mode === "single") {
+            toppingSelected = getCheckedValues('input.ultraSingle');
+        }
+
+        let toppingText = toppingSelected.length > 0 ? toppingSelected.join(", ") : "-";
+        let taburanText = taburanSelected.length > 0 ? taburanSelected.join(", ") : "-";
+
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         doc.text("Nota Pemesanan Pukis Lumer Aulia", 14, 14);
 
-        // Menggunakan autoTable untuk membuat tabel dari HTML
+        // Data tabel
+        const tableData = [
+            ["Nama", nama],
+            ["Nomor WA", wa],
+            ["Jenis Pukis", data.jenis],
+            ["Isi per Box", `${data.isi} pcs`],
+            ...(data.mode === "double" ? [["Topping", toppingText], ["Taburan", taburanText]] : data.mode === "single" ? [["Topping", toppingText]] : []),
+            ["Jumlah Box", data.jumlahBox],
+            ["Harga per Box", formatRp(data.pricePerBox)],
+            ["Subtotal", formatRp(data.subtotal)],
+            ["Diskon", data.discount > 0 ? formatRp(data.discount) : "-"],
+            ["Total Bayar", formatRp(data.total)]
+        ];
+
+        // Menggunakan autoTable untuk membuat tabel dari data
         doc.autoTable({
-            html: '#notaContent',
+            body: tableData,
             startY: 20,
-            theme: 'grid', // Opsi tema: 'striped', 'grid', 'plain', 'css'
+            theme: 'grid',
             styles: {
                 fontSize: 9,
             },
             headerStyles: {
-                fillColor: [214, 51, 108], // Warna pink: #d6336c
+                fillColor: [214, 51, 108],
                 textColor: [255, 255, 255],
                 fontStyle: 'bold',
             },
@@ -217,3 +247,4 @@ document.addEventListener("DOMContentLoaded", () => {
         window.open(url, "_blank");
     });
 }); // end DOMContentLoaded
+        
