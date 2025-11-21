@@ -1,13 +1,10 @@
 // assets/js/order.js
-import { jsPDF } from "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
-import "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js";
-
 document.addEventListener("DOMContentLoaded", () => {
 
   // ================= CONFIG =================
   const BASE_PRICE = { Original: {5:10000,10:18000}, Pandan:{5:12000,10:22000} };
   const TOPPING_EXTRA = { non:0, single:2000, double:4000 };
-  const ADMIN_WA = "6281296668670"; // Nomor admin WA
+  const ADMIN_WA = "6281296668670";
 
   // ================= SELECTORS =================
   const $ = s => document.querySelector(s);
@@ -31,9 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const notaSendAdmin = $("#notaSendAdmin");
 
   // ================= HELPERS =================
-  const formatRp = n => isNaN(n)?"Rp0":"Rp "+Number(n).toLocaleString("id-ID");
-  const getSelectedRadioValue = name => { const r = document.querySelector(`input[name="${name}"]:checked`); return r?r.value:null; };
-  const getCheckedValues = selector => $$(selector).filter(ch=>ch.checked).map(ch=>ch.value);
+  const formatRp = n => isNaN(n) ? "Rp0" : "Rp " + Number(n).toLocaleString("id-ID");
+  const getSelectedRadioValue = name => { const r = document.querySelector(`input[name="${name}"]:checked`); return r ? r.value : null; };
+  const getCheckedValues = selector => $$(selector).filter(ch => ch.checked).map(ch => ch.value);
 
   // Batasi max checkbox
   function enforceMax(selector,max){
@@ -65,10 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const basePerBox = (BASE_PRICE[jenis] && BASE_PRICE[jenis][isi]) || BASE_PRICE["Original"][5];
     const toppingExtra = TOPPING_EXTRA[mode]||0;
-    const pricePerBox = basePerBox+toppingExtra;
-    const subtotal = pricePerBox*jumlah;
+    const pricePerBox = basePerBox + toppingExtra;
+    const subtotal = pricePerBox * jumlah;
     const discount = 0;
-    const grandTotal = subtotal-discount;
+    const grandTotal = subtotal - discount;
 
     ultraPricePerBox.textContent = formatRp(pricePerBox);
     ultraSubtotal.textContent = formatRp(subtotal);
@@ -114,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ================= GENERATE PDF =================
   function generateInvoicePDF(order){
+    if(typeof jsPDF==="undefined"){ alert("jsPDF belum dimuat!"); return; }
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -136,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ["Subtotal",formatRp(order.subtotal)]
     ];
 
-    doc.autoTable({
+    if(doc.autoTable) doc.autoTable({
       startY:60,
       head:[["Keterangan","Isi"]],
       body,
@@ -177,7 +175,6 @@ Invoice: ${order.id}`;
     if(!ultraNama.value||!ultraWA.value) return alert("Isi nama dan WA terlebih dahulu.");
     const order = buildOrderObject(); lastOrder=order;
 
-    // Nota popup
     notaContent.innerHTML=`
       <div>
         <h4>Invoice: ${order.id}</h4>
