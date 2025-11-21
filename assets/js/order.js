@@ -1,6 +1,3 @@
-w.open(url, "_blank");
-    });
-}); // end DOMContentLoaded
 // ================= order.js – Bagian 1 =================
 document.addEventListener("DOMContentLoaded", () => {
     // === Helper ===
@@ -58,8 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ultraDoubleGroup.style.display = (mode === "double") ? "block" : "none";
 
         // reset checkbox
-        $$('input.ultraSingle').forEach(cb => cb.checked = false);
-        $$('input.ultraDouble').forEach(cb => cb.checked = false);
+        $$('#ultraSingleGroup input[type="checkbox"]').forEach(cb => cb.checked = false);
+        $$('#ultraDoubleGroup input[type="checkbox"]').forEach(cb => cb.checked = false);
 
         calculatePrice(); // Update harga saat topping mode berubah
     }
@@ -76,12 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // ====== Maksimal 5 topping dan 5 taburan ======
     $$('#ultraSingleGroup input[type="checkbox"], #ultraDoubleGroup input[type="checkbox"]').forEach(cb => {
         cb.addEventListener("change", () => {
-            const checkedTopping = getCheckedValues('#ultraSingleGroup input[type="checkbox"]');
-            const checkedTaburan = getCheckedValues('#ultraDoubleGroup input[type="checkbox"]');
+            const checkedSingleTopping = getCheckedValues('#ultraSingleGroup input[name="singleTopping"]');
+            const checkedDoubleTopping = getCheckedValues('#ultraDoubleGroup input[name="doubleTopping"]');
+            const checkedTaburan = getCheckedValues('#ultraDoubleGroup input[name="taburan"]');
             const mode = getSelectedRadioValue("ultraToppingMode");
 
             if (mode === "double") {
-                if (checkedTopping.length > 5) {
+                if (checkedDoubleTopping.length > 5) {
                     cb.checked = false;
                     alert("Maksimal 5 topping yang dapat dipilih.");
                     return;
@@ -92,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
             } else if (mode === "single") {
-                if (checkedTopping.length > 5) {
+                if (checkedSingleTopping.length > 5) {
                     cb.checked = false;
                     alert("Maksimal 5 topping yang dapat dipilih.");
                     return;
@@ -127,8 +125,8 @@ document.addEventListener("DOMContentLoaded", () => {
             jenis: jenis,
             isi: isi,
             mode: mode,
-            topping: getCheckedValues('#ultraSingleGroup input[type="checkbox"]'),
-            taburan: getCheckedValues('#ultraDoubleGroup input[type="checkbox"]'),
+            topping: mode === "single" ? getCheckedValues('#ultraSingleGroup input[name="singleTopping"]') : getCheckedValues('#ultraDoubleGroup input[name="doubleTopping"]'),
+            taburan: mode === "double" ? getCheckedValues('#ultraDoubleGroup input[name="taburan"]') : [],
             jumlahBox: jumlahBox,
             pricePerBox: pricePerBox,
             subtotal: subtotal,
@@ -145,8 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     $$('input[name="ultraJenis"]').forEach(r => r.addEventListener("change", calculatePrice));
 
     calculatePrice();
-
-    // ================= order.js – Bagian 2 =================
+                // ================= order.js – Bagian 2 =================
     // ====== POPUP NOTA ======
     function generateNota() {
         const {
