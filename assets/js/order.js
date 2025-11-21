@@ -1,222 +1,285 @@
-// FILE: assets/js/order.js (PREMIUM VERSION)
+/****************************************************
+ *  ORDER.JS PREMIUM – PUKIS LUMER AULIA
+ *  Fitur:
+ *  - Harga otomatis
+ *  - Dropdown dinamis Non/Single/Double
+ *  - Max 5 topping, max 5 taburan
+ *  - Nota PDF premium
+ *  - Kirim WA admin
+ ****************************************************/
 
-// ======== IMPORT LIBRARY ========
 import { jsPDF } from "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
 import "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js";
 
-const ADMIN_WA = "6281296668670";
+/* ======================
+    KONFIGURASI HARGA
+======================= */
 
-// ======== HARGA MENU ========
-const HARGA = {
-    Original: {
-        5: { non: 10000, single: 13000, double: 15000 },
-        10: { non: 18000, single: 25000, double: 28000 }
+const PRICE = {
+    jenis: {
+        original: 0,
+        pandan: 0
     },
-    Pandan: {
-        5: { non: 13000, single: 15000, double: 18000 },
-        10: { non: 25000, single: 28000, double: 32000 }
+    topping: {
+        non: 0,
+        single: 2000,
+        double: 4000
+    },
+    isiBox: {
+        5: 8000,
+        10: 15000
     }
 };
 
-function formatRp(n) {
-    return "Rp " + Number(n).toLocaleString("id-ID");
-}
-function getCheckedValues(selector) {
-    return Array.from(document.querySelectorAll(selector + ':checked')).map(el => el.value);
-}
-
-// ======== TOPPING VISIBILITY ========
-function updateToppingVisibility() {
-    const mode = document.querySelector('input[name="ultraToppingMode"]:checked')?.value || 'non';
-
-    document.getElementById("ultraSingleGroup").style.display =
-        (mode === "single" || mode === "double") ? "block" : "none";
-
-    document.getElementById("ultraDoubleGroup").style.display =
-        (mode === "double") ? "block" : "none";
-}
-document.querySelectorAll('input[name="ultraToppingMode"]').forEach(r => r.addEventListener('change', updateToppingVisibility));
-updateToppingVisibility();
-
-// ======== HITUNG HARGA ========
-function calcUltraPrice() {
-    const jenis = document.querySelector('input[name="ultraJenis"]:checked')?.value || 'Original';
-    const isi = Number(document.getElementById("ultraIsi").value);
-    const mode = document.querySelector('input[name="ultraToppingMode"]:checked')?.value || 'non';
-    const jumlah = Number(document.getElementById("ultraJumlah").value) || 1;
-
-    const keyMode = mode === "non" ? "non" : (mode === "single" ? "single" : "double");
-    const pricePerBox = HARGA[jenis]?.[isi]?.[keyMode] || 0;
-
-    const subTotal = pricePerBox * jumlah;
-    const discount = 0;
-    const grandTotal = subTotal - discount;
-
-    document.getElementById("ultraPricePerBox").innerText = formatRp(pricePerBox);
-    document.getElementById("ultraSubtotal").innerText = formatRp(subTotal);
-    document.getElementById("ultraDiscount").innerText = discount ? `- ${formatRp(discount)}` : "-";
-    document.getElementById("ultraGrandTotal").innerText = formatRp(grandTotal);
-
-    return { pricePerBox, subTotal, discount, grandTotal };
-}
-document.querySelectorAll('#ultraIsi, #ultraJumlah, input[name="ultraJenis"], input[name="ultraToppingMode"]').forEach(el => el.addEventListener('change', calcUltraPrice));
-document.querySelectorAll('.ultraSingle, .ultraDouble').forEach(el => el.addEventListener('change', calcUltraPrice));
-window.addEventListener('load', calcUltraPrice);
+const ADMIN_WA = "62812xxxxxxx"; // ganti nomor admin
 
 
-// =======================================================
-// ★ PREMIUM PDF GENERATOR (LOGO + WATERMARK + TTD)
-// =======================================================
-export function generatePremiumNota(order) {
-    const doc = new jsPDF("p", "mm", "a4");
+/* =============================
+    ELEMENT FORM
+============================= */
 
-    // ===== WATERMARK EMAS =====
-    doc.setFontSize(40);
-    doc.setTextColor(212, 175, 55);
-    doc.text("PUKIS LUMER AULIA", 25, 150, {
-        angle: 45,
-        opacity: 0.13
+const jenisInput = document.getElementById("jenis");
+const isiBoxInput = document.getElementById("isiBox");
+const jumlahBoxInput = document.getElementById("jumlahBox");
+const toppingModeInput = document.getElementById("toppingMode");
+
+const singleContainer = document.getElementById("singleToppingContainer");
+const doubleContainer = document.getElementById("doubleToppingContainer");
+
+const hargaBoxOutput = document.getElementById("hargaBox");
+const totalHargaOutput = document.getElementById("totalHarga");
+
+const btnSubmit = document.getElementById("btnOrder");
+const btnPDF = document.getElementById("btnPDF");
+const btnWA = document.getElementById("btnWA");
+
+// Data pesanan terakhir
+let lastOrder = null;
+
+
+/* ============================
+    ATURAN TOPPING
+============================= */
+
+const toppingList = ["Coklat", "Cappucino", "Vanilla", "Stroberi", "Tiramisu"];
+const taburanList = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
+
+
+/* ==================================================
+   FUNGSI MEMBUAT CHECKBOX DINAMIS
+=================================================== */
+
+function renderCheckbox(container, items, className, maxSelect = 5) {
+    container.innerHTML = "";
+    items.forEach(item => {
+        const id = `${className}-${item}`;
+
+        container.innerHTML += `
+            <label class="check-item">
+                <input type="checkbox" class="${className}" value="${item}">
+                ${item}
+            </label>
+        `;
     });
 
-    // ===== LOGO =====
-    doc.addImage("assets/images/logo.png", "PNG", 15, 10, 30, 30);
+    // batas maksimal
+    const checkboxes = container.querySelectorAll(`.${className}`);
+    checkboxes.forEach(cb => {
+        cb.addEventListener("change", () => {
+            const selected = [...checkboxes].filter(c => c.checked).length;
+            if (selected > maxSelect) {
+                cb.checked = false;
+                alert(`Maksimal hanya ${maxSelect} pilihan!`);
+            }
+        });
+    });
+}
 
-    // ===== TITLE =====
+
+/* ==================================================
+    MUNCULKAN TOPPING BERDASARKAN MODE
+=================================================== */
+
+function updateToppingVisibility() {
+    const mode = toppingModeInput.value;
+
+    singleContainer.style.display = "none";
+    doubleContainer.style.display = "none";
+
+    if (mode === "single") {
+        renderCheckbox(singleContainer, toppingList, "singleCB");
+        singleContainer.style.display = "block";
+    }
+
+    if (mode === "double") {
+        renderCheckbox(singleContainer, toppingList, "singleCB");
+        renderCheckbox(doubleContainer, taburanList, "doubleCB");
+        singleContainer.style.display = "block";
+        doubleContainer.style.display = "block";
+    }
+
+    hitungHarga();
+}
+
+
+/* ==================================================
+    HITUNG HARGA OTOMATIS
+=================================================== */
+
+function hitungHarga() {
+    const jenis = jenisInput.value;
+    const isi = Number(isiBoxInput.value);
+    const toppingMode = toppingModeInput.value;
+    const jlhBox = Number(jumlahBoxInput.value);
+
+    if (!isi || !jlhBox) return;
+
+    let pricePerBox = PRICE.isiBox[isi] + PRICE.topping[toppingMode];
+
+    hargaBoxOutput.innerText = "Rp " + pricePerBox.toLocaleString();
+
+    const total = pricePerBox * jlhBox;
+    totalHargaOutput.innerText = "Rp " + total.toLocaleString();
+
+    return {
+        pricePerBox,
+        total
+    };
+}
+
+
+/* ==================================================
+    AMBIL DATA TOPPING
+=================================================== */
+
+function getSelected(className) {
+    return [...document.querySelectorAll(`.${className}:checked`)].map(cb => cb.value);
+}
+
+
+/* ==================================================
+     BUAT OBJEK ORDER
+=================================================== */
+
+function createOrder() {
+    const harga = hitungHarga();
+
+    return {
+        invoiceID: "INV" + Date.now(),
+        nama: document.getElementById("nama").value,
+        buyerWA: document.getElementById("wa").value,
+
+        jenis: jenisInput.value,
+        toppingMode: toppingModeInput.value,
+        isiPerBox: Number(isiBoxInput.value),
+        jumlahBox: Number(jumlahBoxInput.value),
+
+        singleList: getSelected("singleCB"),
+        doubleList: getSelected("doubleCB"),
+
+        pricePerBox: harga.pricePerBox,
+        subTotal: harga.total,
+        discount: 0,
+        grandTotal: harga.total
+    };
+}
+
+
+/* ==================================================
+    PDF PREMIUM
+=================================================== */
+
+function generatePremiumNota(order) {
+    const doc = new jsPDF();
+
+    // watermark emas
+    doc.setFontSize(40);
+    doc.setTextColor(212, 175, 55);
+    doc.text("PUKIS LUMER AULIA", 20, 150, { angle: 45, opacity: 0.15 });
+
+    // logo
+    doc.addImage("assets/images/logo.png", "PNG", 15, 10, 35, 35);
+
+    // judul
     doc.setFontSize(18);
-    doc.setTextColor(40, 40, 40);
     doc.text("INVOICE PEMBELIAN", 105, 20, null, null, "center");
-
     doc.setFontSize(12);
-    doc.text(`Invoice: ${order.invoiceID}`, 105, 28, null, null, "center");
+    doc.text(`No: ${order.invoiceID}`, 105, 28, null, null, "center");
 
-    // ===== CUSTOMER INFO =====
-    doc.setFontSize(12);
-    doc.text(`Nama Pembeli : ${order.nama}`, 15, 55);
-    doc.text(`Nomor WA     : ${order.buyerWA}`, 15, 62);
+    // pembeli
+    doc.text(`Nama: ${order.nama}`, 15, 55);
+    doc.text(`WA: ${order.buyerWA}`, 15, 62);
 
-    // ===== ORDER TABLE =====
+    // tabel
     doc.autoTable({
         startY: 75,
         head: [["Keterangan", "Isi"]],
         body: [
             ["Jenis", order.jenis],
-            ["Isi per Box", order.isiPerBox + " pcs"],
+            ["Topping Mode", order.toppingMode],
+            ["Topping Single", order.singleList.join(", ") || "-"],
+            ["Taburan Double", order.doubleList.join(", ") || "-"],
+            ["Isi/Box", order.isiPerBox + " pcs"],
             ["Jumlah Box", order.jumlahBox],
-            ["Mode Topping", order.toppingMode],
-            ["Rasa Single", order.singleList || "-"],
-            ["Taburan Double", order.doubleList || "-"],
-            ["Harga per Box", formatRp(order.pricePerBox)],
-            ["Subtotal", formatRp(order.subTotal)],
-            ["Diskon", order.discount ? formatRp(order.discount) : "-"],
-            ["Total Bayar", formatRp(order.grandTotal)]
+            ["Harga/Box", "Rp " + order.pricePerBox.toLocaleString()],
+            ["Total", "Rp " + order.grandTotal.toLocaleString()]
         ],
         theme: "grid",
-        headStyles: {
-            fillColor: [212, 175, 55],  // GOLD
-            textColor: 20
-        },
-        styles: { fontSize: 11 }
+        headStyles: { fillColor: [212, 175, 55] }
     });
 
-    // ===== TANDA TANGAN DIGITAL =====
-    doc.addImage("assets/images/ttd.png", "PNG", 140, 220, 45, 22);
+    // tanda tangan digital
+    doc.addImage("assets/images/ttd.png", "PNG", 140, 220, 40, 20);
     doc.text("Admin Pukis Lumer Aulia", 145, 245);
-
-    // ===== FOOTER =====
-    doc.setFontSize(10);
-    doc.text("Terima kasih telah memesan di Pukis Lumer Aulia ❤️", 105, 285, null, null, "center");
 
     return doc;
 }
 
 
-// =======================================================
-// ★ FORM SUBMIT HANDLER
-// =======================================================
-let lastOrder = null;
+/* ==================================================
+    KIRIM WA
+=================================================== */
 
-document.getElementById("formUltra")?.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const nama = document.getElementById("ultraNama").value.trim();
-    let wa = document.getElementById("ultraWA").value.trim();
-
-    if (!nama || !wa) return alert("Isi nama & WA!");
-
-    if (/^0/.test(wa)) wa = wa.replace(/^0/, "62");
-
-    const jenis = document.querySelector('input[name="ultraJenis"]:checked').value;
-    const isi = Number(document.getElementById("ultraIsi").value);
-    const mode = document.querySelector('input[name="ultraToppingMode"]:checked').value;
-
-    const jumlah = Number(document.getElementById("ultraJumlah").value);
-    const singleList = getCheckedValues('.ultraSingle').join(', ');
-    const doubleList = getCheckedValues('.ultraDouble').join(', ');
-
-    const calc = calcUltraPrice();
-
-    const invoiceID =
-        `PLA-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${String(Date.now()).slice(-6)}`;
-
-    const order = lastOrder = {
-        invoiceID,
-        createdAt: new Date().toISOString(),
-        nama,
-        buyerWA: wa,
-        jenis,
-        isiPerBox: isi,
-        jumlahBox: jumlah,
-        toppingMode:
-            mode === 'non' ? 'Non Topping' :
-            mode === 'single' ? 'Single Topping' : 'Double Topping',
-        singleList,
-        doubleList,
-        pricePerBox: calc.pricePerBox,
-        subTotal: calc.subTotal,
-        discount: calc.discount,
-        grandTotal: calc.grandTotal
-    };
-
-    // DISPLAY NOTA POPUP (HTML)
-    document.getElementById("notaContent").innerHTML = `
-        <strong>Invoice:</strong> ${order.invoiceID}<br>
-        <strong>Nama:</strong> ${order.nama}<br>
-        <strong>Total:</strong> ${formatRp(order.grandTotal)}
-    `;
-    document.getElementById("notaContainer").style.display = "flex";
-
-    // === WhatsApp auto-send ===
-    const waMsg =
-`Halo Admin,
-Saya ingin memesan Pukis:
+function sendWA(order) {
+    const text = `
+Halo! Saya ingin memesan Pukis:
 
 Nama: ${order.nama}
 Jenis: ${order.jenis}
+Topping Mode: ${order.toppingMode}
+Topping Single: ${order.singleList.join(", ") || "-"}
+Taburan Double: ${order.doubleList.join(", ") || "-"}
 Isi per Box: ${order.isiPerBox} pcs
-Jumlah Box: ${order.jumlahBox}
-Rasa: ${order.singleList || "-"}
-Taburan: ${order.doubleList || "-"}
-Total Bayar: ${formatRp(order.grandTotal)}
+Jumlah Box: ${order.jumlahBox} box
+Total Bayar: Rp ${order.grandTotal.toLocaleString()}
+`;
 
-Invoice: ${order.invoiceID}
-WA Pembeli: ${order.buyerWA}`;
+    window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(text)}`);
+}
 
-    window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(waMsg)}`, "_blank");
+
+/* ==================================================
+    EVENT LISTENER
+=================================================== */
+
+toppingModeInput.addEventListener("change", updateToppingVisibility);
+jenisInput.addEventListener("change", hitungHarga);
+isiBoxInput.addEventListener("change", hitungHarga);
+jumlahBoxInput.addEventListener("change", hitungHarga);
+
+btnSubmit.addEventListener("click", () => {
+    lastOrder = createOrder();
+    alert("Pesanan berhasil dibuat!");
 });
 
-
-// =======================================================
-// ★ TOMBOL CETAK & KIRIM WA ADMIN
-// =======================================================
-document.getElementById("notaPrint")?.addEventListener("click", () => {
-    if (!lastOrder) return;
+btnPDF.addEventListener("click", () => {
     const pdf = generatePremiumNota(lastOrder);
     pdf.save(`Invoice-${lastOrder.invoiceID}.pdf`);
 });
 
-document.getElementById("notaSendAdmin")?.addEventListener("click", () => {
-    if (!lastOrder) return;
-    const text =
-        `Halo Admin, berikut invoice: ${lastOrder.invoiceID}\nTotal: ${formatRp(lastOrder.grandTotal)}`;
-    window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(text)}`);
+btnWA.addEventListener("click", () => {
+    sendWA(lastOrder);
 });
+
+updateToppingVisibility();
+hitungHarga();
