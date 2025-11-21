@@ -4,18 +4,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const $ = s => document.querySelector(s);
     const $$ = s => document.querySelectorAll(s);
     const formatRp = n => "Rp" + n.toLocaleString('id-ID');
-
     const BASE_PRICE = {
         "Original": {
-            "5": { "non": 10000, "single": 13000, "double": 15000 },
-            "10": { "non": 18000, "single": 25000, "double": 28000 }
+            "5": {
+                "non": 10000,
+                "single": 13000,
+                "double": 15000
+            },
+            "10": {
+                "non": 18000,
+                "single": 25000,
+                "double": 28000
+            }
         },
         "Pandan": {
-            "5": { "non": 13000, "single": 15000, "double": 18000 },
-            "10": { "non": 25000, "single": 28000, "double": 32000 }
+            "5": {
+                "non": 13000,
+                "single": 15000,
+                "double": 18000
+            },
+            "10": {
+                "non": 25000,
+                "single": 28000,
+                "double": 32000
+            }
         }
     };
-
     const ADMIN_WA = "6281296668670";
     const ultraNama = $("#ultraNama");
     const ultraWA = $("#ultraWA");
@@ -34,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const notaClose = $("#notaClose");
     const notaPrint = $("#notaPrint");
     const notaSendAdmin = $("#ultraSendAdmin");
-
     let dataPesanan = {}; // Menyimpan data pesanan
 
     function getSelectedRadioValue(name) {
@@ -43,9 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function getCheckedValues(selector) {
-        return Array.from(document.querySelectorAll(selector))
-            .filter(c => c.checked)
-            .map(c => c.value);
+        return Array.from(document.querySelectorAll(selector)).filter(c => c.checked).map(c => c.value);
     }
 
     // ====== Topping Mode ======
@@ -53,16 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const mode = getSelectedRadioValue("ultraToppingMode");
         ultraSingleGroup.style.display = (mode === "single") ? "block" : "none";
         ultraDoubleGroup.style.display = (mode === "double") ? "block" : "none";
-
         // reset checkbox
-        $$('.ultraSingleTopping').forEach(cb => cb.checked = false);
-        $$('.ultraDoubleTopping').forEach(cb => cb.checked = false);
+        $$('.ultraTopping').forEach(cb => cb.checked = false);
         $$('.ultraTaburan').forEach(cb => cb.checked = false);
-
         calculatePrice(); // Update harga saat topping mode berubah
     }
 
-    $$('input[name="ultraToppingMode"]').forEach(r => {
+    $('input[name="ultraToppingMode"]').forEach(r => {
         r.addEventListener("change", () => {
             updateToppingDisplay();
             calculatePrice();
@@ -74,12 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // ====== Maksimal 5 topping dan 5 taburan ======
     function toppingTaburanHandler(event) {
         const mode = getSelectedRadioValue("ultraToppingMode");
-        const checkedSingleTopping = getCheckedValues('.ultraSingleTopping');
-        const checkedDoubleTopping = getCheckedValues('.ultraDoubleTopping');
+        const checkedTopping = getCheckedValues('.ultraTopping');
         const checkedTaburan = getCheckedValues('.ultraTaburan');
 
         if (mode === "double") {
-            if (checkedDoubleTopping.length > 5 && event.target.classList.contains('ultraDoubleTopping')) {
+            if (checkedTopping.length > 5 && event.target.classList.contains('ultraTopping')) {
                 event.target.checked = false;
                 alert("Maksimal 5 topping yang dapat dipilih.");
                 return;
@@ -90,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
         } else if (mode === "single") {
-            if (checkedSingleTopping.length > 5 && event.target.classList.contains('ultraSingleTopping')) {
+            if (checkedTopping.length > 5 && event.target.classList.contains('ultraTopping')) {
                 event.target.checked = false;
                 alert("Maksimal 5 topping yang dapat dipilih.");
                 return;
@@ -99,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
         calculatePrice();
     }
 
-    $$('.ultraSingleTopping, .ultraDoubleTopping, .ultraTaburan').forEach(cb => {
+    $$('.ultraTopping, .ultraTaburan').forEach(cb => {
         cb.addEventListener("change", toppingTaburanHandler);
     });
 
@@ -109,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const isi = ultraIsi.value || "5";
         const mode = getSelectedRadioValue("ultraToppingMode") || "non";
         const jumlahBox = parseInt(ultraJumlah.value || 1);
-
         let pricePerBox = BASE_PRICE[jenis][isi][mode];
 
         // Validasi harga per box
@@ -138,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
             jenis: jenis,
             isi: isi,
             mode: mode,
-            topping: mode === "single" ? getCheckedValues('.ultraSingleTopping') : getCheckedValues('.ultraDoubleTopping'),
+            topping: getCheckedValues('.ultraTopping'),
             taburan: mode === "double" ? getCheckedValues('.ultraTaburan') : [],
             jumlahBox: jumlahBox,
             pricePerBox: pricePerBox,
@@ -153,9 +159,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // ====== UPDATE HARGA OTOMATIS ======
     ultraIsi.addEventListener("change", calculatePrice);
     ultraJumlah.addEventListener("input", calculatePrice);
-    $$('input[name="ultraJenis"]').forEach(r => r.addEventListener("change", calculatePrice));
-    $$('input[name="ultraToppingMode"]').forEach(r => r.addEventListener("change", calculatePrice));
-
+    $('input[name="ultraJenis"]').forEach(r => r.addEventListener("change", calculatePrice));
+    $('input[name="ultraToppingMode"]').forEach(r => r.addEventListener("change", calculatePrice));
     calculatePrice();
 
     // ================= order.js – Bagian 2 =================
@@ -175,22 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
             discount,
             total
         } = dataPesanan;
-
         let toppingText = topping.length > 0 ? topping.join(", ") : "-";
         let taburanText = taburan.length > 0 ? taburan.join(", ") : "-";
-
-        let html = `<p><strong>Nama:</strong> ${nama}</p>
-                    <p><strong>Nomor WA:</strong> ${wa}</p>
-                    <p><strong>Jenis Pukis:</strong> ${jenis}</p>
-                    <p><strong>Isi per Box:</strong> ${isi} pcs</p>
-                    ${mode === "double" ? `<p><strong>Topping:</strong> ${toppingText}</p><p><strong>Taburan:</strong> ${taburanText}</p>` : mode === "single" ? `<p><strong>Topping:</strong> ${toppingText}</p>` : ''}
-                    <p><strong>Jumlah Box:</strong> ${jumlahBox}</p>
-                    <hr>
-                    <p><strong>Harga per Box:</strong> ${formatRp(pricePerBox)}</p>
-                    <p><strong>Subtotal:</strong> ${formatRp(subtotal)}</p>
-                    <p><strong>Diskon:</strong> ${discount > 0 ? formatRp(discount) : "-"}</p>
-                    <p><strong>Total Bayar:</strong> ${formatRp(total)}</p>`;
-
+        let html = `<p><strong>Nama:</strong> ${nama}</p><p><strong>Nomor WA:</strong> ${wa}</p><p><strong>Jenis Pukis:</strong> ${jenis}</p><p><strong>Isi per Box:</strong> ${isi} pcs</p>${mode === "double" ? `<p><strong>Topping:</strong> ${toppingText}</p><p><strong>Taburan:</strong> ${taburanText}</p>` : mode === "single" ? `<p><strong>Topping:</strong> ${toppingText}</p>` : ''}<p><strong>Jumlah Box:</strong> ${jumlahBox}</p><hr><p><strong>Harga per Box:</strong> ${formatRp(pricePerBox)}</p><p><strong>Subtotal:</strong> ${formatRp(subtotal)}</p><p><strong>Diskon:</strong> ${discount > 0 ? formatRp(discount) : "-"}</p><p><strong>Total Bayar:</strong> ${formatRp(total)}</p>`;
         notaContent.innerHTML = html;
     }
 
@@ -222,16 +214,15 @@ document.addEventListener("DOMContentLoaded", () => {
             logo,
             ttd
         } = dataPesanan;
-
         // Data nota
         const notaData = {
-            nama: nama,
-            wa: wa,
-            jenis: jenis,
-            isi: isi,
-            mode: mode,
-            topping: topping,
-            taburan: taburan,
+            Nama: nama,
+            Wa: wa,
+            Jenis: jenis,
+            Isi: isi,
+            Mode: mode,
+            Topping: topping,
+            Taburan: taburan,
             jumlahBox: jumlahBox,
             pricePerBox: pricePerBox,
             subtotal: subtotal,
@@ -240,7 +231,6 @@ document.addEventListener("DOMContentLoaded", () => {
             logo: logo,
             ttd: ttd
         };
-
         generatePdf(notaData);
     });
 
@@ -257,114 +247,168 @@ document.addEventListener("DOMContentLoaded", () => {
             jumlahBox,
             total
         } = dataPesanan;
-
         let toppingText = topping.length > 0 ? topping.join(", ") : "-";
         let taburanText = taburan.length > 0 ? taburan.join(", ") : "-";
+        let msg = `Halo! Saya ingin memesan Pukis:\\\\\\\\n` + `Nama: ${nama}\\\\\\\\n` + `Jenis: ${jenis}\\\\\\\\n` + `${mode === "double" ? `Topping: ${toppingText}\\\\\\\\nTaburan: ${taburanText}\\\\\\\\n` : mode === "single" ? `Topping: ${toppingText}\\\\\\\\n` : ''}` + `Isi per Box: ${isi} pcs\\\\\\\\n` + `Jumlah Box: ${jumlahBox} box\\\\\\\\n` + `Harga: ${formatRp(total)}\\\\\\\\n` + `\\\\\\\\n` + `Jenis Pukis:\\\\\\\\n` + `1. Original\\\\\\\\n` + `2. Pandan\\\\\\\\n` + `Topping:\\\\\\\\n` + `a. Non Topping\\\\\\\\n` + `b. Single Topping, bisa pilih maksimal 5 Topping (coklat, tiramisu, vanilla, stroberi, cappucino)\\\\\\\\n` + `c. Duoble topping, bisa pilih maksimal 5 Topping single (coklat, tiramisu, vanilla, stroberi, cappucino) dan sekaligus bisa pilih maksimal 5 taburan (meses, keju, kacang, choco chip, Oreo)\\\\\\\\n` + `Harga sesuai isi per Box:\\\\\\\\n` + `Original:\\\\\\\\n` + `box kecil Non topping = 10.000\\\\\\\\n` + `box kecil single topping = 13.000\\\\\\\\n` + `box kecil duoble topping = 15.000\\\\\\\\n` + `Box besar Non Topping = 18.000\\\\\\\\n` + `box besar single topping = 25.000\\\\\\\\n` + `box besar duoble topping = 28.000\\\\\\\\n` + `Pandan:\\\\\\\\n` + `box kecil Non topping = 13.000\\\\\\\\n` + `box kecil single topping = 15.000\\\\\\\\n` + `box kecil duoble topping = 18.000\\\\\\\\n` + `Box besar Non Topping = 25.000\\\\\\\\n` + `box besar single topping = 28.000\\\\\\\\n` + `box besar duoble topping = 32.000`;
+        const encodedMsg = encodeURIComponent(msg);
+        window.open(`https://wa.me/${ADMIN_WA}?text=${encodedMsg}`, '_blank');
+    });
+});
 
-        let msg = `Halo! Saya ingin memesan Pukis:\\n` +
-            `Nama: ${nama}\\n` +
-            `Jenis: ${jenis}\\n` +
-            `${mode === "double" ? `Topping: ${toppingText}\\nTaburan: ${taburanText}\\n` : mode === "single" ? `Topping: ${toppingText}\\n` : ''}` +
-            `Isi per Box: ${isi} pcs\\n` +
-            `Jumlah Box: ${jumlahBox} box\\n` +
-            `Harga: ${formatRp(total)}\\n` +
-            `\\n` +
-            `Jenis Pukis:\\n` +
-            `1. Original\\n` +
-            `2. Pandan\\n` +
-            `Topping:\\n` +
-            `a. Non Topping\\n` +
-            `b. Single Topping, bisa pilih maksimal 5 Topping (coklat, tiramisu, vanilla, stroberi, cappucino)\\n` +
-            `c. Duoble topping, bisa pilih maksimal 5 Topping single (coklat, tiramisu, vanilla, stroberi, cappucino) dan sekaligus bisa pilih maksimal 5 taburan (meses, keju, kacang, choco chip, Oreo)\\n` +
-            `Harga sesuai isi per Box:\\n` +
-            `Original:\\n` +
-            `box kecil Non topping = 10.000\\n` +
-            `box kecil single topping = 13.000\\n` +
-            `box kecil duoble topping = 15.000\\n` +
-            `Box besar Non Topping = 18.000\\n` +
-            `box besar single topping = 25.000\\n` +
-            `box besar duoble topping = 28.000\\n` +
-            `Pandan:\\n` +
-            `box kecil Non topping = 13.000\\n` +
-            `box kecil single topping = 15.000\\n` +
-            `box kecil duoble topping = 18.000\\n` +
-            `Box besar Non Topping = 25.000\\n` +
-            `box besar single topping = 28.000\\n` +
-            `box besar duoble topping = 32.000`;
+async function generatePdf(data) {
+    const {
+        Nama,
+        Wa,
+        Jenis,
+        Isi,
+        Mode,
+        Topping,
+        Taburan,
+        jumlahBox,
+        pricePerBox,
+        subtotal,
+        discount,
+        total,
+        logo,
+        ttd
+    } = data;
 
-        const url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
-        window.open(url, "_blank");
+    const { jsPDF } = window.jspdf;
+
+    const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
     });
 
-    // Fungsi untuk menghasilkan PDF dengan data nota (perlu diimplementasikan)
-    function generatePdf(notaData) {
-        console.log("Data nota untuk PDF:", notaData);
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
 
-        // Contoh implementasi dengan jsPDF (perlu penyesuaian lebih lanjut)
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
+    // Fungsi untuk menambahkan watermark
+    const addWatermark = (doc, text) => {
+        doc.setFontSize(30);
+        doc.setTextColor(200);
+        const x = pageWidth / 2;
+        const y = pageHeight / 2;
+        doc.text(text, x, y, {
+            align: 'center',
+            angle: 45
         });
+    };
 
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
+    // Tambahkan watermark
+    addWatermark(pdf, 'Pukis Lumer Aulia');
 
-        // Fungsi untuk menambahkan gambar dengan promise
-        function addImageToDoc(doc, imgUrl, x, y, width, height) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                img.onload = () => {
-                    doc.addImage(img, 'PNG', x, y, width, height);
-                    resolve();
-                };
-                img.onerror = (error) => {
-                    console.error("Gagal memuat gambar:", imgUrl, error);
-                    reject(error);
-                };
-                img.src = imgUrl;
-            });
-        }
+    // Tambahkan logo
+    const logoImg = new Image();
+    logoImg.src = logo;
+    await new Promise((resolve, reject) => {
+        logoImg.onload = resolve;
+        logoImg.onerror = reject;
+    });
+    pdf.addImage(logoImg, 'PNG', 10, 10, 50, 20);
 
-        // Header Invoice
-        doc.setFontSize(24);
-        doc.setFont('helvetica', 'bold');
-        doc.text('INVOICE', 14, 20);
+    // Header
+    pdf.setFontSize(18);
+    pdf.setTextColor(0);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Nota Pemesanan', pageWidth / 2, 35, {
+        align: 'center'
+    });
 
-        // Logo
-        addImageToDoc(doc, notaData.logo, 14, 25, 50, 15)
-            .then(() => {
-                //Informasi Toko
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                doc.text('SALFORD & CO.', 14, 45);
-                doc.text('Fashion Terlengkap', 14, 50);
+    // Informasi Pemesanan
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    let y = 50; // Posisi Y awal
+    const lineHeight = 7; // Jarak antar baris
 
-                // Tanggal & No Invoice
-                doc.setFontSize(10);
-                doc.text('TANGGAL:', 140, 20);
-                doc.text(new Date().toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                }), 140, 25);
-                doc.text('NO INVOICE:', 140, 35);
-                doc.text(`1 ${new Date().toLocaleDateString('dd/MM/yyyy')}`, 140, 40);
+    pdf.text(`Nama: ${Nama}`, 15, y);
+    y += lineHeight;
+    pdf.text(`Nomor WA: ${Wa}`, 15, y);
+    y += lineHeight;
+    pdf.text(`Jenis Pukis: ${Jenis}`, 15, y);
+    y += lineHeight;
+    pdf.text(`Isi per Box: ${Isi} pcs`, 15, y);
+    y += lineHeight;
 
-                // Kepada
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'bold');
-                doc.text('KEPADA:', 14, 60);
-                doc.setFont('helvetica', 'normal');
-                doc.text(notaData.nama, 14, 65);
-                doc.text(notaData.wa, 14, 70);
+    // Topping dan Taburan
+    let toppingText = Topping.length > 0 ? Topping.join(", ") : "-";
+    let taburanText = Taburan.length > 0 ? Taburan.join(", ") : "-";
+    if (Mode === "double") {
+        pdf.text(`Topping: ${toppingText}`, 15, y);
+        y += lineHeight;
+        pdf.text(`Taburan: ${taburanText}`, 15, y);
+        y += lineHeight;
+    } else if (Mode === "single") {
+        pdf.text(`Topping: ${toppingText}`, 15, y);
+        y += lineHeight;
+    }
 
-                //Header Table
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'bold');
-                doc.text('KETERANGAN', 14, 80);
-                doc.text('HARGA', 70, 80);
-                doc.text('JML', 100, 80);
+    pdf.text(`Jumlah Box: ${jumlahBox}`, 15, y);
+    y += lineHeight;
+
+    // Tabel
+    const headers = [
+        "Deskripsi",
+        "Harga"
+    ];
+    const tableData = [
+        [
+            "Harga per Box",
+            formatRp(pricePerBox)
+        ],
+        [
+            "Subtotal",
+            formatRp(subtotal)
+        ],
+        [
+            "Diskon",
+            discount > 0 ? formatRp(discount) : "-"
+        ],
+        [
+            "Total Bayar",
+            formatRp(total)
+        ]
+    ];
+
+    pdf.autoTable({
+        head: [headers],
+        body: tableData,
+        startY: y + 10,
+        margin: {
+            left: 15,
+            right: 15
+        },
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 10,
+            cellPadding: 4,
+        },
+        headStyles: {
+            fillColor: '#d6336c',
+            textColor: '#fff',
+            fontStyle: 'bold'
+        },
+        didParseCell: function(data) {
+            if (data.column.index === 0) {
+                data.cell.styles.fontStyle = 'bold';
+            }
+        },
+    });
+
+    // Tanda tangan digital
+    const ttdImg = new Image();
+    ttdImg.src = ttd;
+    await new Promise((resolve, reject) => {
+        ttdImg.onload = resolve;
+        ttdImg.onerror = reject;
+    });
+    pdf.addImage(ttdImg, 'PNG', 150, pdf.autoTable.previous.finalY + 10, 40, 20);
+    pdf.setFontSize(10);
+    pdf.text("Hormat Kami,", 150, pdf.autoTable.previous.finalY + 35);
+
+    // Simpan PDF
+    pdf.save(`Nota_PukisLumer_${Nama}.pdf`);
+            }
+
+
