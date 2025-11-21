@@ -1,78 +1,33 @@
+<!-- FILE: admin.html -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin - Pukis Lumer Aulia</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f8f8f8; padding: 20px; }
-    h1 { color: #d6336c; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 5px; }
-    button { margin-top: 15px; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
-    #btnSimpan { background: #28a745; color: #fff; }
-    #btnReset { background: #ffc107; color: #000; }
-    #btnLogout { background: #dc3545; color: #fff; }
-  </style>
+  <link rel="stylesheet" href="assets/css/admin.css" />
 </head>
 <body>
-  <h1>Admin Panel - Pukis Lumer Aulia</h1>
+  <div class="admin-wrapper">
+    <h1>Dashboard Admin</h1>
+    <p>Selamat datang, admin. Gunakan panel ini untuk melihat pesanan dan testimoni.</p>
 
-  <form id="adminForm">
-    <label>Judul</label>
-    <input type="text" id="judulInput">
+    <section class="order-list">
+      <h2>Daftar Pesanan</h2>
+      <table id="ordersTable">
+        <thead><tr><th>Invoice</th><th>Nama</th><th>Total</th><th>WA</th><th>Tgl</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-    <label>Sapaan</label>
-    <input type="text" id="sapaanInput">
+    <section class="testimonial-section">
+      <h2>Testimoni</h2>
+      <div id="testimonialList"></div>
+    </section>
 
-    <label>Doa</label>
-    <input type="text" id="doaInput">
+    <button id="logoutBtn">Logout</button>
+  </div>
 
-    <label>Lokasi</label>
-    <input type="text" id="lokasiInput">
-
-    <label>Ajakan</label>
-    <input type="text" id="ajakanInput">
-
-    <label>Jam Operasional</label>
-    <input type="text" id="jamOperasionalInput">
-
-    <label>Best Seller</label>
-    <input type="text" id="bestSellerInput">
-
-    <label>Alamat</label>
-    <input type="text" id="alamatInput">
-
-    <label>Ojol</label>
-    <input type="text" id="ojolInput">
-
-    <label>Alasan</label>
-    <textarea id="alasanInput"></textarea>
-
-    <label>Fakta Unik (pisahkan dengan baris baru)</label>
-    <textarea id="faktaUnikInput"></textarea>
-
-    <label>Promo Text</label>
-    <input type="text" id="promoTextInput">
-
-    <label>Promo Image URL</label>
-    <input type="text" id="promoImageInput">
-
-    <label>Footer</label>
-    <textarea id="footerInput"></textarea>
-
-    <label>Testimoni (pisahkan dengan baris baru)</label>
-    <textarea id="testimoniInput"></textarea>
-
-    <label>Galeri (pisahkan dengan tanda |)</label>
-    <textarea id="galeriInput"></textarea>
-
-    <button type="button" id="btnSimpan">💾 Simpan</button>
-    <button type="button" id="btnReset">🔄 Kembali ke Default</button>
-    <button type="button" id="btnLogout">🚪 Logout</button>
-  </form>
-
-  <!-- Script -->
-  <script type="module" src="admin.js"></script>
+  <script type="module" src="assets/js/admin.js"></script>
 </body>
 </html>
