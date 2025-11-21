@@ -1,15 +1,15 @@
 // assets/js/order.js
-import "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+import { jsPDF } from "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
 import "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ================= CONFIG ================= */
+  // ================= CONFIG =================
   const BASE_PRICE = { Original: {5:10000,10:18000}, Pandan:{5:12000,10:22000} };
   const TOPPING_EXTRA = { non:0, single:2000, double:4000 };
-  const ADMIN_WA = "6281296668670";
+  const ADMIN_WA = "6281296668670"; // Nomor admin WA
 
-  /* ================= SELECTORS ================= */
+  // ================= SELECTORS =================
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
 
@@ -30,11 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const notaPrint = $("#notaPrint");
   const notaSendAdmin = $("#notaSendAdmin");
 
-  /* ================= HELPERS ================= */
-  function formatRp(n){ return isNaN(n)?"Rp0":"Rp "+Number(n).toLocaleString("id-ID"); }
-  function getSelectedRadioValue(name){ const r = document.querySelector(`input[name="${name}"]:checked`); return r?r.value:null; }
-  function getCheckedValues(selector){ return $$(selector).filter(ch=>ch.checked).map(ch=>ch.value); }
+  // ================= HELPERS =================
+  const formatRp = n => isNaN(n)?"Rp0":"Rp "+Number(n).toLocaleString("id-ID");
+  const getSelectedRadioValue = name => { const r = document.querySelector(`input[name="${name}"]:checked`); return r?r.value:null; };
+  const getCheckedValues = selector => $$(selector).filter(ch=>ch.checked).map(ch=>ch.value);
 
+  // Batasi max checkbox
   function enforceMax(selector,max){
     $$(selector).forEach(cb=>{
       cb.addEventListener("change",()=>{
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   enforceMax(".ultraSingle",5);
   enforceMax(".ultraDouble",5);
 
-  /* ================= TOPPING VISIBILITY ================= */
+  // ================= TOPPING VISIBILITY =================
   function updateToppingVisibility(){
     const mode = getSelectedRadioValue("ultraToppingMode") || "non";
     if(ultraSingleGroup) ultraSingleGroup.style.display=(mode==="single"||mode==="double")?"block":"none";
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   $$('input[name="ultraToppingMode"]').forEach(r=>r.addEventListener("change",updateToppingVisibility));
 
-  /* ================= CALCULATE PRICE ================= */
+  // ================= CALCULATE PRICE =================
   function calculatePrice(){
     const jenis = getSelectedRadioValue("ultraJenis")||"Original";
     const isi = Number(ultraIsi.value||5);
@@ -69,15 +70,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const discount = 0;
     const grandTotal = subtotal-discount;
 
-    if(ultraPricePerBox) ultraPricePerBox.textContent=formatRp(pricePerBox);
-    if(ultraSubtotal) ultraSubtotal.textContent=formatRp(subtotal);
-    if(ultraDiscount) ultraDiscount.textContent=discount?formatRp(discount):"-";
-    if(ultraGrandTotal) ultraGrandTotal.textContent=formatRp(grandTotal);
+    ultraPricePerBox.textContent = formatRp(pricePerBox);
+    ultraSubtotal.textContent = formatRp(subtotal);
+    ultraDiscount.textContent = discount?formatRp(discount):"-";
+    ultraGrandTotal.textContent = formatRp(grandTotal);
 
     return {pricePerBox,subtotal,discount,grandTotal,jenis,isi,jumlah,mode};
   }
 
-  // Event listeners untuk update harga otomatis
+  // Event update otomatis
   ultraIsi?.addEventListener("change",calculatePrice);
   ultraJumlah?.addEventListener("change",calculatePrice);
   $$('input[name="ultraJenis"]').forEach(r=>r.addEventListener("change",calculatePrice));
@@ -88,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateToppingVisibility();
   calculatePrice();
 
-  /* ================= BUILD ORDER ================= */
+  // ================= BUILD ORDER =================
   function buildOrderObject(){
     const calc = calculatePrice();
     let wa = ultraWA.value.trim();
@@ -111,23 +112,18 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  /* ================= GENERATE PDF ================= */
+  // ================= GENERATE PDF =================
   function generateInvoicePDF(order){
-    const jsPDF = window.jspdf?.jsPDF||window.jsPDF;
-    if(!jsPDF)return alert("jsPDF tidak tersedia"),null;
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
 
-    const doc=new jsPDF();
-    const pageWidth=doc.internal.pageSize.getWidth();
-
-    try{doc.setFontSize(48); doc.setTextColor(212,175,55); doc.text("PUKIS LUMER AULIA",pageWidth/2,140,{align:"center",angle:45}); doc.setTextColor(0,0,0);}catch(e){}
-    try{doc.addImage("assets/images/logo.png","PNG",14,10,36,36);}catch(e){}
-
-    doc.setFontSize(16); doc.text("INVOICE PEMBELIAN",pageWidth-20,18,{align:"right"});
-    doc.setFontSize(10); doc.text(`No: ${order.id}`,pageWidth-20,26,{align:"right"});
-    doc.text(`Tanggal: ${new Date().toLocaleString("id-ID")}`,pageWidth-20,34,{align:"right"});
-
-    doc.setFontSize(11); doc.text(`Nama: ${order.nama}`,14,54);
-    doc.text(`WA: ${order.wa}`,14,62);
+    doc.setFontSize(16);
+    doc.text("PUKIS LUMER AULIA",pageWidth/2,20,{align:"center"});
+    doc.setFontSize(12);
+    doc.text(`Invoice: ${order.id}`,14,30);
+    doc.text(`Tanggal: ${new Date().toLocaleString("id-ID")}`,14,38);
+    doc.text(`Nama: ${order.nama}`,14,46);
+    doc.text(`WA: ${order.wa}`,14,54);
 
     const body=[
       ["Jenis",order.jenis],
@@ -141,26 +137,24 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     doc.autoTable({
-      startY:76,
+      startY:60,
       head:[["Keterangan","Isi"]],
       body,
       theme:"grid",
-      headStyles:{fillColor:[212,175,55],textColor:20},
       styles:{fontSize:10}
     });
 
     const finalY = doc.lastAutoTable?doc.lastAutoTable.finalY+8:150;
     doc.setFontSize(12); doc.setFont(undefined,"bold");
     doc.text("TOTAL BAYAR:",14,finalY+10);
-    doc.text(formatRp(order.total),pageWidth-20,finalY+10,{align:"right"});
-    try{doc.addImage("assets/images/ttd.png","PNG",pageWidth-80,finalY+18,55,25);}catch(e){}
-    doc.setFontSize(9); doc.setFont(undefined,"normal");
+    doc.text(formatRp(order.total),pageWidth-14,finalY+10,{align:"right"});
+    doc.setFontSize(10); doc.setFont(undefined,"normal");
     doc.text("Terima kasih atas pesanan Anda.",pageWidth/2,285,{align:"center"});
 
     return doc;
   }
 
-  /* ================= WA ================= */
+  // ================= WA =================
   function buildWAMessage(order){
     return `Halo! Saya ingin memesan Pukis:
 
@@ -176,13 +170,14 @@ Invoice: ${order.id}`;
   }
   function openWA(order){ window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(buildWAMessage(order))}`,"_blank"); }
 
-  /* ================= NOTA ================= */
+  // ================= NOTA =================
   let lastOrder=null;
-
   formUltra.addEventListener("submit",ev=>{
     ev.preventDefault();
     if(!ultraNama.value||!ultraWA.value) return alert("Isi nama dan WA terlebih dahulu.");
     const order = buildOrderObject(); lastOrder=order;
+
+    // Nota popup
     notaContent.innerHTML=`
       <div>
         <h4>Invoice: ${order.id}</h4>
@@ -204,11 +199,13 @@ Invoice: ${order.id}`;
   });
 
   notaClose?.addEventListener("click",()=>{notaContainer.style.display="none";});
-  notaPrint?.addEventListener("click",()=>{if(!lastOrder)return alert("Belum ada pesanan."); generateInvoicePDF(lastOrder)?.save(`Invoice-${lastOrder.id}.pdf`);});
-  notaSendAdmin?.addEventListener("click",()=>{if(!lastOrder)return alert("Belum ada pesanan."); openWA(lastOrder);});
-
-  // Inisialisasi awal
-  updateToppingVisibility();
-  calculatePrice();
+  notaPrint?.addEventListener("click",()=>{
+    if(!lastOrder) return alert("Belum ada pesanan.");
+    generateInvoicePDF(lastOrder)?.save(`Invoice-${lastOrder.id}.pdf`);
+  });
+  notaSendAdmin?.addEventListener("click",()=>{
+    if(!lastOrder) return alert("Belum ada pesanan.");
+    openWA(lastOrder);
+  });
 
 });
