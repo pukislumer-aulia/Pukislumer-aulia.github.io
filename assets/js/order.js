@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
             discount: discount,
             total: total,
             logo: "assets/images/logo_png", // Path ke logo
-            ttd: "assets/ttd.png" // Path ke tanda tangan digital
+            ttd: "assets/images/ttd.png" // Path ke tanda tangan digital
         };
     }
 
@@ -144,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ultraIsi.addEventListener("change", calculatePrice);
     ultraJumlah.addEventListener("input", calculatePrice);
     $$('input[name="ultraJenis"]').forEach(r => r.addEventListener("change", calculatePrice));
+    $$('input[name="ultraToppingMode"]').forEach(r => r.addEventListener("change", calculatePrice));
 
     calculatePrice();
 
@@ -289,35 +290,35 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fungsi untuk menghasilkan PDF dengan data nota (perlu diimplementasikan)
     function generatePdf(notaData) {
         console.log("Data nota untuk PDF:", notaData);
-        alert("Fungsi generatePdf() perlu diimplementasikan dengan library PDF pilihan
-
-        console.log("Data nota untuk PDF:", notaData);
-        alert("Fungsi generatePdf() perlu diimplementasikan dengan library PDF pilihan (jsPDF, PDFMake, dll.)");
 
         // Contoh implementasi dengan jsPDF (perlu penyesuaian lebih lanjut)
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
+        // Fungsi untuk menambahkan gambar dengan promise
+        function addImageToDoc(doc, imgUrl, x, y, width, height) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous"; // Penting untuk mengatasi masalah CORS
+                img.onload = () => {
+                    doc.addImage(img, 'PNG', x, y, width, height);
+                    resolve();
+                };
+                img.onerror = (error) => {
+                    console.error("Gagal memuat gambar:", imgUrl, error);
+                    reject(error);
+                };
+                img.src = imgUrl;
+            });
+        }
+
         // Tambah logo
-        const img = new Image();
-        img.src = notaData.logo;
-        img.onload = function() {
-            doc.addImage(img, 'PNG', 14, 14, 50, 15);
-
-            // Tambah watermark
-            // (Anda perlu menyediakan gambar watermark yang sesuai)
-            const watermarkImg = new Image();
-            watermarkImg.src = 'assets/images/watermark-emas.png'; // Ganti dengan path watermark Anda
-            watermarkImg.onload = function() {
-                // Dapatkan ukuran halaman PDF
-                const pageSize = doc.internal.pageSize;
-                const pageWidth = pageSize.getWidth();
-                const pageHeight = pageSize.getHeight();
-
-                // Tambah watermark di tengah halaman
-                doc.addImage(watermarkImg, 'PNG', pageWidth / 2 - 75, pageHeight / 2 - 75, 150, 150);
-                doc.setPage(1); // Kembali ke halaman pertama setelah menambahkan watermark
-
+        addImageToDoc(doc, notaData.logo, 14, 14, 50, 15)
+            .then(() => {
+                // Tambah watermark
+                return addImageToDoc(doc, 'assets/images/watermark-emas.png', doc.internal.pageSize.getWidth() / 2 - 75, doc.internal.pageSize.getHeight() / 2 - 75, 150, 150);
+            })
+            .then(() => {
                 // Data tabel
                 const tableData = [
                     ["Nama", notaData.nama],
@@ -353,27 +354,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 // Tambah tanda tangan digital
-                const ttdImg = new Image();
-                ttdImg.src = notaData.ttd;
-                ttdImg.onload = function() {
-                    const finalY = doc.autoTable.previous.finalY; // Mendapatkan posisi Y terakhir dari tabel
-                    doc.addImage(ttdImg, 'PNG', 14, finalY + 10, 50, 15); // Tambah tanda tangan di bawah tabel
-
-                    doc.save(`nota-pemesanan-${Date.now()}.pdf`);
-                };
-                ttdImg.onerror = function() {
-                    console.error("Gagal memuat gambar tanda tangan digital.");
-                    doc.save(`nota-pemesanan-${Date.now()}.pdf`);
-                };
-            };
-            watermarkImg.onerror = function() {
-                console.error("Gagal memuat gambar watermark.");
+                const finalY = doc.autoTable.previous.finalY; // Mendapatkan posisi Y terakhir dari tabel
+                return addImageToDoc(doc, notaData.ttd, 14, finalY + 10, 50, 15);
+            })
+            .then(() => {
                 doc.save(`nota-pemesanan-${Date.now()}.pdf`);
-            };
-        };
-        img.onerror = function() {
-            console.error("Gagal memuat gambar logo.");
-            doc.save(`nota-pemesanan-${Date.now()}.pdf`);
-        };
+            })
+            .catch(error => {
+                console.error("Terjadi kesalahan dalam pembuatan PDF:", error);
+                alert("Terjadi kesalahan dalam pembuatan PDF. Silakan coba lagi.");
+            });
     }
 }); // end DOMContentLoaded
