@@ -1,128 +1,77 @@
-<!-- PART 1: HEAD, META, GLOBAL CSS, PROMO & HEADER -->
+<!-- FILE: index.html (PART 1 of 4) -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pukis Lumer Aulia</title>
-  <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />  <!-- Meta OG & Twitter -->  <meta property="og:type" content="website">
+  <meta name="description" content="Pukis lumer terenak di Padang Panjang!" />
+
+  <!-- OpenGraph & Twitter -->
+  <meta property="og:type" content="website">
   <meta property="og:title" content="Pukis Lumer Aulia">
   <meta property="og:description" content="Pukis Lumer kekinian dengan topping lumer dan rasa juara. Super lembut, empuk sampai besok!">
-  <meta property="og:image" content="https://pukislumer-aulia.github.io/assets/images/pukis-og.png">
-  <meta property="og:url" content="https://pukislumer-aulia.github.io/">  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="assets/images/pukis-og.png">
+  <meta property="og:url" content="https://pukislumer-aulia.github.io/">
+
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pukis Lumer Aulia">
   <meta name="twitter:description" content="Pukis Lumer dengan isian lumer, enak, dan kekinian!">
-  <meta name="twitter:image" content="https://pukislumer-aulia.github.io/assets/images/pukis-og.png">
-  <meta name="twitter:url" content="https://pukislumer-aulia.github.io/">  <!-- Favicon & CSS -->  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
+  <meta name="twitter:image" content="assets/images/pukis-og.png">
+
+  <!-- Styles -->
+  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/form-style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />  <style>
+  <link rel="stylesheet" href="assets/css/admin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Kanit:wght@900&display=swap" rel="stylesheet" />
+
+  <!-- Minimal inline (fallback) -->
+  <style>
     :root { --pink:#d6336c; --brand:#002147; --muted:#666 }
     body { font-family: Arial, sans-serif; padding: 20px; background:#fff8f8; color:#333; }
-    h1, h2 { color:#d6336c; }
     .container { max-width:980px; margin:0 auto; }
-    .responsive-img { max-width:100%; height:auto; border-radius:8px; }
-    header { display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
-    section { margin:18px 0; }
-    label { display:block; margin:6px 0; font-weight:600; }
-    input[type="text"], input[type="tel"], input[type="number"], select, textarea {
-      width:100%; padding:8px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box;
-    }
-
-    button { cursor:pointer; }
-    .small { font-size:13px; color:var(--muted); }
-    .flex { display:flex; gap:10px; align-items:center; }
-
-    /* Gallery */
-    .gallery-grid { display:flex; flex-wrap:wrap; gap:10px; }
-    .gallery-item img { width:200px; border-radius:8px; }
-
-    /* Price box */
-    .price-box { background:#fff8ea; padding:10px; border-radius:8px; border:1px solid #fdebd0; }
-
-    /* Nota popup */
-    #notaContainer { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9999; align-items:center; justify-content:center; }
-    #notaBox { background:#fff; padding:16px; border-radius:10px; max-width:680px; width:95%; }
-
-    /* Floating icons */
-    .floating-icons-container { position:fixed; right:18px; bottom:80px; display:flex; flex-direction:column; gap:8px; z-index:1000; }
-    .floating-icon { width:46px; height:46px; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 12px rgba(0,0,0,.12); text-decoration:none; color:#111; }
-    #btnAdmin { position:fixed; left:18px; bottom:20px; background:#d6336c; color:#fff; padding:10px 18px; border-radius:8px; text-decoration:none; font-weight:bold; box-shadow:0 2px 6px rgba(0,0,0,0.3); z-index:1000; cursor:pointer; }
-
-    /* Footer */
-    footer { background:#222; color:#fff; padding:20px; text-align:center; }
-
-    /* Map link */
-    .map-link img { width:30px; vertical-align:middle; transition:transform 0.2s; }
-    .map-link:hover img { transform:scale(1.2); }
-
-    /* Responsive */
-    @media(max-width:600px){ .gallery-item img{ width:140px } }
+    .responsive-img { max-width:100%; height:auto; border-radius:8px; display:block; margin:0 auto 12px; }
   </style>
 </head>
 <body>
+  <div class="container">
+    <!-- PROMO -->
+    <marquee id="promo"><strong style="color:#002147;">Promo spesial hari ini!</strong></marquee>
+    <marquee><strong style="color:#002147;">Promo hari ini: Tukarkan 15 kupon dapat 1 box gratis! Potongan Rp2.000 untuk order pertama via website.</strong></marquee>
 
-  <!-- 🔹 Promo (Gabungan Bagian 1 + Bagian 2, tidak duplikat) -->
-  <marquee id="promo"><strong style="color:#002147;">Promo spesial hari ini!</strong></marquee>
+    <img id="promoImage" src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
 
-  <!-- Tambahan dari Bagian 1 (karena tidak bentrok) -->
-  <marquee><strong style="color:#002147;">Promo hari ini: Tukarkan 15 kupon dapat 1 box gratis! Potongan Rp2.000 untuk order pertama via website.</strong></marquee>
+    <div class="promo-running-text">
+      <p id="promoText">Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia! Potongan Rp.2000 untuk pembelian pertama melalui website Pukis Lumer Aulia! Ikuti & bagikan Media Sosial Pukis Lumer Aulia, dapatkan potongan Rp.3.000,00!</p>
+    </div>
 
-  <img id="promoImage" src="assets/images/kupon1.jpg" alt="Promo Kupon" class="responsive-img">
+    <!-- Header images & title -->
+    <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="responsive-img">
+    <img src="assets/images/pukis01.jpeg" alt="Pukis Lumer Aulia 2" class="responsive-img">
 
-  <div class="promo-running-text">
-    <p id="promoText">
-      Tukarkan 15 Kupon, Gratis 1 Box Pukis Lumer Aulia!  
-      Potongan Rp.2000 untuk pembelian pertama melalui website Pukis Lumer Aulia!  
-      Ikuti & bagikan Media Sosial Pukis Lumer Aulia, dapatkan potongan Rp.3.000,00!
-    </p>
+    <h1 id="judulUtama">PUKIS LUMER AULIA</h1>
+    <p id="sambutan1"><strong style="color:#002147;">Assalamu'alaikum warahmatullahi wabarakatuh</strong></p>
+    <p id="sambutan2"><strong style="color:#002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</strong></p>
+
+    <p id="lokasi1"><strong style="color:#800020;">Padang Panjang Kota Kuliner.</strong></p>
+    <p id="lokasi2"><strong style="color:#800020;">Kota Serambi Mekkah orang mengenalnya.</strong></p>
+    <p id="jamOperasional"><strong style="color:#9370DB;">Jam Operasional:</strong> <strong style="color:#002147;">16.00 – 23.59 WIB (Selama Persediaan Masih Ada).</strong></p>
+
+  <!-- end part 1 -->
+    <!-- FILE: index.html (PART 2 of 4) -->
+  <!-- galeri & info -->
+  <h2>Galeri</h2>
+  <div class="gallery-grid" id="galeriContainer">
+    <div class="gallery-item"><img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img"></div>
+    <div class="gallery-item"><img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img"></div>
+    <div class="gallery-item"><img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img"></div>
   </div>
 
-  <!-- 🔹 Header Images -->
-  <img id="headerImage" src="assets/images/pukis.jpg" alt="Header Pukis Lumer Aulia" class="responsive-img">
-  <img id="headerImage" src="assets/images/pukis01.jpeg" alt="Header Pukis Lumer Aulia" class="responsive-img">
-
-  <!-- 🔹 Judul & Sambutan -->
-  <h1 id="judulUtama">PUKIS LUMER AULIA</h1>
-
-  <p id="sambutan1"><strong style="color:#002147;">Assalamu'alaikum warahmatullahi wabarakatuh</strong></p>
-  <p id="sambutan2"><strong style="color:#002147;">Dimanapun kamu, semoga selalu berkah dan rejeki berlimpah. Aamiin.</strong></p>
-
-  <!-- 🔹 Lokasi & Info -->
-  <p id="lokasi1"><strong style="color:#800020;">Padang Panjang Kota Kuliner.</strong></p>
-  <p id="lokasi2"><strong style="color:#800020;">Kota Serambi Mekkah orang Mengenalnya.</strong></p>
-  <p id="lokasi3"><strong style="color:#800020;">Kalau main ke Pasar Kuliner</strong></p>
-  <p id="lokasi4"><strong style="color:#800020;">Wajib Cicipin PUKIS LUMER AULIA</strong></p>
-
-  <p id="jamOperasional">
-    <strong style="color:#9370DB;">Jam Operasional:</strong>
-    <strong style="color:#002147;">16.00 – 23.59 WIB (Selama Persediaan Masih Ada).</strong>
-  </p>
-
-  <p id="bestSeller">
-    <strong style="color:#6B8E23;">Best Seller:</strong>
-    <strong style="color:#002147;">Double Topping Vanilla Oreo vs Cokelat Kacang</strong>
-  </p>
-
-  <h2>
-    <strong style="color:#800020;">Lokasi:</strong>
-    Pasar Kuliner Padang Panjang (Cari Gerobak Pink)
-  </h2>
-
-  <p id="ojolText">
-    <strong style="color:#800020;">Tersedia di MaximFood, Kombifood, GrabFood, dan GoFood!</strong>
-  </p>
-
-  <!-- 🔹 Alasan -->
   <h2 id="kenapaTitle">Kenapa wajib cobain Pukis Lumer Aulia?</h2>
-  <p id="kenapaText">
-    <strong style="color:#002147;">
-      Pukis Lumer yang pertama kali hadir di Padang Panjang dengan topping beragam, rasanya lembut di mulut..
-    </strong>
-  </p>
+  <p id="kenapaText"><strong style="color:#002147;">Pukis Lumer yang pertama kali hadir di Padang Panjang dengan topping beragam, rasanya lembut di mulut..</strong></p>
 
-  <!-- 🔹 Fakta -->
   <h2 id="faktaTitle">Fakta Unik Tentang Kami</h2>
   <ul id="faktaList" style="color:#2E8B57;">
     <li>Resep adonan spesial keluarga sejak 2023!</li>
@@ -134,434 +83,167 @@
     <li>Jajan bergizi karena dibuat dari bahan premium</li>
   </ul>
 
-  <!-- 🔹 Galeri (Bagian 2 saja, Bagian 1 dibuang karena sama) -->
-  <h2>Galeri</h2>
-  <div class="gallery-grid" id="galeriContainer">
-    <div class="gallery-item"><img src="assets/images/pukis1.jpg" alt="Pukis 1" class="responsive-img"></div>
-    <div class="gallery-item"><img src="assets/images/pukis2.jpg" alt="Pukis 2" class="responsive-img"></div>
-    <div class="gallery-item"><img src="assets/images/pukis3.jpg" alt="Pukis 3" class="responsive-img"></div>
-  </div>
+  <!-- FORM PEMESANAN (ULTRA) -->
+  <section id="form-ultra">
+    <h2>Pemesanan Pukis Lumer Aulia (Form Ultra)</h2>
+    <form id="formUltra">
+      <label>Nama Pemesan:</label>
+      <input type="text" id="ultraNama" required>
 
-    </section>
-    <!-- PART 3: Form Pemesanan (ULTRA) -->
-    <section id="form-ultra">
-      <h2>Pemesanan Pukis Lumer Aulia (Form Ultra)</h2>
+      <label>Nomor WhatsApp (contoh 0812...):</label>
+      <input type="tel" id="ultraWA" placeholder="0812..." required>
 
-      <form id="formUltra">
-        <label>Nama Pemesan:</label>
-        <input type="text" id="ultraNama" required>
+      <label>Jenis Pukis:</label>
+      <label class="flex"><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
+      <label class="flex"><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
 
-        <label>Nomor WhatsApp (contoh 0812...):</label>
-        <input type="tel" id="ultraWA" placeholder="0812..." required>
+      <label>Isi per Box:</label>
+      <select id="ultraIsi">
+        <option value="5">5 pcs (Box Kecil)</option>
+        <option value="10">10 pcs (Box Besar)</option>
+      </select>
 
-        <label>Jenis Pukis:</label>
-        <label class="flex"><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
-        <label class="flex"><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
+      <label>Topping Mode:</label>
+      <label class="flex"><input type="radio" name="ultraToppingMode" value="non" checked> Non Topping</label>
+      <label class="flex"><input type="radio" name="ultraToppingMode" value="single"> Single Topping</label>
+      <label class="flex"><input type="radio" name="ultraToppingMode" value="double"> Double Topping</label>
 
-        <label>Isi per Box:</label>
-        <select id="ultraIsi">
-          <option value="5">5 pcs (Box Kecil)</option>
-          <option value="10">10 pcs (Box Besar)</option>
-        </select>
+      <div id="ultraSingleGroup" style="display:none; margin-top:8px;">
+        <label>Pilih Rasa (Single) — pilih maksimum 5</label>
+        <label><input type="checkbox" class="ultraSingle" value="Coklat"> Coklat</label>
+        <label><input type="checkbox" class="ultraSingle" value="Cappucino"> Cappucino</label>
+        <label><input type="checkbox" class="ultraSingle" value="Vanilla"> Vanilla</label>
+        <label><input type="checkbox" class="ultraSingle" value="Stroberi"> Stroberi</label>
+        <label><input type="checkbox" class="ultraSingle" value="Tiramisu"> Tiramisu</label>
+      </div>
 
-        <label>Topping Mode:</label>
-        <label class="flex"><input type="radio" name="ultraToppingMode" value="non" checked> Non Topping</label>
-        <label class="flex"><input type="radio" name="ultraToppingMode" value="single"> Single Topping</label>
-        <label class="flex"><input type="radio" name="ultraToppingMode" value="double"> Double Topping</label>
+      <div id="ultraDoubleGroup" style="display:none; margin-top:8px;">
+        <label>Pilih Taburan (Double) — pilih maksimum 5</label>
+        <label><input type="checkbox" class="ultraDouble" value="Meses"> Meses</label>
+        <label><input type="checkbox" class="ultraDouble" value="Keju"> Keju</label>
+        <label><input type="checkbox" class="ultraDouble" value="Kacang"> Kacang</label>
+        <label><input type="checkbox" class="ultraDouble" value="Choco Chip"> Choco Chip</label>
+        <label><input type="checkbox" class="ultraDouble" value="Oreo"> Oreo</label>
+      </div>
 
-        <!-- Single Topping (checkbox list, hidden unless mode=single or double) -->
-        <div id="ultraSingleGroup" style="display:none; margin-top:8px;">
-          <label>Pilih Rasa (Single) — pilih maksimum 5</label>
-          <label><input type="checkbox" class="ultraSingle" value="Coklat"> Coklat</label>
-          <label><input type="checkbox" class="ultraSingle" value="Cappucino"> Cappucino</label>
-          <label><input type="checkbox" class="ultraSingle" value="Vanilla"> Vanilla</label>
-          <label><input type="checkbox" class="ultraSingle" value="Stroberi"> Stroberi</label>
-          <label><input type="checkbox" class="ultraSingle" value="Tiramisu"> Tiramisu</label>
-        </div>
+      <label>Jumlah Box:</label>
+      <input type="number" id="ultraJumlah" min="1" max="10" value="1">
 
-        <!-- Double mode: still allow single choices + taburan group -->
-        <div id="ultraDoubleGroup" style="display:none; margin-top:8px;">
-          <label>Pilih Taburan (Double) — pilih maksimum 5</label>
-          <label><input type="checkbox" class="ultraDouble" value="Meses"> Meses</label>
-          <label><input type="checkbox" class="ultraDouble" value="Keju"> Keju</label>
-          <label><input type="checkbox" class="ultraDouble" value="Kacang"> Kacang</label>
-          <label><input type="checkbox" class="ultraDouble" value="Choco Chip"> Choco Chip</label>
-          <label><input type="checkbox" class="ultraDouble" value="Oreo"> Oreo</label>
-        </div>
+      <div class="price-box" style="margin-top:10px;">
+        <div style="display:flex;justify-content:space-between"><div>Harga per Box:</div><div id="ultraPricePerBox">Rp0</div></div>
+        <div style="display:flex;justify-content:space-between"><div>Subtotal:</div><div id="ultraSubtotal">Rp0</div></div>
+        <div style="display:flex;justify-content:space-between"><div>Diskon:</div><div id="ultraDiscount">-</div></div>
+        <div style="display:flex;justify-content:space-between;font-weight:700;margin-top:6px;"><div>Total Bayar:</div><div id="ultraGrandTotal">Rp0</div></div>
+      </div>
 
-        <label>Jumlah Box:</label>
-        <input type="number" id="ultraJumlah" min="1" max="10" value="1">
+      <button type="submit" style="margin-top:12px;background:var(--brand);color:#fff;padding:10px;border-radius:8px;border:0;">
+        Buat Nota & Kirim ke WhatsApp
+      </button>
+    </form>
+  </section>
+<!-- end part 2 -->
 
-        <!-- Price summary -->
-        <div class="price-box" style="margin-top:10px;">
-          <div style="display:flex;justify-content:space-between"><div>Harga per Box:</div><div id="ultraPricePerBox">Rp0</div></div>
-          <div style="display:flex;justify-content:space-between"><div>Subtotal:</div><div id="ultraSubtotal">Rp0</div></div>
-          <div style="display:flex;justify-content:space-between"><div>Diskon:</div><div id="ultraDiscount">-</div></div>
-          <div style="display:flex;justify-content:space-between;font-weight:700;margin-top:6px;"><div>Total Bayar:</div><div id="ultraGrandTotal">Rp0</div></div>
-        </div>
-
-        <button type="submit" style="margin-top:12px;background:var(--brand);color:#fff;padding:10px;border-radius:8px;border:0;">
-          Buat Nota & Kirim ke WhatsApp
-        </button>
-      </form>
-    </section>
-
-<!-- PART 4: NOTA POPUP + jsPDF + SCRIPT (harga, topping logic, PDF, WA) -->
-    <!-- Nota Popup (minimal) -->
-    <div id="notaContainer" style="display:none; align-items:center; justify-content:center; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9998">
-      <div id="notaBox" style="background:#fff;padding:16px;border-radius:10px;max-width:720px;width:95%;">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h3 style="margin:0">Nota Pemesanan</h3>
-          <button id="notaClose" style="background:#eee;border:0;padding:6px;border-radius:8px;cursor:pointer">✕</button>
-        </div>
-        <div id="notaContent" style="margin-top:12px"></div>
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <button id="notaPrint" style="flex:1">Cetak / Download</button>
-          <button id="notaSendAdmin" style="flex:1;background:#10b981;color:#fff;border:0;padding:8px;border-radius:8px">Kirim ke Admin (WA)</button>
-        </div>
+    <!-- FILE: index.html (PART 3 of 4) -->
+  <!-- NOTA POPUP -->
+  <div id="notaContainer" style="display:none; align-items:center; justify-content:center; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9998">
+    <div id="notaBox" style="background:#fff;padding:16px;border-radius:10px;max-width:720px;width:95%;">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Nota Pemesanan</h3>
+        <button id="notaClose" style="background:#eee;border:0;padding:6px;border-radius:8px;cursor:pointer">✕</button>
+      </div>
+      <div id="notaContent" style="margin-top:12px"></div>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button id="notaPrint" style="flex:1">Cetak / Download</button>
+        <button id="notaSendAdmin" style="flex:1;background:#10b981;color:#fff;border:0;padding:8px;border-radius:8px">Kirim ke Admin (WA)</button>
       </div>
     </div>
-
-    <!-- jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-/* ===========================
-   Harga sesuai tabel konfirmasi
-   =========================== */
-const HARGA = {
-  Original: {
-    5: { non:10000, single:13000, double:15000 },
-    10:{ non:18000, single:25000, double:28000 }
-  },
-  Pandan: {
-    5: { non:13000, single:15000, double:18000 },
-    10:{ non:25000, single:28000, double:32000 }
-  }
-};
-
-const ADMIN_WA = "6281296668670";
-
-/* util */
-function formatRp(n){ return "Rp " + Number(n).toLocaleString("id-ID"); }
-function getCheckedValues(selector){ return Array.from(document.querySelectorAll(selector + ':checked')).map(el=>el.value); }
-
-/* ======= UI toggles for toppings ======= */
-const ultraToppingRadios = document.querySelectorAll('input[name="ultraToppingMode"]');
-function updateToppingVisibility(){
-  const mode = document.querySelector('input[name="ultraToppingMode"]:checked').value;
-  document.getElementById("ultraSingleGroup").style.display = (mode === "single" || mode === "double") ? "block" : "none";
-  document.getElementById("ultraDoubleGroup").style.display = (mode === "double") ? "block" : "none";
-}
-ultraToppingRadios.forEach(r => r.addEventListener('change', updateToppingVisibility));
-updateToppingVisibility();
-
-/* ======= Limit selection logic (max 5) ======= */
-function enforceMaxChecks(selector, max){
-  document.querySelectorAll(selector).forEach(checkbox=>{
-    checkbox.addEventListener('change', ()=>{
-      const checked = document.querySelectorAll(selector + ':checked');
-      if (checked.length > max){
-        checkbox.checked = false;
-        alert(`Maksimal ${max} pilihan.`);
-      }
-    });
-  });
-}
-enforceMaxChecks('.ultraSingle', 5);
-enforceMaxChecks('.ultraDouble', 5);
-
-/* ======= Hitung harga otomatis saat input berubah ======= */
-function calcUltraPrice(){
-  const jenis = document.querySelector('input[name="ultraJenis"]:checked').value;
-  const isi = Number(document.getElementById("ultraIsi").value);
-  const mode = document.querySelector('input[name="ultraToppingMode"]:checked').value;
-  const jumlah = Number(document.getElementById("ultraJumlah").value) || 1;
-
-  const keyMode = mode === "non" ? "non" : (mode === "single" ? "single" : "double");
-  const pricePerBox = (HARGA[jenis] && HARGA[jenis][isi] && HARGA[jenis][isi][keyMode]) ? HARGA[jenis][isi][keyMode] : 0;
-  const subTotal = pricePerBox * jumlah;
-  const discount = 0;
-  const grandTotal = subTotal - discount;
-
-  document.getElementById("ultraPricePerBox").innerText = formatRp(pricePerBox);
-  document.getElementById("ultraSubtotal").innerText = formatRp(subTotal);
-  document.getElementById("ultraDiscount").innerText = discount ? `- ${formatRp(discount)}` : "-";
-  document.getElementById("ultraGrandTotal").innerText = formatRp(grandTotal);
-
-  return { pricePerBox, subTotal, discount, grandTotal };
-}
-
-/* attach change events */
-document.querySelectorAll('#ultraIsi, #ultraJumlah, input[name="ultraJenis"], input[name="ultraToppingMode"]').forEach(el=>{
-  el.addEventListener('change', calcUltraPrice);
-});
-document.querySelectorAll('.ultraSingle, .ultraDouble').forEach(el=>{
-  el.addEventListener('change', calcUltraPrice);
-});
-window.addEventListener('load', calcUltraPrice);
-
-/* ======= FORM SUBMIT: buat order object, PDF, dan WA ke admin ======= */
-document.getElementById("formUltra").addEventListener("submit", async function(e){
-  e.preventDefault();
-
-  // ambil data
-  const nama = document.getElementById("ultraNama").value.trim();
-  let waRaw = document.getElementById("ultraWA").value.trim();
-  const jenis = document.querySelector('input[name="ultraJenis"]:checked').value;
-  const isi = Number(document.getElementById("ultraIsi").value);
-  const mode = document.querySelector('input[name="ultraToppingMode"]:checked').value;
-  const jumlah = Number(document.getElementById("ultraJumlah").value) || 1;
-
-  if (!nama || !waRaw) { alert("Isi nama dan nomor WA"); return; }
-
-  // normalisasi nomor (jika mulai 0 -> 62)
-  if (/^0/.test(waRaw)) waRaw = waRaw.replace(/^0/,'62');
-
-  // ambil topping sesuai mode
-  const singleList = getCheckedValues('.ultraSingle');
-  const doubleList = getCheckedValues('.ultraDouble');
-
-  // validasi jumlah pemilihan sesuai rules
-  if (mode === 'single' && singleList.length > 5) { alert("Single topping maksimal 5"); return; }
-  if (mode === 'double' && (singleList.length > 5 || doubleList.length > 5)) { alert("Double: topping maksimal 5 dan taburan maksimal 5"); return; }
-
-  // harga
-  const calc = calcUltraPrice();
-  const invoiceID = `PLA-${new Date().toISOString().slice(0,10).replace(/-/g,'')}-${String(Date.now()).slice(-6)}`;
-
-  const order = {
-    invoiceID,
-    createdAt: new Date().toISOString(),
-    nama,
-    buyerWA: waRaw,
-    jenis,
-    isiPerBox: isi,
-    toppingMode: mode === 'non' ? 'Non Topping' : (mode === 'single' ? 'Single Topping' : 'Double Topping'),
-    singleList: singleList.join(', '),
-    doubleList: doubleList.join(', '),
-    jumlahBox: jumlah,
-    pricePerBox: calc.pricePerBox,
-    subTotal: calc.subTotal,
-    discount: calc.discount,
-    grandTotal: calc.grandTotal
-  };
-
-  // buat & download PDF (simple)
-  try {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit:'pt', format:'A4' });
-    let y = 40, left = 40, lh = 16;
-    doc.setFontSize(14); doc.text('PUKIS LUMER AULIA', left, y); y += lh+4;
-    doc.setFontSize(10); doc.text('Nota Pemesanan', left, y); y += lh;
-    doc.setFontSize(11); doc.text(`Invoice: ${order.invoiceID}`, left, y); doc.text(`Tanggal: ${new Date().toLocaleString()}`, left+320, y); y += lh;
-    doc.text(`Nama: ${order.nama}`, left, y); y += lh;
-    doc.text(`WA: ${order.buyerWA}`, left, y); y += lh;
-    doc.text('--- Pesanan ---', left, y); y += lh;
-    doc.text(`Jenis: ${order.jenis}`, left, y); y += lh;
-    doc.text(`Mode: ${order.toppingMode}`, left, y); y += lh;
-    if (order.singleList) { doc.text(`Rasa: ${order.singleList}`, left, y); y += lh; }
-    if (order.doubleList) { doc.text(`Taburan: ${order.doubleList}`, left, y); y += lh; }
-    doc.text(`Isi per Box: ${order.isiPerBox} pcs`, left, y); y += lh;
-    doc.text(`Jumlah Box: ${order.jumlahBox}`, left, y); y += lh;
-    doc.text('--- Harga ---', left, y); y += lh;
-    doc.text(`Harga/Box: ${formatRp(order.pricePerBox)}`, left, y); y += lh;
-    doc.text(`Subtotal: ${formatRp(order.subTotal)}`, left, y); y += lh;
-    doc.setFont(undefined,'bold'); doc.text(`Total: ${formatRp(order.grandTotal)}`, left, y); y += lh*1.6;
-    doc.setFont(undefined,'normal'); doc.text('Terima kasih telah memesan Pukis Lumer Aulia!', left, y);
-
-    doc.save(`${order.invoiceID}.pdf`);
-  } catch (err) {
-    console.error("PDF error", err);
-  }
-
-  // render nota popup (opsional)
-  const notaHtml = `
-    <div><strong>No. Invoice:</strong> ${order.invoiceID}</div>
-    <div><strong>Nama:</strong> ${order.nama}</div>
-    <div><strong>Jenis:</strong> ${order.jenis}</div>
-    <div><strong>Mode:</strong> ${order.toppingMode}</div>
-    <div><strong>Isi/Box:</strong> ${order.isiPerBox} pcs</div>
-    <div><strong>Jumlah:</strong> ${order.jumlahBox} box</div>
-    <div style="margin-top:8px"><strong>Total:</strong> ${formatRp(order.grandTotal)}</div>
-  `;
-  document.getElementById('notaContent').innerHTML = notaHtml;
-  document.getElementById('notaContainer').style.display = 'flex';
-
-  // Kirim WA ke admin (detail)
-  const waMessage =
-`Halo! Saya ingin memesan Pukis:
-- Nama: ${order.nama}
-- Jenis: ${order.jenis}
-- Topping: ${order.toppingMode}
-- Isi per Box: ${order.isiPerBox} pcs
-- Jumlah Box: ${order.jumlahBox}
-- Rasa: ${order.singleList || '-'}
-- Taburan: ${order.doubleList || '-'}
-Total: ${formatRp(order.grandTotal)}
-No. Invoice: ${order.invoiceID}
-Nomor WA pembeli: ${order.buyerWA}
-`;
-  // open WA
-  window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(waMessage)}`, '_blank');
-
-}); // end submit
-
-/* nota popup handlers */
-document.getElementById('notaClose').addEventListener('click', ()=>{ document.getElementById('notaContainer').style.display='none'; });
-document.getElementById('notaPrint').addEventListener('click', ()=>{ window.print(); });
-document.getElementById('notaSendAdmin').addEventListener('click', ()=>{
-  // reopen WA with same last order if needed
-  alert('WA admin akan dibuka (jika belum).');
-  // nothing else: main WA already opened on submit
-});
-<!-- ================== FORM TESTIMONI (PERTAHANKAN BAGIAN 1) ================== -->
-<section id="form-testimoni">
-  <h2>Tulis Testimoni Kamu!</h2>
-
-  <form id="testimoniForm">
-    <input type="text" id="nama" placeholder="Nama Kamu" required>
-    <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
-    <button type="submit">Kirim Testimoni</button>
-  </form>
-
-  <div id="daftarTestimoni">
-    <h3>Testimoni:</h3>
-    <ul id="listTestimoni">
-      <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
-      <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
-      <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
-      <li><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, topping-nya gak pelit, penjual juga ramah."</li>
-    </ul>
-
-    <button onclick="hapusSemuaTestimoni()"
-      style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
-      Hapus Semua Testimoni
-    </button>
-  </div>
-</section>
-
-<script>
-const testimoniForm = document.getElementById("testimoniForm");
-const listTestimoni = document.getElementById("listTestimoni");
-
-function hapusSemuaTestimoni() {
-  if (confirm("Apakah Anda yakin ingin menghapus semua testimoni?")) {
-    listTestimoni.innerHTML = "";
-  }
-}
-
-testimoniForm.addEventListener("submit", function (e) {
-  e.preventDefault();
-  const nama = document.getElementById("nama").value.trim();
-  const pesan = document.getElementById("pesan").value.trim();
-  if (!nama || !pesan) return;
-
-  const li = document.createElement("li");
-  li.innerHTML = `<strong>${nama}</strong><br>"${pesan}"`;
-  listTestimoni.appendChild(li);
-  testimoniForm.reset();
-});
-</script>
-
-<!-- ================== QRIS (DARI BAGIAN 1 & BAGIAN 2, TANPA DUPLIKAT) ================== -->
-<section class="qris-section" id="qris">
-  <h3>Bayar Lebih Mudah dengan QRIS</h3>
-  <p>Scan kode QR di bawah ini untuk membayar pesanan kamu:</p>
-  <img src="assets/images/qris-pukis.jpg" alt="QRIS Pukis Lumer Aulia" style="max-width:260px;border-radius:10px;">
-</section>
-
-<!-- ================== LOKASI (PERTAHANKAN BAGIAN 2 KARENA LEBIH JELAS) ================== -->
-<section id="lokasi">
-  <h2>Lokasi Kami</h2>
-  <p>Pasar Kuliner Padang Panjang (Gerobak Pink)</p>
-  <iframe src="https://www.google.com/maps?q=-0.46396,100.39405&z=15&output=embed"
-    style="width:100%;height:260px;border:0;border-radius:8px"></iframe>
-</section>
-
-<!-- ================== FOOTER (GABUNGKAN, TANPA DUPLIKAT) ================== -->
-<footer style="margin-top:18px;padding:12px;background:#222;color:#fff;border-radius:8px">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-    <div>© 2025 Pukis Lumer Aulia</div>
-    <div>Kontak Admin: <a href="https://wa.me/6281296668670" style="color:#fff">6281296668670</a></div>
   </div>
 
-  <p style="margin-top:6px">Hak cipta dilindungi undang-undang.</p>
+  <!-- FORM TESTIMONI -->
+  <section id="form-testimoni">
+    <h2>Tulis Testimoni Kamu!</h2>
+    <form id="testimoniForm">
+      <input type="text" id="nama" placeholder="Nama Kamu" required>
+      <textarea id="pesan" placeholder="Tulis testimoni di sini..." required></textarea>
+      <button type="submit">Kirim Testimoni</button>
+    </form>
 
-  <p>
-    Kunjungi lokasi kami:
-    <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" class="map-link">
-      <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" width="32">
-    </a>
-  </p>
-</footer>
+    <div id="daftarTestimoni">
+      <h3>Testimoni:</h3>
+      <ul id="listTestimoni">
+        <li><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+        <li><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+        <li><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+        <li><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, topping-nya gak pelit, penjual juga ramah."</li>
+      </ul>
 
-<!-- ================== FLOATING SHARE ICONS (PERTAHANKAN BAGIAN 1 – LEBIH LENGKAP) ================== -->
-<div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
-  <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-  <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-  <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-  <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank"><i class="fa-brands fa-twitter"></i></a>
-  <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-</div>
+      <button onclick="hapusSemuaTestimoni()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">Hapus Semua Testimoni</button>
+    </div>
+  </section>
 
-<div class="toggle-float-btn" id="toggleShareBtn">
-  <i class="fa-solid fa-share-nodes"></i>
-</div>
+  <!-- QRIS -->
+  <section class="qris-section" id="qris">
+    <h3>Bayar Lebih Mudah dengan QRIS</h3>
+    <p>Scan kode QR di bawah ini untuk membayar pesanan kamu:</p>
+    <img src="assets/images/qris-pukis.jpg" alt="QRIS Pukis Lumer Aulia" style="max-width:260px;border-radius:10px;">
+  </section>
 
-<script>
-const toggleBtn = document.getElementById("toggleShareBtn");
-const floatingIcons = document.getElementById("floatingIcons");
+  <!-- LOKASI -->
+  <section id="lokasi">
+    <h2>Lokasi Kami</h2>
+    <p>Pasar Kuliner Padang Panjang (Gerobak Pink)</p>
+    <iframe src="https://www.google.com/maps?q=-0.46396,100.39405&z=15&output=embed" style="width:100%;height:260px;border:0;border-radius:8px"></iframe>
+  </section>
+<!-- end part 3 -->
 
-toggleBtn.addEventListener("click", () => {
-  floatingIcons.classList.toggle("show");
-});
-</script>
+    <!-- FILE: index.html (PART 4 of 4) -->
+  <!-- FOOTER -->
+  <footer style="margin-top:18px;padding:12px;background:#222;color:#fff;border-radius:8px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>© 2025 Pukis Lumer Aulia</div>
+      <div>Kontak Admin: <a href="https://wa.me/6281296668670" style="color:#fff">6281296668670</a></div>
+    </div>
+    <p style="margin-top:6px">Hak cipta dilindungi undang-undang.</p>
+    <p>Kunjungi lokasi kami:
+      <a href="https://maps.app.goo.gl/LmM9QywPpAUUVkJ4A" target="_blank" class="map-link">
+        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" width="32">
+      </a>
+    </p>
+  </footer>
 
-<!-- ================== TOMBOL ADMIN (DARI BAGIAN 1) ================== -->
-<a id="btnAdmin" href="login.html">🔑 Admin</a>
+  <!-- FLOATING SHARE ICONS -->
+  <div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
+    <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+    <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+  </div>
 
-<script type="module">
-  import { auth } from "./firebase.js";
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+  <div class="toggle-float-btn" id="toggleShareBtn"><i class="fa-solid fa-share-nodes"></i></div>
 
-  const btnAdmin = document.getElementById("btnAdmin");
-  let userReady = false;
-  let currentUser = null;
+  <!-- Admin button -->
+  <a id="btnAdmin" href="login.html" style="position:fixed; left:18px; bottom:20px; background:#d6336c; color:#fff; padding:10px 18px; border-radius:8px; text-decoration:none; font-weight:bold; box-shadow:0 2px 6px rgba(0,0,0,0.3); z-index:1000;">🔑 Admin</a>
 
-  onAuthStateChanged(auth, (user) => {
-    userReady = true;
-    currentUser = user;
-  });
+  <!-- External libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  btnAdmin.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (!userReady) {
-      alert("Sedang memeriksa status login...");
-      return;
-    }
-    window.location.href = currentUser ? "admin.html" : "login.html";
-  });
-</script>
+  <!-- Inline / module scripts (dipisah juga jadi file .js terpisah di folder assets/js/) -->
+  <script type="module" src="assets/js/frontend.js"></script>
+  <script type="module" src="assets/js/order.js"></script>
+  <script type="module" src="assets/js/testimoni.js"></script>
+  <script type="module" src="firebase.js"></script>
 
-<!-- ================== FIREBASE LOADER (DIGABUNG & DIRAPIKAN) ================== -->
-<script type="module">
-  try {
-    import { getContent } from "./firebase.js";
+  <script>
+    // Toggle share icons
+    const toggleBtn = document.getElementById("toggleShareBtn");
+    const floatingIcons = document.getElementById("floatingIcons");
+    toggleBtn?.addEventListener("click", () => { floatingIcons.classList.toggle("show"); });
 
-    async function loadHomePage() {
-      try {
-        const data = await getContent("homepage");
-        if (!data) return;
-
-        if (data.promoImage && document.querySelector("#promoImage"))
-          document.querySelector("#promoImage").src = data.promoImage;
-      } catch (e) { console.warn("firebase load failed", e); }
-    }
-
-    window.addEventListener("load", loadHomePage);
-  } catch (e) {}
-</script>
-
+    // Nota popup close/print handlers
+    document.getElementById('notaClose')?.addEventListener('click', ()=>{ document.getElementById('notaContainer').style.display='none'; });
+    document.getElementById('notaPrint')?.addEventListener('click', ()=>{ window.print(); });
+    document.getElementById('notaSendAdmin')?.addEventListener('click', ()=>{ alert('WA admin akan dibuka (jika belum).'); });
+  </script>
 </body>
 </html>
