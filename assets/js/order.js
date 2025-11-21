@@ -1,3 +1,6 @@
+w.open(url, "_blank");
+    });
+}); // end DOMContentLoaded
 // ================= order.js – Bagian 1 =================
 document.addEventListener("DOMContentLoaded", () => {
     // === Helper ===
@@ -130,7 +133,9 @@ document.addEventListener("DOMContentLoaded", () => {
             pricePerBox: pricePerBox,
             subtotal: subtotal,
             discount: discount,
-            total: total
+            total: total,
+            logo: "assets/images/logo_png", // Path ke logo
+            ttd: "assets/ttd.png" // Path ke tanda tangan digital
         };
     }
 
@@ -187,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ====== Tutup Popup ======
     notaClose.addEventListener("click", () => notaContainer.style.display = "none");
 
-    // ====== Cetak / Download PDF ======
+    // ====== Cetak / Download PDF (Data Only) ======
     notaPrint.addEventListener("click", () => {
         const {
             nama,
@@ -201,53 +206,31 @@ document.addEventListener("DOMContentLoaded", () => {
             pricePerBox,
             subtotal,
             discount,
-            total
+            total,
+            logo, // Ambil path logo dari dataPesanan
+            ttd // Ambil path ttd dari dataPesanan
         } = dataPesanan;
 
-        let toppingText = topping.length > 0 ? topping.join(", ") : "-";
-        let taburanText = taburan.length > 0 ? taburan.join(", ") : "-";
+        // Data nota
+        const notaData = {
+            nama: nama,
+            wa: wa,
+            jenis: jenis,
+            isi: isi,
+            mode: mode,
+            topping: topping,
+            taburan: taburan,
+            jumlahBox: jumlahBox,
+            pricePerBox: pricePerBox,
+            subtotal: subtotal,
+            discount: discount,
+            total: total,
+            logo: logo, // Gunakan path logo dari dataPesanan
+            ttd: ttd // Gunakan path ttd dari dataPesanan
+        };
 
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text("Nota Pemesanan Pukis Lumer Aulia", 14, 14);
-
-        const tableData = [
-            ["Nama", nama],
-            ["Nomor WA", wa],
-            ["Jenis Pukis", jenis],
-            ["Isi per Box", `${isi} pcs`],
-            ...(mode === "double" ? [
-                ["Topping", toppingText],
-                ["Taburan", taburanText]
-            ] : mode === "single" ? [
-                ["Topping", toppingText]
-            ] : []),
-            ["Jumlah Box", jumlahBox],
-            ["Harga per Box", formatRp(pricePerBox)],
-            ["Subtotal", formatRp(subtotal)],
-            ["Diskon", discount > 0 ? formatRp(discount) : "-"],
-            ["Total Bayar", formatRp(total)]
-        ];
-
-        try {
-            doc.autoTable({
-                body: tableData,
-                startY: 20,
-                theme: 'grid',
-                styles: {
-                    fontSize: 9,
-                },
-                headerStyles: {
-                    fillColor: [214, 51, 108],
-                    textColor: [255, 255, 255],
-                    fontStyle: 'bold',
-                },
-            });
-            doc.save(`nota-pemesanan-${Date.now()}.pdf`);
-        } catch (error) {
-            console.error("Error generating PDF:", error);
-            alert("Terjadi kesalahan saat membuat nota PDF. Silakan coba lagi.");
-        }
+        // Kirim data nota ke fungsi untuk menghasilkan PDF (perlu diimplementasikan dengan library PDF pilihan)
+        generatePdf(notaData);
     });
 
     // ====== Kirim WA Admin ======
@@ -301,4 +284,92 @@ document.addEventListener("DOMContentLoaded", () => {
         const url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
         window.open(url, "_blank");
     });
+
+    // Fungsi untuk menghasilkan PDF dengan data nota (perlu diimplementasikan)
+    function generatePdf(notaData) {
+        console.log("Data nota untuk PDF:", notaData);
+        alert("Fungsi generatePdf() perlu diimplementasikan dengan library PDF pilihan (jsPDF, PDFMake, dll.)");
+
+        // Contoh implementasi dengan jsPDF (perlu penyesuaian lebih lanjut)
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Tambah logo
+        const img = new Image();
+        img.src = notaData.logo;
+        img.onload = function() {
+            doc.addImage(img, 'PNG', 14, 14, 50, 15);
+
+            // Tambah watermark
+            // (Anda perlu menyediakan gambar watermark yang sesuai)
+            const watermarkImg = new Image();
+            watermarkImg.src = 'assets/images/watermark-emas.png'; // Ganti dengan path watermark Anda
+            watermarkImg.onload = function() {
+                // Dapatkan ukuran halaman PDF
+                const pageSize = doc.internal.pageSize;
+                const pageWidth = pageSize.getWidth();
+                const pageHeight = pageSize.getHeight();
+
+                // Tambah watermark di tengah halaman
+                doc.addImage(watermarkImg, 'PNG', pageWidth / 2 - 75, pageHeight / 2 - 75, 150, 150);
+                doc.setPage(1); // Kembali ke halaman pertama setelah menambahkan watermark
+
+                // Data tabel
+                const tableData = [
+                    ["Nama", notaData.nama],
+                    ["Nomor WA", notaData.wa],
+                    ["Jenis Pukis", notaData.jenis],
+                    ["Isi per Box", `${notaData.isi} pcs`],
+                    ...(notaData.mode === "double" ? [
+                        ["Topping", notaData.topping.join(", ")],
+                        ["Taburan", notaData.taburan.join(", ")]
+                    ] : notaData.mode === "single" ? [
+                        ["Topping", notaData.topping.join(", ")]
+                    ] : []),
+                    ["Jumlah Box", notaData.jumlahBox],
+                    ["Harga per Box", formatRp(notaData.pricePerBox)],
+                    ["Subtotal", formatRp(notaData.subtotal)],
+                    ["Diskon", notaData.discount > 0 ? formatRp(notaData.discount) : "-"],
+                    ["Total Bayar", formatRp(notaData.total)]
+                ];
+
+                // Tambah tabel
+                doc.autoTable({
+                    body: tableData,
+                    startY: 40,
+                    theme: 'grid',
+                    styles: {
+                        fontSize: 9,
+                    },
+                    headerStyles: {
+                        fillColor: [214, 51, 108],
+                        textColor: [255, 255, 255],
+                        fontStyle: 'bold',
+                    },
+                });
+
+                // Tambah tanda tangan digital
+                const ttdImg = new Image();
+                ttdImg.src = notaData.ttd;
+                ttdImg.onload = function() {
+                    const finalY = doc.autoTable.previous.finalY; // Mendapatkan posisi Y terakhir dari tabel
+                    doc.addImage(ttdImg, 'PNG', 14, finalY + 10, 50, 15); // Tambah tanda tangan di bawah tabel
+
+                    doc.save(`nota-pemesanan-${Date.now()}.pdf`);
+                };
+                ttdImg.onerror = function() {
+                    console.error("Gagal memuat gambar tanda tangan digital.");
+                    doc.save(`nota-pemesanan-${Date.now()}.pdf`);
+                };
+            };
+            watermarkImg.onerror = function() {
+                console.error("Gagal memuat gambar watermark.");
+                doc.save(`nota-pemesanan-${Date.now()}.pdf`);
+            };
+        };
+        img.onerror = function() {
+            console.error("Gagal memuat gambar logo.");
+            doc.save(`nota-pemesanan-${Date.now()}.pdf`);
+        };
+    }
 }); // end DOMContentLoaded
