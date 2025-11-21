@@ -1,4 +1,4 @@
-// ================= order.js – Bagian 1 =================
+// ================= order.js =================
 document.addEventListener("DOMContentLoaded", () => {
     // === Helper ===
     const $ = s => document.querySelector(s);
@@ -55,8 +55,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ultraDoubleGroup.style.display = (mode === "double") ? "block" : "none";
 
         // reset checkbox
-        $$('#ultraSingleGroup input[type="checkbox"]').forEach(cb => cb.checked = false);
-        $$('#ultraDoubleGroup input[type="checkbox"]').forEach(cb => cb.checked = false);
+        $$('.ultraSingleTopping').forEach(cb => cb.checked = false);
+        $$('.ultraDoubleTopping').forEach(cb => cb.checked = false);
+        $$('.ultraTaburan').forEach(cb => cb.checked = false);
 
         calculatePrice(); // Update harga saat topping mode berubah
     }
@@ -71,33 +72,35 @@ document.addEventListener("DOMContentLoaded", () => {
     updateToppingDisplay();
 
     // ====== Maksimal 5 topping dan 5 taburan ======
-    $$('#ultraSingleGroup input[type="checkbox"], #ultraDoubleGroup input[type="checkbox"]').forEach(cb => {
-        cb.addEventListener("change", () => {
-            const checkedSingleTopping = getCheckedValues('#ultraSingleGroup input[name="singleTopping"]');
-            const checkedDoubleTopping = getCheckedValues('#ultraDoubleGroup input[name="doubleTopping"]');
-            const checkedTaburan = getCheckedValues('#ultraDoubleGroup input[name="taburan"]');
-            const mode = getSelectedRadioValue("ultraToppingMode");
+    function toppingTaburanHandler(event) {
+        const mode = getSelectedRadioValue("ultraToppingMode");
+        const checkedSingleTopping = getCheckedValues('.ultraSingleTopping');
+        const checkedDoubleTopping = getCheckedValues('.ultraDoubleTopping');
+        const checkedTaburan = getCheckedValues('.ultraTaburan');
 
-            if (mode === "double") {
-                if (checkedDoubleTopping.length > 5) {
-                    cb.checked = false;
-                    alert("Maksimal 5 topping yang dapat dipilih.");
-                    return;
-                }
-                if (checkedTaburan.length > 5) {
-                    cb.checked = false;
-                    alert("Maksimal 5 taburan yang dapat dipilih.");
-                    return;
-                }
-            } else if (mode === "single") {
-                if (checkedSingleTopping.length > 5) {
-                    cb.checked = false;
-                    alert("Maksimal 5 topping yang dapat dipilih.");
-                    return;
-                }
+        if (mode === "double") {
+            if (checkedDoubleTopping.length > 5 && event.target.classList.contains('ultraDoubleTopping')) {
+                event.target.checked = false;
+                alert("Maksimal 5 topping yang dapat dipilih.");
+                return;
             }
-            calculatePrice();
-        });
+            if (checkedTaburan.length > 5 && event.target.classList.contains('ultraTaburan')) {
+                event.target.checked = false;
+                alert("Maksimal 5 taburan yang dapat dipilih.");
+                return;
+            }
+        } else if (mode === "single") {
+            if (checkedSingleTopping.length > 5 && event.target.classList.contains('ultraSingleTopping')) {
+                event.target.checked = false;
+                alert("Maksimal 5 topping yang dapat dipilih.");
+                return;
+            }
+        }
+        calculatePrice();
+    }
+
+    $$('.ultraSingleTopping, .ultraDoubleTopping, .ultraTaburan').forEach(cb => {
+        cb.addEventListener("change", toppingTaburanHandler);
     });
 
     // ====== HITUNG HARGA ======
@@ -125,8 +128,8 @@ document.addEventListener("DOMContentLoaded", () => {
             jenis: jenis,
             isi: isi,
             mode: mode,
-            topping: mode === "single" ? getCheckedValues('#ultraSingleGroup input[name="singleTopping"]') : getCheckedValues('#ultraDoubleGroup input[name="doubleTopping"]'),
-            taburan: mode === "double" ? getCheckedValues('#ultraDoubleGroup input[name="taburan"]') : [],
+            topping: mode === "single" ? getCheckedValues('.ultraSingleTopping') : getCheckedValues('.ultraDoubleTopping'),
+            taburan: mode === "double" ? getCheckedValues('.ultraTaburan') : [],
             jumlahBox: jumlahBox,
             pricePerBox: pricePerBox,
             subtotal: subtotal,
@@ -143,7 +146,8 @@ document.addEventListener("DOMContentLoaded", () => {
     $$('input[name="ultraJenis"]').forEach(r => r.addEventListener("change", calculatePrice));
 
     calculatePrice();
-                // ================= order.js – Bagian 2 =================
+
+    // ================= order.js – Bagian 2 =================
     // ====== POPUP NOTA ======
     function generateNota() {
         const {
@@ -284,6 +288,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fungsi untuk menghasilkan PDF dengan data nota (perlu diimplementasikan)
     function generatePdf(notaData) {
+        console.log("Data nota untuk PDF:", notaData);
+        alert("Fungsi generatePdf() perlu diimplementasikan dengan library PDF pilihan
+
         console.log("Data nota untuk PDF:", notaData);
         alert("Fungsi generatePdf() perlu diimplementasikan dengan library PDF pilihan (jsPDF, PDFMake, dll.)");
 
