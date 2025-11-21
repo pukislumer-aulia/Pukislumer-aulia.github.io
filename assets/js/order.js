@@ -1,14 +1,21 @@
 // ================= order.js - Bagian 1 =================
 document.addEventListener("DOMContentLoaded",()=>{
 
-  // ====== CONFIG ======
-  const BASE_PRICE = { Original: {5:10000,10:18000}, Pandan: {5:12000,10:22000} };
-  const TOPPING_EXTRA = { non:0, single:2000, double:4000 };
-  const ADMIN_WA = "6281296668670";
-
-  // ====== SELECTORS ======
+  // === Helper ===
   const $ = s=>document.querySelector(s);
-  const $$ = s=>Array.from(document.querySelectorAll(s));
+  const $$ = s=>document.querySelectorAll(s);
+  const formatRp = n=>"Rp"+n.toLocaleString('id-ID');
+
+  const BASE_PRICE = {
+    "Original": {5:15000,10:28000},
+    "Pandan": {5:16000,10:30000}
+  };
+  const TOPPING_EXTRA = {
+    "non":0,
+    "single":2000,
+    "double":4000
+  };
+  const ADMIN_WA = "6281296668670";
 
   const ultraNama = $("#ultraNama");
   const ultraWA = $("#ultraWA");
@@ -18,46 +25,55 @@ document.addEventListener("DOMContentLoaded",()=>{
   const ultraSubtotal = $("#ultraSubtotal");
   const ultraDiscount = $("#ultraDiscount");
   const ultraGrandTotal = $("#ultraGrandTotal");
-  const ultraSingleGroup = $("#ultraSingleGroup");
-  const ultraDoubleGroup = $("#ultraDoubleGroup");
   const formUltra = $("#formUltra");
 
+  const ultraSingleGroup = $("#ultraSingleGroup");
+  const ultraDoubleGroup = $("#ultraDoubleGroup");
+
   const notaContainer = $("#notaContainer");
+  const notaBox = $("#notaBox");
   const notaContent = $("#notaContent");
   const notaClose = $("#notaClose");
   const notaPrint = $("#notaPrint");
   const notaSendAdmin = $("#notaSendAdmin");
 
-  // ====== HELPERS ======
-  const formatRp = n=>"Rp"+Number(n).toLocaleString("id-ID");
-  const getSelectedRadioValue = name=>{ const r = document.querySelector(`input[name="${name}"]:checked`); return r?r.value:null; };
-  const getCheckedValues = selector=>$$(selector).filter(ch=>ch.checked).map(ch=>ch.value);
+  function getSelectedRadioValue(name){
+    const r = document.querySelector(`input[name="${name}"]:checked`);
+    return r?r.value:null;
+  }
+  function getCheckedValues(selector){
+    return Array.from(document.querySelectorAll(selector))
+      .filter(c=>c.checked)
+      .map(c=>c.value);
+  }
 
-  // ====== MAX CHECKBOX ======
-  function enforceMax(selector,max){
-    $$(selector).forEach(cb=>{
-      cb.addEventListener("change",()=>{
-        const count = $$(selector).filter(x=>x.checked).length;
-        if(count>max){ cb.checked=false; alert(`Maksimal ${max} pilihan.`); }
-      });
+  // ====== Topping Mode ======
+  function updateToppingDisplay(){
+    const mode = getSelectedRadioValue("ultraToppingMode");
+    ultraSingleGroup.style.display = (mode==="single")?"block":"none";
+    ultraDoubleGroup.style.display = (mode==="double")?"block":"none";
+    // reset checkbox
+    $$('input.ultraSingle').forEach(cb=>cb.checked=false);
+    $$('input.ultraDouble').forEach(cb=>cb.checked=false);
+  }
+  $$('input[name="ultraToppingMode"]').forEach(r=>{
+    r.addEventListener("change",()=>{
+      updateToppingDisplay();
+      calculatePrice();
     });
-  }
-  enforceMax(".ultraSingle",5);
-  enforceMax(".ultraDouble",5);
+  });
+  updateToppingDisplay();
 
-  // ====== TOPPING VISIBILITY ======
-  function updateToppingVisibility(){
-    const mode = getSelectedRadioValue("ultraToppingMode")||"non";
-    if(ultraSingleGroup) ultraSingleGroup.style.display=(mode==="single"||mode==="double")?"block":"none";
-    if(ultraDoubleGroup) ultraDoubleGroup.style.display=(mode==="double")?"block":"none";
-  }
-  $$('input[name="ultraToppingMode"]').forEach(r=>r.addEventListener("change",()=>{
-    updateToppingVisibility();
-    calculatePrice();
-  }));
-
-  updateToppingVisibility();
-  // ================= order.js - Bagian 2 =================
+  // ====== Maksimal 5 topping ======
+  $$('input.ultraSingle, input.ultraDouble').forEach(cb=>{
+    cb.addEventListener("change",()=>{
+      const mode = getSelectedRadioValue("ultraToppingMode");
+      const checkboxes = mode==="single"?$$('input.ultraSingle'):$$('input.ultraDouble');
+      const checked = checkboxes.filter(c=>c.checked);
+      if(checked.length>5) cb.checked=false;
+      calculatePrice();
+    });
+  });
 
   // ====== HITUNG HARGA ======
   function calculatePrice(){
@@ -72,7 +88,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     pricePerBox += TOPPING_EXTRA[mode] || 0;
 
     const subtotal = pricePerBox * jumlahBox;
-    const discount = 0; // bisa ditambah logika diskon
+    const discount = 0;
     const total = subtotal - discount;
 
     ultraPricePerBox.textContent = formatRp(pricePerBox);
@@ -87,67 +103,80 @@ document.addEventListener("DOMContentLoaded",()=>{
   ultraIsi.addEventListener("change",calculatePrice);
   ultraJumlah.addEventListener("input",calculatePrice);
   $$('input[name="ultraJenis"]').forEach(r=>r.addEventListener("change",calculatePrice));
-  $$('input.ultraSingle, input.ultraDouble').forEach(cb=>cb.addEventListener("change",calculatePrice));
 
   calculatePrice();
 
-  // ====== BUILD NOTA HTML ======
-  function buildNota(){
-    const data = calculatePrice();
-    const nama = ultraNama.value.trim();
-    const wa = ultraWA.value.trim();
-    const singleToppings = getCheckedValues(".ultraSingle").join(", ") || "-";
-    const doubleToppings = getCheckedValues(".ultraDouble").join(", ") || "-";
+                          // ================= order.js - Bagian 2 =================
 
-    let html = `<p><strong>Nama:</strong> ${nama}</p>`;
-    html += `<p><strong>No WA:</strong> ${wa}</p>`;
-    html += `<p><strong>Jenis:</strong> ${data.jenis}</p>`;
-    html += `<p><strong>Isi per Box:</strong> ${data.isi}</p>`;
-    html += `<p><strong>Topping Single:</strong> ${singleToppings}</p>`;
-    html += `<p><strong>Taburan Double:</strong> ${doubleToppings}</p>`;
-    html += `<p><strong>Jumlah Box:</strong> ${data.jumlahBox}</p>`;
-    html += `<p><strong>Harga per Box:</strong> ${formatRp(data.pricePerBox)}</p>`;
-    html += `<p><strong>Subtotal:</strong> ${formatRp(data.subtotal)}</p>`;
-    html += `<p><strong>Diskon:</strong> ${data.discount>0?formatRp(data.discount):"-"}</p>`;
-    html += `<p><strong>Total Bayar:</strong> ${formatRp(data.total)}</p>`;
+// ====== POPUP NOTA ======
+function generateNota(){
+  const data = calculatePrice();
+  const nama = ultraNama.value.trim() || "-";
+  const wa = ultraWA.value.trim() || "-";
+  const toppingSelected = data.mode==="single"?getCheckedValues('input.ultraSingle')
+                          :data.mode==="double"?getCheckedValues('input.ultraDouble')
+                          :[];
+  let toppingText = toppingSelected.length>0?toppingSelected.join(","):"-";
 
-    notaContent.innerHTML = html;
-    notaContainer.style.display = "flex";
-  }
+  let html = `
+    <p><strong>Nama:</strong> ${nama}</p>
+    <p><strong>Nomor WA:</strong> ${wa}</p>
+    <p><strong>Jenis Pukis:</strong> ${data.jenis}</p>
+    <p><strong>Isi per Box:</strong> ${data.isi} pcs</p>
+    <p><strong>Topping/Taburan:</strong> ${toppingText}</p>
+    <p><strong>Jumlah Box:</strong> ${data.jumlahBox}</p>
+    <hr>
+    <p><strong>Harga per Box:</strong> ${formatRp(data.pricePerBox)}</p>
+    <p><strong>Subtotal:</strong> ${formatRp(data.subtotal)}</p>
+    <p><strong>Diskon:</strong> ${data.discount>0?formatRp(data.discount):"-"}</p>
+    <p><strong>Total Bayar:</strong> ${formatRp(data.total)}</p>
+  `;
+  notaContent.innerHTML = html;
+}
 
-  // ====== CLOSE NOTA ======
-  notaClose.addEventListener("click",()=>{ notaContainer.style.display="none"; });
+// ====== Buka Popup ======
+formUltra.addEventListener("submit",(e)=>{
+  e.preventDefault();
+  generateNota();
+  notaContainer.style.display = "flex";
+});
 
-  // ====== PDF ======
-  notaPrint.addEventListener("click",()=>{
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.html(notaContent, {
-      callback: function (doc) {
-        doc.save("Nota-Pemesanan.pdf");
-      },
-      x:10, y:10, width:180
-    });
-  });
+// ====== Tutup Popup ======
+notaClose.addEventListener("click",()=>notaContainer.style.display="none");
 
-  // ====== KIRIM WA ADMIN ======
-  notaSendAdmin.addEventListener("click",()=>{
-    const data = calculatePrice();
-    const nama = ultraNama.value.trim();
-    const wa = ultraWA.value.trim();
-    const singleToppings = getCheckedValues(".ultraSingle").join(", ") || "-";
-    const doubleToppings = getCheckedValues(".ultraDouble").join(", ") || "-";
+// ====== Cetak / Download PDF ======
+notaPrint.addEventListener("click",()=>{
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text("Nota Pemesanan Pukis Lumer Aulia",14,14);
+  doc.autoTable({ html:"#notaContent", startY:20 });
+  doc.save(`nota-pemesanan-${Date.now()}.pdf`);
+});
 
-    const text = `*Nota Pemesanan Pukis Lumer Aulia*\nNama: ${nama}\nWA: ${wa}\nJenis: ${data.jenis}\nIsi/Box: ${data.isi}\nTopping: ${singleToppings}\nTaburan: ${doubleToppings}\nJumlah Box: ${data.jumlahBox}\nTotal Bayar: ${formatRp(data.total)}`;
+// ====== Kirim WA Admin ======
+notaSendAdmin.addEventListener("click",()=>{
+  const data = calculatePrice();
+  const nama = ultraNama.value.trim() || "-";
+  const wa = ultraWA.value.trim() || "-";
+  const toppingSelected = data.mode==="single"?getCheckedValues('input.ultraSingle')
+                          :data.mode==="double"?getCheckedValues('input.ultraDouble')
+                          :[];
+  let toppingText = toppingSelected.length>0?toppingSelected.join(","):"-";
 
-    const url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(text)}`;
-    window.open(url,"_blank");
-  });
+  let msg = `*Nota Pemesanan Pukis Lumer Aulia*\n\n`+
+            `Nama: ${nama}\n`+
+            `Nomor WA: ${wa}\n`+
+            `Jenis: ${data.jenis}\n`+
+            `Isi per Box: ${data.isi} pcs\n`+
+            `Topping/Taburan: ${toppingText}\n`+
+            `Jumlah Box: ${data.jumlahBox}\n\n`+
+            `Harga per Box: ${formatRp(data.pricePerBox)}\n`+
+            `Subtotal: ${formatRp(data.subtotal)}\n`+
+            `Diskon: ${data.discount>0?formatRp(data.discount):"-"}\n`+
+            `Total Bayar: ${formatRp(data.total)}`;
 
-  // ====== FORM SUBMIT ======
-  formUltra.addEventListener("submit",e=>{
-    e.preventDefault();
-    buildNota();
-  });
+  const url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
+  window.open(url,"_blank");
+});
 
-}); // DOMContentLoaded end
+}); // end DOMContentLoaded
