@@ -112,6 +112,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let pricePerBox = BASE_PRICE[jenis][isi][mode];
 
+        // Validasi harga per box
+        if (!pricePerBox) {
+            console.error("Harga tidak valid untuk kombinasi jenis, isi, dan mode yang dipilih.");
+            ultraPricePerBox.textContent = "Rp0";
+            ultraSubtotal.textContent = "Rp0";
+            ultraDiscount.textContent = "-";
+            ultraGrandTotal.textContent = "Rp0";
+            return;
+        }
+
         const subtotal = pricePerBox * jumlahBox;
         const discount = 0;
         const total = subtotal - discount;
@@ -209,8 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
             subtotal,
             discount,
             total,
-            logo, // Ambil path logo dari dataPesanan
-            ttd // Ambil path ttd dari dataPesanan
+            logo,
+            ttd
         } = dataPesanan;
 
         // Data nota
@@ -227,11 +237,10 @@ document.addEventListener("DOMContentLoaded", () => {
             subtotal: subtotal,
             discount: discount,
             total: total,
-            logo: logo, // Gunakan path logo dari dataPesanan
-            ttd: ttd // Gunakan path ttd dari dataPesanan
+            logo: logo,
+            ttd: ttd
         };
 
-        // Kirim data nota ke fungsi untuk menghasilkan PDF (perlu diimplementasikan dengan library PDF pilihan)
         generatePdf(notaData);
     });
 
@@ -293,13 +302,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Contoh implementasi dengan jsPDF (perlu penyesuaian lebih lanjut)
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+        const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
 
         // Fungsi untuk menambahkan gambar dengan promise
         function addImageToDoc(doc, imgUrl, x, y, width, height) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
-                img.crossOrigin = "anonymous"; // Penting untuk mengatasi masalah CORS
+                img.crossOrigin = "anonymous";
                 img.onload = () => {
                     doc.addImage(img, 'PNG', x, y, width, height);
                     resolve();
@@ -312,57 +328,43 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Tambah logo
-        addImageToDoc(doc, notaData.logo, 14, 14, 50, 15)
-            .then(() => {
-                // Tambah watermark
-                return addImageToDoc(doc, 'assets/images/watermark-emas.png', doc.internal.pageSize.getWidth() / 2 - 75, doc.internal.pageSize.getHeight() / 2 - 75, 150, 150);
-            })
-            .then(() => {
-                // Data tabel
-                const tableData = [
-                    ["Nama", notaData.nama],
-                    ["Nomor WA", notaData.wa],
-                    ["Jenis Pukis", notaData.jenis],
-                    ["Isi per Box", `${notaData.isi} pcs`],
-                    ...(notaData.mode === "double" ? [
-                        ["Topping", notaData.topping.join(", ")],
-                        ["Taburan", notaData.taburan.join(", ")]
-                    ] : notaData.mode === "single" ? [
-                        ["Topping", notaData.topping.join(", ")]
-                    ] : []),
-                    ["Jumlah Box", notaData.jumlahBox],
-                    ["Harga per Box", formatRp(notaData.pricePerBox)],
-                    ["Subtotal", formatRp(notaData.subtotal)],
-                    ["Diskon", notaData.discount > 0 ? formatRp(notaData.discount) : "-"],
-                    ["Total Bayar", formatRp(notaData.total)]
-                ];
+        // Header Invoice
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.text('INVOICE', 14, 20);
 
-                // Tambah tabel
-                doc.autoTable({
-                    body: tableData,
-                    startY: 40,
-                    theme: 'grid',
-                    styles: {
-                        fontSize: 9,
-                    },
-                    headerStyles: {
-                        fillColor: [214, 51, 108],
-                        textColor: [255, 255, 255],
-                        fontStyle: 'bold',
-                    },
-                });
-
-                // Tambah tanda tangan digital
-                const finalY = doc.autoTable.previous.finalY; // Mendapatkan posisi Y terakhir dari tabel
-                return addImageToDoc(doc, notaData.ttd, 14, finalY + 10, 50, 15);
-            })
+        // Logo
+        addImageToDoc(doc, notaData.logo, 14, 25, 50, 15)
             .then(() => {
-                doc.save(`nota-pemesanan-${Date.now()}.pdf`);
-            })
-            .catch(error => {
-                console.error("Terjadi kesalahan dalam pembuatan PDF:", error);
-                alert("Terjadi kesalahan dalam pembuatan PDF. Silakan coba lagi.");
-            });
-    }
-}); // end DOMContentLoaded
+                //Informasi Toko
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text('SALFORD & CO.', 14, 45);
+                doc.text('Fashion Terlengkap', 14, 50);
+
+                // Tanggal & No Invoice
+                doc.setFontSize(10);
+                doc.text('TANGGAL:', 140, 20);
+                doc.text(new Date().toLocaleDateString('id-ID', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }), 140, 25);
+                doc.text('NO INVOICE:', 140, 35);
+                doc.text(`1 ${new Date().toLocaleDateString('dd/MM/yyyy')}`, 140, 40);
+
+                // Kepada
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                doc.text('KEPADA:', 14, 60);
+                doc.setFont('helvetica', 'normal');
+                doc.text(notaData.nama, 14, 65);
+                doc.text(notaData.wa, 14, 70);
+
+                //Header Table
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                doc.text('KETERANGAN', 14, 80);
+                doc.text('HARGA', 70, 80);
+                doc.text('JML', 100, 80);
