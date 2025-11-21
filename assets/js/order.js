@@ -4,11 +4,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const $ = s => document.querySelector(s);
     const $$ = s => document.querySelectorAll(s);
     const formatRp = n => "Rp" + n.toLocaleString('id-ID');
+
     const BASE_PRICE = {
-        "Original": { 5: 15000, 10: 28000 },
-        "Pandan": { 5: 16000, 10: 30000 }
+        "Original": {
+            "5": { "non": 10000, "single": 13000, "double": 15000 },
+            "10": { "non": 18000, "single": 25000, "double": 28000 }
+        },
+        "Pandan": {
+            "5": { "non": 13000, "single": 15000, "double": 18000 },
+            "10": { "non": 25000, "single": 28000, "double": 32000 }
+        }
     };
-    const TOPPING_EXTRA = { "non": 0, "single": 2000, "double": 4000 };
+
     const ADMIN_WA = "6281296668670";
     const ultraNama = $("#ultraNama");
     const ultraWA = $("#ultraWA");
@@ -27,6 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const notaClose = $("#notaClose");
     const notaPrint = $("#notaPrint");
     const notaSendAdmin = $("#notaSendAdmin");
+
+    let dataPesanan = {}; // Menyimpan data pesanan
 
     function getSelectedRadioValue(name) {
         const r = document.querySelector(`input[name="${name}"]:checked`);
@@ -48,6 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // reset checkbox
         $$('input.ultraSingle').forEach(cb => cb.checked = false);
         $$('input.ultraDouble').forEach(cb => cb.checked = false);
+
+        calculatePrice(); // Update harga saat topping mode berubah
     }
 
     $$('input[name="ultraToppingMode"]').forEach(r => {
@@ -93,15 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // ====== HITUNG HARGA ======
     function calculatePrice() {
         const jenis = getSelectedRadioValue("ultraJenis") || "Original";
-        const isi = parseInt(ultraIsi.value || 5);
+        const isi = ultraIsi.value || "5";
         const mode = getSelectedRadioValue("ultraToppingMode") || "non";
         const jumlahBox = parseInt(ultraJumlah.value || 1);
 
-        // Harga dasar per box
-        let pricePerBox = BASE_PRICE[jenis][isi] || 0;
+        let pricePerBox = BASE_PRICE[jenis][isi][mode];
 
-        // Tambahan topping
-        pricePerBox += TOPPING_EXTRA[mode] || 0;
         const subtotal = pricePerBox * jumlahBox;
         const discount = 0;
         const total = subtotal - discount;
@@ -111,7 +119,21 @@ document.addEventListener("DOMContentLoaded", () => {
         ultraDiscount.textContent = discount > 0 ? formatRp(discount) : "-";
         ultraGrandTotal.textContent = formatRp(total);
 
-        return { jenis, isi, mode, pricePerBox, subtotal, discount, total, jumlahBox };
+        // Simpan data pesanan
+        dataPesanan = {
+            nama: ultraNama.value.trim() || "-",
+            wa: ultraWA.value.trim() || "-",
+            jenis: jenis,
+            isi: isi,
+            mode: mode,
+            topping: getCheckedValues('input.ultraSingle'),
+            taburan: getCheckedValues('input.ultraDouble'),
+            jumlahBox: jumlahBox,
+            pricePerBox: pricePerBox,
+            subtotal: subtotal,
+            discount: discount,
+            total: total
+        };
     }
 
     // ====== UPDATE HARGA OTOMATIS ======
@@ -124,33 +146,36 @@ document.addEventListener("DOMContentLoaded", () => {
     // ================= order.js – Bagian 2 =================
     // ====== POPUP NOTA ======
     function generateNota() {
-        const data = calculatePrice();
-        const nama = ultraNama.value.trim() || "-";
-        const wa = ultraWA.value.trim() || "-";
-        let toppingSelected = [];
-        let taburanSelected = [];
+        const {
+            nama,
+            wa,
+            jenis,
+            isi,
+            mode,
+            topping,
+            taburan,
+            jumlahBox,
+            pricePerBox,
+            subtotal,
+            discount,
+            total
+        } = dataPesanan;
 
-        if (data.mode === "double") {
-            toppingSelected = getCheckedValues('input.ultraSingle');
-            taburanSelected = getCheckedValues('input.ultraDouble');
-        } else if (data.mode === "single") {
-            toppingSelected = getCheckedValues('input.ultraSingle');
-        }
-
-        let toppingText = toppingSelected.length > 0 ? toppingSelected.join(", ") : "-";
-        let taburanText = taburanSelected.length > 0 ? taburanSelected.join(", ") : "-";
+        let toppingText = topping.length > 0 ? topping.join(", ") : "-";
+        let taburanText = taburan.length > 0 ? taburan.join(", ") : "-";
 
         let html = `<p><strong>Nama:</strong> ${nama}</p>
                     <p><strong>Nomor WA:</strong> ${wa}</p>
-                    <p><strong>Jenis Pukis:</strong> ${data.jenis}</p>
-                    <p><strong>Isi per Box:</strong> ${data.isi} pcs</p>
-                    ${data.mode === "double" ? `<p><strong>Topping:</strong> ${toppingText}</p><p><strong>Taburan:</strong> ${taburanText}</p>` : data.mode === "single" ? `<p><strong>Topping:</strong> ${toppingText}</p>` : ''}
-                    <p><strong>Jumlah Box:</strong> ${data.jumlahBox}</p>
+                    <p><strong>Jenis Pukis:</strong> ${jenis}</p>
+                    <p><strong>Isi per Box:</strong> ${isi} pcs</p>
+                    ${mode === "double" ? `<p><strong>Topping:</strong> ${toppingText}</p><p><strong>Taburan:</strong> ${taburanText}</p>` : mode === "single" ? `<p><strong>Topping:</strong> ${toppingText}</p>` : ''}
+                    <p><strong>Jumlah Box:</strong> ${jumlahBox}</p>
                     <hr>
-                    <p><strong>Harga per Box:</strong> ${formatRp(data.pricePerBox)}</p>
-                    <p><strong>Subtotal:</strong> ${formatRp(data.subtotal)}</p>
-                    <p><strong>Diskon:</strong> ${data.discount > 0 ? formatRp(data.discount) : "-"}</p>
-                    <p><strong>Total Bayar:</strong> ${formatRp(data.total)}</p>`;
+                    <p><strong>Harga per Box:</strong> ${formatRp(pricePerBox)}</p>
+                    <p><strong>Subtotal:</strong> ${formatRp(subtotal)}</p>
+                    <p><strong>Diskon:</strong> ${discount > 0 ? formatRp(discount) : "-"}</p>
+                    <p><strong>Total Bayar:</strong> ${formatRp(total)}</p>`;
+
         notaContent.innerHTML = html;
     }
 
@@ -166,41 +191,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ====== Cetak / Download PDF ======
     notaPrint.addEventListener("click", () => {
-        const data = calculatePrice();
-        const nama = ultraNama.value.trim() || "-";
-        const wa = ultraWA.value.trim() || "-";
-        let toppingSelected = [];
-        let taburanSelected = [];
+        const {
+            nama,
+            wa,
+            jenis,
+            isi,
+            mode,
+            topping,
+            taburan,
+            jumlahBox,
+            pricePerBox,
+            subtotal,
+            discount,
+            total
+        } = dataPesanan;
 
-        if (data.mode === "double") {
-            toppingSelected = getCheckedValues('input.ultraSingle');
-            taburanSelected = getCheckedValues('input.ultraDouble');
-        } else if (data.mode === "single") {
-            toppingSelected = getCheckedValues('input.ultraSingle');
-        }
-
-        let toppingText = toppingSelected.length > 0 ? toppingSelected.join(", ") : "-";
-        let taburanText = taburanSelected.length > 0 ? taburanSelected.join(", ") : "-";
+        let toppingText = topping.length > 0 ? topping.join(", ") : "-";
+        let taburanText = taburan.length > 0 ? taburan.join(", ") : "-";
 
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         doc.text("Nota Pemesanan Pukis Lumer Aulia", 14, 14);
 
-        // Data tabel
         const tableData = [
             ["Nama", nama],
             ["Nomor WA", wa],
-            ["Jenis Pukis", data.jenis],
-            ["Isi per Box", `${data.isi} pcs`],
-            ...(data.mode === "double" ? [["Topping", toppingText], ["Taburan", taburanText]] : data.mode === "single" ? [["Topping", toppingText]] : []),
-            ["Jumlah Box", data.jumlahBox],
-            ["Harga per Box", formatRp(data.pricePerBox)],
-            ["Subtotal", formatRp(data.subtotal)],
-            ["Diskon", data.discount > 0 ? formatRp(data.discount) : "-"],
-            ["Total Bayar", formatRp(data.total)]
+            ["Jenis Pukis", jenis],
+            ["Isi per Box", `${isi} pcs`],
+            ...(mode === "double" ? [
+                ["Topping", toppingText],
+                ["Taburan", taburanText]
+            ] : mode === "single" ? [
+                ["Topping", toppingText]
+            ] : []),
+            ["Jumlah Box", jumlahBox],
+            ["Harga per Box", formatRp(pricePerBox)],
+            ["Subtotal", formatRp(subtotal)],
+            ["Diskon", discount > 0 ? formatRp(discount) : "-"],
+            ["Total Bayar", formatRp(total)]
         ];
 
-        // Menggunakan autoTable untuk membuat tabel dari data
         doc.autoTable({
             body: tableData,
             startY: 20,
@@ -219,32 +249,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ====== Kirim WA Admin ======
     notaSendAdmin.addEventListener("click", () => {
-        const data = calculatePrice();
-        const nama = ultraNama.value.trim() || "-";
-        const wa = ultraWA.value.trim() || "-";
-        let toppingSelected = [];
-        let taburanSelected = [];
+        const {
+            nama,
+            wa,
+            jenis,
+            isi,
+            mode,
+            topping,
+            taburan,
+            jumlahBox,
+            total
+        } = dataPesanan;
 
-        if (data.mode === "double") {
-            toppingSelected = getCheckedValues('input.ultraSingle');
-            taburanSelected = getCheckedValues('input.ultraDouble');
-        } else if (data.mode === "single") {
-            toppingSelected = getCheckedValues('input.ultraSingle');
-        }
-
-        let toppingText = toppingSelected.length > 0 ? toppingSelected.join(", ") : "-";
-        let taburanText = taburanSelected.length > 0 ? taburanSelected.join(", ") : "-";
+        let toppingText = topping.length > 0 ? topping.join(", ") : "-";
+        let taburanText = taburan.length > 0 ? taburan.join(", ") : "-";
 
         let msg = `Halo! Saya ingin memesan Pukis:\\n` +
             `Nama: ${nama}\\n` +
-            `Jenis: ${data.jenis}\\n` +
-            `${data.mode === "double" ? `Topping: ${toppingText}\\nTaburan: ${taburanText}\\n` : data.mode === "single" ? `Topping: ${toppingText}\\n` : ''}` +
-            `Isi per Box: ${data.isi} pcs\\n` +
-            `Jumlah Box: ${data.jumlahBox} box\\n` +
-            `Harga: ${formatRp(data.total)}`;
+            `Jenis: ${jenis}\\n` +
+            `${mode === "double" ? `Topping: ${toppingText}\\nTaburan: ${taburanText}\\n` : mode === "single" ? `Topping: ${toppingText}\\n` : ''}` +
+            `Isi per Box: ${isi} pcs\\n` +
+            `Jumlah Box: ${jumlahBox} box\\n` +
+            `Harga: ${formatRp(total)}\\n` +
+            `\\n` +
+            `Jenis Pukis:\\n` +
+            `1. Original\\n` +
+            `2. Pandan\\n` +
+            `Topping:\\n` +
+            `a. Non Topping\\n` +
+            `b. Single Topping, bisa pilih maksimal 5 Topping (coklat, tiramisu, vanilla, stroberi, cappucino)\\n` +
+            `c. Duoble topping, bisa pilih maksimal 5 Topping single (coklat, tiramisu, vanilla, stroberi, cappucino) dan sekaligus bisa pilih maksimal 5 taburan (meses, keju, kacang, choco chip, Oreo)\\n` +
+            `Harga sesuai isi per Box:\\n` +
+            `Original:\\n` +
+            `box kecil Non topping = 10.000\\n` +
+            `box kecil single topping = 13.000\\n` +
+            `box kecil duoble topping = 15.000\\n` +
+            `Box besar Non Topping = 18.000\\n` +
+            `Box besar single topping = 25.000\\n` +
+            `Box besar duoble topping = 28.000\\n` +
+            `Pandan:\\n` +
+            `box kecil Non topping = 13.000\\n` +
+            `box kecil single topping = 15.000\\n` +
+            `box kecil duoble topping = 18.000\\n` +
+            `Box besar Non Topping = 25.000\\n` +
+            `Box besar single topping = 28.000\\n` +
+            `Box besar duoble topping = 32.000`;
 
         const url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
         window.open(url, "_blank");
     });
 }); // end DOMContentLoaded
-        
