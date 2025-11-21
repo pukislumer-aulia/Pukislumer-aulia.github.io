@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const notaContent = $("#notaContent");
     const notaClose = $("#notaClose");
     const notaPrint = $("#notaPrint");
-    const notaSendAdmin = $("#notaSendAdmin");
+    const notaSendAdmin = $("#ultraSendAdmin"); // Perbaikan: Ganti #notaSendAdmin menjadi #ultraSendAdmin
 
     let dataPesanan = {}; // Menyimpan data pesanan
 
@@ -292,10 +292,11 @@ document.addEventListener("DOMContentLoaded", () => {
             `box kecil single topping = 15.000\\n` +
             `box kecil duoble topping = 18.000\\n` +
             `Box besar Non Topping = 25.000\\n` +
-            `Box besar single topping = 28.000\\n` +
-            `Box besar duoble topping = 32.000`;
+            `box besar single topping = 28.000\\n` +
+            `box besar duoble topping = 32.000`;
 
         const url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
         window.open(url, "_blank");
     });
 }); // end DOMContentLoaded
+            
