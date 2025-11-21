@@ -83,81 +83,67 @@
     <li>Jajan bergizi karena dibuat dari bahan premium</li>
   </ul>
 
-  <!-- FORM PEMESANAN (ULTRA) -->
-  <section id="form-ultra">
-    <h2>Pemesanan Pukis Lumer Aulia (Form Ultra)</h2>
-    <form id="formUltra">
-      <label>Nama Pemesan:</label>
-      <input type="text" id="ultraNama" required>
+<!-- FORM PEMESANAN ULTRA FINAL -->
+<section id="form-ultra">
+  <h2>Pemesanan Pukis Lumer Aulia</h2>
 
-      <label>Nomor WhatsApp (contoh 0812...):</label>
-      <input type="tel" id="ultraWA" placeholder="0812..." required>
+  <form id="formUltra">
 
-      <label>Jenis Pukis:</label>
-      <label class="flex"><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
-      <label class="flex"><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
+    <label>Nama Pemesan:</label>
+    <input type="text" id="ultraNama" required>
 
-      <label>Isi per Box:</label>
-      <select id="ultraIsi">
-        <option value="5">5 pcs (Box Kecil)</option>
-        <option value="10">10 pcs (Box Besar)</option>
-      </select>
+    <label>Nomor WhatsApp:</label>
+    <input type="tel" id="ultraWA" placeholder="0812..." required>
 
-      <label>Topping Mode:</label>
-      <label class="flex"><input type="radio" name="ultraToppingMode" value="non" checked> Non Topping</label>
-      <label class="flex"><input type="radio" name="ultraToppingMode" value="single"> Single Topping</label>
-      <label class="flex"><input type="radio" name="ultraToppingMode" value="double"> Double Topping</label>
+    <label>Jenis Pukis:</label>
+    <label><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
+    <label><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
 
-      <div id="ultraSingleGroup" style="display:none; margin-top:8px;">
-        <label>Pilih Rasa (Single) — pilih maksimum 5</label>
-        <label><input type="checkbox" class="ultraSingle" value="Coklat"> Coklat</label>
-        <label><input type="checkbox" class="ultraSingle" value="Cappucino"> Cappucino</label>
-        <label><input type="checkbox" class="ultraSingle" value="Vanilla"> Vanilla</label>
-        <label><input type="checkbox" class="ultraSingle" value="Stroberi"> Stroberi</label>
-        <label><input type="checkbox" class="ultraSingle" value="Tiramisu"> Tiramisu</label>
-      </div>
+    <label>Isi per Box:</label>
+    <select id="ultraIsi">
+      <option value="5">5 pcs (Box Kecil)</option>
+      <option value="10">10 pcs (Box Besar)</option>
+    </select>
 
-      <div id="ultraDoubleGroup" style="display:none; margin-top:8px;">
-        <label>Pilih Taburan (Double) — pilih maksimum 5</label>
-        <label><input type="checkbox" class="ultraDouble" value="Meses"> Meses</label>
-        <label><input type="checkbox" class="ultraDouble" value="Keju"> Keju</label>
-        <label><input type="checkbox" class="ultraDouble" value="Kacang"> Kacang</label>
-        <label><input type="checkbox" class="ultraDouble" value="Choco Chip"> Choco Chip</label>
-        <label><input type="checkbox" class="ultraDouble" value="Oreo"> Oreo</label>
-      </div>
+    <label>Topping Mode:</label>
+    <label><input type="radio" name="ultraToppingMode" value="non" checked> Non Topping</label>
+    <label><input type="radio" name="ultraToppingMode" value="single"> Single Topping</label>
+    <label><input type="radio" name="ultraToppingMode" value="double"> Double Topping</label>
 
-      <label>Jumlah Box:</label>
-      <input type="number" id="ultraJumlah" min="1" max="10" value="1">
-
-      <div class="price-box" style="margin-top:10px;">
-        <div style="display:flex;justify-content:space-between"><div>Harga per Box:</div><div id="ultraPricePerBox">Rp0</div></div>
-        <div style="display:flex;justify-content:space-between"><div>Subtotal:</div><div id="ultraSubtotal">Rp0</div></div>
-        <div style="display:flex;justify-content:space-between"><div>Diskon:</div><div id="ultraDiscount">-</div></div>
-        <div style="display:flex;justify-content:space-between;font-weight:700;margin-top:6px;"><div>Total Bayar:</div><div id="ultraGrandTotal">Rp0</div></div>
-      </div>
-
-      <button type="submit" style="margin-top:12px;background:var(--brand);color:#fff;padding:10px;border-radius:8px;border:0;">
-        Buat Nota & Kirim ke WhatsApp
-      </button>
-    </form>
-  </section>
-<!-- end part 2 -->
-
-    <!-- FILE: index.html (PART 3 of 4) -->
-  <!-- NOTA POPUP -->
-  <div id="notaContainer" style="display:none; align-items:center; justify-content:center; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9998">
-    <div id="notaBox" style="background:#fff;padding:16px;border-radius:10px;max-width:720px;width:95%;">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h3 style="margin:0">Nota Pemesanan</h3>
-        <button id="notaClose" style="background:#eee;border:0;padding:6px;border-radius:8px;cursor:pointer">✕</button>
-      </div>
-      <div id="notaContent" style="margin-top:12px"></div>
-      <div style="margin-top:12px;display:flex;gap:8px">
-        <button id="notaPrint" style="flex:1">Cetak / Download</button>
-        <button id="notaSendAdmin" style="flex:1;background:#10b981;color:#fff;border:0;padding:8px;border-radius:8px">Kirim ke Admin (WA)</button>
-      </div>
+    <!-- TOPPING SINGLE -->
+    <div id="ultraSingleGroup" style="display:none;margin-top:10px;">
+      <label>Pilih Topping (maks 5):</label>
+      <label><input type="checkbox" class="ultraSingle" value="Coklat"> Coklat</label>
+      <label><input type="checkbox" class="ultraSingle" value="Cappucino"> Cappucino</label>
+      <label><input type="checkbox" class="ultraSingle" value="Vanilla"> Vanilla</label>
+      <label><input type="checkbox" class="ultraSingle" value="Stroberi"> Stroberi</label>
+      <label><input type="checkbox" class="ultraSingle" value="Tiramisu"> Tiramisu</label>
     </div>
-  </div>
+
+    <!-- TOPPING DOUBLE -->
+    <div id="ultraDoubleGroup" style="display:none;margin-top:10px;">
+      <label>Pilih Taburan (maks 5):</label>
+      <label><input type="checkbox" class="ultraDouble" value="Meses"> Meses</label>
+      <label><input type="checkbox" class="ultraDouble" value="Keju"> Keju</label>
+      <label><input type="checkbox" class="ultraDouble" value="Kacang"> Kacang</label>
+      <label><input type="checkbox" class="ultraDouble" value="Choco Chip"> Choco Chip</label>
+      <label><input type="checkbox" class="ultraDouble" value="Oreo"> Oreo</label>
+    </div>
+
+    <label>Jumlah Box:</label>
+    <input type="number" id="ultraJumlah" min="1" max="10" value="1">
+
+    <div style="margin-top:12px;border:1px solid #ddd;padding:10px;border-radius:8px;">
+      <div style="display:flex;justify-content:space-between;"><span>Harga per Box:</span><span id="ultraPricePerBox">Rp0</span></div>
+      <div style="display:flex;justify-content:space-between;"><span>Subtotal:</span><span id="ultraSubtotal">Rp0</span></div>
+      <div style="display:flex;justify-content:space-between;"><span>Diskon:</span><span id="ultraDiscount">-</span></div>
+      <div style="display:flex;justify-content:space-between;font-weight:700;"><span>Total Bayar:</span><span id="ultraGrandTotal">Rp0</span></div>
+    </div>
+
+    <button type="submit" id="ultraSubmit" style="margin-top:12px;background:#fa7878;color:#fff;padding:12px;border-radius:8px;border:none;width:100%;">Buat Nota & Kirim WA</button>
+
+  </form>
+</section>
 
   <!-- FORM TESTIMONI -->
   <section id="form-testimoni">
