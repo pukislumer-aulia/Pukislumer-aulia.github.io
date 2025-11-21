@@ -212,14 +212,14 @@
   <a id="btnAdmin" href="login.html" style="position:fixed; left:18px; bottom:20px; background:#d6336c; color:#fff; padding:10px 18px; border-radius:8px; text-decoration:none; font-weight:bold; box-shadow:0 2px 6px rgba(0,0,0,0.3); z-index:1000;">🔑 Admin</a>
 
   <!-- External libs -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <!-- Inline / module scripts (dipisah juga jadi file .js terpisah di folder assets/js/) -->
-  <script type="module" src="assets/js/frontend.js"></script>
-  <script type="module" src="assets/js/order.js"></script>
-  <script type="module" src="assets/js/testimoni.js"></script>
-  <script type="module" src="firebase.js"></script>
-
+<!-- Modules -->
+<script type="module" src="assets/js/frontend.js"></script>
+<script type="module" src="assets/js/order.js"></script>
+<script type="module" src="assets/js/testimoni.js"></script>
+<script type="module" src="firebase.js"></script>
+    
   <script>
     // Toggle share icons
     const toggleBtn = document.getElementById("toggleShareBtn");
@@ -231,9 +231,5 @@
     document.getElementById('notaPrint')?.addEventListener('click', ()=>{ window.print(); });
     document.getElementById('notaSendAdmin')?.addEventListener('click', ()=>{ alert('WA admin akan dibuka (jika belum).'); });
   </script>
-    <!-- SCRIPT JS -->
-<script src="assets/js/order.js" defer></script>
-</body>
-</html>
 </body>
 </html>
