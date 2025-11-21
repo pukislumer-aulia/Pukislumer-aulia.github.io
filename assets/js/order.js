@@ -59,22 +59,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateToppingDisplay();
 
-    // ====== Maksimal 5 topping ======
+    // ====== Maksimal 5 topping/taburan per jenis ======
     $$('input.ultraSingle, input.ultraDouble').forEach(cb => {
         cb.addEventListener("change", () => {
             const mode = getSelectedRadioValue("ultraToppingMode");
-            let checkboxes;
-            if (mode === "single") {
-                checkboxes = $$('input.ultraSingle');
-            } else if (mode === "double") {
-                checkboxes = $$('input.ultraDouble');
-            } else {
-                return; // Tidak ada batasan jika mode "non"
-            }
-            const checked = Array.from(checkboxes).filter(c => c.checked);
-            if (checked.length > 5) {
-                cb.checked = false; // Batalkan pilihan jika lebih dari 5
-                alert("Maksimal 5 topping/taburan yang dapat dipilih.");
+            if (mode === "double") {
+                const checkedTopping = Array.from($$('input.ultraSingle')).filter(c => c.checked);
+                const checkedTaburan = Array.from($$('input.ultraDouble')).filter(c => c.checked);
+
+                if (checkedTopping.length > 5) {
+                    cb.checked = false;
+                    alert("Maksimal 5 topping yang dapat dipilih.");
+                    return;
+                }
+
+                if (checkedTaburan.length > 5) {
+                    cb.checked = false;
+                    alert("Maksimal 5 taburan yang dapat dipilih.");
+                    return;
+                }
+            } else if (mode === "single") {
+                const checkedTopping = Array.from($$('input.ultraSingle')).filter(c => c.checked);
+                if (checkedTopping.length > 5) {
+                    cb.checked = false;
+                    alert("Maksimal 5 topping yang dapat dipilih.");
+                    return;
+                }
             }
             calculatePrice();
         });
@@ -118,18 +128,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const nama = ultraNama.value.trim() || "-";
         const wa = ultraWA.value.trim() || "-";
         let toppingSelected = [];
-        if (data.mode === "single") {
+        let taburanSelected = [];
+
+        if (data.mode === "double") {
             toppingSelected = getCheckedValues('input.ultraSingle');
-        } else if (data.mode === "double") {
-            toppingSelected = getCheckedValues('input.ultraDouble');
+            taburanSelected = getCheckedValues('input.ultraDouble');
+        } else if (data.mode === "single") {
+            toppingSelected = getCheckedValues('input.ultraSingle');
         }
-        let toppingText = toppingSelected.length > 0 ? toppingSelected.join(", ") : "-"; // Tambahkan spasi setelah koma
+
+        let toppingText = toppingSelected.length > 0 ? toppingSelected.join(", ") : "-";
+        let taburanText = taburanSelected.length > 0 ? taburanSelected.join(", ") : "-";
 
         let html = `<p><strong>Nama:</strong> ${nama}</p>
                     <p><strong>Nomor WA:</strong> ${wa}</p>
                     <p><strong>Jenis Pukis:</strong> ${data.jenis}</p>
                     <p><strong>Isi per Box:</strong> ${data.isi} pcs</p>
-                    <p><strong>Topping/Taburan:</strong> ${toppingText}</p>
+                    ${data.mode === "double" ? `<p><strong>Topping:</strong> ${toppingText}</p><p><strong>Taburan:</strong> ${taburanText}</p>` : data.mode === "single" ? `<p><strong>Topping:</strong> ${toppingText}</p>` : ''}
                     <p><strong>Jumlah Box:</strong> ${data.jumlahBox}</p>
                     <hr>
                     <p><strong>Harga per Box:</strong> ${formatRp(data.pricePerBox)}</p>
@@ -178,17 +193,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const nama = ultraNama.value.trim() || "-";
         const wa = ultraWA.value.trim() || "-";
         let toppingSelected = [];
-        if (data.mode === "single") {
+        let taburanSelected = [];
+
+        if (data.mode === "double") {
             toppingSelected = getCheckedValues('input.ultraSingle');
-        } else if (data.mode === "double") {
-            toppingSelected = getCheckedValues('input.ultraDouble');
+            taburanSelected = getCheckedValues('input.ultraDouble');
+        } else if (data.mode === "single") {
+            toppingSelected = getCheckedValues('input.ultraSingle');
         }
-        let toppingText = toppingSelected.length > 0 ? toppingSelected.join(", ") : "-"; // Tambahkan spasi setelah koma
+
+        let toppingText = toppingSelected.length > 0 ? toppingSelected.join(", ") : "-";
+        let taburanText = taburanSelected.length > 0 ? taburanSelected.join(", ") : "-";
 
         let msg = `Halo! Saya ingin memesan Pukis:\\n` +
             `Nama: ${nama}\\n` +
             `Jenis: ${data.jenis}\\n` +
-            `Topping: ${toppingText}\\n` +
+            `${data.mode === "double" ? `Topping: ${toppingText}\\nTaburan: ${taburanText}\\n` : data.mode === "single" ? `Topping: ${toppingText}\\n` : ''}` +
             `Isi per Box: ${data.isi} pcs\\n` +
             `Jumlah Box: ${data.jumlahBox} box\\n` +
             `Harga: ${formatRp(data.total)}`;
@@ -197,4 +217,3 @@ document.addEventListener("DOMContentLoaded", () => {
         window.open(url, "_blank");
     });
 }); // end DOMContentLoaded
-                                   
