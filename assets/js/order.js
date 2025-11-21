@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const notaContent = $("#notaContent");
     const notaClose = $("#notaClose");
     const notaPrint = $("#notaPrint");
-    const notaSendAdmin = $("#ultraSendAdmin"); // Perbaikan: Ganti #notaSendAdmin menjadi #ultraSendAdmin
+    const notaSendAdmin = $("#ultraSendAdmin");
 
     let dataPesanan = {}; // Menyimpan data pesanan
 
@@ -70,27 +70,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateToppingDisplay();
 
-    // ====== Maksimal 5 topping/taburan per jenis ======
-    $$('input.ultraSingle, input.ultraDouble').forEach(cb => {
+    // ====== Maksimal 5 topping dan 5 taburan ======
+    $$('#ultraSingleGroup input[type="checkbox"], #ultraDoubleGroup input[type="checkbox"]').forEach(cb => {
         cb.addEventListener("change", () => {
+            const checkedTopping = getCheckedValues('#ultraSingleGroup input[type="checkbox"]');
+            const checkedTaburan = getCheckedValues('#ultraDoubleGroup input[type="checkbox"]');
             const mode = getSelectedRadioValue("ultraToppingMode");
-            if (mode === "double") {
-                const checkedTopping = Array.from($$('input.ultraSingle')).filter(c => c.checked);
-                const checkedTaburan = Array.from($$('input.ultraDouble')).filter(c => c.checked);
 
+            if (mode === "double") {
                 if (checkedTopping.length > 5) {
                     cb.checked = false;
                     alert("Maksimal 5 topping yang dapat dipilih.");
                     return;
                 }
-
                 if (checkedTaburan.length > 5) {
                     cb.checked = false;
                     alert("Maksimal 5 taburan yang dapat dipilih.");
                     return;
                 }
             } else if (mode === "single") {
-                const checkedTopping = Array.from($$('input.ultraSingle')).filter(c => c.checked);
                 if (checkedTopping.length > 5) {
                     cb.checked = false;
                     alert("Maksimal 5 topping yang dapat dipilih.");
@@ -126,8 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
             jenis: jenis,
             isi: isi,
             mode: mode,
-            topping: getCheckedValues('input.ultraSingle'),
-            taburan: getCheckedValues('input.ultraDouble'),
+            topping: getCheckedValues('#ultraSingleGroup input[type="checkbox"]'),
+            taburan: getCheckedValues('#ultraDoubleGroup input[type="checkbox"]'),
             jumlahBox: jumlahBox,
             pricePerBox: pricePerBox,
             subtotal: subtotal,
@@ -231,20 +229,25 @@ document.addEventListener("DOMContentLoaded", () => {
             ["Total Bayar", formatRp(total)]
         ];
 
-        doc.autoTable({
-            body: tableData,
-            startY: 20,
-            theme: 'grid',
-            styles: {
-                fontSize: 9,
-            },
-            headerStyles: {
-                fillColor: [214, 51, 108],
-                textColor: [255, 255, 255],
-                fontStyle: 'bold',
-            },
-        });
-        doc.save(`nota-pemesanan-${Date.now()}.pdf`);
+        try {
+            doc.autoTable({
+                body: tableData,
+                startY: 20,
+                theme: 'grid',
+                styles: {
+                    fontSize: 9,
+                },
+                headerStyles: {
+                    fillColor: [214, 51, 108],
+                    textColor: [255, 255, 255],
+                    fontStyle: 'bold',
+                },
+            });
+            doc.save(`nota-pemesanan-${Date.now()}.pdf`);
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            alert("Terjadi kesalahan saat membuat nota PDF. Silakan coba lagi.");
+        }
     });
 
     // ====== Kirim WA Admin ======
@@ -285,8 +288,8 @@ document.addEventListener("DOMContentLoaded", () => {
             `box kecil single topping = 13.000\\n` +
             `box kecil duoble topping = 15.000\\n` +
             `Box besar Non Topping = 18.000\\n` +
-            `Box besar single topping = 25.000\\n` +
-            `Box besar duoble topping = 28.000\\n` +
+            `box besar single topping = 25.000\\n` +
+            `box besar duoble topping = 28.000\\n` +
             `Pandan:\\n` +
             `box kecil Non topping = 13.000\\n` +
             `box kecil single topping = 15.000\\n` +
@@ -299,4 +302,3 @@ document.addEventListener("DOMContentLoaded", () => {
         window.open(url, "_blank");
     });
 }); // end DOMContentLoaded
-            
