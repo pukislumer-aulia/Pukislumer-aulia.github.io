@@ -1,6 +1,6 @@
 // ===============================
 // ORDER SYSTEM — PUKIS LUMER AULIA
-// Final version with robust PDF generation and debugging logs
+// Final version with robust PDF generation and image fallback
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ADMIN_WA = "6281296668670";
 
-  // DOM ELEMENTS
+  // ELEMENTS
   const ultraNama = $("#ultraNama");
   const ultraWA = $("#ultraWA");
   const ultraIsi = $("#ultraIsi");
@@ -41,9 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const notaClose = $("#notaClose");
   const notaPrint = $("#notaPrint");
   const notaSendAdmin = $("#ultraSendAdmin");
-
-  // optional note field (may be null if not added)
-  const ultraNote = $("#ultraNote");
+  const ultraNote = $("#ultraNote"); // optional
 
   let dataPesanan = {};
 
@@ -66,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           if (conditionFn()) return resolve(true);
         } catch (e) {
-          // ignore and continue polling
+          // ignore
         }
         if (Date.now() - start > timeout) return reject(new Error("waitFor timeout"));
         setTimeout(poll, interval);
@@ -246,12 +244,12 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("PDF gagal dibuat: jsPDF belum ter-load. Pastikan urutan script di HTML.");
         return;
       }
-      // wait for autoTable plugin to attach
+      // wait for autoTable plugin to attach (try-catch safe)
       await waitFor(() => {
         try {
           const { jsPDF } = window.jspdf;
           const pdfTest = new jsPDF();
-          return !!pdfTest.autoTable || !!pdfTest.autoTable; // check presence
+          return !!pdfTest.autoTable;
         } catch (e) {
           return false;
         }
@@ -266,7 +264,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // end DOMContentLoaded
-}); 
+});
+
 // =======================
 // PDF GENERATOR (Robust, with logging & fallbacks)
 // =======================
@@ -299,27 +298,37 @@ async function generatePdf(data) {
     new Promise((resolve) => {
       try {
         const img = new Image();
+        // try anonymous crossOrigin (GitHub Pages should be same origin, but keep it)
         img.crossOrigin = "anonymous";
-        img.onload = () => resolve(img);
+        img.onload = () => {
+          try {
+            console.log("[generatePdf] image loaded:", src, img.naturalWidth + "x" + img.naturalHeight);
+          } catch (e) {}
+          resolve(img);
+        };
         img.onerror = (e) => {
           console.warn("[generatePdf] image failed to load:", src, e);
           resolve(null);
         };
         img.src = src;
-        // in case cached and immediate
-        if (img.complete) resolve(img);
       } catch (e) {
         console.warn("[generatePdf] loadImage error:", e);
         resolve(null);
       }
     });
 
-  // load assets in parallel
+  // load assets in parallel (relative paths as in your project)
   const [logo, ttd, qris] = await Promise.all([
     loadImage("assets/images/logo.png"),
     loadImage("assets/images/ttd.png"),
     loadImage("assets/images/qris-pukis.jpg"),
   ]);
+
+  console.log("[generatePdf] assets loaded ->", {
+    logo: !!logo,
+    ttd: !!ttd,
+    qris: !!qris,
+  });
 
   try {
     // Prepare data (defensive)
@@ -340,25 +349,52 @@ async function generatePdf(data) {
     } = data || {};
 
     // HEADER
-pdf.setFont("helvetica", "bold");
-pdf.setFontSize(12);
-pdf.text("INVOICE", 10, 12);
+    try {
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text("INVOICE", 10, 12);
+    } catch (e) {
+      // some environments may have limited font support
+      console.warn("[generatePdf] header font/text warn:", e);
+      pdf.text("INVOICE", 10, 12);
+    }
 
-// TITLE USING CUSTOM PACIFICO FONT
-pdf.setFont("Pacifico-Regular", "normal"); // <— menggunakan font custom
-pdf.setFontSize(30);
-pdf.setTextColor(214, 51, 108);
-pdf.text("PUKIS LUMER AULIA", 105, 15, { align: "center" });
+    // TITLE USING CUSTOM PACIFICO FONT (attempt, but safe fallback)
+    try {
+      pdf.setFont("Pacifico-Regular", "normal"); // attempt custom font if loaded in page
+      pdf.setFontSize(30);
+      pdf.setTextColor(214, 51, 108);
+      pdf.text("PUKIS LUMER AULIA", 105, 15, { align: "center" });
+    } catch (e) {
+      // fallback to helvetica bold center
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(20);
+      pdf.setTextColor(214, 51, 108);
+      pdf.text("PUKIS LUMER AULIA", 105, 15, { align: "center" });
+    }
 
-// RESET FONT & COLOR
-pdf.setFont("helvetica", "normal");
-pdf.setTextColor(0, 0, 0);
-    
+    // RESET FONT & COLOR
+    pdf.setFont("helvetica", "normal");
+    pdf.setTextColor(0, 0, 0);
+
+    // add logo if available (safe try/catch)
     if (logo) {
       try {
+        // If logo is an HTMLImageElement, we can pass it directly to addImage in newer jsPDF builds
         pdf.addImage(logo, "PNG", 155, 5, 40, 20);
       } catch (e) {
-        console.warn("[generatePdf] failed to add logo image to PDF", e);
+        // fallback: convert to dataURL using canvas
+        try {
+          const c = document.createElement("canvas");
+          c.width = logo.naturalWidth;
+          c.height = logo.naturalHeight;
+          const ctx = c.getContext("2d");
+          ctx.drawImage(logo, 0, 0);
+          const dataUrl = c.toDataURL("image/png");
+          pdf.addImage(dataUrl, "PNG", 155, 5, 40, 20);
+        } catch (e2) {
+          console.warn("[generatePdf] failed to add logo image to PDF", e2);
+        }
       }
     } else {
       console.warn("[generatePdf] logo not available");
@@ -389,7 +425,7 @@ pdf.setTextColor(0, 0, 0);
       pdf.text("PUKIS LUMER AULIA", 105, 160, { align: "center", angle: 32 });
     } catch (e) {
       // some environments don't support angle -> fallback center text
-      pdf.text("PUKIS LUMER AULIA", 105, 160, { align: "center" });
+      try { pdf.text("PUKIS LUMER AULIA", 105, 160, { align: "center" }); } catch (e2) {}
     }
     pdf.setTextColor(0);
 
@@ -408,13 +444,7 @@ pdf.setTextColor(0, 0, 0);
 
     // ensure autoTable is available on pdf instance
     if (!pdf.autoTable) {
-      console.warn("[generatePdf] pdf.autoTable not found. Trying to continue using plugin...");
-      // try to re-check global plugin
-      try {
-        // no-op: if still not there, calling autoTable will throw
-      } catch (e) {
-        console.error("[generatePdf] autoTable missing", e);
-      }
+      console.warn("[generatePdf] pdf.autoTable not found. autoTable features may not be available.");
     }
 
     // build table body (single line representing order)
@@ -426,23 +456,27 @@ pdf.setTextColor(0, 0, 0);
 
     // Use autoTable safely inside try/catch
     try {
-      pdf.autoTable({
-        startY: startTableY,
-        head: [["Keterangan", "Harga", "Jumlah", "Total"]],
-        body: [
-          [
-            keterangan,
-            formatRp(pricePerBox),
-            jumlahBox + " Box",
-            formatRp(total),
+      if (pdf.autoTable) {
+        pdf.autoTable({
+          startY: startTableY,
+          head: [["Keterangan", "Harga", "Jumlah", "Total"]],
+          body: [
+            [
+              keterangan,
+              formatRp(pricePerBox),
+              jumlahBox + " Box",
+              formatRp(total),
+            ],
           ],
-        ],
-        theme: "grid",
-        headStyles: { fillColor: [214, 51, 108], textColor: 255 },
-        styles: { fontSize: 10 },
-      });
+          theme: "grid",
+          headStyles: { fillColor: [214, 51, 108], textColor: 255 },
+          styles: { fontSize: 10 },
+        });
+      } else {
+        throw new Error("autoTable not present");
+      }
     } catch (errAuto) {
-      console.error("[generatePdf] autoTable error:", errAuto);
+      console.error("[generatePdf] autoTable error or missing:", errAuto);
       // As a fallback, print a simple text table
       let fy = startTableY;
       pdf.setFontSize(10);
@@ -468,21 +502,68 @@ pdf.setTextColor(0, 0, 0);
 
     // signature + qris (position under totals)
     finalY += 12;
+
+    // ===== TTD handling with robust fallback =====
     if (ttd) {
+      // First try: direct addImage with HTMLImageElement (supported in newer jsPDF)
       try {
         pdf.addImage(ttd, "PNG", 150, finalY, 40, 18);
-      } catch (e) {
-        console.warn("[generatePdf] failed to add ttd image:", e);
+        console.log("[generatePdf] ttd added directly as HTMLImageElement");
+      } catch (e1) {
+        console.warn("[generatePdf] direct add ttd failed, attempting canvas fallback:", e1);
+
+        // Canvas fallback: draw image to canvas and get dataURL (this often fixes issues from metadata/icc/cmyk)
+        try {
+          const c = document.createElement("canvas");
+          // limit max dimensions to avoid memory blowup while preserving aspect
+          const MAX_DIM = 1200;
+          let w = ttd.naturalWidth || ttd.width || 400;
+          let h = ttd.naturalHeight || ttd.height || 200;
+          const scale = Math.min(1, MAX_DIM / Math.max(w, h));
+          w = Math.floor(w * scale);
+          h = Math.floor(h * scale);
+          c.width = w;
+          c.height = h;
+          const ctx = c.getContext("2d");
+          // draw white background to avoid transparency issues when using certain convertors
+          ctx.fillStyle = "rgba(0,0,0,0)";
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(ttd, 0, 0, w, h);
+
+          // export as PNG (RGB)
+          const dataUrl = c.toDataURL("image/png");
+          pdf.addImage(dataUrl, "PNG", 150, finalY, 40, 18);
+          console.log("[generatePdf] ttd added via canvas fallback");
+        } catch (e2) {
+          console.error("[generatePdf] ttd canvas fallback failed:", e2);
+          try {
+            pdf.text("(Tanda tangan tidak tersedia)", 150, finalY + 5);
+          } catch (e3) {}
+        }
       }
     } else {
-      console.warn("[generatePdf] ttd not available");
+      console.warn("[generatePdf] ttd not available (not loaded)");
+      try { pdf.text("(Tanda tangan tidak tersedia)", 150, finalY + 5); } catch (e) {}
     }
 
+    // ===== QRIS handling =====
     if (qris) {
       try {
         pdf.setFont("helvetica", "normal");
         pdf.text("Scan QR untuk pembayaran:", 105, finalY, { align: "center" });
-        pdf.addImage(qris, "JPEG", 80, finalY + 3, 50, 50);
+        // prefer JPEG if original loaded type is JPEG
+        try {
+          pdf.addImage(qris, "JPEG", 80, finalY + 3, 50, 50);
+        } catch (eAdd) {
+          // fallback to canvas dataURL
+          const c2 = document.createElement("canvas");
+          c2.width = qris.naturalWidth || qris.width || 400;
+          c2.height = qris.naturalHeight || qris.height || 400;
+          const ctx2 = c2.getContext("2d");
+          ctx2.drawImage(qris, 0, 0, c2.width, c2.height);
+          const dataUrl2 = c2.toDataURL("image/png");
+          pdf.addImage(dataUrl2, "PNG", 80, finalY + 3, 50, 50);
+        }
       } catch (e) {
         console.warn("[generatePdf] failed to add qris image:", e);
       }
@@ -507,4 +588,4 @@ pdf.setTextColor(0, 0, 0);
     console.error("[generatePdf] unexpected error", err);
     throw err;
   }
-        }
+  }
