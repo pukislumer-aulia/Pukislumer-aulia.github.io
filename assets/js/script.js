@@ -22,7 +22,6 @@ function getSelectedToppingType() {
 // Validasi form order
 function validateOrderForm() {
   const { name, menu, toppingType, boxSize, qty } = getOrderFormData();
-
   if (!name || !menu || !toppingType || !boxSize || !qty) {
     alert('Semua kolom harus diisi dengan benar.');
     return false;
@@ -30,7 +29,6 @@ function validateOrderForm() {
 
   const maxToppings = parseInt(boxSize);
   const selectedToppings = document.querySelectorAll('.topping:checked').length;
-
   if (selectedToppings > maxToppings) {
     alert(`Jumlah topping maksimal untuk box ${boxSize} pcs adalah ${maxToppings} topping.`);
     return false;
@@ -44,19 +42,10 @@ function submitOrder() {
   if (!validateOrderForm()) return;
 
   const { name, menu, toppingType, boxSize, qty, totalPrice } = getOrderFormData();
-
   const toppingsSelected = Array.from(document.querySelectorAll('.topping:checked'))
     .map(topping => topping.value).join(', ') || 'Tidak ada topping';
 
-  const orderMessage = `
-Halo, saya ingin pesan Pukis Lumer Aulia:
-- Nama: ${name}
-- Jenis Pukis: ${menu === 'original' ? 'Pukis Original' : 'Pukis Pandan'}
-- Topping: ${toppingType === 'none' ? 'Tanpa Topping' : toppingsSelected}
-- Ukuran Kotak: ${boxSize === '5' ? 'Kecil (5 pcs)' : 'Besar (10 pcs)'}
-- Jumlah Kotak: ${qty}
-- Total Harga: ${totalPrice}
-  `;
+  const orderMessage = `Halo, saya ingin pesan Pukis Lumer Aulia:\n- Nama: ${name}\n- Jenis Pukis: ${menu === 'original' ? 'Pukis Original' : 'Pukis Pandan'}\n- Topping: ${toppingType === 'none' ? 'Tanpa Topping' : toppingsSelected}\n- Ukuran Kotak: ${boxSize === '5' ? 'Kecil (5 pcs)' : 'Besar (10 pcs)'}\n- Jumlah Kotak: ${qty}\n- Total Harga: ${totalPrice}\n`;
 
   const encodedMessage = encodeURIComponent(orderMessage);
   const whatsappUrl = `https://wa.me/6281296668670?text=${encodedMessage}`;
@@ -120,11 +109,9 @@ document.getElementById("testimoniForm").addEventListener("submit", function(e) 
   e.preventDefault();
   const nama = document.getElementById("nama").value;
   const pesan = document.getElementById("pesan").value;
-
   const li = document.createElement("li");
   li.innerHTML = `<strong>${nama}</strong><br>"${pesan}"`;
   document.getElementById("listTestimoni").appendChild(li);
-
   this.reset();
 });
 
@@ -172,12 +159,14 @@ document.getElementById('orderForm').addEventListener('submit', (e) => {
   e.preventDefault();
   submitOrder();
 });
+
 import { db } from "./firebase.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { doc, getDoc } from "firebase/firestore";
 
 async function loadContent() {
   const docRef = doc(db, "content", "about");
   const docSnap = await getDoc(docRef);
+
   if (docSnap.exists()) {
     const data = docSnap.data();
 
