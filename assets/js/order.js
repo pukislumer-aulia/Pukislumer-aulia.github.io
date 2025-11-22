@@ -339,14 +339,21 @@ async function generatePdf(data) {
       note = "-",
     } = data || {};
 
-    // Header
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.text("INVOICE", 10, 12);
+    // HEADER
+pdf.setFont("helvetica", "bold");
+pdf.setFontSize(12);
+pdf.text("INVOICE", 10, 12);
 
-    pdf.setFontSize(16);
-    pdf.text("PUKIS LUMER AULIA", 105, 12, { align: "center" });
+// TITLE USING CUSTOM PACIFICO FONT
+pdf.setFont("Pacifico-Regular", "normal"); // <— menggunakan font custom
+pdf.setFontSize(30);
+pdf.setTextColor(214, 51, 108);
+pdf.text("PUKIS LUMER AULIA", 105, 15, { align: "center" });
 
+// RESET FONT & COLOR
+pdf.setFont("helvetica", "normal");
+pdf.setTextColor(0, 0, 0);
+    
     if (logo) {
       try {
         pdf.addImage(logo, "PNG", 155, 5, 40, 20);
