@@ -1,7 +1,19 @@
-/* ============================
-   ADMIN DASHBOARD PRO CSS
-   ============================ */
+/* ================================
+   ADMIN DASHBOARD — SUPER FINAL PRO
+   PUKIS LUMER AULIA
+   ================================= */
 
+/* COLOR VARIABLES */
+:root {
+  --brand: #d6336c;
+  --accent: #ffb74d;
+  --bg: #fafafa;
+  --card: #ffffff;
+  --text: #222;
+  --muted: #777;
+}
+
+/* GLOBAL */
 body {
   font-family: 'Kanit', sans-serif;
   background: var(--bg);
@@ -10,159 +22,164 @@ body {
   color: var(--text);
 }
 
-/* Wrapper */
+/* WRAPPER */
 .admin-wrapper {
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 0 auto;
   background: var(--card);
-  padding: 28px;
+  padding: 24px;
   border-radius: 16px;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
-/* Subtext */
-.admin-subtext {
-  text-align:center;
-  margin-top:-4px;
-  margin-bottom:18px;
-  color: var(--muted);
-}
-
-/* Headings */
-h1, h2 {
-  text-align: center;
-  color: var(--text);
-}
-
-/* Stats Card */
-.stats-card {
-  padding: 16px;
-  border-radius: 12px;
-  background: var(--card);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+/* HEADER */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--brand);
+  padding: 18px;
+  border-radius: 14px;
+  color: #fff;
   margin-bottom: 20px;
-  border-left: 6px solid var(--accent);
 }
-.stats-card p {
-  margin: 6px 0;
+.admin-header h1 {
+  font-size: 1.4rem;
+  margin: 0;
 }
 
-/* Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 12px;
+/* BUTTON TYPES */
+.btn-primary, .btn-secondary, .btn-danger, .btn-logout {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: .25s;
 }
-th, td {
-  padding: 10px;
-  border-bottom: 1px solid #e7e7e7;
-  font-size: 0.9rem;
+.btn-primary { background: var(--brand); color: #fff; }
+.btn-secondary { background: #555; color: #fff; }
+.btn-danger { background: #d32626; color: #fff; }
+.btn-logout { background: #333; color:#fff; }
+
+.btn-primary:hover { background: #b42158; }
+.btn-secondary:hover { background: #222; }
+.btn-danger:hover { background:#ff0000; }
+.btn-logout:hover { opacity:.85; }
+
+.action-buttons {
+  display:flex;
+  gap:10px;
+  margin: 10px 0 18px;
+}
+
+/* STATS SECTION */
+.stat-section {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+  gap:14px;
+  margin-bottom:20px;
+}
+.stat-card {
+  background:#fff;
+  padding:20px;
+  border-radius:14px;
+  text-align:center;
+  border-left:6px solid var(--accent);
+  box-shadow:0 4px 10px rgba(0,0,0,0.06);
+  transition:transform .25s;
+}
+.stat-card:hover { transform:translateY(-6px); }
+.stat-number {
+  font-size:1.8rem;
+  font-weight:800;
+  color:var(--brand);
+}
+
+/* TABLE */
+.order-section table {
+  width:100%;
+  border-collapse:collapse;
+}
+th,td {
+  padding:12px 10px;
+  border-bottom:1px solid #ddd;
+  font-size:.92rem;
+  text-align:center;
 }
 th {
-  background: var(--accent);
-  color: #fff;
-  text-transform: uppercase;
+  background:var(--brand);
+  color:#fff;
+  text-transform:uppercase;
 }
-tr:nth-child(even) {
-  background: rgba(0,0,0,0.03);
-}
-
-/* Controls */
-.admin-controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 6px 0 12px;
-}
-.btn-outline {
-  background: transparent;
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--accent);
-  cursor: pointer;
-}
-.btn-outline:hover {
-  background: var(--accent);
-  color: #fff;
+tr:hover {
+  background:#fff1f5;
 }
 
-/* Danger Button */
-.danger {
-  background: #d32626 !important;
-  color: #fff !important;
-  border: none;
-}
-.danger:hover {
-  background: #ff0000 !important;
-}
-
-/* Testimonial */
+/* TESTIMONIALS */
 .testimonial-card {
-  background: var(--card);
-  padding: 12px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  text-align: left;
+  background:#ffeaea;
+  padding:14px;
+  border-radius:14px;
+  margin-bottom:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+  animation:fadeUp .4s ease;
+}
+@keyframes fadeUp {
+  from {opacity:0; transform:translateY(10px);}
+  to {opacity:1; transform:translateY(0);}
 }
 .testimonial-card small {
-  display: block;
-  margin-top: 4px;
-  color: var(--muted);
+  display:block;
+  margin-top:6px;
+  color:var(--muted);
 }
 
-/* Analytics */
+/* ANALYTICS */
 .analytics-section {
-  margin-top: 22px;
+  margin-top:20px;
 }
-.data-box {
-  background: #0c1624;
-  color: #00ffea;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 0.82rem;
-  overflow-x: auto;
-}
-
-/* Login Modal PIN Admin */
-.admin-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-.admin-modal-box {
-  background: var(--card);
-  padding: 26px;
-  width: 90%;
-  max-width: 350px;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-}
-#adminPinInput {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  font-size: 20px;
-  text-align: center;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+.analytics-section pre {
+  background:#0c1624;
+  color:#00ffea;
+  padding:16px;
+  border-radius:10px;
+  font-size:.85rem;
+  overflow-x:auto;
 }
 
-/* Mobile Responsive */
+/* LOGIN MODAL */
+.modal {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.modal-box {
+  background:#fff;
+  padding:28px;
+  border-radius:14px;
+  width:90%;
+  max-width:350px;
+  text-align:center;
+  animation:fadeUp .4s ease;
+}
+.modal-box input {
+  width:100%;
+  margin:12px 0;
+  padding:12px;
+  border:2px solid #ccc;
+  border-radius:10px;
+  font-size:1.1rem;
+  text-align:center;
+}
+
+/* RESPONSIVE */
 @media(max-width:768px){
-  .admin-wrapper {
-    padding: 18px;
-  }
-  th, td {
-    font-size: 0.8rem;
-    padding: 8px;
-  }
-  .btn-outline, .danger {
-    padding: 6px 10px;
-  }
+  .admin-wrapper { padding:18px; }
+  th,td { font-size:.78rem; padding:8px; }
+  .action-buttons { flex-wrap:wrap; justify-content:center; }
 }
