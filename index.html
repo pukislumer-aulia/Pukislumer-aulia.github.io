@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="assets/css/admin.css">
 
 <!-- FONTS & ICONS -->
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;900&family=Poppins:wght@300;500;600&family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700&family=Pacifico&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -29,55 +29,58 @@
   <p>Menyiapkan kelezatan 🤤...</p>
 </div>
 
-<!-- DARK MODE placeholder -->
+<!-- DARK MODE -->
 <button id="darkToggle" class="dark-toggle">🌓</button>
 
 <div class="container">
 
 <!-- ============ HERO ============ -->
-<section id="hero" class="hero-section">
-  <img src="assets/images/pukis-hero.jpg" class="img-cover hero-img" alt="Pukis Lumer Aulia">
+<section id="section-hero">
+  <h1 class="brand-logo">Pukis Lumer Aulia</h1>
+  <p class="tagline">Full Topping – Harga Bersahabat 🎉</p>
 
-  <div class="hero-info">
-    <h1>Pukis Lumer Aulia</h1>
-    <p>Fresh setiap hari • Topping melimpah • Harga bersahabat</p>
-    <p class="best-seller">Best Seller Kota Padang Panjang 🎉</p>
-  </div>
+  <img src="assets/images/pukis-hero.jpg" alt="Pukis Lumer Aulia" class="hero-img">
 
   <div class="promo-slider">
-    <span>Promo 🔥 Tukarkan 15 Kupon → Gratis 1 Box!</span>
-    <span>Buka 16.00–23.59 WIB — Selama Persediaan Tersedia</span>
+    <span>🔥 Promo: Kumpulkan 15 Kupon → Gratis 1 Box!</span>
+    <span>⏰ Buka 16.00–23.59 — Selama Persediaan Ada</span>
   </div>
 </section>
 
 <!-- ============ WHY ============ -->
-<section class="section-light">
+<section id="section-why">
   <h2>Kenapa Semua Pilih Kami?</h2>
   <ul class="why-list">
     <li>Lumer banget 🤤</li>
-    <li>Full topping sesuai request</li>
-    <li>Lokasi mudah & ramai</li>
-    <li>Dibuat fresh setiap order</li>
+    <li>Topping melimpah sesuai request</li>
+    <li>Resep rahasia lembut anti bantet</li>
+    <li>Best Seller Pasar Kuliner!</li>
   </ul>
 </section>
 
 <!-- ============ GALLERY ============ -->
-<section class="section-white">
+<section id="section-gallery">
   <h2>Galeri Pilihan</h2>
   <div class="gallery-grid">
-    <img loading="lazy" src="assets/images/pukis1.jpg" class="gallery-img">
-    <img loading="lazy" src="assets/images/pukis2.jpg" class="gallery-img">
-    <img loading="lazy" src="assets/images/pukis3.jpg" class="gallery-img">
-    <img loading="lazy" src="assets/images/pukis4.jpg" class="gallery-img">
-    <img loading="lazy" src="assets/images/pukis5.jpg" class="gallery-img">
+    <img loading="lazy" src="assets/images/pukis1.jpg" class="gallery-img lightbox-item">
+    <img loading="lazy" src="assets/images/pukis2.jpg" class="gallery-img lightbox-item">
+    <img loading="lazy" src="assets/images/pukis3.jpg" class="gallery-img lightbox-item">
+    <img loading="lazy" src="assets/images/pukis4.jpg" class="gallery-img lightbox-item">
+    <img loading="lazy" src="assets/images/pukis5.jpg" class="gallery-img lightbox-item">
   </div>
 </section>
 
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightboxOverlay">
+  <img id="lightboxImg" src="">
+</div>
+
 <!-- ============ ORDER FORM ============ -->
-<section id="form-ultra" class="section-accent">
+<section id="form-ultra">
   <h2>Pesan Sekarang!</h2>
 
   <form id="formUltra">
+
     <label>Nama Pemesan:</label>
     <input id="ultraNama" type="text" required>
 
@@ -86,8 +89,8 @@
 
     <label>Jenis Pukis:</label>
     <div class="opt-group">
-      <label><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
-      <label><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
+      <label class="radio-btn"><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
+      <label class="radio-btn"><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
     </div>
 
     <label>Isi per Box:</label>
@@ -98,11 +101,14 @@
 
     <label>Topping:</label>
     <div class="opt-group">
-      <label><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
-      <label><input type="radio" name="ultraToppingMode" value="single"> Single</label>
-      <label><input type="radio" name="ultraToppingMode" value="double"> Double</label>
+      <label class="radio-btn"><input type="radio" name="ultraToppingMode" value="non" checked> Tanpa</label>
+      <label class="radio-btn"><input type="radio" name="ultraToppingMode" value="single"> Single</label>
+      <label class="radio-btn"><input type="radio" name="ultraToppingMode" value="double"> Double</label>
     </div>
 
+    <!-- dynamic topping inject >
+
+<!-- Dynamic topping area -->
     <div id="ultraSingleGroup" class="topping-wrap" style="display:none"></div>
     <div id="ultraDoubleGroup" class="topping-wrap" style="display:none"></div>
 
@@ -117,6 +123,7 @@
 
     <button type="submit" class="btn-primary">Buat Nota</button>
     <button type="button" id="ultraSendAdmin" class="btn-wa">Kirim Admin</button>
+
   </form>
 </section>
 
@@ -128,23 +135,26 @@
       <button id="notaClose">✕</button>
     </div>
     <div id="notaContent"></div>
-    <button id="notaPrint" class="btn-outline" style="width:100%">Cetak / PDF</button>
+    <button id="notaPrint" class="btn-outline full">Cetak / PDF</button>
   </div>
 </div>
 
 <!-- ============ LOKASI ============ -->
-<section class="section-white">
-  <h2>Lokasi</h2>
+<section id="section-location">
+  <h2>Lokasi Kami</h2>
   <a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" class="btn-map">
-    📍 Buka Maps
+    📍 Klik untuk buka Google Maps
   </a>
 </section>
 
 <!-- ============ TESTIMONI ============ -->
-<section class="section-light">
+<section id="section-testimoni">
   <h2>Testimoni Pelanggan</h2>
   <div id="testimonialsList"></div>
+</section>
 
+<section id="section-add-testimoni">
+  <h2>Tulis Testimoni Kamu</h2>
   <form id="testimonialForm" class="testi-form">
     <input id="nameInput" placeholder="Nama" required>
     <textarea id="testimonialInput" placeholder="Testimoni..." required></textarea>
@@ -152,19 +162,27 @@
   </form>
 </section>
 
-<!-- ============ ADMIN ============ -->
-<section class="section-white" style="text-align:center;">
+<!-- ============ ADMIN LINK ============ -->
+<section id="section-admin" style="text-align:center;">
   <a class="admin-link" href="admin.html">Masuk Admin</a>
 </section>
 
-</div> <!-- container -->
+</div> <!-- END CONTAINER -->
 
 <!-- ============ BOTTOM NAV ============ -->
 <nav class="bottom-nav">
-  <a href="https://wa.me/6281296668670" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat</span></a>
-  <a href="#form-ultra"><i class="fas fa-cart-shopping"></i><span>Order</span></a>
-  <a href="https://shopee.co.id/" target="_blank"><i class="fas fa-store"></i><span>Shopee</span></a>
-  <a href="https://food.maxim.com/" target="_blank"><i class="fa-solid fa-motorcycle"></i><span>Maxim</span></a>
+  <a href="https://wa.me/6281296668670" target="_blank">
+    <i class="fab fa-whatsapp"></i><span>Chat</span>
+  </a>
+  <a href="#form-ultra">
+    <i class="fas fa-cart-shopping"></i><span>Order</span>
+  </a>
+  <a href="https://shopee.co.id/" target="_blank">
+    <i class="fas fa-store"></i><span>Shopee</span>
+  </a>
+  <a href="https://food.maxim.com/" target="_blank">
+    <i class="fa-solid fa-motorcycle"></i><span>Maxim</span>
+  </a>
 </nav>
 
 <footer>
