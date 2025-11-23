@@ -61,6 +61,26 @@ h1,h2,h3 {
 }
 
 /* =========================
+   HERO SECTION
+========================= */
+#section-hero {
+  padding: 12px 16px;       /* jarak atas-bawah dan kiri-kanan */
+  max-width: 720px;         /* lebar maksimal section */
+  margin: 0 auto;           /* tengah horizontal */
+  border-radius: 12px;
+  text-align: center;       /* agar teks h1 rata tengah */
+}
+
+#section-hero .hero-img {
+  width: 100%;              /* gambar mengikuti lebar section */
+  max-width: 600px;         /* gambar tidak terlalu besar */
+  height: auto;             /* pertahankan rasio */
+  display: block;
+  margin: 0 auto 12px auto; /* tengah horizontal + jarak bawah */
+  border-radius: 12px;
+}
+
+/* =========================
    PROMO SLIDER
 ========================= */
 .promo-slider {
