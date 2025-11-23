@@ -161,3 +161,13 @@ window.addEventListener("DOMContentLoaded", ()=>{
   updatePriceUI();
   updateToppingList();
 });
+// LIGHTBOX
+document.querySelectorAll('.gallery-img').forEach(img=>{
+  img.addEventListener('click',()=>{
+    const box = document.createElement('div');
+    box.className = 'lightbox-overlay show';
+    box.innerHTML = `<img src="${img.src}">`;
+    box.addEventListener('click',()=>box.remove());
+    document.body.appendChild(box);
+  });
+});
