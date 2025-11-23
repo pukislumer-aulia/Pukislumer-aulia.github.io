@@ -5,7 +5,7 @@
 
 console.info("[admin.js] Loaded");
 
-const ADMIN_PIN = "8670"; // PIN ADMIN (bisa diganti sendiri)
+const ADMIN_PIN = "030419"; // PIN ADMIN (bisa diganti sendiri)
 
 const loginModal = document.getElementById("adminLoginModal");
 const adminContent = document.getElementById("adminContent");
