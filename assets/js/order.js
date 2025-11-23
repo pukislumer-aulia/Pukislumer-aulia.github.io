@@ -232,7 +232,54 @@ document.addEventListener("DOMContentLoaded", () => {
       "_blank"
     );
   });
+// ==========================
+// PATCH: SAVE TO ADMIN DASHBOARD
+// ==========================
 
+async function saveOrderToAdmin(d) {
+  const orderID = "ORD-" + Date.now();
+  const orderData = {
+    orderID,
+    nama: d.nama,
+    wa: d.wa,
+    jenis: d.jenis,
+    isi: d.isi,
+    mode: d.mode,
+    topping: d.topping,
+    taburan: d.taburan,
+    jumlahBox: d.jumlahBox,
+    total: d.total,
+    pricePerBox: d.pricePerBox,
+    note: d.note,
+    createdAt: new Date().toISOString()
+  };
+
+  console.log("[order.js] saveOrderToAdmin ->", orderData);
+
+  // === Simpan ke localStorage (backup offline) ===
+  const existing = JSON.parse(localStorage.getItem("orders") || "[]");
+  existing.push(orderData);
+  localStorage.setItem("orders", JSON.stringify(existing));
+
+  // === Opsional: Upload ke Firebase jika koneksi ada ===
+  if (window.saveOrderToFirebase) {
+    try {
+      await window.saveOrderToFirebase(orderData);
+      console.log("Order uploaded to Firebase");
+    } catch (e) {
+      console.warn("Upload gagal → pakai LocalStorage dulu", e);
+    }
+  }
+}
+
+// Tambahkan ke submit success:
+formUltra.addEventListener("submit", (e) => {
+  e.preventDefault();
+  calculatePrice();
+  saveOrderToAdmin(dataPesanan); // <== PATCH DISINI
+  renderNota();
+  notaContainer.style.display = "flex";
+});
   notaPrint.addEventListener("click", async () => {
     console.log("[order.js] Cetak PDF button clicked - start generatePdf");
     try {
