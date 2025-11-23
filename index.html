@@ -22,6 +22,30 @@
 
 <body>
 
+    <!-- Loader -->
+<div id="site-loader">
+  <div>
+    <img src="assets/images/logo.png" alt="Pukis Lumer Aulia" style="width:120px;">
+    <p style="text-align:center;margin-top:8px">Memuat Pukis Lumer Aulia...</p>
+  </div>
+</div>
+
+<!-- Dark mode toggle (optional visible button) -->
+<button id="darkToggle" style="position:fixed;right:18px;top:18px;padding:8px;border-radius:8px;z-index:2500">🌓</button>
+
+<!-- QRIS modal -->
+<div id="qrisModal">
+  <div class="card">
+    <h3>Scan QRIS untuk bayar</h3>
+    <img src="assets/images/qris-placeholder.png" alt="QRIS" style="width:200px;margin:8px 0;">
+    <p>Scan dari e-wallet kamu untuk membayar pesanan.</p>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button data-close-qris class="btn-primary">Sudah Bayar</button>
+      <button data-close-qris class="btn-outline">Tutup</button>
+    </div>
+  </div>
+</div>
+    
 <div class="container">
 
     <!-- ================= HERO SECTION ================= -->
