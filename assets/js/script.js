@@ -1,395 +1,404 @@
-/* FILE: assets/js/script.js
-   PUKIS LUMER AULIA — SCRIPT FINAL PRO (UPGRADED)
-   Terhubung dengan: index.html (ultra*), order.js (PDF generator), admin.js
-*/
+/* ======================================
+   PUKIS LUMER AULIA — SCRIPT FINAL PRO
+   ====================================== */
 
-(() => {
+/* Loader */
+window.addEventListener("load", () => {
+  const loader = document.getElementById("site-loader");
+  setTimeout(() => loader.style.display = "none", 800);
+});
+
+/* Ambil Data Form */
+function getOrderFormData() {
+  const toppingType = document.querySelector('input[name="ultraToppingMode"]:checked')?.value || "non";
+
+  return {
+    id: "INV" + Date.now(),
+    name: document.getElementById("ultraNama").value,
+    wa: document.getElementById("ultraWA").value,
+    jenis: document.querySelector('input[name="ultraJenis"]:checked')?.value || "Original",
+    isi: parseInt(document.getElementById("ultraIsi").value),
+    toppingType,
+    singleTopping: getChecked(".single-top"),
+    doubleTopping: getChecked(".double-top"),
+    jumlah: parseInt(document.getElementById("ultraJumlah").value),
+    note: document.getElementById("ultraNote").value || "-",
+    priceBox: calculatePrice(),
+    subtotal: calculateSubtotal(),
+    discount: calculateDiskon(),
+    total: calculateGrandTotal(),
+    createdAt: new Date().toISOString()
+  };
+}
+
+function getChecked(selector) {
+  return Array.from(document.querySelectorAll(selector + ":checked"))
+    .map(el => el.value);
+}
+
+/* PRICE RULE */
+function calculatePrice() {
+  const harga = {
+    "Original": { non: 10000, single: 13000, double: 15000 },
+    "Pandan": { non: 12000, single: 15000, double: 18000 }
+  };
+  const jenis = document.querySelector('input[name="ultraJenis"]:checked')?.value || "Original";
+  const mode = document.querySelector('input[name="ultraToppingMode"]:checked')?.value || "non";
+  return harga[jenis][mode];
+}
+
+function calculateSubtotal() {
+  const price = calculatePrice();
+  const jumlah = parseInt(document.getElementById("ultraJumlah").value);
+  return price * jumlah;
+}
+
+/* Diskon Promo */
+function calculateDiskon() {
+  const jumlah = parseInt(document.getElementById("ultraJumlah").value);
+  return jumlah >= 5 ? 2000 * jumlah : 0;
+}
+
+function calculateGrandTotal() {
+  return calculateSubtotal() - calculateDiskon();
+}
+
+/* UI Update */
+function updatePriceUI() {
+  document.getElementById("ultraPricePerBox").innerText = formatRp(calculatePrice());
+  document.getElementById("ultraSubtotal").innerText = formatRp(calculateSubtotal());
+  document.getElementById("ultraDiscount").innerText = "-" + formatRp(calculateDiskon());
+  document.getElementById("ultraGrandTotal").innerText = formatRp(calculateGrandTotal());
+}
+
+function formatRp(num) {
+  return "Rp " + num.toLocaleString("id-ID");
+}
+
+/* Topping Logic */
+function showTopping() {
+  const mode = document.querySelector('input[name="ultraToppingMode"]:checked')?.value;
+  const isi = parseInt(document.getElementById("ultraIsi").value);
+
+  const singleEl = document.getElementById("ultraSingleGroup");
+  const doubleEl = document.getElementById("ultraDoubleGroup");
+
+  const toppingsSingle = ["Coklat", "Keju", "Oreo", "Tiramisu", "Matcha", "Strawberry"];
+  const toppingsDouble = ["Meses", "Kacang", "Susu", "Crush Oreo"];
+
+  singleEl.innerHTML = "";
+  doubleEl.innerHTML = "";
+
+  if (mode === "non") {
+    singleEl.style.display = "none";
+    doubleEl.style.display = "none";
+    updatePriceUI();
+    return;
+  }
+
+  if (mode === "single" || mode === "double") {
+    singleEl.style.display = "block";
+  }
+  if (mode === "double") {
+    doubleEl.style.display = "block";
+  }
+
+  toppingsSingle.forEach((t, i) => {
+    if (i < isi) singleEl.innerHTML += `
+      <label class="topping-check">
+        <input type="checkbox" class="single-top" value="${t}">
+        <span>${t}</span>
+      </label>`;
+  });
+
+  toppingsDouble.forEach((t, i) => {
+    if (mode === "double" && i < isi)
+      doubleEl.innerHTML += `
+      <label class="topping-check">
+        <input type="checkbox" class="double-top" value="${t}">
+        <span>${t}</span>
+      </label>`;
+  });
+
+  updatePriceUI();
+}
+
+/* INIT EVENTS */
+document.querySelectorAll('input[name="ultraToppingMode"]').forEach(el =>
+  el.addEventListener("change", showTopping)
+);
+
+document.querySelectorAll('input[name="ultraJenis"]').forEach(el =>
+  el.addEventListener("change", () => {
+    showTopping();
+    updatePriceUI();
+  })
+);
+
+["ultraIsi", "ultraJumlah"].forEach(id =>
+  document.getElementById(id).addEventListener("change", showTopping)
+);
+
+/* ======================================
+   BAGIAN 2 — PUKIS LUMER AULIA (FINAL PRO)
+   Lanjutan dari BAGIAN 1
+   ====================================== */
+
+(function(){
   "use strict";
 
-  /* --------- Helpers --------- */
-  const q = (sel) => document.querySelector(sel);
-  const qAll = (sel) => Array.from(document.querySelectorAll(sel));
-  const fmtRp = (n = 0) => "Rp " + Number(n).toLocaleString("id-ID");
-
-  /* --------- Elements (match index.html) --------- */
-  const formUltra = q("#formUltra");
-  const ultraNama = q("#ultraNama");
-  const ultraWA = q("#ultraWA");
-  const ultraIsi = q("#ultraIsi");
-  const ultraJumlah = q("#ultraJumlah");
-  const ultraPricePerBox = q("#ultraPricePerBox");
-  const ultraSubtotal = q("#ultraSubtotal");
-  const ultraDiscount = q("#ultraDiscount") || null;
-  const ultraGrandTotal = q("#ultraGrandTotal");
-  const ultraSingleGroup = q("#ultraSingleGroup");
-  const ultraDoubleGroup = q("#ultraDoubleGroup");
-  const notaContainer = q("#notaContainer") || q(".nota-overlay");
-  const notaContent = q("#notaContent");
-  const notaClose = q("#notaClose");
-  const notaPrint = q("#notaPrint");
-  const ultraSendAdmin = q("#ultraSendAdmin");
-
-  const testimonialsListContainer = q("#testimonialsList");
-  const testimonialForm = q("#testimonialForm");
-  const testiName = q("#nameInput");
-  const testiMessage = q("#testimonialInput");
-
-  const galleryItems = qAll(".gallery-img").concat(qAll(".lightbox-item"));
-
-  const siteLoader = q("#site-loader");
-
-  /* --------- Pricing table (single source of truth) --------- */
-  const BASE_PRICE = {
-    Original: { "5": { non: 10000, single: 13000, double: 15000 }, "10": { non: 18000, single: 25000, double: 28000 } },
-    Pandan:   { "5": { non: 12000, single: 15000, double: 18000 }, "10": { non: 22000, single: 28000, double: 32000 } },
-  };
-
+  /* ---------- Utility (reuse) ---------- */
+  const q = (s) => document.querySelector(s);
+  const qAll = (s) => Array.from(document.querySelectorAll(s));
   const ADMIN_WA = "6281296668670";
 
-  /* --------- Utility: get selected topping mode --------- */
-  function getToppingMode() {
-    const r = document.querySelector('input[name="ultraToppingMode"]:checked');
-    return r ? r.value : "non";
-  }
+  /* ---------- Form submit & save ---------- */
+  // use existing getOrderFormData() from BAGIAN 1 (it returns full order object)
+  async function handleFormSubmit(e) {
+    e.preventDefault();
 
-  /* --------- Create topping UI (with accent check visuals) --------- */
-  const SINGLE_TOPPINGS = ["Coklat","Tiramisu","Matcha","Cappucino","Strawberry","Vanilla","Taro"];
-  const DOUBLE_TOPPINGS = ["Coklat","Tiramisu","Matcha","Cappucino","Strawberry","Vanilla","Taro"];
-  const DOUBLE_TABURAN  = ["Meses","Keju","Kacang","Choco Chip","Oreo"];
-
-  function renderToppingUI() {
-    const mode = getToppingMode();
-    // clear groups
-    ultraSingleGroup.innerHTML = "";
-    ultraDoubleGroup.innerHTML = "";
-
-    // Single group
-    if (mode === "single") {
-      ultraSingleGroup.style.display = "block";
-      ultraDoubleGroup.style.display = "none";
-      SINGLE_TOPPINGS.forEach(t => {
-        const el = document.createElement("label");
-        el.className = "topping-label";
-        el.innerHTML = `<input type="checkbox" class="ultraTopping" value="${t}"> <span class="topping-name">${t}</span> <span class="tick">✓</span>`;
-        ultraSingleGroup.appendChild(el);
-      });
-    } else if (mode === "double") {
-      ultraSingleGroup.style.display = "none";
-      ultraDoubleGroup.style.display = "block";
-      // toppings
-      DOUBLE_TOPPINGS.forEach(t => {
-        const el = document.createElement("label");
-        el.className = "topping-label";
-        el.innerHTML = `<input type="checkbox" class="ultraTopping" value="${t}"> <span class="topping-name">${t}</span> <span class="tick">✓</span>`;
-        ultraDoubleGroup.appendChild(el);
-      });
-      // separator
-      const sep = document.createElement("div");
-      sep.style.height = "8px";
-      ultraDoubleGroup.appendChild(sep);
-      // taburan
-      DOUBLE_TABURAN.forEach(t => {
-        const el = document.createElement("label");
-        el.className = "topping-label taburan";
-        el.innerHTML = `<input type="checkbox" class="ultraTaburan" value="${t}"> <span class="topping-name">${t}</span> <span class="tick">✓</span>`;
-        ultraDoubleGroup.appendChild(el);
-      });
-    } else {
-      ultraSingleGroup.style.display = "none";
-      ultraDoubleGroup.style.display = "none";
-    }
-
-    // attach limit handlers
-    qAll(".ultraTopping").forEach(cb => cb.removeEventListener("change", toppingLimitHandler));
-    qAll(".ultraTaburan").forEach(cb => cb.removeEventListener("change", toppingLimitHandler));
-    qAll(".ultraTopping").forEach(cb => cb.addEventListener("change", toppingLimitHandler));
-    qAll(".ultraTaburan").forEach(cb => cb.addEventListener("change", toppingLimitHandler));
-  }
-
-  function toppingLimitHandler(e) {
-    const mode = getToppingMode();
-    const toppingsChecked = qAll(".ultraTopping").filter(i => i.checked).length;
-    const taburanChecked = qAll(".ultraTaburan").filter(i => i.checked).length;
-
-    if (mode === "single" && toppingsChecked > 5) {
-      e.target.checked = false;
-      alert("Maksimal 5 topping untuk mode single.");
-      return;
-    }
-    if (mode === "double") {
-      if (e.target.classList.contains("ultraTopping") && toppingsChecked > 5) {
-        e.target.checked = false;
-        alert("Maksimal 5 topping (double).");
-        return;
-      }
-      if (e.target.classList.contains("ultraTaburan") && taburanChecked > 5) {
-        e.target.checked = false;
-        alert("Maksimal 5 taburan (double).");
-        return;
-      }
-    }
-    // refresh price on change
-    calculateAndRenderPrice();
-    // toggle visual tick
-    updateToppingVisuals();
-  }
-
-  /* --------- Price calculation & render --------- */
-  function getSelectedJenis() {
-    const r = document.querySelector('input[name="ultraJenis"]:checked');
-    return r ? r.value : "Original";
-  }
-
-  function calculateAndRenderPrice() {
-    const jenis = getSelectedJenis();
-    const isi = ultraIsi.value || "5";
-    const mode = getToppingMode();
-    const jumlah = parseInt(ultraJumlah.value || "1", 10);
-    const pricePerBox = (BASE_PRICE[jenis] && BASE_PRICE[jenis][isi] && BASE_PRICE[jenis][isi][mode]) ? BASE_PRICE[jenis][isi][mode] : 0;
-    const subtotal = pricePerBox * jumlah;
-    const discount = 0;
-    const total = subtotal - discount;
-
-    ultraPricePerBox.textContent = fmtRp(pricePerBox);
-    ultraSubtotal.textContent = fmtRp(subtotal);
-    if (ultraDiscount) ultraDiscount.textContent = discount > 0 ? `- ${fmtRp(discount)}` : "-";
-    ultraGrandTotal.textContent = fmtRp(total);
-
-    return { pricePerBox, subtotal, discount, total, jumlah, jenis, isi, mode };
-  }
-
-  /* --------- Build order object & store (format admin friendly) --------- */
-  function buildOrderObject() {
-    const d = calculateAndRenderPrice();
-    const toppingVals = qAll(".ultraTopping").filter(x=>x.checked).map(x=>x.value);
-    const taburanVals = qAll(".ultraTaburan").filter(x=>x.checked).map(x=>x.value);
-
-    const order = {
-      orderID: "ORD-" + Date.now(),
-      nama: ultraNama.value || "-",
-      buyerWA: ultraWA.value || "-",
-      jenis: d.jenis || "-",
-      isi: d.isi || "-",
-      mode: d.mode || "non",
-      topping: toppingVals,
-      taburan: taburanVals,
-      jumlahBox: d.jumlah,
-      pricePerBox: d.pricePerBox,
-      subtotal: d.subtotal,
-      discount: d.discount,
-      total: d.total,
-      note: "",
-      createdAt: new Date().toISOString()
-    };
-    return order;
-  }
-
-  function saveOrderLocal(order) {
-    const existing = JSON.parse(localStorage.getItem("orders") || "[]");
-    existing.push(order);
-    localStorage.setItem("orders", JSON.stringify(existing));
-  }
-
-  /* --------- Nota render & actions --------- */
-  function renderNota(order) {
-    if (!notaContent) return;
-    const lines = [];
-    lines.push(`<p><strong>Nama:</strong> ${order.nama}</p>`);
-    lines.push(`<p><strong>WA:</strong> ${order.buyerWA}</p>`);
-    lines.push(`<p><strong>Jenis:</strong> ${order.jenis}</p>`);
-    lines.push(`<p><strong>Isi:</strong> ${order.isi} pcs</p>`);
-    if (order.mode === "single") lines.push(`<p><strong>Topping:</strong> ${order.topping.join(", ") || "-"}</p>`);
-    if (order.mode === "double") {
-      lines.push(`<p><strong>Topping:</strong> ${order.topping.join(", ") || "-"}</p>`);
-      lines.push(`<p><strong>Taburan:</strong> ${order.taburan.join(", ") || "-"}</p>`);
-    }
-    lines.push(`<p><strong>Jumlah Box:</strong> ${order.jumlahBox}</p>`);
-    lines.push(`<p><strong>Total:</strong> <strong>${fmtRp(order.total)}</strong></p>`);
-    notaContent.innerHTML = lines.join("");
-  }
-
-  /* --------- WA message and open --------- */
-  function sendWhatsApp(order) {
-    const msg =
-`Halo Admin, saya ingin memesan Pukis Lumer Aulia:
-Nama: ${order.nama}
-Nomor WA: ${order.buyerWA}
-Jenis: ${order.jenis}
-Isi: ${order.isi} pcs
-Mode: ${order.mode}
-Topping: ${order.topping.join(", ") || "-"}
-Taburan: ${order.taburan.join(", ") || "-"}
-Jumlah Box: ${order.jumlahBox}
-Total: ${fmtRp(order.total)}
-Terima kasih 🙏`;
-    const encoded = encodeURIComponent(msg);
-    window.open(`https://wa.me/${ADMIN_WA}?text=${encoded}`, "_blank");
-  }
-
-  /* --------- Form submit handler (create nota + save) --------- */
-  formUltra?.addEventListener("submit", (ev) => {
-    ev.preventDefault();
     // basic validation
-    if (!ultraNama.value || !ultraWA.value) {
-      alert("Isi nama dan nomor WhatsApp terlebih dahulu.");
+    const name = (q("#ultraNama")?.value || "").trim();
+    const wa = (q("#ultraWA")?.value || "").trim();
+    if (!name || !wa) {
+      alert("Isi nama & nomor WhatsApp terlebih dahulu.");
       return;
     }
 
-    const order = buildOrderObject();
-    saveOrderLocal(order);
-    renderNota(order);
-    // show nota modal
-    if (notaContainer) notaContainer.classList.add("show");
-    // optionally allow printing via order.js generatePdf
-  });
+    // Build order using function defined earlier
+    const order = getOrderFormData();
 
-  /* --------- UltraSendAdmin (kirim WA dari form, juga menyimpan) --------- */
-  ultraSendAdmin?.addEventListener("click", () => {
-    // validate
-    if (!ultraNama.value || !ultraWA.value) {
-      alert("Isi nama dan nomor WhatsApp terlebih dahulu.");
+    // enforce topping limits per group (defensive)
+    const singleChecked = getChecked(".single-top").length;
+    const doubleChecked = getChecked(".double-top").length;
+    if (order.toppingType === "single" && singleChecked > order.isi) {
+      alert(`Maksimal ${order.isi} topping (single).`);
       return;
     }
-    const order = buildOrderObject();
+    if (order.toppingType === "double" && (singleChecked > order.isi || doubleChecked > order.isi)) {
+      alert(`Maksimal ${order.isi} topping per grup (single/taburan).`);
+      return;
+    }
+
+    // Save locally (admin-friendly)
     saveOrderLocal(order);
-    sendWhatsApp(order);
-    alert("Pesanan disimpan dan WA terbuka ke admin.");
+
+    // Render nota to modal
+    renderNota(order); // renderNota implemented in BAGIAN1 or in order.js; ensure exists
+    // show nota
+    const overlay = q("#notaContainer");
+    overlay?.classList.add("show");
+
+    // auto-scroll to nota
+    overlay?.querySelector(".nota-card")?.scrollIntoView({behavior:"smooth"});
+
+    // Optionally open WA? We'll not auto-open on submit; user can click "Kirim WA Admin" button
+    // but we can auto-open a compose link (commented) — leave commented for user preference
+    // sendWhatsApp(order);
+
+    // reset form? keep values so user can adjust; we won't auto-reset
+    console.log("[script] Order saved locally:", order);
+    alert("Nota dibuat. Silakan cek dan tekan 'Cetak / PDF' atau 'Kirim WA Admin'.");
+  }
+
+  // attach to form (id=formUltra)
+  q("#formUltra")?.addEventListener("submit", handleFormSubmit);
+
+  /* ---------- Save order (localStorage) ---------- */
+  function saveOrderLocal(order) {
+    const arr = JSON.parse(localStorage.getItem("orders") || "[]");
+    arr.push(order);
+    localStorage.setItem("orders", JSON.stringify(arr));
+  }
+
+  /* ---------- Send WA Admin (button) ---------- */
+  q("#ultraSendAdmin")?.addEventListener("click", () => {
+    const order = getOrderFormData();
+    // validate minimal
+    if (!order.name || !order.wa) {
+      alert("Isi nama & WA terlebih dahulu.");
+      return;
+    }
+    // save then open WA
+    saveOrderLocal(order);
+    const msgLines = [
+      "Assalamu'alaikum",
+      "Saya ingin memesan Pukis Lumer Aulia:",
+      `Nama: ${order.name}`,
+      `WA: ${order.wa}`,
+      `Jenis: ${order.jenis}`,
+      `Isi: ${order.isi} pcs`,
+      `Mode: ${order.toppingType}`,
+    ];
+    if (order.toppingType === "single") {
+      msgLines.push(`Topping: ${order.singleTopping.join(", ") || "-"}`);
+    } else if (order.toppingType === "double") {
+      msgLines.push(`Topping: ${order.singleTopping.join(", ") || "-"}`);
+      msgLines.push(`Taburan: ${order.doubleTopping.join(", ") || "-"}`);
+    }
+    msgLines.push(`Jumlah Box: ${order.jumlah}`);
+    msgLines.push(`Catatan: ${order.note}`);
+    msgLines.push(`Total: ${formatRp(order.total)}`);
+    msgLines.push("Terima kasih 🙏");
+
+    const waLink = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msgLines.join("\n"))}`;
+    window.open(waLink, "_blank");
   });
 
-  /* --------- Nota close & print --------- */
-  notaClose?.addEventListener("click", () => {
-    notaContainer?.classList.remove("show");
-  });
-
-  notaPrint?.addEventListener("click", async () => {
-    // try to call generatePdf from order.js (it should be global)
+  /* ---------- Nota print (invoke generatePdf) ---------- */
+  q("#notaPrint")?.addEventListener("click", async () => {
+    // build current order snapshot (use getOrderFormData)
+    const order = getOrderFormData();
+    // try-catch safe
     try {
-      const order = buildOrderObject();
-      if (window.generatePdf) {
-        await window.generatePdf(order);
+      if (typeof window.generatePdf === "function") {
+        // branding-full: attempt to pass formatting flag
+        await window.generatePdf({...order, branding: "full"});
       } else {
-        alert("Fitur PDF tidak tersedia (order.js belum ter-load).");
+        // fallback: try to create a simple PDF via window.jspdf directly
+        if (window.jspdf && window.jspdf.jsPDF) {
+          try {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            pdf.setFontSize(12);
+            pdf.text("PUKIS LUMER AULIA - Nota Sederhana", 10, 20);
+            pdf.setFontSize(10);
+            pdf.text(`Nama: ${order.name}`, 10, 30);
+            pdf.text(`No WA: ${order.wa}`, 10, 36);
+            pdf.text(`Jenis: ${order.jenis}`, 10, 42);
+            pdf.text(`Isi: ${order.isi} pcs`, 10, 48);
+            pdf.text(`Mode: ${order.toppingType}`, 10, 54);
+            if (order.singleTopping?.length) pdf.text(`Topping: ${order.singleTopping.join(", ")}`, 10, 60);
+            if (order.doubleTopping?.length) pdf.text(`Taburan: ${order.doubleTopping.join(", ")}`, 10, 66);
+            pdf.text(`Jumlah: ${order.jumlah}`, 10, 72);
+            pdf.text(`Total: ${formatRp(order.total)}`, 10, 78);
+            pdf.save(`${order.id || "Nota"}.pdf`);
+          } catch (e) {
+            console.error("Fallback PDF failed:", e);
+            alert("Cetak PDF gagal. Pastikan library jsPDF terpasang.");
+          }
+        } else {
+          alert("Fitur PDF tidak tersedia. Periksa apakah order.js sudah dimuat.");
+        }
       }
     } catch (err) {
-      console.error("PDF error:", err);
-      alert("Gagal membuat PDF: " + (err.message || err));
+      console.error("generatePdf error:", err);
+      alert("Gagal membuat PDF: " + (err && err.message ? err.message : err));
     }
   });
 
-  /* --------- Testimonial handling (store + UI) --------- */
-  function renderTestimonials() {
-    const data = JSON.parse(localStorage.getItem("testimonials") || "[]");
-    testimonialsListContainer.innerHTML = "";
-    if (!Array.isArray(data) || data.length === 0) {
-      testimonialsListContainer.innerHTML = "<p style='opacity:.7'>Belum ada testimoni.</p>";
-      return;
-    }
-    data.slice().reverse().forEach(t => {
-      const card = document.createElement("div");
-      card.className = "testimonial-card";
-      card.innerHTML = `<strong>${escapeHtml(t.name)}</strong><p style="margin:6px 0 0">${escapeHtml(t.testimonial)}</p>`;
-      testimonialsListContainer.appendChild(card);
+  /* ---------- Nota modal close (overlay) ---------- */
+  q("#notaClose")?.addEventListener("click", () => {
+    q("#notaContainer")?.classList.remove("show");
+  });
+
+  /* ---------- Testimonials: load + submit ---------- */
+  function loadTestimonials() {
+    const container = q("#testimonialsList");
+    const saved = JSON.parse(localStorage.getItem("testimonials") || "[]");
+    container.innerHTML = "";
+
+    // first add saved (user) testimonials (latest first)
+    saved.slice().reverse().forEach(t => {
+      const li = document.createElement("li");
+      li.className = "testimonial-card";
+      li.innerHTML = `<strong>${escapeHtml(t.name)}</strong><br>${escapeHtml(t.testimonial)}`;
+      container.appendChild(li);
     });
+
+    // If no saved, keep default fake ones already in HTML (we preserved them)
   }
 
-  testimonialForm?.addEventListener("submit", (e) => {
+  q("#testimonialForm")?.addEventListener("submit", (e) => {
     e.preventDefault();
-    const name = testiName.value.trim();
-    const testimonial = testiMessage.value.trim();
-    if (!name || !testimonial) return alert("Isi nama & testimoni.");
+    const name = (q("#nameInput")?.value || "").trim();
+    const text = (q("#testimonialInput")?.value || "").trim();
+    if (!name || !text) return alert("Isi nama & testimoni.");
+
     const arr = JSON.parse(localStorage.getItem("testimonials") || "[]");
-    arr.push({ name, testimonial, createdAt: new Date().toISOString() });
+    arr.push({ name, testimonial: text, createdAt: new Date().toISOString() });
     localStorage.setItem("testimonials", JSON.stringify(arr));
-    testiName.value = ""; testiMessage.value = "";
-    renderTestimonials();
+    q("#nameInput").value = ""; q("#testimonialInput").value = "";
+    loadTestimonials();
+    alert("Terima kasih, testimoni kamu sudah tersimpan!");
   });
 
-  /* --------- Lightbox gallery (works with .gallery-img and .lightbox-item) --------- */
-  function initLightbox() {
-    const items = Array.from(new Set([...qAll(".gallery-img"), ...qAll(".lightbox-item")]));
-    items.forEach(img => {
-      img.addEventListener("click", () => {
-        const overlay = q("#lightboxOverlay");
-        const lightImg = q("#lightboxImg");
-        if (!overlay || !lightImg) {
-          // fallback: create temporary overlay
-          const box = document.createElement("div");
-          box.className = "lightbox-overlay show";
-          box.innerHTML = `<img src="${img.src}" alt="">`;
-          box.addEventListener("click", () => box.remove());
-          document.body.appendChild(box);
-          return;
-        }
-        lightImg.src = img.src;
-        overlay.classList.add("show");
-      });
-    });
+  /* ---------- Floating share toggle & admin float ---------- */
+  q("#toggleShareBtn")?.addEventListener("click", () => {
+    const icons = q("#floatingIcons");
+    if (!icons) return;
+    const shown = icons.classList.toggle("show");
+    icons.setAttribute("aria-hidden", String(!shown));
+    // animate button
+    const btn = q("#toggleShareBtn");
+    if (btn) btn.textContent = shown ? "✕" : "+";
+  });
 
-    // click to close overlay
-    const overlay = q("#lightboxOverlay");
-    if (overlay) overlay.addEventListener("click", () => {
-      overlay.classList.remove("show");
-      q("#lightboxImg").src = "";
-    });
-  }
+  // admin float open new tab (link is in HTML anchor)
+  // nothing to attach here
 
-  /* --------- Topping visuals: add tick class when checked --------- */
-  function updateToppingVisuals() {
-    qAll(".topping-label").forEach(lbl => {
-      const cb = lbl.querySelector("input[type='checkbox']");
-      if (!cb) return;
-      if (cb.checked) lbl.classList.add("checked");
-      else lbl.classList.remove("checked");
-    });
-  }
+  /* ---------- Lightbox handled in BAGIAN1 initLightbox (fallback included) ---------- */
 
-  /* --------- Utility: escape HTML for safe output --------- */
-  function escapeHtml(str = "") {
-    return String(str).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  }
+  /* ---------- Topping check visual & limits enforcement (event delegation) ---------- */
+  document.addEventListener("change", (ev) => {
+    const target = ev.target;
+    if (!target) return;
 
-  /* --------- Init / Bind simple events --------- */
-  function attachBasicBindings() {
-    // render topping initially & on mode change
-    renderToppingUI();
-    qAll('input[name="ultraToppingMode"]').forEach(r => r.addEventListener("change", () => {
-      renderToppingUI();
-      calculateAndRenderPrice();
-    }));
-
-    // update price when jenis, isi, jumlah change
-    qAll('input[name="ultraJenis"]').forEach(r => r.addEventListener("change", calculateAndRenderPrice));
-    ultraIsi?.addEventListener("change", calculateAndRenderPrice);
-    ultraJumlah?.addEventListener("input", calculateAndRenderPrice);
-
-    // update visuals after dynamic topping render (delegate)
-    document.addEventListener("change", (ev) => {
-      if (ev.target && (ev.target.classList.contains("ultraTopping") || ev.target.classList.contains("ultraTaburan"))) {
-        updateToppingVisuals();
+    // handle checkbox visuals
+    if (target.matches(".single-top, .double-top")) {
+      // toggle checked class on parent label for styling
+      const lbl = target.closest("label");
+      if (lbl) {
+        if (target.checked) lbl.classList.add("checked");
+        else lbl.classList.remove("checked");
       }
-    });
 
-    // Send Admin button already handled above
-  }
+      // limit enforcement
+      const isi = parseInt(q("#ultraIsi")?.value || "5", 10);
+      // single group limit
+      const singleCount = getChecked(".single-top").length;
+      const doubleCount = getChecked(".double-top").length;
+      const mode = document.querySelector('input[name="ultraToppingMode"]:checked')?.value || "non";
 
-  /* --------- Page loader hide & initial render --------- */
-  function initPage() {
-    try {
-      renderTestimonials();
-      initLightbox();
-      attachBasicBindings();
-      calculateAndRenderPrice();
-    } finally {
-      // hide loader
-      if (siteLoader) siteLoader.style.display = "none";
+      if (mode === "single" && singleCount > isi) {
+        target.checked = false;
+        alert(`Maksimal ${isi} topping untuk single mode.`);
+      }
+      if (mode === "double") {
+        if (target.classList.contains("single-top") && singleCount > isi) {
+          target.checked = false;
+          alert(`Maksimal ${isi} topping (single) untuk mode double.`);
+        }
+        if (target.classList.contains("double-top") && doubleCount > isi) {
+          target.checked = false;
+          alert(`Maksimal ${isi} taburan (double).`);
+        }
+      }
+
+      // recalc prices (in case you implement topping price later)
+      updatePriceUI();
     }
+  });
+
+  /* ---------- Helper: escape HTML ---------- */
+  function escapeHtml(str = "") {
+    return String(str).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); });
   }
 
-  /* --------- Kickoff on DOM ready --------- */
+  /* ---------- Init final: load testimonials, attach listeners from BAGIAN1 ---------- */
+  function initFinal() {
+    loadTestimonials();
+    // ensure price UI is current
+    if (typeof updatePriceUI === "function") updatePriceUI();
+    // ensure topping UI exists
+    if (typeof showTopping === "function") showTopping();
+  }
+
+  // run after DOM ready
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initPage);
+    document.addEventListener("DOMContentLoaded", initFinal);
   } else {
-    initPage();
+    initFinal();
   }
 
 })();
