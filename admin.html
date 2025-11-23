@@ -1,74 +1,91 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin - Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/admin.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin • Pukis Lumer Aulia</title>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- Login Modal -->
-<div id="adminLoginModal" class="admin-modal">
-  <div class="admin-modal-box">
-    <h2>Masuk Admin</h2>
-    <p>Masukkan PIN Admin</p>
-    <input type="password" id="adminPinInput" placeholder="•••••" maxlength="6">
-    <button id="adminLoginBtn" class="btn-primary" style="width:100%;margin-top:10px">Masuk</button>
+  <!-- LOGIN MODAL -->
+  <div id="adminLoginModal" class="modal">
+    <div class="modal-box">
+      <h2>Login Admin</h2>
+      <p>Masukkan PIN Admin</p>
+      <input type="password" id="adminPinInput" placeholder="*****">
+      <button id="adminLoginBtn" class="btn-primary">Masuk</button>
+    </div>
   </div>
-</div>
 
-<div id="adminContent" style="display:none;">
-  <div class="admin-wrapper">
+  <!-- DASHBOARD -->
+  <div id="adminContent" class="admin-wrapper">
 
-    <h1 style="margin-bottom:6px;">Dashboard Admin</h1>
-    <p class="admin-subtext">Pantau pesanan & testimoni secara real-time</p>
+    <header class="admin-header">
+      <h1>Dashboard Admin</h1>
+      <button id="logoutBtn" class="btn-logout">Logout</button>
+    </header>
 
-    <!-- Statistik -->
-    <section class="stats-card">
-      <h2>Statistik Harian</h2>
-      <p><strong>Total Pesanan:</strong> <span id="statOrders">-</span></p>
-      <p><strong>Total Pendapatan:</strong> <span id="statRevenue">-</span></p>
-      <p><strong>Kode Kupon Dipakai:</strong> <span id="statCoupons">-</span></p>
+    <!-- STATISTIK -->
+    <section class="stat-section">
+      <div class="stat-card">
+        <h3>Total Orders</h3>
+        <div id="statOrders" class="stat-number">0</div>
+      </div>
+
+      <div class="stat-card">
+        <h3>Total Pendapatan</h3>
+        <div id="statRevenue" class="stat-number">Rp0</div>
+      </div>
+
+      <div class="stat-card">
+        <h3>Kupon Terpakai</h3>
+        <div id="statCoupons" class="stat-number">0</div>
+      </div>
     </section>
 
-    <!-- Pesanan -->
-    <section class="order-list">
+    <!-- PESANAN -->
+    <section class="order-section">
       <h2>Daftar Pesanan</h2>
-      <div class="admin-controls">
-        <button id="refreshOrders" class="btn-outline">Refresh</button>
-        <button id="exportCSV" class="btn-outline">Export CSV</button>
-        <button id="clearOrders" class="btn-outline danger">Clear Orders</button>
+
+      <div class="action-buttons">
+        <button id="refreshOrders" class="btn-secondary">Refresh</button>
+        <button id="exportCSV" class="btn-primary">Export CSV</button>
+        <button id="clearOrders" class="btn-danger">Clear Orders</button>
       </div>
 
       <table id="ordersTable">
         <thead>
           <tr>
-            <th>OrderID</th><th>Nama</th><th>WA</th><th>Qty</th><th>Total</th><th>Tanggal</th>
+            <th>Order ID</th>
+            <th>Nama</th>
+            <th>WA</th>
+            <th>Varian</th>
+            <th>Box</th>
+            <th>Total</th>
+            <th>Tgl</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
+
     </section>
 
-    <!-- Testimoni -->
+    <!-- TESTIMONI -->
     <section class="testimonial-section">
       <h2>Testimoni Pelanggan</h2>
       <div id="testimonialList"></div>
     </section>
 
-    <!-- Analytics -->
+    <!-- ANALYTICS -->
     <section class="analytics-section">
-      <h2>Event Analytics</h2>
-      <pre id="analyticsData" class="data-box"></pre>
+      <h2>Analytics</h2>
+      <pre id="analyticsData">[]</pre>
     </section>
 
-    <button id="logoutBtn" class="danger" style="margin-top:20px;width:100%;">Logout</button>
-
   </div>
-</div>
 
-<script src="assets/js/admin.js" type="module"></script>
+  <script src="assets/js/admin.js"></script>
 </body>
 </html>
