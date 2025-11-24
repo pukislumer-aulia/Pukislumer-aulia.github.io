@@ -1,8 +1,11 @@
-/* ===============================
+/* ==========================================
    ORDER SYSTEM — PUKIS LUMER AULIA
    Hybrid Final Version
-   =============================== */
+   ========================================== */
 document.addEventListener("DOMContentLoaded", () => {
+  "use strict";
+
+  // ====== BLOCK 1: ELEMENT REFERENCES ======
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
   const formatRp = n => "Rp " + Number(n).toLocaleString("id-ID");
@@ -14,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 "10":{ non:25000, single:28000, double:32000 } },
   };
   const ADMIN_WA = "6281296668670";
+
+  let dataPesanan = {};
 
   const ultraNama = $("#ultraNama");
   const ultraWA = $("#ultraWA");
@@ -33,26 +38,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const notaSendAdmin = $("#ultraSendAdmin");
   const ultraNote = $("#ultraNote");
 
-  let dataPesanan = {};
-
+  // ====== BLOCK 2: HELPER FUNCTIONS ======
   function getSelectedRadioValue(name){
     const r = document.querySelector(`input[name="${name}"]:checked`);
     return r ? r.value : null;
   }
+
   function getCheckedValues(selector){
     return [...$$(selector)].filter(cb=>cb.checked).map(cb=>cb.value);
   }
 
+  // ====== BLOCK 3: CALCULATE PRICE ======
   function calculatePrice(){
     try{
       const jenis = getSelectedRadioValue("ultraJenis") || "Original";
       const isi = ultraIsi ? ultraIsi.value : "5";
       const mode = getSelectedRadioValue("ultraToppingMode") || "non";
-      const jumlahBox = ultraJumlah ? (parseInt(ultraJumlah.value,10)||1) : 1;
+      const jumlahBox = ultraJumlah ? parseInt(ultraJumlah.value,10)||1 : 1;
 
-      const pricePerBox = (BASE_PRICE[jenis] && BASE_PRICE[jenis][isi] && BASE_PRICE[jenis][isi][mode]) ? BASE_PRICE[jenis][isi][mode] : 0;
+      const pricePerBox = BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
       const subtotal = pricePerBox * jumlahBox;
-      const discount = 0;
+      const discount = 0; // bisa ditambah promo nanti
       const total = subtotal - discount;
 
       if(ultraPricePerBox) ultraPricePerBox.textContent = formatRp(pricePerBox);
@@ -61,29 +67,28 @@ document.addEventListener("DOMContentLoaded", () => {
       if(ultraGrandTotal) ultraGrandTotal.textContent = formatRp(total);
 
       dataPesanan = {
-        nama: ultraNama ? (ultraNama.value||"-") : "-",
-        wa: ultraWA ? (ultraWA.value||"-") : "-",
-        jenis,
-        isi,
-        mode,
+        nama: ultraNama?.value||"-",
+        wa: ultraWA?.value||"-",
+        jenis, isi, mode,
         topping: getCheckedValues(".ultraTopping"),
         taburan: mode==="double"? getCheckedValues(".ultraTaburan") : [],
-        jumlahBox,
-        pricePerBox,
-        subtotal,
-        discount,
-        total,
-        note: ultraNote ? (ultraNote.value||"-") : "-"
+        jumlahBox, pricePerBox, subtotal, discount, total,
+        note: ultraNote?.value||"-"
       };
-    }catch(err){ console.error("calculatePrice error", err);}
+    } catch(err){ console.error("calculatePrice error", err);}
   }
 
-  // ===== Topping Display Logic =====
+  // ====== BLOCK 4: TOPPING DISPLAY ======
   function updateToppingDisplay(){
     const mode = getSelectedRadioValue("ultraToppingMode");
-    if(ultraSingleGroup) ultraSingleGroup.style.display = mode==="single"?"block":"none";
-    if(ultraDoubleGroup) ultraDoubleGroup.style.display = mode==="double"?"block":"none";
-    $$(".ultraTopping, .ultraTaburan").forEach(cb=>cb.checked=false);
+
+    if(ultraSingleGroup) ultraSingleGroup.style.display = (mode==="single"?"block":"none");
+    if(ultraDoubleGroup) ultraDoubleGroup.style.display = (mode==="double"?"block":"none");
+
+    $$(".ultraTopping, .ultraTaburan").forEach(cb=>{
+      cb.checked=false;
+      cb.disabled=false;
+    });
 
     if(mode==="non"){
       $$(".ultraTopping, .ultraTaburan").forEach(cb=>cb.disabled=true);
@@ -96,14 +101,15 @@ document.addEventListener("DOMContentLoaded", () => {
     calculatePrice();
   }
 
-  const toppingModeRadios = $$('input[name="ultraToppingMode"]') || [];
-  toppingModeRadios.forEach(r=>r.addEventListener("change", updateToppingDisplay));
-  try{ updateToppingDisplay(); } catch(err){ console.warn("updateToppingDisplay failed:", err); }
+  $$('input[name="ultraToppingMode"]').forEach(r=>r.addEventListener("change", updateToppingDisplay));
+  updateToppingDisplay(); // init
 
+  // ====== BLOCK 5: TOPPING LIMIT ======
   function toppingLimitEvent(e){
     const mode = getSelectedRadioValue("ultraToppingMode");
     const t = getCheckedValues(".ultraTopping");
     const tb = getCheckedValues(".ultraTaburan");
+
     if(mode==="single" && t.length>5){ e.target.checked=false; alert("Maksimal 5 topping!"); return; }
     if(mode==="double"){
       if(e.target.classList.contains("ultraTopping") && t.length>5){ e.target.checked=false; alert("Maksimal 5 topping!"); return; }
@@ -112,17 +118,14 @@ document.addEventListener("DOMContentLoaded", () => {
     calculatePrice();
   }
 
-  const toppingCheckboxes = $$('.ultraTopping, .ultraTaburan') || [];
-  toppingCheckboxes.forEach(cb=>cb.addEventListener("change", toppingLimitEvent));
+  $$('.ultraTopping, .ultraTaburan').forEach(cb=>cb.addEventListener("change", toppingLimitEvent));
 
+  // ====== BLOCK 6: INPUT EVENTS ======
   if(ultraIsi) ultraIsi.addEventListener("change", calculatePrice);
   if(ultraJumlah) ultraJumlah.addEventListener("input", calculatePrice);
-  const jenisRadios = $$('input[name="ultraJenis"]') || [];
-  jenisRadios.forEach(r=>r.addEventListener("change", calculatePrice));
+  $$('input[name="ultraJenis"]').forEach(r=>r.addEventListener("change", calculatePrice));
 
-  calculatePrice();
-
-  // ===== Nota Rendering =====
+         // ====== BLOCK 7: RENDER NOTA ======
   formUltra.addEventListener("submit", e=>{
     e.preventDefault();
     calculatePrice();
@@ -146,41 +149,52 @@ document.addEventListener("DOMContentLoaded", () => {
     if(notaContent) notaContent.innerHTML=text;
   }
 
-  // ===== Kirim WA ke admin =====
-  notaSendAdmin.addEventListener("click", ()=>{
-    calculatePrice();
-    const d = dataPesanan;
-    let msg = `Halo Admin, saya ingin memesan Pukis:\n` +
-              `Nama: ${d.nama}\n` +
-              `Jenis: ${d.jenis}\n` +
-              `Isi: ${d.isi} pcs\n` +
-              (d.mode==="single"? `Topping: ${d.topping.join(", ")||"-"}\n`:"") +
-              (d.mode==="double"? `Topping: ${d.topping.join(", ")||"-"}\nTaburan: ${d.taburan.join(", ")||"-"}\n`:"") +
-              `Jumlah: ${d.jumlahBox} Box\n` +
-              `Total: ${formatRp(d.total)}\n` +
-              `Catatan: ${d.note}\n\nTerimakasih 🙏`;
-    window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, "_blank");
-  });
+  // ====== BLOCK 8: KIRIM WA ADMIN ======
+  if(notaSendAdmin){
+    notaSendAdmin.addEventListener("click", ()=>{
+      calculatePrice();
+      const d = dataPesanan;
+      let msg = `Halo Admin, saya ingin memesan Pukis:\n` +
+                `Nama: ${d.nama}\n` +
+                `Jenis: ${d.jenis}\n` +
+                `Isi: ${d.isi} pcs\n` +
+                (d.mode==="single"? `Topping: ${d.topping.join(", ")||"-"}\n`:"") +
+                (d.mode==="double"? `Topping: ${d.topping.join(", ")||"-"}\nTaburan: ${d.taburan.join(", ")||"-"}\n`:"") +
+                `Jumlah: ${d.jumlahBox} Box\n` +
+                `Total: ${formatRp(d.total)}\n` +
+                `Catatan: ${d.note}\n\nTerimakasih 🙏`;
+      window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, "_blank");
+    });
+  }
 
-  // ===== Cetak PDF =====
-  notaPrint.addEventListener("click", async ()=>{
-    calculatePrice();
-    try{
-      if(!window.jspdf){ alert("PDF gagal dibuat: jsPDF belum ter-load."); return; }
-      await generatePdf(dataPesanan);
-    } catch(err){ alert("PDF gagal dibuat: "+(err?.message||err)); }
-  });
+  // ====== BLOCK 9: CETAK PDF ======
+  if(notaPrint){
+    notaPrint.addEventListener("click", async ()=>{
+      calculatePrice();
+      try{
+        if(!window.jspdf){ alert("PDF gagal dibuat: jsPDF belum ter-load."); return; }
+        await generatePdf(dataPesanan);
+      } catch(err){ alert("PDF gagal dibuat: "+(err?.message||err)); }
+    });
+  }
 });
 
-// =======================
-// PDF Generator Hybrid Version
-// =======================
+// ====== BLOCK 10: PDF GENERATOR ======
 async function generatePdf(data){
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({orientation:"portrait", unit:"mm", format:"a4"});
   const fmtRp = n=>"Rp "+Number(n).toLocaleString("id-ID");
 
-  async function loadImage(src){ return new Promise(resolve=>{ const img=new Image(); img.crossOrigin="anonymous"; img.onload=()=>resolve(img); img.onerror=()=>resolve(null); img.src=src; }); }
+  async function loadImage(src){ 
+    return new Promise(resolve=>{
+      const img = new Image();
+      img.crossOrigin="anonymous";
+      img.onload=()=>resolve(img);
+      img.onerror=()=>resolve(null);
+      img.src=src;
+    });
+  }
+
   const [logo, ttd, qris] = await Promise.all([
     loadImage("assets/images/logo.png"),
     loadImage("assets/images/ttd.png"),
@@ -193,40 +207,59 @@ async function generatePdf(data){
   } = data||{};
 
   const now = new Date();
-  const tgl = now.toLocaleDateString("id-ID"), jam=now.toLocaleTimeString("id-ID");
-  const invoiceNum = "INV-"+now.getFullYear()+(now.getMonth()+1).toString().padStart(2,"0")+now.getDate().toString().padStart(2,"0")+"-"+now.getHours().toString().padStart(2,"0")+now.getMinutes().toString().padStart(2,"0");
+  const tgl = now.toLocaleDateString("id-ID");
+  const jam = now.toLocaleTimeString("id-ID");
+  const invoiceNum = "INV-"+now.getFullYear()+
+                     (now.getMonth()+1).toString().padStart(2,"0")+
+                     now.getDate().toString().padStart(2,"0")+"-"+
+                     now.getHours().toString().padStart(2,"0")+
+                     now.getMinutes().toString().padStart(2,"0");
 
+  // ====== HEADER PDF ======
   pdf.setFont("helvetica","bold"); pdf.setFontSize(14); pdf.text("INVOICE",10,12);
   try{ pdf.setFont("Pacifico-Regular"); } catch{}; pdf.setFontSize(26); pdf.setTextColor(214,51,108);
   pdf.text("PUKIS LUMER AULIA",105,17,{align:"center"});
   pdf.setFont("helvetica","normal"); pdf.setTextColor(0,0,0);
   if(logo) pdf.addImage(logo,"PNG",155,5,40,20);
-
-  pdf.setFontSize(9); pdf.text("Pasar Kuliner Padang Panjang",155,27); pdf.text("📞 0812-9666-8670",155,31);
+  pdf.setFontSize(9); pdf.text("Pasar Kuliner Padang Panjang",155,27); 
+  pdf.text("📞 0812-9666-8670",155,31);
   pdf.line(10,35,200,35);
 
+  // ====== BODY PDF ======
   let y=43; pdf.setFontSize(11);
   pdf.text("Nama Pemesan : "+nama,10,y); pdf.text("Tanggal : "+tgl+" "+jam,150,y); y+=7;
   pdf.text("Nomor Invoice : "+invoiceNum,150,y); y+=10;
   if(note!=="-"){ pdf.text("Catatan :",10,y); pdf.text(note,10,y+6); y+=12; }
 
-  const desc = `${jenis} — ${isi} pcs\n` + (mode==="single"? `Topping: ${topping.join(",")||"-"}` : mode==="double"? `Topping: ${topping.join(",")||"-"} | Taburan: ${taburan.join(",")||"-"}` : "Tanpa Topping");
+  const desc = `${jenis} — ${isi} pcs\n` + 
+               (mode==="single"? `Topping: ${topping.join(",")||"-"}` : 
+                mode==="double"? `Topping: ${topping.join(",")||"-"} | Taburan: ${taburan.join(",")||"-"}` : 
+                "Tanpa Topping");
 
   if(pdf.autoTable){
-    pdf.autoTable({startY:y, head:[["Deskripsi","Harga","Jumlah","Total"]], body:[[desc,fmtRp(pricePerBox),jumlahBox+" Box",fmtRp(total)]], theme:"grid", headStyles:{fillColor:[214,51,108],textColor:255}, styles:{fontSize:10}});
+    pdf.autoTable({
+      startY:y, 
+      head:[["Deskripsi","Harga","Jumlah","Total"]], 
+      body:[[desc,fmtRp(pricePerBox),jumlahBox+" Box",fmtRp(total)]],
+      theme:"grid", 
+      headStyles:{fillColor:[214,51,108],textColor:255}, 
+      styles:{fontSize:10}
+    });
   } else {
     pdf.text("Deskripsi",10,y); pdf.text("Harga",100,y); pdf.text("Jumlah",140,y); pdf.text("Total",170,y); y+=6;
     pdf.text(desc,10,y); pdf.text(fmtRp(pricePerBox),100,y); pdf.text(jumlahBox+" Box",140,y); pdf.text(fmtRp(total),170,y);
   }
+
   const finalY = pdf.lastAutoTable?.finalY ? pdf.lastAutoTable.finalY + 10 : y+30;
 
   pdf.setFontSize(11); pdf.text("Subtotal: "+fmtRp(subtotal),195,finalY,{align:"right"});
   if(discount>0) pdf.text("Disc: "+fmtRp(discount),195,finalY+6,{align:"right"});
   pdf.setFont("helvetica","bold"); pdf.text("Total Bayar: "+fmtRp(total),195,finalY+(discount>0?12:6),{align:"right"});
 
+  // ====== SIGNATURE & QRIS ======
   let sigY = finalY + (discount>0?20:16); pdf.setFont("helvetica","normal"); pdf.text("Hormat Kami,",150,sigY);
   if(ttd) pdf.addImage(ttd,"PNG",150,sigY+5,40,18);
   if(qris){ pdf.text("QRIS Pembayaran",13,sigY); pdf.addImage(qris,"PNG",10,sigY+5,35,35); }
 
   pdf.save(`Invoice_${(nama||"Pelanggan").replace(/\s+/g,"_")}.pdf`);
-}
+       }                 
