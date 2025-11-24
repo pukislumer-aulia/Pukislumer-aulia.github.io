@@ -1,239 +1,181 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pukis Lumer Aulia — Best Seller Padang Panjang</title>
-
-  <meta name="description" content="Pukis Lumer topping melimpah — nomor #1 di Padang Panjang">
-  <meta property="og:title" content="Pukis Lumer Aulia">
-  <meta property="og:description" content="Pukis Lumer kekinian dengan topping lumer dan rasa juara.">
-  <meta property="og:image" content="assets/images/pukis-og.jpg">
-
-  <!-- ICON & CSS -->
-  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/form-style.css">
-  <link rel="stylesheet" href="assets/css/admin.css">
-
-  <!-- FONTS & ICONS -->
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;900&family=Poppins:wght@300;500;600&family=Pacifico&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <style>
-    .nota-overlay.show, .nota-overlay { display:none; }
-    .nota-overlay.show { display:flex; }
-    .topping-check { display:inline-flex; align-items:center; gap:8px; margin:6px; padding:6px 8px; border-radius:8px; border:1px solid #eee; cursor:pointer; user-select:none; }
-    .topping-check input { transform:scale(1.05); }
-    .topping-check.checked { background:linear-gradient(90deg,#fff9f9,#fff); border-color:#ffb3c7; box-shadow:0 4px 10px rgba(0,0,0,0.06); }
-    .floating-icons-container { transition: all .25s ease; opacity:0; visibility:hidden; transform:translateY(8px); position:fixed; right:18px; bottom:90px; display:flex; flex-direction:column; gap:10px; z-index:2000; }
-    .floating-icons-container.show { opacity:1; visibility:visible; transform:translateY(0); }
-    .admin-float-btn { position:fixed; left:18px; bottom:20px; background:#1f2937; color:#fff; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px; z-index:2000; box-shadow:0 6px 18px rgba(0,0,0,.18); text-decoration:none; }
-    .toggle-float-btn { position:fixed; right:18px; bottom:18px; width:56px; height:56px; border-radius:50%; background:#ff5e7e; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; z-index:2100; box-shadow:0 8px 24px rgba(0,0,0,.18); }
-    #lightboxOverlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.85); z-index:9999; }
-    #lightboxOverlay.show { display:flex; }
-    #lightboxImg { max-width:92%; max-height:86%; border-radius:12px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pukis Lumer Aulia — Pesan Online</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/order.css">
+<script src="assets/js/jspdf.min.js"></script>
+<script src="assets/js/order.js" defer></script>
 </head>
-
 <body>
+<!-- ======================================
+     LOADER
+     ====================================== -->
+<div id="site-loader" class="loader">Loading...</div>
 
-  <!-- LOADER -->
-  <div id="site-loader" class="loader" style="display:flex;align-items:center;justify-content:center;flex-direction:column;">
-    <img src="assets/images/logo.png" width="110" alt="Logo Pukis Lumer Aulia">
-    <p style="margin-top:15px">Menyiapkan kelezatan 🤤...</p>
-  </div>
+<!-- ======================================
+     HEADER
+     ====================================== -->
+<header>
+  <h1>Pukis Lumer Aulia</h1>
+  <p>Pasar Kuliner Padang Panjang</p>
+</header>
 
-  <div class="container">
-
-    <!-- HERO -->
-    <section id="section-hero">
-      <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="hero-img">
-      <h1 style="margin:6px 0;color:#ff5e7e">PUKIS LUMER AULIA</h1>
-    </section>
-          
-    <!-- Texts -->
-    <p style="font-weight:700;color:#000">Assalamu'alaikum</p>
-    <p style="font-weight:700;color:#000">Dimana saja kamu insyaAllah selalu Sehat, diberikan keberkahan, rejeki berlimpah<br>Aamiin Allahumma Aamiiin</p>
-    <p style="font-weight:700;color:#021b54">Padang Panjang Kota Kuliner — Serambi Mekkah orang mengenalnya</p>
-    <p style="font-weight:700;color:#5b0080">Jika Sanak mampir ke Pasar Kuliner Jangan lupa mampir ke PUKIS LUMER AULIA!</p>
-    <p style="font-weight:700;color:#0b6500">Tersedia Rasa Original dan Rasa Pandan, beragam varian Topping & Taburan bisa di mix — HARGA MULAI DARI 10K</p>
-    <p style="font-weight:700;color:#5a2b0c">OPERASIONAL Jam: 16.00pm - 23.59pm (selama persediaan masih ada)</p>
-    <p style="font-weight:700;color:#ff47b0">Location : pasar kuliner atas Padang Panjang deket roti TENONK , depan Aquarium ( Gerobak Pink)</p>
-    <p style="font-weight:700;color:#5b2d02">Temukan Pukis Lumer Aulia di aplikasi: Maxim Food, Grab Food and Go Food</p>
-    <p style="font-weight:700;color:#0067d6">BEST SELLER : DOUBLETOPING VANILLA - KEJU</p>
-    <p style="font-weight:700;color:#000">SATU PORSI bisa di mix ya topingnya..</p>
-    <p style="font-weight:700;color:#ff009e">Mau jajan manis, enak, KENYANG, ramah dan irit dikantong yuk jajan PUKIS LUMER AULIA aja.. PORSI BESAR ADA DISKONYAHH LOH</p>
-
-    <!-- WHY -->
-    <section id="section-why" style="margin-top:18px;padding:18px;border-radius:12px;">
-      <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
-      <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa luar biasa. Tersedia berbagai varian topping favorit semua umur!</p>
-    </section>
-
-    <!-- FACTS -->
-    <section id="section-facts" style="margin-top:18px;padding:18px;border-radius:12px;">
-      <h2>Fakta Unik Tentang Kami</h2>
-      <ul style="color:#2E8B57;">
-        <li>Resep adonan spesial keluarga sejak 2023!</li>
-        <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
-        <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
-        <li>Lebih dari 10 varian topping siap setiap hari.</li>
-        <li>100% bahan premium tanpa pengawet.</li>
-        <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
-      </ul>
-    </section>
-
-    <!-- GALLERY -->
-    <section id="section-gallery" style="margin-top:18px;padding:12px;border-radius:12px;">
-      <h2>Galeri Pilihan</h2>
-      <div class="gallery-grid" style="margin-top:12px;">
-        <img loading="lazy" src="assets/images/pukis1.jpg" class="gallery-img" alt="Pukis 1">
-        <img loading="lazy" src="assets/images/pukis2.jpg" class="gallery-img" alt="Pukis 2">
-        <img loading="lazy" src="assets/images/pukis3.jpg" class="gallery-img" alt="Pukis 3">
-        <img loading="lazy" src="assets/images/pukis4.jpg" class="gallery-img" alt="Pukis 4">
-        <img loading="lazy" src="assets/images/pukis5.jpg" class="gallery-img" alt="Pukis 5">
-      </div>
-    </section>
-
-    <!-- ORDER FORM -->
-    <section id="form-ultra" style="margin-top:18px;padding:18px;border-radius:12px;background:#1b2838;color:#fff;">
-      <h2 style="color:#fff">Pemesanan Pukis Lumer Aulia</h2>
-
-      <form id="formUltra">
-        <label style="color:#fff">Nama Pemesan:</label>
-        <input type="text" id="ultraNama" required style="padding:10px;border-radius:8px;border:0;margin-bottom:8px;">
-
-        <label style="color:#fff">Nomor WhatsApp:</label>
-        <input type="tel" id="ultraWA" required placeholder="0812..." style="padding:10px;border-radius:8px;border:0;margin-bottom:8px;">
-
-        <label style="color:#fff">Jenis Pukis:</label>
-        <div class="opt-group" style="display:flex;gap:8px;margin-bottom:8px;">
-          <label style="color:#fff"><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
-          <label style="color:#fff"><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
-        </div>
-
-        <label style="color:#fff">Isi per Box:</label>
-        <select id="ultraIsi" style="padding:8px;border-radius:8px;margin-bottom:8px;">
-          <option value="5">5 pcs</option>
-          <option value="10">10 pcs</option>
-        </select>
-
-        <label style="color:#fff">Pilih Mode Topping:</label>
-        <div class="opt-group" style="display:flex;gap:8px;margin-bottom:8px;color:#fff;">
-          <label><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
-          <label><input type="radio" name="ultraToppingMode" value="single"> Single</label>
-          <label><input type="radio" name="ultraToppingMode" value="double"> Double</label>
-        </div>
-
-        <div id="ultraSingleGroup" class="topping-wrap" style="display:none;margin-bottom:8px;"></div>
-        <div id="ultraDoubleGroup" class="topping-wrap" style="display:none;margin-bottom:8px;"></div>
-
-        <label style="color:#fff">Catatan Khusus:</label>
-        <textarea id="ultraNote" placeholder="Contoh: Tanpa kacang / Ambil jam 19.00" style="width:100%;padding:8px;border-radius:8px;margin-bottom:8px;"></textarea>
-
-        <label style="color:#fff">Jumlah Box:</label>
-        <input type="number" id="ultraJumlah" min="1" value="1" style="padding:8px;border-radius:8px;margin-bottom:12px;">
-
-        <div class="price-summary" style="background:rgba(255,255,255,0.06);padding:10px;border-radius:8px;margin-bottom:12px;">
-          <div style="display:flex;justify-content:space-between;"><span>Harga per Box:</span><span id="ultraPricePerBox">Rp0</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>Subtotal:</span><span id="ultraSubtotal">Rp0</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>Diskon:</span><span id="ultraDiscount">-</span></div>
-          <div style="display:flex;justify-content:space-between;font-weight:700;"><span>Total Bayar:</span><span id="ultraGrandTotal">Rp0</span></div>
-        </div>
-
-        <button type="submit" id="ultraSubmit" class="btn-primary" style="width:100%;padding:12px;border-radius:10px;border:0;margin-bottom:8px;">Buat Nota</button>
-        <button type="button" id="ultraSendAdmin" class="btn-wa" style="width:100%;padding:12px;border-radius:10px;border:0;">Kirim WA Admin</button>
-      </form>
-    </section>
-
-    <!-- NOTA POPUP -->
-    <div id="notaContainer" class="nota-overlay">
-      <div class="nota-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <h3 style="margin:0">Nota Pemesanan</h3>
-          <button id="notaClose" style="background:#eee;border:0;padding:6px;border-radius:8px;cursor:pointer">✕</button>
-        </div>
-        <div id="notaContent" style="margin-top:12px"></div>
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <button id="notaPrint" style="flex:1;padding:10px;border-radius:8px;border:0;background:#ff5e7e;color:#fff">Cetak / PDF</button>
-        </div>
-      </div>
+<!-- ======================================
+     FORM PEMESANAN
+     ====================================== -->
+<section id="orderSection">
+  <form id="formUltra">
+    <div class="form-group">
+      <label for="ultraNama">Nama Pemesan</label>
+      <input type="text" id="ultraNama" required>
+    </div>
+    <div class="form-group">
+      <label for="ultraWA">Nomor WhatsApp</label>
+      <input type="tel" id="ultraWA" required>
+    </div>
+    <div class="form-group">
+      <label>Jenis Pukis</label>
+      <label><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
+      <label><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
+    </div>
+    <div class="form-group">
+      <label for="ultraIsi">Isi per Box</label>
+      <select id="ultraIsi">
+        <option value="5">5 pcs</option>
+        <option value="10">10 pcs</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Mode Topping</label>
+      <label><input type="radio" name="ultraToppingMode" value="non" checked> Tanpa Topping</label>
+      <label><input type="radio" name="ultraToppingMode" value="single"> Single Topping</label>
+      <label><input type="radio" name="ultraToppingMode" value="double"> Double Topping</label>
     </div>
 
-    <!-- LOCATION BLOCK -->
-    <section id="section-location" style="margin-top:18px;padding:12px;border-radius:12px;background:#fff8f8;">
-      <h2>Lokasi Kami</h2>
-      <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color:#e67e22;font-weight:700">📍 Klik untuk buka Google Maps</a></p>
-    </section>
+    <!-- SINGLE TOPPING -->
+    <div id="ultraSingleGroup" class="topping-group">
+      <p>Pilih topping (maks 5):</p>
+      <label><input type="checkbox" class="ultraTopping" value="Coklat"> Coklat</label>
+      <label><input type="checkbox" class="ultraTopping" value="Tiramisu"> Tiramisu</label>
+      <label><input type="checkbox" class="ultraTopping" value="Vanilla"> Vanilla</label>
+      <label><input type="checkbox" class="ultraTopping" value="Stroberi"> Stroberi</label>
+      <label><input type="checkbox" class="ultraTopping" value="Cappucino"> Cappucino</label>
+    </div>
 
-    <!-- TESTIMONI BLOCK -->
-    <section id="section-testimoni" style="margin-top:18px;padding:12px;border-radius:12px;background:#3A3A44;color:#fff;">
-      <h2>Testimoni Pelanggan</h2>
-      <ul id="testimonialsList" style="list-style:none;padding:0;margin:0;">
-        <!-- Testimoni Palsu (default) -->
-        <li class="testimonial-card" style="background:#fff;padding:12px;border-radius:8px;margin-bottom:8px;color:#000;"><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
-        <li class="testimonial-card" style="background:#fff;padding:12px;border-radius:8px;margin-bottom:8px;color:#000;"><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
-        <li class="testimonial-card" style="background:#fff;padding:12px;border-radius:8px;margin-bottom:8px;color:#000;"><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
-        <li class="testimonial-card" style="background:#fff;padding:12px;border-radius:8px;margin-bottom:8px;color:#000;"><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"</li>
-      </ul>
-    </section>
+    <!-- DOUBLE TOPPING + TABURAN -->
+    <div id="ultraDoubleGroup" class="topping-group">
+      <p>Pilih topping & taburan (maks 5 masing-masing):</p>
+      <p>Topping:</p>
+      <label><input type="checkbox" class="ultraTopping" value="Coklat"> Coklat</label>
+      <label><input type="checkbox" class="ultraTopping" value="Tiramisu"> Tiramisu</label>
+      <label><input type="checkbox" class="ultraTopping" value="Vanilla"> Vanilla</label>
+      <label><input type="checkbox" class="ultraTopping" value="Stroberi"> Stroberi</label>
+      <label><input type="checkbox" class="ultraTopping" value="Cappucino"> Cappucino</label>
+      <p>Taburan:</p>
+      <label><input type="checkbox" class="ultraTaburan" value="Meses"> Meses</label>
+      <label><input type="checkbox" class="ultraTaburan" value="Keju"> Keju</label>
+      <label><input type="checkbox" class="ultraTaburan" value="Kacang"> Kacang</label>
+      <label><input type="checkbox" class="ultraTaburan" value="Choco Chip"> Choco Chip</label>
+      <label><input type="checkbox" class="ultraTaburan" value="Oreo"> Oreo</label>
+    </div>
 
-    <!-- ADD TESTIMONI BLOCK -->
-    <section id="section-add-testimoni" style="margin-top:12px;padding:12px;border-radius:12px;background:#fff;">
-      <h2>Tulis Testimoni Kamu</h2>
-      <form id="testimonialForm">
-        <input id="nameInput" placeholder="Nama Kamu" style="width:100%;padding:8px;border-radius:8px;margin-bottom:8px;">
-        <textarea id="testimonialInput" placeholder="Testimoni..." style="width:100%;padding:8px;border-radius:8px;margin-bottom:8px;"></textarea>
-        <button type="submit" style="padding:10px;border-radius:8px;border:0;background:#ff5e7e;color:#fff">Kirim</button>
-      </form>
-    </section>
+    <div class="form-group">
+      <label for="ultraJumlah">Jumlah Box</label>
+      <input type="number" id="ultraJumlah" min="1" value="1">
+    </div>
 
-  </div> <!-- END container -->
+    <div class="price-summary">
+      <p>Harga per Box: <span id="ultraPricePerBox">Rp 0</span></p>
+      <p>Subtotal: <span id="ultraSubtotal">Rp 0</span></p>
+      <p>Diskon: <span id="ultraDiscount">-</span></p>
+      <p>Total: <span id="ultraGrandTotal">Rp 0</span></p>
+    </div>
 
-  <!-- ADMIN FLOAT LEFT BUTTON -->
-  <a href="admin.html" class="admin-float-btn" title="Masuk Admin">
-    <i class="fas fa-user-shield"></i>
-  </a>
+    <div class="form-group">
+      <label for="ultraNote">Catatan</label>
+      <textarea id="ultraNote"></textarea>
+    </div>
 
-  <!-- FLOATING SHARE BUTTON -->
-  <button id="toggleShareBtn" class="toggle-float-btn" aria-label="Tombol Share">+</button>
-  <div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
-    <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-    <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-    <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-    <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
-    <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-  </div>
+    <button type="submit">Buat Nota</button>
+  </form>
+</section>
 
-  <!-- LIGHTBOX BLOCK -->
-  <div id="lightboxOverlay"><img id="lightboxImg" src="" alt="Preview"></div>
+<!-- ======================================
+     NOTA MODAL
+     ====================================== -->
+<div id="notaContainer" class="modal">
+  <div class="nota-card" id="notaContent"></div>
+  <button id="notaPrint">Cetak / PDF</button>
+  <button id="ultraSendAdmin">Kirim WA Admin</button>
+  <button id="notaClose">Tutup</button>
+</div>
 
-  <!-- BOTTOM NAV BLOCK -->
-  <nav class="bottom-nav">
-    <a href="https://wa.me/6281296668670" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat</span></a>
-    <a href="#form-ultra"><i class="fas fa-cart-shopping"></i><span>Order</span></a>
-    <a href="https://shopee.co.id/" target="_blank"><i class="fas fa-store"></i><span>Shopee</span></a>
-    <a href="https://food.maxim.com/" target="_blank"><i class="fa-solid fa-motorcycle"></i><span>Maxim</span></a>
-    <a href="https://food.maxim.com/" target="_blank"><i class="fa-solid fa-motorcycle"></i><span>Kombi</span></a>
-    <a href="https://food.maxim.com/" target="_blank"><i class="fa-solid fa-motorcycle"></i><span>Gofood</span></a>
- </nav>
+<!-- ======================================
+     TESTIMONI
+     ====================================== -->
+<section id="testimonialSection">
+  <h2>Testimoni</h2>
+  <ul id="testimonialsList">
+    <!-- Testimoni default / palsu tetap muncul jika localStorage kosong -->
+    <li class="testimonial-card"><strong>Rina</strong><br>Enak banget pukisnya!</li>
+    <li class="testimonial-card"><strong>Budi</strong><br>Pelayanan cepat & ramah.</li>
+  </ul>
+  <form id="testimonialForm">
+    <input type="text" id="nameInput" placeholder="Nama" required>
+    <textarea id="testimonialInput" placeholder="Tulis testimoni..." required></textarea>
+    <button type="submit">Kirim Testimoni</button>
+  </form>
+</section>
+<!-- ======================================
+     FLOATING SHARE & ADMIN BUTTON
+     ====================================== -->
+<div id="floatingIcons" class="floating-icons" aria-hidden="true">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=example.com" target="_blank">FB</a>
+  <a href="https://twitter.com/intent/tweet?url=example.com" target="_blank">TW</a>
+  <a href="https://wa.me/6281296668670" target="_blank">WA Admin</a>
+</div>
+<button id="toggleShareBtn" class="floating-toggle">+</button>
 
-  <!-- FOOTER BLOCK -->
-  <footer style="padding:18px;text-align:center;background:#121213;color:#d8d8d8;margin-top:18px;border-radius:12px 12px 0 0;">
-    © 2025 Pukis Lumer Aulia — Hak Cipta Dilindungi
-  </footer>
+<!-- ======================================
+     BOTTOM NAVIGATION
+     ====================================== -->
+<nav id="bottomNav" class="bottom-nav">
+  <a href="#orderSection">Pesan</a>
+  <a href="#testimonialSection">Testimoni</a>
+  <a href="#footerSection">Kontak</a>
+</nav>
 
-  <!-- SCRIPTS: URUTAN PENTING -->
-  <!-- 1) jsPDF + plugin -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<!-- ======================================
+     FOOTER
+     ====================================== -->
+<footer id="footerSection">
+  <p>&copy; 2025 Pukis Lumer Aulia</p>
+  <p>📞 0812-9666-8670 | Pasar Kuliner Padang Panjang</p>
+</footer>
 
-  <!-- 2) Order generator -->
-  <script src="assets/js/order.js"></script>
+<!-- ======================================
+     SCRIPTS LINKING & INIT
+     ====================================== -->
+<script src="assets/js/script.js" defer></script>
 
-  <!-- 3) Main script -->
-  <script src="assets/js/script.js"></script>
+<script>
+  // ===== Bottom Nav Hide on Scroll =====
+  let lastScroll = 0, bottomNav = document.getElementById("bottomNav"), navTimeout;
+  window.addEventListener("scroll", ()=>{
+    const currentScroll = window.pageYOffset;
+    if(!bottomNav) return;
+    if(currentScroll > lastScroll){
+      // scrolling down
+      bottomNav.style.transform = "translateY(100%)";
+      clearTimeout(navTimeout);
+      navTimeout = setTimeout(()=>{ bottomNav.style.transform="translateY(0)"; },3000);
+    }
+    lastScroll = currentScroll;
+  });
+</script>
 
 </body>
 </html>
