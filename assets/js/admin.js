@@ -1,52 +1,114 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin Dashboard — Pukis Lumer Aulia</title>
-<link rel="stylesheet" href="assets/css/admin.css">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
+// ================================
+// ADMIN.JS — PUKIS LUMER AULIA
+// ================================
+console.info("[admin.js] Loaded");
 
-<!-- LOGIN MODAL -->
-<div id="adminLoginModal" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000000aa;">
-  <div style="background:#fff;padding:24px;border-radius:12px;max-width:360px;width:100%;">
-    <h2>Admin Login</h2>
-    <input type="password" id="adminPinInput" placeholder="Masukkan PIN Admin" style="width:100%;padding:12px;border-radius:8px;margin-bottom:12px;">
-    <button id="adminLoginBtn" style="width:100%;padding:12px;border-radius:8px;background:#ff5e7e;color:#fff;border:0;">Login</button>
-  </div>
-</div>
+const ADMIN_PIN = "8670";
+const loginModal = document.getElementById("adminLoginModal");
+const adminContent = document.getElementById("adminContent");
 
-<!-- DASHBOARD -->
-<div id="adminContent" style="display:none;padding:18px;">
-  <h1>Dashboard Admin</h1>
-  <button id="logoutBtn" style="padding:10px 14px;background:#1f2937;color:#fff;border:0;border-radius:8px;margin-bottom:12px;">Logout</button>
+// LOGIN
+function showLogin() {
+  loginModal.style.display = "flex";
+  adminContent.style.display = "none";
+}
+function showDashboard() {
+  loginModal.style.display = "none";
+  adminContent.style.display = "block";
+  loadAllData();
+}
 
-  <h2>Orders</h2>
-  <button id="refreshOrders">Refresh</button>
-  <button id="exportCSV">Export CSV</button>
-  <button id="clearOrders">Clear Orders</button>
-  <table id="ordersTable" border="1" cellspacing="0" cellpadding="6" style="width:100%;margin-top:12px;">
-    <thead>
+document.getElementById("adminLoginBtn")?.addEventListener("click", () => {
+  const pin = document.getElementById("adminPinInput")?.value;
+  if(!pin) return alert("Masukkan PIN admin");
+  if(pin === ADMIN_PIN){
+    localStorage.setItem("adminLoggedIn","yes");
+    showDashboard();
+  } else alert("PIN Salah!");
+});
+
+if(localStorage.getItem("adminLoggedIn")==="yes") showDashboard();
+else showLogin();
+
+/* ========================
+   LOAD DATA SECTIONS
+======================== */
+function loadAllData() {
+  loadOrders();
+  loadTestimonials();
+  loadStatistics();
+  loadAnalytics();
+}
+
+// ORDERS
+function loadOrders() {
+  const tbody = document.querySelector("#ordersTable tbody");
+  tbody.innerHTML = "";
+  const orders = JSON.parse(localStorage.getItem("orders")||"[]");
+  orders.forEach(o=>{
+    tbody.innerHTML += `
       <tr>
-        <th>Nama</th><th>WA</th><th>Jenis</th><th>Topping</th><th>Jumlah Box</th><th>Total</th><th>Tanggal</th>
+        <td>${o.nama}</td>
+        <td>${o.wa}</td>
+        <td>${o.jenis} (${o.isi}pcs)</td>
+        <td>${o.toppingMode}</td>
+        <td>${o.jumlahBox} Box</td>
+        <td>Rp${Number(o.total||0).toLocaleString()}</td>
+        <td>${new Date(o.createdAt).toLocaleString()}</td>
       </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    `;
+  });
+}
 
-  <h2>Testimonials</h2>
-  <div id="testimonialList"></div>
+// TESTIMONIALS
+function loadTestimonials() {
+  const wrap = document.getElementById("testimonialList");
+  wrap.innerHTML = "";
+  const testi = JSON.parse(localStorage.getItem("testimonials")||"[]");
+  testi.forEach(t=>{
+    wrap.innerHTML += `
+      <div class="testimonial-card">
+        <p>“${t.pesan}”</p>
+        <small>— ${t.nama}</small>
+      </div>
+    `;
+  });
+}
 
-  <h2>Statistics</h2>
-  <p>Total Orders: <span id="statOrders">0</span></p>
-  <p>Total Revenue: <span id="statRevenue">Rp0</span></p>
+// STATISTICS
+function loadStatistics() {
+  const orders = JSON.parse(localStorage.getItem("orders")||"[]");
+  const totalOrder = orders.length;
+  const revenue = orders.reduce((a,c)=>a+Number(c.total||0),0);
+  document.getElementById("statOrders").textContent = totalOrder;
+  document.getElementById("statRevenue").textContent = "Rp"+revenue.toLocaleString();
+}
 
-  <h2>Analytics</h2>
-  <pre id="analyticsData" style="background:#eee;padding:12px;border-radius:8px;max-height:300px;overflow:auto;"></pre>
-</div>
+// ANALYTICS
+function loadAnalytics() {
+  const analytics = JSON.parse(localStorage.getItem("pukis-analytics")||"[]");
+  document.getElementById("analyticsData").textContent = JSON.stringify(analytics,null,2);
+}
 
-<script src="assets/js/admin.js"></script>
-</body>
-</html>
+// ADMIN ACTIONS
+document.getElementById("refreshOrders")?.addEventListener("click",loadAllData);
+document.getElementById("exportCSV")?.addEventListener("click",()=>{
+  const orders = JSON.parse(localStorage.getItem("orders")||"[]");
+  let csv = "nama,wa,jenis,isi,topping,jumlah,total,tanggal\n"+
+    orders.map(o=>`${o.nama},${o.wa},${o.jenis},${o.isi},${o.toppingMode},${o.jumlahBox},${o.total},${o.createdAt}`).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download="orders-export.csv";
+  a.click();
+});
+document.getElementById("clearOrders")?.addEventListener("click",()=>{
+  if(!confirm("Hapus semua pesanan offline?")) return;
+  localStorage.removeItem("orders");
+  loadOrders();
+});
+
+// LOGOUT
+document.getElementById("logoutBtn")?.addEventListener("click",()=>{
+  localStorage.removeItem("adminLoggedIn");
+  showLogin();
+});
