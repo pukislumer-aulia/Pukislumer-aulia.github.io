@@ -1,6 +1,6 @@
 /* ===============================
    ORDER.JS — PUKIS LUMER AULIA
-   Final Hybrid Version — Bagian 1
+   Final Hybrid Version
    =============================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const $$ = s => document.querySelectorAll(s);
   const formatRp = n => "Rp " + Number(n).toLocaleString("id-ID");
 
-  /* ---------- Constants ---------- */
   const ADMIN_WA = "6281296668670";
   const MAX_TOPPING = 5;
   const MAX_TABURAN = 5;
@@ -25,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const SINGLE_TOPPINGS = ["Coklat", "Tiramisu", "Vanilla", "Stroberi", "Cappucino"];
   const DOUBLE_TABURAN = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
 
-  /* ---------- DOM Elements ---------- */
   const ultraNama = $("#ultraNama");
   const ultraWA = $("#ultraWA");
   const ultraIsi = $("#ultraIsi");
@@ -46,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let dataPesanan = {};
 
-  /* ---------- Utility Functions ---------- */
   function getSelectedRadioValue(name){
     const r = document.querySelector(`input[name="${name}"]:checked`);
     return r ? r.value : null;
@@ -55,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return [...$$(selector)].filter(cb=>cb.checked).map(cb=>cb.value);
   }
 
-  /* ---------- Calculate Price ---------- */
   function calculatePrice(){
     try{
       const jenis = getSelectedRadioValue("ultraJenis") || "Original";
@@ -65,8 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const pricePerBox = (BASE_PRICE[jenis] && BASE_PRICE[jenis][isi] && BASE_PRICE[jenis][isi][mode]) ? BASE_PRICE[jenis][isi][mode] : 0;
       let subtotal = pricePerBox * jumlahBox;
-
-      // Diskon jika beli minimal 10 box
       let discount = (jumlahBox >= DISKON_MIN_BOX) ? DISKON_PER_BOX * jumlahBox : 0;
       let total = subtotal - discount;
 
@@ -93,15 +87,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }catch(err){ console.error("calculatePrice error", err);}
   }
 
-  /* ---------- Update Topping Display ---------- */
   function updateToppingDisplay(){
     const mode = getSelectedRadioValue("ultraToppingMode");
-
-    // Non mode hides all
     if(ultraSingleGroup) ultraSingleGroup.style.display = mode==="single"||mode==="double"?"block":"none";
     if(ultraDoubleGroup) ultraDoubleGroup.style.display = mode==="double"?"block":"none";
 
-    // Disable all checkboxes first
     $$(".ultraTopping, .ultraTaburan").forEach(cb=>{ cb.checked=false; cb.disabled=true; });
 
     if(mode==="single"){
@@ -109,8 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cb.disabled=false;
         cb.style.display = SINGLE_TOPPINGS.includes(cb.value)? "inline-block":"none";
       });
-    }
-    else if(mode==="double"){
+    } else if(mode==="double"){
       $$(".ultraTopping").forEach(cb=>{
         cb.disabled=false;
         cb.style.display = SINGLE_TOPPINGS.includes(cb.value)? "inline-block":"none";
@@ -124,11 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
     calculatePrice();
   }
 
-  const toppingModeRadios = $$('input[name="ultraToppingMode"]') || [];
-  toppingModeRadios.forEach(r=>r.addEventListener("change", updateToppingDisplay));
+  $$('input[name="ultraToppingMode"]').forEach(r=>r.addEventListener("change", updateToppingDisplay));
   try{ updateToppingDisplay(); } catch(err){ console.warn("updateToppingDisplay failed:", err); }
 
-  /* ---------- Topping Limit Enforcement ---------- */
   function toppingLimitEvent(e){
     const mode = getSelectedRadioValue("ultraToppingMode");
     const t = getCheckedValues(".ultraTopping");
@@ -142,30 +129,19 @@ document.addEventListener("DOMContentLoaded", () => {
     calculatePrice();
   }
 
-  const toppingCheckboxes = $$('.ultraTopping, .ultraTaburan') || [];
-  toppingCheckboxes.forEach(cb=>cb.addEventListener("change", toppingLimitEvent));
-
-  /* ---------- Attach Event Listeners for Inputs ---------- */
+  $$('.ultraTopping, .ultraTaburan').forEach(cb=>cb.addEventListener("change", toppingLimitEvent));
   if(ultraIsi) ultraIsi.addEventListener("change", calculatePrice);
   if(ultraJumlah) ultraJumlah.addEventListener("input", calculatePrice);
-  const jenisRadios = $$('input[name="ultraJenis"]') || [];
-  jenisRadios.forEach(r=>r.addEventListener("change", calculatePrice));
+  $$('input[name="ultraJenis"]').forEach(r=>r.addEventListener("change", calculatePrice));
 
   calculatePrice();
 
-                          /* ===============================
-   ORDER.JS — PUKIS LUMER AULIA
-   Final Hybrid Version — Bagian 2
-   =============================== */
-
-  /* ---------- Form Submit & Nota Rendering ---------- */
   formUltra.addEventListener("submit", e=>{
     e.preventDefault();
     calculatePrice();
     renderNota();
     if(notaContainer) notaContainer.style.display="flex";
   });
-
   if(notaClose) notaClose.addEventListener("click", ()=>{ notaContainer.style.display="none"; });
 
   function renderNota(){
@@ -182,32 +158,33 @@ document.addEventListener("DOMContentLoaded", () => {
     if(notaContent) notaContent.innerHTML=text;
   }
 
-  /* ---------- Kirim WA Admin ---------- */
-  notaSendAdmin.addEventListener("click", ()=>{
-    calculatePrice();
-    const d = dataPesanan;
-    let msg = `Halo Admin, saya ingin memesan Pukis:\n` +
-              `Nama: ${d.nama}\n` +
-              `Jenis: ${d.jenis}\n` +
-              `Isi: ${d.isi} pcs\n` +
-              (d.mode==="single"? `Topping: ${d.topping.join(", ")||"-"}\n`:"") +
-              (d.mode==="double"? `Topping: ${d.topping.join(", ")||"-"}\nTaburan: ${d.taburan.join(", ")||"-"}\n`:"") +
-              `Jumlah: ${d.jumlahBox} Box\n` +
-              `Total: ${formatRp(d.total)}\n` +
-              `Catatan: ${d.note}\n\nTerimakasih 🙏`;
-    window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, "_blank");
-  });
+  if(notaSendAdmin){
+    notaSendAdmin.addEventListener("click", ()=>{
+      calculatePrice();
+      const d = dataPesanan;
+      let msg = `Halo Admin, saya ingin memesan Pukis:\n` +
+                `Nama: ${d.nama}\n` +
+                `Jenis: ${d.jenis}\n` +
+                `Isi: ${d.isi} pcs\n` +
+                (d.mode==="single"? `Topping: ${d.topping.join(", ")||"-"}\n`:"") +
+                (d.mode==="double"? `Topping: ${d.topping.join(", ")||"-"}\nTaburan: ${d.taburan.join(", ")||"-"}\n`:"") +
+                `Jumlah: ${d.jumlahBox} Box\n` +
+                `Total: ${formatRp(d.total)}\n` +
+                `Catatan: ${d.note}\n\nTerimakasih 🙏`;
+      window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, "_blank");
+    });
+  }
 
-  /* ---------- Cetak PDF ---------- */
-  notaPrint.addEventListener("click", async ()=>{
-    calculatePrice();
-    try{
-      if(!window.jspdf){ alert("PDF gagal dibuat: jsPDF belum ter-load."); return; }
-      await generatePdf(dataPesanan);
-    } catch(err){ alert("PDF gagal dibuat: "+(err?.message||err)); }
-  });
+  if(notaPrint){
+    notaPrint.addEventListener("click", async ()=>{
+      calculatePrice();
+      try{
+        if(!window.jspdf){ alert("PDF gagal dibuat: jsPDF belum ter-load."); return; }
+        await generatePdf(dataPesanan);
+      } catch(err){ alert("PDF gagal dibuat: "+(err?.message||err)); }
+    });
+  }
 
-  /* ---------- Floating Share & Admin Buttons ---------- */
   const toggleShareBtn = $("#toggleShareBtn");
   const floatingIcons = $("#floatingIcons");
   if(toggleShareBtn && floatingIcons){
@@ -217,14 +194,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- Bottom Nav Scroll Behavior ---------- */
   const bottomNav = $("#bottomNav");
   let bottomNavTimeout = null;
   let lastScroll = window.scrollY;
   window.addEventListener("scroll", ()=>{
     if(!bottomNav) return;
     const currentScroll = window.scrollY;
-    if(currentScroll > lastScroll){ // scroll down
+    if(currentScroll > lastScroll){
       bottomNav.style.bottom="-70px";
       clearTimeout(bottomNavTimeout);
       bottomNavTimeout = setTimeout(()=>{ bottomNav.style.bottom="0"; }, 3000);
@@ -232,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
     lastScroll = currentScroll;
   });
 
-  /* ---------- Testimonial Handling ---------- */
   function loadTestimonials(){
     const container = $("#testimonialsList");
     const saved = JSON.parse(localStorage.getItem("testimonials")||"[]");
@@ -261,12 +236,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- Helper: Escape HTML ---------- */
-  function escapeHtml(str=""){
-    return String(str).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  }
+  function escapeHtml(str=""){ return String(str).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
-  /* ---------- Init Final ---------- */
   function initFinal(){
     loadTestimonials();
     updateToppingDisplay();
@@ -307,7 +278,6 @@ async function generatePdf(data){
   pdf.text("PUKIS LUMER AULIA",105,17,{align:"center"});
   pdf.setFont("helvetica","normal"); pdf.setTextColor(0,0,0);
   if(logo) pdf.addImage(logo,"PNG",155,5,40,20);
-
   pdf.setFontSize(9); pdf.text("Pasar Kuliner Padang Panjang",155,27); pdf.text("📞 0812-9666-8670",155,31);
   pdf.line(10,35,200,35);
 
@@ -335,4 +305,4 @@ async function generatePdf(data){
   if(qris){ pdf.text("QRIS Pembayaran",13,sigY); pdf.addImage(qris,"PNG",10,sigY+5,35,35); }
 
   pdf.save(`Invoice_${(nama||"Pelanggan").replace(/\s+/g,"_")}.pdf`);
-}
+                }
