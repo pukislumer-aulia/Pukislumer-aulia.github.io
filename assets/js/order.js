@@ -1,6 +1,6 @@
 /* ===============================
    ORDER.JS — PUKIS LUMER AULIA
-   Final Hybrid Version
+   Final Hybrid Version (Upgrade PDF + Admin)
    =============================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const SINGLE_TOPPINGS = ["Coklat", "Tiramisu", "Vanilla", "Stroberi", "Cappucino"];
   const DOUBLE_TABURAN = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
 
+  // DOM Elements
   const ultraNama = $("#ultraNama");
   const ultraWA = $("#ultraWA");
   const ultraIsi = $("#ultraIsi");
@@ -69,7 +70,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if(ultraDiscount) ultraDiscount.textContent = discount>0? "-"+formatRp(discount) : "-";
       if(ultraGrandTotal) ultraGrandTotal.textContent = formatRp(total);
 
+      const now = new Date();
+      const invoiceNum = "INV-"+now.getFullYear()+(now.getMonth()+1).toString().padStart(2,"0")+now.getDate().toString().padStart(2,"0")+"-"+now.getHours().toString().padStart(2,"0")+now.getMinutes().toString().padStart(2,"0");
+
       dataPesanan = {
+        orderID: invoiceNum,
         nama: ultraNama ? (ultraNama.value||"-") : "-",
         wa: ultraWA ? (ultraWA.value||"-") : "-",
         jenis,
@@ -82,8 +87,17 @@ document.addEventListener("DOMContentLoaded", () => {
         subtotal,
         discount,
         total,
-        note: ultraNote ? (ultraNote.value||"-") : "-"
+        note: ultraNote ? (ultraNote.value||"-") : "-",
+        tgl: now.toLocaleDateString("id-ID") + " " + now.toLocaleTimeString("id-ID")
       };
+
+      // Simpan ke storage untuk Admin
+      const allOrders = JSON.parse(localStorage.getItem("allOrders")||"[]");
+      const existingIndex = allOrders.findIndex(o=>o.orderID===dataPesanan.orderID);
+      if(existingIndex===-1) allOrders.push(dataPesanan);
+      else allOrders[existingIndex] = dataPesanan;
+      localStorage.setItem("allOrders", JSON.stringify(allOrders));
+
     }catch(err){ console.error("calculatePrice error", err);}
   }
 
@@ -136,6 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   calculatePrice();
 
+  // FORM SUBMIT & NOTA
   formUltra.addEventListener("submit", e=>{
     e.preventDefault();
     calculatePrice();
@@ -146,7 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderNota(){
     const d = dataPesanan;
-    let text = `<p><strong>Nama:</strong> ${d.nama}</p>
+    let text = `<p><strong>Order ID:</strong> ${d.orderID}</p>
+                <p><strong>Nama:</strong> ${d.nama}</p>
                 <p><strong>WA:</strong> ${d.wa}</p>
                 <p><strong>Jenis:</strong> ${d.jenis}</p>
                 <p><strong>Isi:</strong> ${d.isi} pcs</p>`;
@@ -155,6 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <p><strong>Taburan:</strong> ${d.taburan.join(", ")||"-"}</p>`;
     text+= `<p><strong>Jumlah Box:</strong> ${d.jumlahBox}</p>
             <p><strong>Catatan:</strong> ${d.note}</p>`;
+    text+= `<p>Terimakasih sudah Belanja di toko Kami 🙏</p>`;
     if(notaContent) notaContent.innerHTML=text;
   }
 
@@ -163,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
       calculatePrice();
       const d = dataPesanan;
       let msg = `Halo Admin, saya ingin memesan Pukis:\n` +
+                `Order ID: ${d.orderID}\n` +
                 `Nama: ${d.nama}\n` +
                 `Jenis: ${d.jenis}\n` +
                 `Isi: ${d.isi} pcs\n` +
@@ -250,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =======================
-   PDF Generator
+   PDF Generator with Watermark & Footer
    ======================= */
 async function generatePdf(data){
   const { jsPDF } = window.jspdf;
@@ -265,35 +283,43 @@ async function generatePdf(data){
   ]);
 
   const {
-    nama="-", jenis="-", isi="-", mode="non", topping=[], taburan=[], jumlahBox=1,
-    pricePerBox=0, subtotal=0, discount=0, total=0, note="-", wa="-"
+    orderID="-", nama="-", jenis="-", isi="-", mode="non", topping=[], taburan=[], jumlahBox=1,
+    pricePerBox=0, subtotal=0, discount=0, total=0, note="-", tgl="-", wa="-"
   } = data||{};
 
-  const now = new Date();
-  const tgl = now.toLocaleDateString("id-ID"), jam=now.toLocaleTimeString("id-ID");
-  const invoiceNum = "INV-"+now.getFullYear()+(now.getMonth()+1).toString().padStart(2,"0")+now.getDate().toString().padStart(2,"0")+"-"+now.getHours().toString().padStart(2,"0")+now.getMinutes().toString().padStart(2,"0");
+  // Watermark
+  pdf.setTextColor(200,200,200);
+  pdf.setFontSize(50);
+  pdf.text("PUKIS LUMER AULIA",105,150,{align:"center", angle:45});
+  pdf.setTextColor(0,0,0);
 
-  pdf.setFont("helvetica","bold"); pdf.setFontSize(14); pdf.text("INVOICE",10,12);
-  try{ pdf.setFont("Pacifico-Regular"); } catch{}; pdf.setFontSize(26); pdf.setTextColor(214,51,108);
-  pdf.text("PUKIS LUMER AULIA",105,17,{align:"center"});
-  pdf.setFont("helvetica","normal"); pdf.setTextColor(0,0,0);
+  const now = new Date();
+  const invoiceNum = orderID;
+
   if(logo) pdf.addImage(logo,"PNG",155,5,40,20);
   pdf.setFontSize(9); pdf.text("Pasar Kuliner Padang Panjang",155,27); pdf.text("📞 0812-9666-8670",155,31);
   pdf.line(10,35,200,35);
 
   let y=43; pdf.setFontSize(11);
-  pdf.text("Nama Pemesan : "+nama,10,y); pdf.text("Tanggal : "+tgl+" "+jam,150,y); y+=7;
-  pdf.text("Nomor Invoice : "+invoiceNum,150,y); y+=10;
+  pdf.text("Order ID : "+orderID,10,y);
+  pdf.text("Tanggal : "+tgl,150,y); y+=7;
+  pdf.text("Nama Pemesan : "+nama,10,y); pdf.text("WA : "+wa,150,y); y+=10;
+
   if(note!=="-"){ pdf.text("Catatan :",10,y); pdf.text(note,10,y+6); y+=12; }
 
   const desc = `${jenis} — ${isi} pcs\n` + (mode==="single"? `Topping: ${topping.join(",")||"-"}` : mode==="double"? `Topping: ${topping.join(",")||"-"} | Taburan: ${taburan.join(",")||"-"}` : "Tanpa Topping");
 
   if(pdf.autoTable){
-    pdf.autoTable({startY:y, head:[["Deskripsi","Harga","Jumlah","Total"]], body:[[desc,fmtRp(pricePerBox),jumlahBox+" Box",fmtRp(total)]], theme:"grid", headStyles:{fillColor:[214,51,108],textColor:255}, styles:{fontSize:10}});
-  } else {
-    pdf.text("Deskripsi",10,y); pdf.text("Harga",100,y); pdf.text("Jumlah",140,y); pdf.text("Total",170,y); y+=6;
-    pdf.text(desc,10,y); pdf.text(fmtRp(pricePerBox),100,y); pdf.text(jumlahBox+" Box",140,y); pdf.text(fmtRp(total),170,y);
+    pdf.autoTable({
+      startY:y,
+      head:[["Deskripsi","Harga","Jumlah","Total"]],
+      body:[[desc,fmtRp(pricePerBox),jumlahBox+" Box",fmtRp(total)]],
+      theme:"grid",
+      headStyles:{fillColor:[214,51,108],textColor:255},
+      styles:{fontSize:10}
+    });
   }
+
   const finalY = pdf.lastAutoTable?.finalY ? pdf.lastAutoTable.finalY + 10 : y+30;
 
   pdf.setFontSize(11); pdf.text("Subtotal: "+fmtRp(subtotal),195,finalY,{align:"right"});
@@ -304,5 +330,7 @@ async function generatePdf(data){
   if(ttd) pdf.addImage(ttd,"PNG",150,sigY+5,40,18);
   if(qris){ pdf.text("QRIS Pembayaran",13,sigY); pdf.addImage(qris,"PNG",10,sigY+5,35,35); }
 
+  pdf.text("Terimakasih sudah Belanja di toko Kami 🙏",105,sigY+50,{align:"center"});
+
   pdf.save(`Invoice_${(nama||"Pelanggan").replace(/\s+/g,"_")}.pdf`);
-                }
+                          }
