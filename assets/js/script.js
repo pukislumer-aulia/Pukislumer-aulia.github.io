@@ -1,326 +1,251 @@
 /* ======================================
-   PUKIS LUMER AULIA — SCRIPT FINAL PRO
+   PUKIS LUMER AULIA — SCRIPT USER FINAL
    ====================================== */
 
-/* Loader */
+/* ---------- Loader ---------- */
 window.addEventListener("load", () => {
   const loader = document.getElementById("site-loader");
-  setTimeout(() => loader.style.display = "none", 800);
+  if(loader) setTimeout(()=>loader.style.display="none",800);
 });
 
 /* ---------- Utility ---------- */
-const q = (s) => document.querySelector(s);
-const qAll = (s) => Array.from(document.querySelectorAll(s));
+const $ = s=>document.querySelector(s);
+const $$ = s=>Array.from(document.querySelectorAll(s));
 const ADMIN_WA = "6281296668670";
 
-/* ---------- LocalStorage Init Testimoni Palsu ---------- */
-(function initFakeTestimonials() {
-  const key = "testimonials";
+function formatRp(num){ return "Rp " + Number(num).toLocaleString("id-ID"); }
+function escapeHtml(str=""){ return String(str).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ---------- LocalStorage Init Testimoni ---------- */
+(function initFakeTestimonials(){
+  const key="testimonials";
   if(!localStorage.getItem(key)){
-    const fake = [
+    const fake=[
       {name:"Anggi, Payakumbuh", testimonial:"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."},
       {name:"Wenni, Pekanbaru", testimonial:"Rasa pandan-nya mantap, cocok buat cemilan sore!"},
       {name:"Annisa, Bukittinggi", testimonial:"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"},
       {name:"Maulana, Padang Panjang", testimonial:"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"}
     ];
-    localStorage.setItem(key, JSON.stringify(fake));
+    localStorage.setItem(key,JSON.stringify(fake));
   }
 })();
 
-/* ---------- Ambil Data Form ---------- */
-function getOrderFormData() {
-  const toppingType = q('input[name="ultraToppingMode"]:checked')?.value || "non";
+/* ---------- PRICE & TOPPING ---------- */
+const BASE_PRICE = {
+  Original: { "5": { non:10000, single:13000, double:15000 }, "10":{ non:18000, single:25000, double:28000 } },
+  Pandan:   { "5": { non:13000, single:15000, double:18000 }, "10":{ non:25000, single:28000, double:32000 } },
+};
+const SINGLE_TOPPINGS = ["Coklat","Tiramisu","Vanilla","Stroberi","Cappucino"];
+const DOUBLE_TABURAN = ["Meses","Keju","Kacang","Choco Chip","Oreo"];
+const MAX_TOPPING=5, MAX_TABURAN=5, DISKON_MIN_BOX=10, DISKON_PER_BOX=1000;
+
+function getSelectedRadio(name){ const r=$(`input[name="${name}"]:checked`); return r?r.value:null; }
+function getChecked(selector){ return $$(selector+":checked").map(e=>e.value); }
+
+function calculatePrice(jenis, isi, mode){ return BASE_PRICE[jenis][isi][mode]||0; }
+function calculateSubtotal(pricePerBox, jumlah){ return pricePerBox*jumlah; }
+function calculateDiscount(jumlah){ return jumlah>=DISKON_MIN_BOX?DISKON_PER_BOX*jumlah:0; }
+function calculateGrandTotal(subtotal, discount){ return subtotal-discount; }
+
+/* ---------- GET ORDER FORM DATA ---------- */
+function getOrderFormData(){
+  const jenis = getSelectedRadio("ultraJenis") || "Original";
+  const isi = $("#ultraIsi")?$("#ultraIsi").value:"5";
+  const mode = getSelectedRadio("ultraToppingMode") || "non";
+  const jumlahBox = $("#ultraJumlah")?parseInt($("#ultraJumlah").value)||1:1;
+  const pricePerBox = calculatePrice(jenis,isi,mode);
+  const subtotal = calculateSubtotal(pricePerBox,jumlahBox);
+  const discount = calculateDiscount(jumlahBox);
+  const total = calculateGrandTotal(subtotal,discount);
 
   return {
-    id: "INV" + Date.now(),
-    name: q("#ultraNama")?.value || "",
-    wa: q("#ultraWA")?.value || "",
-    jenis: q('input[name="ultraJenis"]:checked')?.value || "Original",
-    isi: parseInt(q("#ultraIsi")?.value || "5"),
-    toppingType,
-    singleTopping: getChecked(".single-top"),
-    doubleTopping: getChecked(".double-top"),
-    jumlah: parseInt(q("#ultraJumlah")?.value || "1"),
-    note: q("#ultraNote")?.value || "-",
-    priceBox: calculatePrice(),
-    subtotal: calculateSubtotal(),
-    discount: calculateDiskon(),
-    total: calculateGrandTotal(),
+    id: "INV"+Date.now(),
+    nama: $("#ultraNama")?$("#ultraNama").value:"-",
+    wa: $("#ultraWA")?$("#ultraWA").value:"-",
+    jenis, isi, mode,
+    topping: getChecked(".ultraTopping"),
+    taburan: getChecked(".ultraTaburan"),
+    jumlahBox, pricePerBox, subtotal, discount, total,
+    note: $("#ultraNote")?$("#ultraNote").value:"-",
     createdAt: new Date().toISOString()
   };
 }
 
-function getChecked(selector) {
-  return qAll(selector + ":checked").map(el => el.value);
+/* ---------- UPDATE PRICE UI ---------- */
+function updatePriceUI(){
+  const data = getOrderFormData();
+  if($("#ultraPricePerBox")) $("#ultraPricePerBox").innerText = formatRp(data.pricePerBox);
+  if($("#ultraSubtotal")) $("#ultraSubtotal").innerText = formatRp(data.subtotal);
+  if($("#ultraDiscount")) $("#ultraDiscount").innerText = data.discount>0?"-"+formatRp(data.discount):"-";
+  if($("#ultraGrandTotal")) $("#ultraGrandTotal").innerText = formatRp(data.total);
 }
 
-/* ---------- PRICE RULE ---------- */
-function calculatePrice() {
-  const harga = {
-    "Original": { non: 10000, single: 13000, double: 15000 },
-    "Pandan": { non: 12000, single: 15000, double: 18000 }
-  };
-  const jenis = q('input[name="ultraJenis"]:checked')?.value || "Original";
-  const mode = q('input[name="ultraToppingMode"]:checked')?.value || "non";
-  return harga[jenis][mode];
-}
+/* ---------- TOPPING DISPLAY ---------- */
+function updateToppingDisplay(){
+  const mode = getSelectedRadio("ultraToppingMode");
+  const isi = parseInt($("#ultraIsi")?$("#ultraIsi").value:5);
+  const singleEl = $("#ultraSingleGroup");
+  const doubleEl = $("#ultraDoubleGroup");
+  if(!singleEl||!doubleEl) return;
 
-function calculateSubtotal() {
-  return calculatePrice() * parseInt(q("#ultraJumlah")?.value || "1");
-}
+  singleEl.innerHTML=""; doubleEl.innerHTML="";
 
-function calculateDiskon() {
-  const jumlah = parseInt(q("#ultraJumlah")?.value || "1");
-  return jumlah >= 5 ? 2000 * jumlah : 0;
-}
+  if(mode==="single"||mode==="double"){ singleEl.style.display="flex"; } else singleEl.style.display="none";
+  if(mode==="double"){ doubleEl.style.display="flex"; } else doubleEl.style.display="none";
 
-function calculateGrandTotal() {
-  return calculateSubtotal() - calculateDiskon();
-}
-
-function formatRp(num) {
-  return "Rp " + num.toLocaleString("id-ID");
-}
-
-function updatePriceUI() {
-  q("#ultraPricePerBox").innerText = formatRp(calculatePrice());
-  q("#ultraSubtotal").innerText = formatRp(calculateSubtotal());
-  q("#ultraDiscount").innerText = "-" + formatRp(calculateDiskon());
-  q("#ultraGrandTotal").innerText = formatRp(calculateGrandTotal());
-}
-
-/* ---------- Topping Logic ---------- */
-function showTopping() {
-  const mode = q('input[name="ultraToppingMode"]:checked')?.value;
-  const isi = parseInt(q("#ultraIsi")?.value || "5");
-
-  const singleEl = q("#ultraSingleGroup");
-  const doubleEl = q("#ultraDoubleGroup");
-
-  const toppingsSingle = ["Coklat", "Tiramisu", "Vanila", "Stroberi", "Cappucino"];
-  const toppingsDouble = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
-
-  singleEl.innerHTML = "";
-  doubleEl.innerHTML = "";
-
-  if(mode === "non") {
-    singleEl.style.display = "none";
-    doubleEl.style.display = "none";
-    updatePriceUI();
-    return;
+  if(mode==="single"||mode==="double"){
+    SINGLE_TOPPINGS.forEach((t,i)=>{ if(i<isi) singleEl.innerHTML+=`<label class="topping-check"><input type="checkbox" class="ultraTopping" value="${t}"><span>${t}</span></label>`; });
   }
-
-  if(mode === "single" || mode === "double") singleEl.style.display = "flex";
-  if(mode === "double") doubleEl.style.display = "flex";
-
-  if(mode === "single" || mode === "double") {
-    toppingsSingle.forEach((t,i) => {
-      if(i < isi) singleEl.innerHTML += `
-        <label class="topping-check">
-          <input type="checkbox" class="single-top" value="${t}">
-          <span>${t}</span>
-        </label>`;
-    });
+  if(mode==="double"){
+    DOUBLE_TABURAN.forEach((t,i)=>{ if(i<isi) doubleEl.innerHTML+=`<label class="topping-check"><input type="checkbox" class="ultraTaburan" value="${t}"><span>${t}</span></label>`; });
   }
-
-  if(mode === "double") {
-    toppingsDouble.forEach((t,i) => {
-      if(i < isi) doubleEl.innerHTML += `
-        <label class="topping-check">
-          <input type="checkbox" class="double-top" value="${t}">
-          <span>${t}</span>
-        </label>`;
-    });
-  }
-
   updatePriceUI();
 }
 
-/* ---------- Event Listeners ---------- */
-qAll('input[name="ultraToppingMode"]').forEach(el => el.addEventListener("change", showTopping));
-qAll('input[name="ultraJenis"]').forEach(el => {
-  el.addEventListener("change", () => {
-    showTopping();
+/* ---------- Event Listeners for Topping & Inputs ---------- */
+$$('input[name="ultraToppingMode"], input[name="ultraJenis"]').forEach(r=>r.addEventListener("change",()=>{ updateToppingDisplay(); updatePriceUI(); }));
+["ultraIsi","ultraJumlah"].forEach(id=>{ const el=$("#"+id); if(el) el.addEventListener("change",()=>{ updateToppingDisplay(); updatePriceUI(); }); });
+
+document.addEventListener("change", e=>{
+  const t=e.target; if(!t) return;
+  if(t.matches(".ultraTopping,.ultraTaburan")){
+    const lbl=t.closest("label"); if(lbl){ t.checked?lbl.classList.add("checked"):lbl.classList.remove("checked"); }
+    const mode=getSelectedRadio("ultraToppingMode"), isi=parseInt($("#ultraIsi")?$("#ultraIsi").value:5);
+    const s=getChecked(".ultraTopping").length, d=getChecked(".ultraTaburan").length;
+    if(mode==="single" && s>MAX_TOPPING){ t.checked=false; alert(`Maksimal ${MAX_TOPPING} topping`); }
+    if(mode==="double"){ 
+      if(t.classList.contains("ultraTopping") && s>MAX_TOPPING){ t.checked=false; alert(`Maksimal ${MAX_TOPPING} topping`); } 
+      if(t.classList.contains("ultraTaburan") && d>MAX_TABURAN){ t.checked=false; alert(`Maksimal ${MAX_TABURAN} taburan`); } 
+    }
     updatePriceUI();
-  });
+  }
 });
-["ultraIsi","ultraJumlah"].forEach(id => {
-  q("#"+id)?.addEventListener("change", showTopping);
-});
+
 /* ======================================
-   BAGIAN 2 — PUKIS LUMER AULIA SCRIPT FINAL
+   BAGIAN 2 — FORM, NOTA, WA, TESTIMONIALS
    ====================================== */
 
-/* ---------- Form Submit Handler ---------- */
-function handleFormSubmit(e) {
+/* ---------- Form Submit ---------- */
+$("#formUltra")?.addEventListener("submit", e=>{
   e.preventDefault();
-
-  const name = (q("#ultraNama")?.value || "").trim();
-  const wa = (q("#ultraWA")?.value || "").trim();
-  if(!name || !wa) return alert("Isi nama & nomor WhatsApp terlebih dahulu.");
-
-  const order = getOrderFormData();
-
-  const singleChecked = getChecked(".single-top").length;
-  const doubleChecked = getChecked(".double-top").length;
-  if(order.toppingType === "single" && singleChecked > order.isi) {
-    return alert(`Maksimal ${order.isi} topping (single).`);
-  }
-  if(order.toppingType === "double" && (singleChecked > order.isi || doubleChecked > order.isi)) {
-    return alert(`Maksimal ${order.isi} topping per grup (single/taburan).`);
-  }
-
-  saveOrderLocal(order);
-  renderNota(order);
-  q("#notaContainer")?.classList.add("show");
-  q("#notaContainer .nota-card")?.scrollIntoView({behavior:"smooth"});
-  console.log("[script] Order saved locally:", order);
-  alert("Nota dibuat. Silakan cek dan tekan 'Cetak / PDF' atau 'Kirim WA Admin'.");
-}
-q("#formUltra")?.addEventListener("submit", handleFormSubmit);
-
-/* ---------- LocalStorage Save Order ---------- */
-function saveOrderLocal(order) {
-  const arr = JSON.parse(localStorage.getItem("orders") || "[]");
-  arr.push(order);
-  localStorage.setItem("orders", JSON.stringify(arr));
-}
-
-/* ---------- Send WA Admin ---------- */
-q("#ultraSendAdmin")?.addEventListener("click", () => {
-  const order = getOrderFormData();
-  if(!order.name || !order.wa) return alert("Isi nama & WA terlebih dahulu.");
-  saveOrderLocal(order);
-
-  const msgLines = [
-    "Assalamu'alaikum",
-    "Saya ingin memesan Pukis Lumer Aulia:",
-    `Nama: ${order.name}`,
-    `WA: ${order.wa}`,
-    `Jenis: ${order.jenis}`,
-    `Isi: ${order.isi} pcs`,
-    `Mode: ${order.toppingType}`
-  ];
-  if(order.toppingType === "single") {
-    msgLines.push(`Topping: ${order.singleTopping.join(", ") || "-"}`);
-  } else if(order.toppingType === "double") {
-    msgLines.push(`Topping: ${order.singleTopping.join(", ") || "-"}`);
-    msgLines.push(`Taburan: ${order.doubleTopping.join(", ") || "-"}`);
-  }
-  msgLines.push(`Jumlah Box: ${order.jumlah}`);
-  msgLines.push(`Catatan: ${order.note}`);
-  msgLines.push(`Total: ${formatRp(order.total)}`);
-  msgLines.push("Terima kasih 🙏");
-
-  const waLink = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msgLines.join("\n"))}`;
-  window.open(waLink, "_blank");
+  const data=getOrderFormData();
+  if(!data.nama||!data.wa) return alert("Isi nama & WA terlebih dahulu.");
+  saveOrderLocal(data);
+  renderNota(data);
+  $("#notaContainer")?.classList.add("show");
+  $("#notaContainer .nota-card")?.scrollIntoView({behavior:"smooth"});
+  alert("Nota dibuat. Silakan cek & tekan 'Cetak/PDF' atau 'Kirim WA Admin'.");
 });
 
+/* ---------- Save Order Local ---------- */
+function saveOrderLocal(order){
+  const arr=JSON.parse(localStorage.getItem("orders")||"[]");
+  arr.push(order);
+  localStorage.setItem("orders",JSON.stringify(arr));
+}
+
+/* ---------- Render Nota ---------- */
+function renderNota(data){
+  const container=$("#notaContainer .nota-card");
+  if(!container) return;
+  container.innerHTML=`
+    <h3>INVOICE — Pukis Lumer Aulia</h3>
+    <p><strong>Nama:</strong> ${escapeHtml(data.nama)}</p>
+    <p><strong>WA:</strong> ${escapeHtml(data.wa)}</p>
+    <p><strong>Jenis:</strong> ${data.jenis}</p>
+    <p><strong>Isi:</strong> ${data.isi} pcs</p>
+    <p><strong>Mode:</strong> ${data.mode}</p>
+    ${data.topping.length?`<p><strong>Topping:</strong> ${data.topping.join(", ")}</p>`:""}
+    ${data.taburan.length?`<p><strong>Taburan:</strong> ${data.taburan.join(", ")}</p>`:""}
+    <p><strong>Jumlah Box:</strong> ${data.jumlahBox}</p>
+    <p><strong>Catatan:</strong> ${escapeHtml(data.note)}</p>
+    <p><strong>Total:</strong> ${formatRp(data.total)}</p>
+  `;
+}
+
 /* ---------- Nota Print / PDF ---------- */
-q("#notaPrint")?.addEventListener("click", async () => {
-  const order = getOrderFormData();
-  try {
-    if(typeof window.generatePdf === "function") {
-      await window.generatePdf({...order, branding:"full"});
-    } else if(window.jspdf && window.jspdf.jsPDF) {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      pdf.setFontSize(12);
-      pdf.text("PUKIS LUMER AULIA - Nota Sederhana", 10, 20);
-      pdf.setFontSize(10);
-      pdf.text(`Nama: ${order.name}`, 10, 30);
-      pdf.text(`No WA: ${order.wa}`, 10, 36);
-      pdf.text(`Jenis: ${order.jenis}`, 10, 42);
-      pdf.text(`Isi: ${order.isi} pcs`, 10, 48);
-      pdf.text(`Mode: ${order.toppingType}`, 10, 54);
-      if(order.singleTopping?.length) pdf.text(`Topping: ${order.singleTopping.join(", ")}`, 10, 60);
-      if(order.doubleTopping?.length) pdf.text(`Taburan: ${order.doubleTopping.join(", ")}`, 10, 66);
-      pdf.text(`Jumlah: ${order.jumlah}`, 10, 72);
-      pdf.text(`Total: ${formatRp(order.total)}`, 10, 78);
-      pdf.save(`${order.id || "Nota"}.pdf`);
+$("#notaPrint")?.addEventListener("click", async()=>{
+  const data=getOrderFormData();
+  try{
+    if(typeof window.generatePdf==="function"){
+      await window.generatePdf({...data, branding:"full"});
     } else {
-      alert("Fitur PDF tidak tersedia. Pastikan order.js sudah dimuat.");
+      alert("PDF gagal. Pastikan order.js sudah dimuat.");
     }
-  } catch(err) {
+  } catch(err){
     console.error("generatePdf error:", err);
-    alert("Gagal membuat PDF: " + (err?.message || err));
+    alert("Gagal membuat PDF: "+(err?.message||err));
   }
 });
 
 /* ---------- Nota Modal Close ---------- */
-q("#notaClose")?.addEventListener("click", () => {
-  q("#notaContainer")?.classList.remove("show");
+$("#notaClose")?.addEventListener("click",()=>{ $("#notaContainer")?.classList.remove("show"); });
+
+/* ---------- Send WA Admin ---------- */
+$("#ultraSendAdmin")?.addEventListener("click", ()=>{
+  const data=getOrderFormData();
+  if(!data.nama||!data.wa) return alert("Isi nama & WA terlebih dahulu.");
+  saveOrderLocal(data);
+
+  const lines=[
+    "Halo Admin, saya ingin memesan Pukis Lumer Aulia:",
+    `Nama: ${data.nama}`,
+    `WA: ${data.wa}`,
+    `Jenis: ${data.jenis}`,
+    `Isi: ${data.isi} pcs`
+  ];
+  if(data.mode==="single") lines.push(`Topping: ${data.topping.join(",")||"-"}`);
+  if(data.mode==="double"){
+    lines.push(`Topping: ${data.topping.join(",")||"-"}`);
+    lines.push(`Taburan: ${data.taburan.join(",")||"-"}`);
+  }
+  lines.push(`Jumlah Box: ${data.jumlahBox}`);
+  lines.push(`Catatan: ${data.note}`);
+  lines.push(`Total: ${formatRp(data.total)}`);
+  lines.push("Terima kasih 🙏");
+
+  window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(lines.join("\n"))}`,"_blank");
 });
 
-/* ---------- Load & Submit Testimonials ---------- */
-function loadTestimonials() {
-  const container = q("#testimonialsList");
-  const saved = JSON.parse(localStorage.getItem("testimonials") || "[]");
-  container.innerHTML = "";
-  saved.slice().reverse().forEach(t => {
-    const li = document.createElement("li");
-    li.className = "testimonial-card";
-    li.innerHTML = `<strong>${escapeHtml(t.name)}</strong><br>${escapeHtml(t.testimonial)}`;
+/* ---------- Testimonials ---------- */
+function loadTestimonials(limit=3){
+  const container=$("#testimonialsList"); if(!container) return;
+  const arr=JSON.parse(localStorage.getItem("testimonials")||"[]");
+  container.innerHTML="";
+  arr.slice().reverse().slice(0,limit).forEach(t=>{
+    const li=document.createElement("li");
+    li.className="testimonial-card";
+    li.innerHTML=`<strong>${escapeHtml(t.name)}</strong><br>${escapeHtml(t.testimonial)}`;
     container.appendChild(li);
   });
 }
-q("#testimonialForm")?.addEventListener("submit", (e) => {
+
+$("#testimonialForm")?.addEventListener("submit", e=>{
   e.preventDefault();
-  const name = (q("#nameInput")?.value || "").trim();
-  const text = (q("#testimonialInput")?.value || "").trim();
-  if(!name || !text) return alert("Isi nama & testimoni.");
-  const arr = JSON.parse(localStorage.getItem("testimonials") || "[]");
+  const name=($("#nameInput")?.value||"").trim();
+  const text=($("#testimonialInput")?.value||"").trim();
+  if(!name||!text) return alert("Isi nama & testimoni.");
+  const arr=JSON.parse(localStorage.getItem("testimonials")||"[]");
   arr.push({name,testimonial:text,createdAt:new Date().toISOString()});
-  localStorage.setItem("testimonials", JSON.stringify(arr));
-  q("#nameInput").value = ""; q("#testimonialInput").value = "";
+  localStorage.setItem("testimonials",JSON.stringify(arr));
+  $("#nameInput").value=""; $("#testimonialInput").value="";
   loadTestimonials();
-  alert("Terima kasih, testimoni kamu sudah tersimpan!");
+  alert("Terima kasih, testimoni sudah tersimpan!");
 });
 
-/* ---------- Floating Share Toggle ---------- */
-q("#toggleShareBtn")?.addEventListener("click", () => {
-  const icons = q("#floatingIcons");
-  if(!icons) return;
-  const shown = icons.classList.toggle("show");
-  icons.setAttribute("aria-hidden", String(!shown));
-  const btn = q("#toggleShareBtn");
-  if(btn) btn.textContent = shown ? "✕" : "+";
+/* ---------- Floating Share ---------- */
+$("#toggleShareBtn")?.addEventListener("click",()=>{
+  const icons=$("#floatingIcons"); if(!icons) return;
+  const shown=icons.classList.toggle("show");
+  icons.setAttribute("aria-hidden",String(!shown));
+  $("#toggleShareBtn").textContent=shown?"✕":"+";
 });
-
-/* ---------- Topping Check Visual & Limits ---------- */
-document.addEventListener("change", (ev) => {
-  const target = ev.target;
-  if(!target) return;
-  if(target.matches(".single-top, .double-top")) {
-    const lbl = target.closest("label");
-    if(lbl) target.checked ? lbl.classList.add("checked") : lbl.classList.remove("checked");
-
-    const isi = parseInt(q("#ultraIsi")?.value || "5");
-    const singleCount = getChecked(".single-top").length;
-    const doubleCount = getChecked(".double-top").length;
-    const mode = q('input[name="ultraToppingMode"]:checked')?.value || "non";
-
-    if(mode==="single" && singleCount>isi) { target.checked=false; alert(`Maksimal ${isi} topping untuk single mode.`); }
-    if(mode==="double"){
-      if(target.classList.contains("single-top") && singleCount>isi){ target.checked=false; alert(`Maksimal ${isi} topping (single) untuk mode double.`); }
-      if(target.classList.contains("double-top") && doubleCount>isi){ target.checked=false; alert(`Maksimal ${isi} taburan (double).`); }
-    }
-    updatePriceUI();
-  }
-});
-
-/* ---------- Helper: escape HTML ---------- */
-function escapeHtml(str=""){ return String(str).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
 /* ---------- Init Final ---------- */
 function initFinal(){
+  updateToppingDisplay();
+  updatePriceUI();
   loadTestimonials();
-  if(typeof updatePriceUI==="function") updatePriceUI();
-  if(typeof showTopping==="function") showTopping();
 }
-
-if(document.readyState==="loading"){
-  document.addEventListener("DOMContentLoaded", initFinal);
-}else{
-  initFinal();
-}
+if(document.readyState==="loading"){ document.addEventListener("DOMContentLoaded",initFinal); }
+else{ initFinal(); }
