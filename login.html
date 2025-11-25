@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Login Admin — Pukis Lumer Aulia</title>
-<link rel="stylesheet" href="assets/css/admin.css">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<style>
-  body { margin:0; font-family: 'Poppins', sans-serif; background:#f5f5f5; display:flex; align-items:center; justify-content:center; height:100vh; }
-  .login-card { background:#fff; padding:32px; border-radius:12px; width:100%; max-width:360px; box-shadow:0 8px 24px rgba(0,0,0,0.18); }
-  .login-card h2 { text-align:center; margin-bottom:24px; color:#ff5e7e; }
-  .login-card input { width:100%; padding:12px; margin-bottom:12px; border-radius:8px; border:1px solid #ccc; }
-  .login-card button { width:100%; padding:12px; border-radius:8px; border:0; background:#ff5e7e; color:#fff; font-weight:600; cursor:pointer; }
-  .login-card button:hover { background:#e03954; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — Pukis Lumer Aulia</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
 
-<div class="login-card">
-  <h2>Admin Login</h2>
-  <input type="password" id="adminPinInput" placeholder="Masukkan PIN Admin" autofocus>
-  <button id="adminLoginBtn">Login</button>
-</div>
+<body class="login-body">
 
-<script src="assets/js/admin.js"></script>
+    <div class="login-container">
+        <img src="assets/images/logo.png" class="login-logo">
+
+        <h2>Login Admin</h2>
+        <p class="sub-text">Masukkan PIN untuk masuk ke dashboard</p>
+
+        <input id="adminPinInput" type="password" maxlength="6" placeholder="Masukkan PIN Admin" class="login-input">
+
+        <button id="adminLoginBtn" class="btn login-btn">Login</button>
+
+        <a href="index.html" class="back-home">← Kembali ke halaman utama</a>
+    </div>
+
+    <script src="assets/js/admin.js"></script>
+
 </body>
 </html>
