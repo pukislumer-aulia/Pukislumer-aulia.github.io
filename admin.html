@@ -1,52 +1,93 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin Dashboard — Pukis Lumer Aulia</title>
-<link rel="stylesheet" href="assets/css/admin.css">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin – Pukis Lumer Aulia</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
 
-<!-- LOGIN MODAL -->
-<div id="adminLoginModal" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000000aa;">
-  <div style="background:#fff;padding:24px;border-radius:12px;max-width:360px;width:100%;">
-    <h2>Admin Login</h2>
-    <input type="password" id="adminPinInput" placeholder="Masukkan PIN Admin" style="width:100%;padding:12px;border-radius:8px;margin-bottom:12px;">
-    <button id="adminLoginBtn" style="width:100%;padding:12px;border-radius:8px;background:#ff5e7e;color:#fff;border:0;">Login</button>
-  </div>
-</div>
+<body class="admin-body">
 
-<!-- DASHBOARD -->
-<div id="adminContent" style="display:none;padding:18px;">
-  <h1>Dashboard Admin</h1>
-  <button id="logoutBtn" style="padding:10px 14px;background:#1f2937;color:#fff;border:0;border-radius:8px;margin-bottom:12px;">Logout</button>
+    <!-- ====================== -->
+    <!-- LOGIN MODAL -->
+    <!-- ====================== -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-box">
+            <h2>Masukkan PIN Admin</h2>
+            <input id="adminPinInput" type="password" maxlength="6" placeholder="PIN Admin" class="input">
+            <button id="adminLoginBtn" class="btn primary">Masuk</button>
+        </div>
+    </div>
 
-  <h2>Orders</h2>
-  <button id="refreshOrders">Refresh</button>
-  <button id="exportCSV">Export CSV</button>
-  <button id="clearOrders">Clear Orders</button>
-  <table id="ordersTable" border="1" cellspacing="0" cellpadding="6" style="width:100%;margin-top:12px;">
-    <thead>
-      <tr>
-        <th>Nama</th><th>WA</th><th>Jenis</th><th>Topping</th><th>Jumlah Box</th><th>Total</th><th>Tanggal</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <!-- ====================== -->
+    <!-- ADMIN CONTENT -->
+    <!-- ====================== -->
+    <div id="adminContent" class="admin-wrapper">
 
-  <h2>Testimonials</h2>
-  <div id="testimonialList"></div>
+        <header class="admin-header">
+            <img src="assets/images/logo.png" class="admin-logo">
+            <h1>Dashboard Admin</h1>
 
-  <h2>Statistics</h2>
-  <p>Total Orders: <span id="statOrders">0</span></p>
-  <p>Total Revenue: <span id="statRevenue">Rp0</span></p>
+            <button id="logoutBtn" class="btn danger small">Logout</button>
+        </header>
 
-  <h2>Analytics</h2>
-  <pre id="analyticsData" style="background:#eee;padding:12px;border-radius:8px;max-height:300px;overflow:auto;"></pre>
-</div>
+        <!-- =================== -->
+        <!-- STATISTIK RINGKAS -->
+        <!-- =================== -->
+        <section class="admin-section">
+            <h2>Statistik Hari Ini</h2>
 
-<script src="assets/js/admin.js"></script>
-</body>
-</html>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Order</h3>
+                    <p id="statOrders">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Total Pendapatan</h3>
+                    <p id="statRevenue">Rp0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Antrian Saat Ini</h3>
+                    <p id="statQueue">-</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================== -->
+        <!-- MANAJEMEN PESANAN -->
+        <!-- =================== -->
+        <section class="admin-section">
+            <h2>Daftar Pesanan</h2>
+
+            <div class="admin-actions">
+                <button id="refreshOrders" class="btn small">Refresh</button>
+                <button id="exportCSV" class="btn success small">Export CSV</button>
+                <button id="clearOrders" class="btn danger small">Hapus Semua</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>WA</th>
+                            <th>Jenis</th>
+                            <th>Topping</th>
+                            <th>Jumlah</th>
+                            <th>Total</th>
+                            <th>Tanggal</th>
+                            <th>Invoice</th>
+                            <th>Cetak</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Diisi otomatis oleh admin.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
