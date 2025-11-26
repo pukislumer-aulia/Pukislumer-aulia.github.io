@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin – Pukis Lumer Aulia</title>
-
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body class="admin-body">
 
-    <!-- ====================== -->
-    <!-- LOGIN MODAL -->
+    <!-- ====================== <!—LOGIN MODAL -->
     <!-- ====================== -->
     <div id="adminLoginModal" class="modal">
         <div class="modal-box">
@@ -22,35 +18,28 @@
         </div>
     </div>
 
-    <!-- ====================== -->
-    <!-- ADMIN CONTENT -->
+    <!-- ====================== <!—ADMIN CONTENT -->
     <!-- ====================== -->
     <div id="adminContent" class="admin-wrapper">
-
         <header class="admin-header">
             <img src="assets/images/logo.png" class="admin-logo">
             <h1>Dashboard Admin</h1>
-
             <button id="logoutBtn" class="btn danger small">Logout</button>
         </header>
 
-        <!-- =================== -->
-        <!-- STATISTIK RINGKAS -->
+        <!-- =================== <!—STATISTIK RINGKAS -->
         <!-- =================== -->
         <section class="admin-section">
             <h2>Statistik Hari Ini</h2>
-
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total Order</h3>
                     <p id="statOrders">0</p>
                 </div>
-
                 <div class="stat-card">
                     <h3>Total Pendapatan</h3>
                     <p id="statRevenue">Rp0</p>
                 </div>
-
                 <div class="stat-card">
                     <h3>Antrian Saat Ini</h3>
                     <p id="statQueue">-</p>
@@ -58,18 +47,15 @@
             </div>
         </section>
 
-        <!-- =================== -->
-        <!-- MANAJEMEN PESANAN -->
+        <!-- =================== <!—MANAJEMEN PESANAN -->
         <!-- =================== -->
         <section class="admin-section">
             <h2>Daftar Pesanan</h2>
-
             <div class="admin-actions">
                 <button id="refreshOrders" class="btn small">Refresh</button>
                 <button id="exportCSV" class="btn success small">Export CSV</button>
                 <button id="clearOrders" class="btn danger small">Hapus Semua</button>
             </div>
-
             <div class="table-wrapper">
                 <table id="ordersTable">
                     <thead>
@@ -86,51 +72,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Diisi otomatis oleh admin.js -->
+                        <!--Diisi otomatis oleh admin.js -->
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- =================== -->
-        <!-- MANAGE TESTIMONI -->
+        <!-- =================== <!—MANAGE TESTIMONI -->
         <!-- =================== -->
         <section class="admin-section">
             <h2>Testimoni Pelanggan</h2>
-
             <div id="testimonialList" class="testimonial-grid">
-                <!-- Auto load -->
+                <!--Auto load -->
             </div>
         </section>
 
-        <!-- =================== -->
-        <!-- PROMO & DISKON -->
+        <!-- =================== <!—PROMO & DISKON -->
         <!-- =================== -->
         <section class="admin-section">
             <h2>Pengaturan Promo</h2>
-
             <label class="label">Diskon Per Box (Rp)</label>
             <input type="number" id="promoValue" class="input" placeholder="Contoh: 1000">
-
             <button id="savePromo" class="btn primary small">Simpan Promo</button>
         </section>
 
-        <!-- =================== -->
-        <!-- ANALYTICS -->
+        <!-- =================== <!—ANALYTICS -->
         <!-- =================== -->
         <section class="admin-section">
             <h2>Data Analytics</h2>
-            <pre id="analyticsData" class="analytics-box">
-(loading...)
-            </pre>
+            <pre id="analyticsData" class="analytics-box">(loading...)</pre>
         </section>
-
     </div>
 
-    <!-- =================== -->
-    <!-- JS FILES -->
+    <!-- =================== <!—JS FILES -->
     <!-- =================== -->
     <script src="assets/js/admin.js"></script>
-
 </body>
 </html>
