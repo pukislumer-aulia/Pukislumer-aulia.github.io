@@ -1,105 +1,518 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin – Pukis Lumer Aulia</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pukis Lumer Aulia – Order</title>
+
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/invoice.css">
+
+<!-- QRIS & jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="js/qris.js" defer></script>
+<script src="js/storage.js" defer></script>
+<script src="js/order.js" defer></script>
+
 </head>
+<body>
 
-<body class="admin-body">
-    <!-- ======================LOGIN MODAL====================== -->
-    <div id="adminLoginModal" class="modal">
-        <div class="modal-box">
-            <h2>Masukkan PIN Admin</h2>
-            <input id="adminPinInput" type="password" maxlength="6" placeholder="PIN Admin" class="input">
-            <button id="adminLoginBtn" class="btn primary">Masuk</button>
+<!-- 🟣 HERO SECTION -->
+<header class="hero">
+  <img src="assets/images/logo.png" class="hero-logo" alt="Logo">
+  <h1>Pukis Lumer Aulia</h1>
+  <p>Fresh, Lumer Banget, Bikin Nagih!</p>
+  <a href="#order" class="btn-primary">Pesan Sekarang</a>
+</header>
+
+<!-- 🟡 WHY CHOOSE US -->
+<section class="why">
+  <h2>Kenapa Pilih Pukis Kami?</h2>
+  <div class="why-list">
+    <div class="why-item">🧈 Lebih Lumer</div>
+    <div class="why-item">🔥 Selalu Fresh</div>
+    <div class="why-item">💰 Harga Bersahabat</div>
+    <div class="why-item">✨ Banyak Pilihan Topping</div>
+  </div>
+</section>
+    <button class="btn-main" id="cetakUlang" style="display:none;">Cetak Ulang Nota</button>
+
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <h2>Galeri Pukis Lumer</h2>
+  <div class="gallery-grid">
+    <img src="assets/images/gallery-1.jpg">
+    <img src="assets/images/gallery-2.jpg">
+    <img src="assets/images/gallery-3.jpg">
+    <img src="assets/images/gallery-4.jpg">
+    <img src="assets/images/gallery-5.jpg">
+    <img src="assets/images/gallery-6.jpg">
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonials" id="testi">
+  <h2>Apa Kata Mereka?</h2>
+  <div id="testimonialList"></div>
+</section>
+
+<!-- 🟢 PRODUCT GALLERY / MENU -->
+<section class="menu">
+  <h2>Menu Favorit</h2>
+  <div class="gallery">
+    <div class="item">
+      <img src="assets/images/produk/pukis-original.jpg" alt="Pukis Original">
+      <p>Pukis Original</p>
+    </div>
+    <div class="item">
+      <img src="assets/images/produk/pukis-pandan.jpg" alt="Pukis Pandan">
+      <p>Pukis Pandan</p>
+    </div>
+  </div>
+</section>
+
+<!-- 🔴 ORDER FORM — PART 1 -->
+<section id="order" class="order">
+  <h2>Form Pemesanan</h2>
+
+  <form id="orderForm">
+    <label>Nama Pemesan*</label>
+    <input type="text" id="customerName" required>
+
+    <label>Nomor WhatsApp*</label>
+    <input type="tel" id="customerPhone" required>
+
+    <label>Jumlah Porsi*</label>
+    <input type="number" id="quantity" min="1" value="1" required>
+
+    <label>Pilih Jenis Pukis*</label>
+    <select id="pukisType" required>
+      <option value="Original">Original</option>
+      <option value="Pandan">Pandan</option>
+    </select>
+
+    <label>Pilih Topping</label>
+    <div class="check-group" id="toppingOptions">
+      <label><input type="checkbox" value="Coklat"> Coklat</label>
+      <label><input type="checkbox" value="Keju"> Keju</label>
+      <label><input type="checkbox" value="Mesis"> Mesis</label>
+      <label><input type="checkbox" value="Milo"> Milo</label>
+    </div>
+
+    <label>Taburan</label>
+    <div class="check-group" id="sprinkleOptions">
+      <label><input type="checkbox" value="Gula Halus"> Gula Halus</label>
+      <label><input type="checkbox" value="Coklat Bubuk"> Coklat Bubuk</label>
+      <label><input type="checkbox" value="Keju Parut"> Keju Parut</label>
+    </div>
+    <!-- === (lanjutan order form) === -->
+
+    <!-- Mode Topping (Non / Single / Double) -->
+    <label>Pilih Mode Topping*</label>
+    <div class="opt-group" id="toppingModeGroup">
+      <label><input type="radio" name="toppingMode" value="non" checked> Non</label>
+      <label><input type="radio" name="toppingMode" value="single"> Single</label>
+      <label><input type="radio" name="toppingMode" value="double"> Double</label>
+    </div>
+
+    <!-- -- Hidden legacy fields (compatibility with order.js that expects ultra* ids) -->
+    <input type="hidden" id="ultraNama" name="ultraNama">
+    <input type="hidden" id="ultraWA" name="ultraWA">
+    <input type="hidden" id="ultraIsi" name="ultraIsi" value="5">
+    <input type="hidden" id="ultraJenis" name="ultraJenis" value="Original">
+    <input type="hidden" id="ultraToppingMode" name="ultraToppingMode" value="non">
+    <input type="hidden" id="ultraJumlah" name="ultraJumlah" value="1">
+    <input type="hidden" id="ultraNote" name="ultraNote">
+
+    <!-- Single Topping group (rendered only when mode single or double) -->
+    <div id="singleToppingsWrap" class="topping-wrap" style="display:none">
+      <h4>Pilih Topping (max 5):</h4>
+      <label><input type="checkbox" class="ultraTopping" value="Coklat"> Coklat</label>
+      <label><input type="checkbox" class="ultraTopping" value="Tiramisu"> Tiramisu</label>
+      <label><input type="checkbox" class="ultraTopping" value="Vanilla"> Vanilla</label>
+      <label><input type="checkbox" class="ultraTopping" value="Stroberi"> Stroberi</label>
+      <label><input type="checkbox" class="ultraTopping" value="Cappucino"> Cappucino</label>
+    </div>
+
+    <!-- Double mode: show toppings + taburan -->
+    <div id="doubleToppingsWrap" class="topping-wrap" style="display:none">
+      <h4>Pilih Topping (max 5):</h4>
+      <label><input type="checkbox" class="ultraTopping" value="Coklat"> Coklat</label>
+      <label><input type="checkbox" class="ultraTopping" value="Tiramisu"> Tiramisu</label>
+      <label><input type="checkbox" class="ultraTopping" value="Vanilla"> Vanilla</label>
+      <label><input type="checkbox" class="ultraTopping" value="Stroberi"> Stroberi</label>
+      <label><input type="checkbox" class="ultraTopping" value="Cappucino"> Cappucino</label>
+
+      <h4>Taburan (max 5):</h4>
+      <label><input type="checkbox" class="ultraTaburan" value="Meses"> Meses</label>
+      <label><input type="checkbox" class="ultraTaburan" value="Keju"> Keju</label>
+      <label><input type="checkbox" class="ultraTaburan" value="Kacang"> Kacang</label>
+      <label><input type="checkbox" class="ultraTaburan" value="Choco Chip"> Choco Chip</label>
+      <label><input type="checkbox" class="ultraTaburan" value="Oreo"> Oreo</label>
+    </div>
+
+    <!-- Catatan pelanggan (visible textarea) -->
+    <label>Catatan</label>
+    <textarea id="customerNote" placeholder="Contoh: Tanpa kacang / Ambil jam 19.00"></textarea>
+
+    <!-- Price summary area -->
+    <div class="price-summary">
+      <div class="row"><span>Harga per Box:</span><span id="ultraPricePerBox">Rp0</span></div>
+      <div class="row"><span>Subtotal:</span><span id="ultraSubtotal">Rp0</span></div>
+      <div class="row"><span>Diskon:</span><span id="ultraDiscount">-</span></div>
+      <div class="row total"><span>Total Bayar:</span><span id="ultraGrandTotal">Rp0</span></div>
+    </div>
+
+    <!-- Buttons: create nota (local modal) & kirim WA -->
+    <div class="actions">
+      <button type="submit" class="btn-primary">Buat Nota</button>
+      <button type="button" id="btnSendWA" class="btn-wa">Kirim WA Admin</button>
+    </div>
+  </form>
+</section>
+
+<!-- NOTA POPUP (modal) — kept for compatibility -->
+<div id="notaContainer" class="nota-overlay" style="display:none">
+  <div class="nota-card">
+    <div class="nota-head">
+      <h3>Nota Pemesanan</h3>
+      <button id="notaClose">✕</button>
+    </div>
+    <div id="notaContent"></div>
+    <div class="nota-actions">
+      <button id="notaPrint">Cetak / PDF</button>
+      <button id="notaSave">Simpan ke Riwayat</button>
+    </div>
+  </div>
+</div>
+
+<!-- Riwayat singkat (local) -->
+<section id="history" style="margin:18px;">
+  <h3>Riwayat Pesanan Terakhir</h3>
+  <div id="historyList">-</div>
+</section>
+
+<!-- Floating admin + share buttons -->
+<a href="admin.html" class="admin-float-btn" id="adminFloat" title="Admin">
+  <span class="admin-icon">ADM</span>
+</a>
+
+<button id="toggleShareBtn" class="toggle-float-btn" aria-label="Share">+</button>
+<div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
+  <a class="floating-icon whatsapp" href="https://wa.me/6281296668670" target="_blank" title="WhatsApp">WA</a>
+  <a class="floating-icon facebook" href="https://www.facebook.com/pukislumer.aulia" target="_blank" title="Facebook">F</a>
+  <a class="floating-icon instagram" href="https://www.instagram.com/pukis.lumer_aulia" target="_blank" title="Instagram">IG</a>
+  <a class="floating-icon twitter" href="https://www.x.com/pukislumer_" target="_blank" title="X/Twitter">X</a>
+  <a class="floating-icon tiktok" href="https://www.tiktok.com/@pukislumer.aulia" target="_blank" title="TikTok">TT</a>
+</div>
+
+<!-- Bottom nav (ke order, chat, marketplace) -->
+<nav class="bottom-nav" id="bottomNav">
+  <a href="https://wa.me/6281296668670" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat</span></a>
+  <a href="#order"><i class="fas fa-cart-shopping"></i><span>Order</span></a>
+  <a href="https://shopee.co.id" target="_blank"><i class="fas fa-store"></i><span>Shopee</span></a>
+  <a href="https://food.maxim.com/" target="_blank"><i class="fa-solid fa-motorcycle"></i><span>Maxim</span></a>
+</nav>
+
+<footer class="site-footer">
+  <div>© 2025 Pukis Lumer Aulia — Hak Cipta Dilindungi</div>
+</footer>
+
+<!-- ====== Small glue script: sync visible form -> hidden ultra* fields for backwards compatibility ====== -->
+<script>
+(function(){
+  // elements mapping: generic -> legacy ultra*
+  const map = {
+    customerName: 'ultraNama',
+    customerPhone: 'ultraWA',
+    quantity: 'ultraJumlah',
+    pukisType: 'ultraJenis',
+    customerNote: 'ultraNote'
+  };
+
+  function syncFields(){
+    Object.keys(map).forEach(k=>{
+      const src = document.getElementById(k);
+      const dst = document.getElementById(map[k]);
+      if(src && dst){
+        dst.value = src.type==='checkbox'? (src.checked?src.value:'') : src.value;
+      }
+    });
+    // mode topping radio mapping
+    const mode = document.querySelector('input[name="toppingMode"]:checked');
+    const legacyMode = document.getElementById('ultraToppingMode');
+    if(mode && legacyMode) legacyMode.value = mode.value;
+
+    // isi selection into legacy ultraIsi
+    const isiSel = document.getElementById('pukisSize') || null;
+    const legacyIsi = document.getElementById('ultraIsi');
+    if(isiSel && legacyIsi) legacyIsi.value = isiSel.value;
+
+    // sync topping checkboxes: copy to checkboxes with same class names if present
+    // (we use classes ultraTopping / ultraTaburan already)
+    // nothing needed here because we used those classes for checkbox inputs too
+  }
+
+  // attach events
+  ['input','change'].forEach(ev=>{
+    document.getElementById('orderForm').addEventListener(ev, syncFields, {passive:true});
+  });
+
+  // also sync on submit (final)
+  document.getElementById('orderForm').addEventListener('submit', syncFields);
+})();
+</script>
+<!-- ============================
+     Index.html — PART 3 (final)
+     Riwayat, QRIS modal, Loader PDF, Queue number
+     ============================ -->
+
+<!-- QRIS / Pembayaran Modal -->
+<div id="qrisModal" style="display:none; position:fixed; inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center;z-index:99999;">
+  <div style="background:#fff;padding:18px;border-radius:12px;max-width:420px;width:94%;text-align:center;">
+    <h3>Scan QRIS untuk Pembayaran</h3>
+    <img id="qrisImage" src="assets/images/qris-pukis.jpg" alt="QRIS Pukis Lumer" style="max-width:220px;margin:12px auto;display:block;">
+    <p style="font-size:13px;color:#444">Setelah transfer, konfirmasi via WA ke admin: <strong>0812-9666-8670</strong></p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+      <button id="closeQris" style="padding:8px 12px;border-radius:8px;border:0;background:#333;color:#fff">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- Global loading overlay (dipakai saat generate PDF / export) -->
+<div id="globalLoader" style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(255,255,255,.6);z-index:100000;">
+  <div style="background:#fff;padding:18px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:10px;">
+    <div class="spinner" style="width:48px;height:48px;border-radius:50%;border:5px solid #eee;border-top-color:#ff5e7e;animation:spin 1s linear infinite"></div>
+    <div id="globalLoaderText">Memproses... mohon tunggu</div>
+  </div>
+</div>
+
+<style>
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .history-item{background:#fff;border-radius:8px;padding:10px;margin-bottom:10px;box-shadow:0 4px 8px rgba(0,0,0,0.05)}
+  .history-meta{display:flex;gap:8px;align-items:center;justify-content:space-between;font-size:13px;color:#333}
+  .btn-small{padding:6px 8px;border-radius:8px;border:0;background:#ff5e7e;color:#fff;cursor:pointer}
+  .btn-outline{background:transparent;border:1px solid #ddd;color:#333;padding:6px 8px;border-radius:8px;cursor:pointer}
+</style>
+
+<script>
+/* ======= PART 3: History, QRIS modal, Loader, Queue number ======= */
+(function(){
+  const keyOrders = "allOrders";       // single source of truth
+  const keyCounterDate = "pukis-counter-date";
+  const keyCounterValue = "pukis-counter-value";
+
+  // helpers
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  function formatRp(n){ return "Rp " + Number(n||0).toLocaleString("id-ID"); }
+  function nowDateStr(){ return (new Date()).toLocaleDateString("id-ID"); }
+
+  // queue / nomor antrean (reset harian)
+  function getQueue() {
+    const today = nowDateStr();
+    const savedDate = localStorage.getItem(keyCounterDate);
+    let val = parseInt(localStorage.getItem(keyCounterValue) || "0",10) || 0;
+    if(savedDate !== today){
+      // reset
+      val = 0;
+      localStorage.setItem(keyCounterDate, today);
+      localStorage.setItem(keyCounterValue, String(val));
+    }
+    return { val, date: today };
+  }
+  function nextQueue() {
+    const q = getQueue();
+    q.val = q.val + 1;
+    localStorage.setItem(keyCounterValue, String(q.val));
+    localStorage.setItem(keyCounterDate, q.date);
+    return q.val;
+  }
+
+  // show/hide global loader
+  function showLoader(text){
+    $("#globalLoaderText").textContent = text || "Memproses... mohon tunggu";
+    $("#globalLoader").style.display = "flex";
+  }
+  function hideLoader(){ $("#globalLoader").style.display = "none"; }
+
+  // Save order to allOrders (with queue number & invoice id)
+  function saveOrderToAll(order){
+    const arr = JSON.parse(localStorage.getItem(keyOrders) || "[]");
+    // ensure order has orderID
+    if(!order.orderID) order.orderID = "INV-" + (new Date()).getFullYear() + (""+Date.now()).slice(-7);
+    if(!order.queueNumber) order.queueNumber = nextQueue();
+    arr.push(order);
+    localStorage.setItem(keyOrders, JSON.stringify(arr));
+    renderHistory(); // refresh UI
+    return order;
+  }
+
+  // Render history list
+  function renderHistory(){
+    const list = $("#historyList");
+    if(!list) return;
+    const arr = JSON.parse(localStorage.getItem(keyOrders) || "[]").slice().reverse();
+    if(!arr.length){ list.innerHTML = "<em>Belum ada pesanan.</em>"; return; }
+    list.innerHTML = "";
+    arr.forEach(o=>{
+      const d = document.createElement("div");
+      d.className = "history-item";
+      d.innerHTML = `
+        <div class="history-meta">
+          <div><strong>#${o.queueNumber || "-"}</strong> ${o.orderID || ""} — <small>${o.nama}</small></div>
+          <div><small>${o.tgl || (new Date(o.createdAt||o.createdAt||Date.now())).toLocaleString()}</small></div>
         </div>
-    </div>
+        <div style="margin-top:8px;color:#444;font-size:14px">
+          <div>${o.jenis} — ${o.isi} pcs — ${o.jumlahBox || 1} Box</div>
+          <div>${o.mode==="double" ? "Double (topping+taburan)" : o.mode==="single" ? "Single" : "Non Topping"}</div>
+          <div style="margin-top:6px"><small>Topping: ${ (o.topping && o.topping.length)? o.topping.join(", "): "-" } | Taburan: ${ (o.taburan && o.taburan.length)? o.taburan.join(", "): "-" }</small></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn-small reprintBtn" data-id="${o.orderID}">Cetak Ulang</button>
+          <button class="btn-outline viewBtn" data-id="${o.orderID}">Lihat Nota</button>
+          <button class="btn-outline payBtn" data-id="${o.orderID}">QRIS</button>
+        </div>
+      `;
+      list.appendChild(d);
+    });
+    // attach events
+    $$(".reprintBtn").forEach(b=>b.addEventListener("click", e=>{
+      const id = e.currentTarget.dataset.id;
+      reprintInvoice(id);
+    }));
+    $$(".viewBtn").forEach(b=>b.addEventListener("click", e=>{
+      const id = e.currentTarget.dataset.id;
+      viewNotaModal(id);
+    }));
+    $$(".payBtn").forEach(b=>b.addEventListener("click", e=>{
+      $("#qrisModal").style.display = "flex";
+    }));
+  }
 
-    <!-- ======================ADMIN CONTENT====================== -->
-    <div id="adminContent" class="admin-wrapper">
-        <header class="admin-header">
-            <img src="assets/images/logo.png" class="admin-logo" alt="Logo Pukis Lumer Aulia">
-            <h1>Dashboard Admin</h1>
-            <button id="logoutBtn" class="btn danger small">Logout</button>
-        </header>
+  // view nota modal (simple)
+  function viewNotaModal(orderID){
+    const arr = JSON.parse(localStorage.getItem(keyOrders) || "[]");
+    const o = arr.find(x=>x.orderID===orderID);
+    if(!o) return alert("Order tidak ditemukan.");
+    const nota = document.getElementById("notaContent");
+    if(!nota) return;
+    nota.innerHTML = `
+      <p><strong>Order ID:</strong> ${o.orderID}</p>
+      <p><strong>Nama:</strong> ${o.nama}</p>
+      <p><strong>WA:</strong> ${o.wa}</p>
+      <p><strong>Jenis:</strong> ${o.jenis}</p>
+      <p><strong>Isi:</strong> ${o.isi} pcs</p>
+      <p><strong>Mode:</strong> ${o.mode}</p>
+      <p><strong>Topping:</strong> ${(o.topping||[]).join(", ")||"-"}</p>
+      <p><strong>Taburan:</strong> ${(o.taburan||[]).join(", ")||"-"}</p>
+      <p><strong>Jumlah Box:</strong> ${o.jumlahBox}</p>
+      <p><strong>Total:</strong> ${formatRp(o.total)}</p>
+      <p><strong>Catatan:</strong> ${o.note || "-"}</p>
+    `;
+    // show modal
+    $("#notaContainer").style.display = "flex";
+  }
 
-        <!-- ===================STATISTIK RINGKAS=================== -->
-        <section class="admin-section">
-            <h2>Statistik Hari Ini</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Order</h3>
-                    <p id="statOrders">0</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Total Pendapatan</h3>
-                    <p id="statRevenue">Rp0</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Antrian Saat Ini</h3>
-                    <p id="statQueue">-</p>
-                </div>
-            </div>
-        </section>
+  // reprint invoice by calling generatePdf (if available). Show loader while processing.
+  async function reprintInvoice(orderID){
+    const arr = JSON.parse(localStorage.getItem(keyOrders) || "[]");
+    const o = arr.find(x=>x.orderID===orderID);
+    if(!o) return alert("Order tidak ditemukan.");
+    if(typeof window.generatePdf !== "function"){ return alert("Fungsi PDF belum tersedia."); }
+    try{
+      showLoader("Membuat PDF, mohon tunggu...");
+      await window.generatePdf(o);
+      hideLoader();
+      alert("File PDF berhasil dibuat (download otomatis).");
+    }catch(err){
+      hideLoader();
+      console.error(err);
+      alert("Gagal membuat PDF: " + (err?.message||err));
+    }
+  }
 
-        <!-- ===================MANAJEMEN PESANAN=================== -->
-        <section class="admin-section">
-            <h2>Daftar Pesanan</h2>
-            <div class="admin-actions">
-                <button id="refreshOrders" class="btn small">Refresh</button>
-                <button id="exportCSV" class="btn success small">Export CSV</button>
-                <button id="clearOrders" class="btn danger small">Hapus Semua</button>
-            </div>
-            <div class="table-wrapper">
-                <table id="ordersTable">
-                    <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>WA</th>
-                            <th>Jenis</th>
-                            <th>Topping</th>
-                            <th>Jumlah</th>
-                            <th>Total</th>
-                            <th>Tanggal</th>
-                            <th>Invoice</th>
-                            <th>Cetak</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Diisi otomatis oleh admin.js -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
+  // Hook into visible form submissions (support multiple form ids)
+  function attachFormHook(){
+    const forms = [ document.getElementById("formUltra"), document.getElementById("orderForm") ].filter(Boolean);
+    forms.forEach(f=>{
+      f.addEventListener("submit", function(evt){
+        // let existing order.js handle calculatePrice and dataPesanan — we will read localStorage 'lastOrder' or 'dataPesanan' as fallback
+        evt.preventDefault && evt.preventDefault();
+        // try to get order object from global dataPesanan (if order.js created it) or from lastOrder
+        let order = window.dataPesanan || JSON.parse(localStorage.getItem("lastOrder") || "{}");
+        // fallback: build minimal from form fields
+        if(!order || !order.nama){
+          order = {
+            orderID: "INV-"+Date.now(),
+            nama: $("#ultraNama")?.value || $("#customerName")?.value || "-",
+            wa: $("#ultraWA")?.value || $("#customerPhone")?.value || "-",
+            jenis: $("#ultraJenis")?.value || $("#pukisType")?.value || "Original",
+            isi: $("#ultraIsi")?.value || $("#pukisSize")?.value || 5,
+            mode: $("#ultraToppingMode")?.value || document.querySelector('input[name="toppingMode"]:checked')?.value || "non",
+            topping: (getChecked(".ultraTopping") || []),
+            taburan: (getChecked(".ultraTaburan") || []),
+            jumlahBox: Number($("#ultraJumlah")?.value || $("#quantity")?.value || 1),
+            pricePerBox: Number($("#ultraPricePerBox")?.textContent.replace(/[^0-9]/g,"")||0),
+            subtotal: Number($("#ultraSubtotal")?.textContent.replace(/[^0-9]/g,"")||0),
+            discount: Number($("#ultraDiscount")?.textContent.replace(/[^0-9]/g,"")||0),
+            total: Number($("#ultraGrandTotal")?.textContent.replace(/[^0-9]/g,"")||0),
+            note: $("#ultraNote")?.value || $("#customerNote")?.value || "-",
+            tgl: new Date().toLocaleString(),
+            createdAt: new Date().toISOString()
+          };
+        }
+        // add queue & save
+        const saved = saveOrderToAll(order);
+        // give user quick feedback
+        alert("Pesanan tersimpan. Nomor antrean: " + (saved.queueNumber || "-") + " — Order ID: " + saved.orderID);
+        // show nota modal
+        viewNotaModal(saved.orderID);
+      });
+    });
+  }
 
-        <!-- ===================MANAGE TESTIMONI=================== -->
-        <section class="admin-section">
-            <h2>Testimoni Pelanggan</h2>
-            <div id="testimonialList" class="testimonial-grid">
-                <!-- Auto load -->
-            </div>
-        </section>
+  // small utility to read checked values
+  function getChecked(selector){ return Array.from(document.querySelectorAll(selector + ":checked")).map(i=>i.value); }
 
-        <!-- ===================PROMO & DISKON=================== -->
-        <section class="admin-section">
-            <h2>Pengaturan Promo</h2>
-            <label class="label">Diskon Per Box (Rp)</label>
-            <input type="number" id="promoValue" class="input" placeholder="Contoh: 1000">
-            <button id="savePromo" class="btn primary small">Simpan Promo</button>
-        </section>
+  // wire up QRIS modal close button
+  document.getElementById("closeQris")?.addEventListener("click", ()=>{ $("#qrisModal").style.display="none"; });
 
-        <!-- ===================ANALYTICS=================== -->
-        <section class="admin-section">
-            <h2>Data Analytics</h2>
-            <pre id="analyticsData" class="analytics-box">(loading...)</pre>
-        </section>
-    </div>
+  // init
+  function init(){
+    renderHistory();
+    attachFormHook();
+    // expose reprint function to window for debug
+    window.reprintInvoice = reprintInvoice;
+  }
 
-    <!-- ===================JS FILES=================== -->
-    <script src="assets/js/admin.js"></script>
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+
+})();
+</script>
+
+<!-- end PART 3 -->
+    <!-- FLOATING WA -->
+<a href="https://wa.me/628xxxx" target="_blank" class="float-wa">
+  <img src="assets/images/icon-wa.png">
+</a>
+
+<footer>
+  <p>© 2025 Pukis Lumer Aulia — Semua Hak Dilindungi</p>
+</footer>
+
+<script src="assets/js/promo.js"></script>
+<script src="assets/js/antrian.js"></script>
+<script src="assets/js/testimonial.js"></script>
+<script src="assets/js/pdf.js"></script>
+<script src="assets/js/order.js"></script>
+<script src="assets/js/ui.js"></script>
+
 </body>
-
 </html>
+    
