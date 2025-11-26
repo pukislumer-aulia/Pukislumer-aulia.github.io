@@ -1,136 +1,207 @@
+<!-- FILE: admin.html
+     ADMIN DASHBOARD — PUKIS LUMER AULIA
+     Sinkron dengan admin.js (ADMIN_PIN = 8670)
+     Place in project root as /admin.html
+-->
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin – Pukis Lumer Aulia</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Dashboard — Pukis Lumer Aulia</title>
 
-    <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Styles: gunakan admin.css jika ada, fallback minimal inline -->
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <style>
+    /* Minimal fallback styling in case admin.css missing */
+    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:#f6f7fb; color:#111; }
+    .page { max-width:1200px; margin:18px auto; padding:18px; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; }
+    h1 { margin:0; font-size:20px; color:#d6336c; }
+    .grid { display:grid; grid-template-columns: 1fr 340px; gap:18px; }
+    .card { background:#fff; border-radius:10px; padding:12px; box-shadow:0 6px 20px rgba(18,18,18,0.06); }
+    .stats { display:flex; gap:8px; }
+    .stat { flex:1; padding:10px; border-radius:8px; background:linear-gradient(180deg,#fff,#fff); text-align:center; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    table thead th { background:#ff5e7e; color:#fff; padding:8px; text-align:left; font-weight:600; }
+    table tbody td { padding:8px; border-bottom:1px solid #eee; vertical-align:middle; }
+    button { background:#ff5e7e; color:#fff; border:0; padding:8px 10px; border-radius:8px; cursor:pointer; }
+    .controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .small { padding:6px 8px; font-size:13px; border-radius:8px; }
+    .muted { color:#666; font-size:13px; }
+    .history-card { background:#fff; border-radius:8px; padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .topbar { display:flex; gap:8px; align-items:center; }
+    .search { padding:8px; border-radius:8px; border:1px solid #e6e6e6; }
+    footer { margin-top:14px; text-align:center; color:#777; font-size:13px; }
+    /* login modal */
+    #adminLoginModal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.5); z-index:9999; }
+    #adminLoginModal .modal { background:#fff; padding:18px; border-radius:10px; width:340px; box-shadow:0 8px 30px rgba(0,0,0,0.12); }
+    label { font-size:13px; display:block; margin-top:8px; color:#333; }
+    input[type="password"], input[type="text"], input[type="number"] { width:100%; padding:10px; margin-top:6px; border-radius:8px; border:1px solid #e6e6e6; }
+    .row { display:flex; gap:8px; margin-top:8px; }
+    .badge { padding:6px 8px; border-radius:999px; background:#eee; font-size:12px; }
+    .danger { background:#ffcccc; color:#900; padding:6px 8px; border-radius:8px; }
+    .ok { background:#ddffed; color:#077; padding:6px 8px; border-radius:8px; }
+    .btn-ghost { background:transparent; color:#ff5e7e; border:1px solid #ffb0c0; }
+    .table-wrap { overflow:auto; max-height:480px; }
+  </style>
 </head>
+<body>
+  <!-- LOGIN MODAL -->
+  <div id="adminLoginModal" style="display:none;">
+    <div class="modal card" role="dialog" aria-modal="true">
+      <h2 style="margin:0 0 6px 0;color:#d6336c">Login Admin</h2>
+      <p class="muted">Masukkan PIN admin untuk mengakses dashboard.</p>
+      <label for="adminPinInput">PIN</label>
+      <input id="adminPinInput" type="password" placeholder="Masukkan PIN (contoh: 8670)">
+      <div class="row" style="margin-top:12px;">
+        <button id="adminLoginBtn" class="small">Masuk</button>
+        <button id="adminCancelBtn" class="small btn-ghost" onclick="document.getElementById('adminLoginModal').style.display='none'">Batal</button>
+      </div>
+    </div>
+  </div>
 
-<body class="admin-body">
+  <!-- DASHBOARD -->
+  <div class="page">
+    <header>
+      <div>
+        <h1>Dashboard Admin — Pukis Lumer Aulia</h1>
+        <div class="muted">Panel pengelolaan pesanan, testimoni, promo & laporan</div>
+      </div>
 
-    <!-- ====================== -->
-    <!-- LOGIN MODAL -->
-    <!-- ====================== -->
-    <div id="adminLoginModal" class="modal">
-        <div class="modal-box">
-            <h2>Masukkan PIN Admin</h2>
-            <input id="adminPinInput" type="password" maxlength="6" placeholder="PIN Admin" class="input">
-            <button id="adminLoginBtn" class="btn primary">Masuk</button>
+      <div class="topbar">
+        <div class="controls">
+          <input id="globalSearch" class="search" placeholder="Cari nama / invoice / WA">
+          <button id="refreshOrders" class="small">Refresh</button>
+          <button id="exportCSV" class="small">Export CSV</button>
+          <button id="clearOrders" class="small danger">Clear Orders</button>
+          <button id="logoutBtn" class="small">Logout</button>
         </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: Orders, Table -->
+      <main>
+        <div class="card" style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>Ringkasan</strong>
+            <div class="controls">
+              <div class="badge" id="promoStatus">Promo OFF</div>
+              <input id="promoValue" type="number" placeholder="Rp promo per box" style="width:140px;padding:8px;border-radius:8px;border:1px solid #e6e6e6">
+              <button id="promoSet" class="small">Set Promo</button>
+            </div>
+          </div>
+
+          <div class="stats" style="margin-top:10px;">
+            <div class="stat">
+              <div class="muted">Total Orders</div>
+              <div id="statOrders" style="font-weight:700;font-size:18px">0</div>
+            </div>
+            <div class="stat">
+              <div class="muted">Pendapatan</div>
+              <div id="statRevenue" style="font-weight:700;font-size:18px">Rp0</div>
+            </div>
+            <div class="stat">
+              <div class="muted">Antrian Saat Ini</div>
+              <div id="statQueue" style="font-weight:700;font-size:18px">-</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card table-wrap">
+          <table id="ordersTable" aria-describedby="ordersTable">
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Nama</th>
+                <th>WA</th>
+                <th>Varian (isi)</th>
+                <th>Topping</th>
+                <th>Taburan</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>No.Antrian</th>
+                <th>Status</th>
+                <th>Tgl</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- rows from admin.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:14px" class="card">
+          <strong>Riwayat Pesanan (cetakan & ulang)</strong>
+          <div id="historyList" style="margin-top:10px;">
+            <!-- history cards injected here -->
+          </div>
+        </div>
+      </main>
+
+      <!-- RIGHT: Controls & Testimoni -->
+      <aside>
+        <div class="card" style="margin-bottom:12px;">
+          <strong>Kontrol Cepat</strong>
+          <div style="margin-top:10px;display:grid;gap:8px">
+            <button id="exportCSV_side" class="small" onclick="document.getElementById('exportCSV').click()">Export CSV</button>
+            <button id="refreshOrders_side" class="small" onclick="document.getElementById('refreshOrders').click()">Refresh</button>
+            <button id="clearOrders_side" class="small danger" onclick="document.getElementById('clearOrders').click()">Clear Orders</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:12px;">
+          <strong>Testimoni</strong>
+          <div id="testimonialList" style="margin-top:10px">
+            <!-- testimonial cards loaded by admin.js -->
+          </div>
+        </div>
+
+        <div class="card">
+          <strong>Export & Download</strong>
+          <div style="margin-top:10px" class="muted">Export CSV semua order atau cetak ulang invoice dari riwayat.</div>
+          <div style="margin-top:10px">
+            <button id="exportCSV_small" class="small" onclick="document.getElementById('exportCSV').click()">Export CSV</button>
+          </div>
+        </div>
+
+      </aside>
     </div>
 
-    <!-- ====================== -->
-    <!-- ADMIN CONTENT -->
-    <!-- ====================== -->
-    <div id="adminContent" class="admin-wrapper">
+    <footer>
+      © 2025 Pukis Lumer Aulia — Admin Panel
+    </footer>
+  </div>
 
-        <header class="admin-header">
-            <img src="assets/images/logo.png" class="admin-logo">
-            <h1>Dashboard Admin</h1>
+  <!-- SCRIPTS
+       Pastikan admin.js, order.js sudah ada di assets/js/
+       urutan: order.js mengumpulkan order, admin.js mengelola admin actions.
+  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-            <button id="logoutBtn" class="btn danger small">Logout</button>
-        </header>
+  <!-- Admin logic (final) -->
+  <script src="assets/js/admin.js"></script>
 
-        <!-- =================== -->
-        <!-- STATISTIK RINGKAS -->
-        <!-- =================== -->
-        <section class="admin-section">
-            <h2>Statistik Hari Ini</h2>
+  <!-- jika ingin menampilkan sample orders saat manual testing, file order.js yg menambah order ke localStorage -->
+  <script src="assets/js/order.js"></script>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Order</h3>
-                    <p id="statOrders">0</p>
-                </div>
+  <script>
+    /* Small helper to show queue number in dashboard (live) */
+    function refreshQueueUI(){
+      const qn = localStorage.getItem("queueNumber") || "0";
+      document.getElementById("statQueue").textContent = qn;
+    }
+    // initial
+    refreshQueueUI();
 
-                <div class="stat-card">
-                    <h3>Total Pendapatan</h3>
-                    <p id="statRevenue">Rp0</p>
-                </div>
-
-                <div class="stat-card">
-                    <h3>Antrian Saat Ini</h3>
-                    <p id="statQueue">-</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================== -->
-        <!-- MANAJEMEN PESANAN -->
-        <!-- =================== -->
-        <section class="admin-section">
-            <h2>Daftar Pesanan</h2>
-
-            <div class="admin-actions">
-                <button id="refreshOrders" class="btn small">Refresh</button>
-                <button id="exportCSV" class="btn success small">Export CSV</button>
-                <button id="clearOrders" class="btn danger small">Hapus Semua</button>
-            </div>
-
-            <div class="table-wrapper">
-                <table id="ordersTable">
-                    <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>WA</th>
-                            <th>Jenis</th>
-                            <th>Topping</th>
-                            <th>Jumlah</th>
-                            <th>Total</th>
-                            <th>Tanggal</th>
-                            <th>Invoice</th>
-                            <th>Cetak</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Diisi otomatis oleh admin.js -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-         <!-- =================== -->
-        <!-- MANAGE TESTIMONI -->
-        <!-- =================== -->
-        <section class="admin-section">
-            <h2>Testimoni Pelanggan</h2>
-
-            <div id="testimonialList" class="testimonial-grid">
-                <!-- Auto load -->
-            </div>
-        </section>
-
-        <!-- =================== -->
-        <!-- PROMO & DISKON -->
-        <!-- =================== -->
-        <section class="admin-section">
-            <h2>Pengaturan Promo</h2>
-
-            <label class="label">Diskon Per Box (Rp)</label>
-            <input type="number" id="promoValue" class="input" placeholder="Contoh: 1000">
-
-            <button id="savePromo" class="btn primary small">Simpan Promo</button>
-        </section>
-
-        <!-- =================== -->
-        <!-- ANALYTICS -->
-        <!-- =================== -->
-        <section class="admin-section">
-            <h2>Data Analytics</h2>
-            <pre id="analyticsData" class="analytics-box">
-(loading...)
-            </pre>
-        </section>
-
-    </div>
-
-    <!-- =================== -->
-    <!-- JS FILES -->
-    <!-- =================== -->
-    <script src="assets/js/admin.js"></script>
-
+    // also refresh when storage changed (from other tab)
+    window.addEventListener('storage', ()=> {
+      // reload table via admin.js's loadOrders if present
+      try { if(typeof loadOrders === 'function') loadOrders(); } catch(e){}
+      refreshQueueUI();
+    });
+  </script>
 </body>
 </html>
