@@ -1,76 +1,135 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Pukis Lumer Aulia</title>
+    <title>Dashboard Admin – Pukis Lumer Aulia</title>
 
-    <!-- STYLE -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- ICON -->
-    <link rel="icon" type="image/png" href="assets/logo.png">
-
-    <!-- JS -->
-    <script defer src="admin.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body class="admin-page">
+<body class="admin-body">
 
-    <header class="admin-header">
-        <h1>📦 Admin Panel</h1>
-        <button id="logoutBtn" class="btn-logout">Logout</button>
-    </header>
+    <!-- ====================== -->
+    <!-- LOGIN MODAL -->
+    <!-- ====================== -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-box">
+            <h2>Masukkan PIN Admin</h2>
+            <input id="adminPinInput" type="password" maxlength="6" placeholder="PIN Admin" class="input">
+            <button id="adminLoginBtn" class="btn primary">Masuk</button>
+        </div>
+    </div>
 
-    <main class="admin-container">
+    <!-- ====================== -->
+    <!-- ADMIN CONTENT -->
+    <!-- ====================== -->
+    <div id="adminContent" class="admin-wrapper">
 
-        <!-- STATISTIK -->
-        <section class="dashboard-section">
-            <h2>Statistik Pesanan</h2>
+        <header class="admin-header">
+            <img src="assets/images/logo.png" class="admin-logo">
+            <h1>Dashboard Admin</h1>
+
+            <button id="logoutBtn" class="btn danger small">Logout</button>
+        </header>
+
+        <!-- =================== -->
+        <!-- STATISTIK RINGKAS -->
+        <!-- =================== -->
+        <section class="admin-section">
+            <h2>Statistik Hari Ini</h2>
 
             <div class="stats-grid">
-                <div class="stat-box">
-                    <h3>Total Pesanan</h3>
-                    <p id="totalOrders">0</p>
+                <div class="stat-card">
+                    <h3>Total Order</h3>
+                    <p id="statOrders">0</p>
                 </div>
-                <div class="stat-box">
-                    <h3>Pendapatan Hari Ini</h3>
-                    <p id="todayIncome">Rp 0</p>
+
+                <div class="stat-card">
+                    <h3>Total Pendapatan</h3>
+                    <p id="statRevenue">Rp0</p>
                 </div>
-                <div class="stat-box">
-                    <h3>Pendapatan Bulan Ini</h3>
-                    <p id="monthlyIncome">Rp 0</p>
+
+                <div class="stat-card">
+                    <h3>Antrian Saat Ini</h3>
+                    <p id="statQueue">-</p>
                 </div>
             </div>
         </section>
 
-        <!-- TABEL PESANAN -->
-        <section class="table-section">
-            <h2>Data Pesanan Masuk</h2>
+        <!-- =================== -->
+        <!-- MANAJEMEN PESANAN -->
+        <!-- =================== -->
+        <section class="admin-section">
+            <h2>Daftar Pesanan</h2>
+
+            <div class="admin-actions">
+                <button id="refreshOrders" class="btn small">Refresh</button>
+                <button id="exportCSV" class="btn success small">Export CSV</button>
+                <button id="clearOrders" class="btn danger small">Hapus Semua</button>
+            </div>
 
             <div class="table-wrapper">
-                <table id="orderTable">
+                <table id="ordersTable">
                     <thead>
                         <tr>
-                            <th>Waktu</th>
                             <th>Nama</th>
-                            <th>Produk</th>
+                            <th>WA</th>
+                            <th>Jenis</th>
+                            <th>Topping</th>
                             <th>Jumlah</th>
                             <th>Total</th>
-                            <th>Metode</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
+                            <th>Tanggal</th>
+                            <th>Invoice</th>
+                            <th>Cetak</th>
                         </tr>
                     </thead>
-
-                    <tbody id="orderList">
-                        <!-- Data diisi oleh admin.js -->
+                    <tbody>
+                        <!-- Diisi otomatis oleh admin.js -->
                     </tbody>
                 </table>
             </div>
         </section>
+        <!-- =================== -->
+        <!-- MANAGE TESTIMONI -->
+        <!-- =================== -->
+        <section class="admin-section">
+            <h2>Testimoni Pelanggan</h2>
 
-    </main>
+            <div id="testimonialList" class="testimonial-grid">
+                <!-- Auto load -->
+            </div>
+        </section>
+
+        <!-- =================== -->
+        <!-- PROMO & DISKON -->
+        <!-- =================== -->
+        <section class="admin-section">
+            <h2>Pengaturan Promo</h2>
+
+            <label class="label">Diskon Per Box (Rp)</label>
+            <input type="number" id="promoValue" class="input" placeholder="Contoh: 1000">
+
+            <button id="savePromo" class="btn primary small">Simpan Promo</button>
+        </section>
+
+        <!-- =================== -->
+        <!-- ANALYTICS -->
+        <!-- =================== -->
+        <section class="admin-section">
+            <h2>Data Analytics</h2>
+            <pre id="analyticsData" class="analytics-box">
+(loading...)
+            </pre>
+        </section>
+
+    </div>
+
+    <!-- =================== -->
+    <!-- JS FILES -->
+    <!-- =================== -->
+    <script src="assets/js/admin.js"></script>
 
 </body>
 </html>
