@@ -8,6 +8,7 @@ body {
     font-family: "Poppins", sans-serif;
     background: #f7f7f7;
     color: #333;
+    text-align: center; /* Pusatkan semua teks secara default */
 }
 
 /* LOGIN MODAL */
@@ -58,14 +59,17 @@ body {
     color: white;
     padding: 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Pusatkan konten header */
     align-items: center;
 }
 
-/* Tambahkan atau modifikasi CSS untuk logo */
+/* Modifikasi CSS untuk logo */
 .admin-logo {
-    max-height: 40px; /* Sesuaikan nilai ini */
+    max-width: 50%; /* Set lebar maksimum logo menjadi setengah dari lebar header */
+    max-height: 50px; /* Sesuaikan tinggi maksimum logo */
     margin-right: 10px; /* Opsional: Tambahkan margin kanan jika diperlukan */
+    margin: 0 auto; /* Pusatkan logo secara horizontal */
+    display: block; /* Memastikan logo diperlakukan sebagai elemen blok */
 }
 
 .logout {
@@ -109,7 +113,7 @@ body {
     margin-bottom: 10px;
     display: flex;
     gap: 10px;
-    justify-content: flex-end;
+    justify-content: center; /* Pusatkan tombol aksi */
 }
 
 .btn {
@@ -147,6 +151,7 @@ body {
 #ordersTable {
     width: 100%;
     border-collapse: collapse;
+    margin: 0 auto; /* Pusatkan tabel */
 }
 
 #ordersTable th,
@@ -154,7 +159,7 @@ body {
     border: 1px solid #ddd;
     padding: 12px;
     font-size: 14px;
-    text-align: left;
+    text-align: center; /* Pusatkan teks dalam sel tabel */
 }
 
 #ordersTable th {
@@ -176,6 +181,7 @@ body {
     border-radius: 12px;
     margin-bottom: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Pusatkan teks dalam testimonial card */
 }
 
 /* ANALYTICS */
@@ -186,4 +192,7 @@ body {
     border-radius: 10px;
     overflow-x: auto;
     white-space: pre-wrap;
+    text-align: left; /* Biarkan teks analytics tetap rata kiri */
+    margin: 0 auto; /* Pusatkan kotak analytics */
+    max-width: 80%; /* Batasi lebar kotak analytics */
 }
