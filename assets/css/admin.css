@@ -1,162 +1,187 @@
 /* ============================
-   ADMIN DASHBOARD CSS — FINAL
-   PUKIS LUMER AULIA
+ADMIN DASHBOARD CSS — FINAL
+PUKIS LUMER AULIA
 ============================ */
 
 body {
-  margin: 0;
-  font-family: "Poppins", sans-serif;
-  background: #f7f7f7;
-  color: #333;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #f7f7f7;
+    color: #333;
 }
 
 /* LOGIN MODAL */
 .login-modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
 }
 
-.login-box {
-  background: #fff;
-  padding: 25px;
-  width: 90%;
-  max-width: 350px;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 7px 25px rgba(0,0,0,0.18);
+.modal-box {
+    background: #fff;
+    padding: 25px;
+    width: 90%;
+    max-width: 350px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.18);
 }
 
-.login-box input {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #ddd;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  font-size: 15px;
+.modal-box input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    font-size: 15px;
 }
 
-.login-box button {
-  width: 100%;
-  padding: 12px;
-  background: #ff4466;
-  border: none;
-  color: white;
-  font-weight: bold;
-  font-size: 15px;
-  border-radius: 12px;
-  cursor: pointer;
+.modal-box button {
+    width: 100%;
+    padding: 12px;
+    background: #ff4466;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 12px;
+    cursor: pointer;
 }
 
 /* HEADER */
 .admin-header {
-  background: #ff4466;
-  color: white;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    background: #ff4466;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-logo {
+    max-height: 50px;
 }
 
 .logout {
-  background: #fff;
-  color: #d60036;
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
+    background: #fff;
+    color: #d60036;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 /* STAT BOXES */
-.stat-box {
-  display: flex;
-  gap: 15px;
-  padding: 20px;
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
 }
 
-.stat {
-  background: white;
-  padding: 20px;
-  width: 33%;
-  text-align: center;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+.stat-card {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.stat p {
-  font-size: 22px;
-  font-weight: bold;
-  margin: 0;
+.stat-card p {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
 }
 
 /* TABLE */
-.table-section {
-  padding: 20px;
+.admin-section {
+    padding: 20px;
 }
 
-.btn-row {
-  margin-bottom: 10px;
-  display: flex;
-  gap: 10px;
+.admin-actions {
+    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
 }
 
-.btn-row button {
-  padding: 10px 15px;
-  background: #ff4466;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.btn-row .danger {
-  background: #a00000;
+.btn.small {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+}
+
+.btn.primary {
+    background: #ff4466;
+    color: #fff;
+}
+
+.btn.success {
+    background: #00a000;
+    color: #fff;
+}
+
+.btn.danger {
+    background: #a00000;
+    color: #fff;
+}
+
+.table-wrapper {
+    overflow-x: auto;
 }
 
 #ordersTable {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 #ordersTable th,
 #ordersTable td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  font-size: 14px;
+    border: 1px solid #ddd;
+    padding: 12px;
+    font-size: 14px;
+    text-align: left;
 }
 
 #ordersTable th {
-  background: #ffe6ea;
+    background: #ffe6ea;
+    font-weight: bold;
 }
 
 /* TESTIMONIAL SECTION */
-.testi-section {
-  padding: 20px;
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 20px;
 }
 
 .testimonial-card {
-  background: white;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* ANALYTICS */
-.analytics-section {
-  padding: 20px;
-}
-
-.analytics-section pre {
-  background: #222;
-  color: #00ff99;
-  padding: 15px;
-  border-radius: 10px;
-  overflow-x: auto;
+.analytics-box {
+    background: #222;
+    color: #00ff99;
+    padding: 15px;
+    border-radius: 10px;
+    overflow-x: auto;
+    white-space: pre-wrap;
 }
