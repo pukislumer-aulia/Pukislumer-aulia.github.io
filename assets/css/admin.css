@@ -62,8 +62,10 @@ body {
     align-items: center;
 }
 
+/* Tambahkan atau modifikasi CSS untuk logo */
 .admin-logo {
-    max-height: 50px;
+    max-height: 40px; /* Sesuaikan nilai ini */
+    margin-right: 10px; /* Opsional: Tambahkan margin kanan jika diperlukan */
 }
 
 .logout {
