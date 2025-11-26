@@ -71,13 +71,12 @@ h3 {
   margin: 0 auto; /* tengah horizontal */
   border-radius: 12px;
   text-align: center; /* agar teks h1 rata tengah */
-  display: inline-block; /* Agar lebar section menyesuaikan konten */
 }
 
 #section-hero .hero-img {
-  /*width: 100%;  HAPUS baris ini */
-  max-width: 100%; /* gambar tidak terlalu besar */
-  height: auto; /* pertahankan rasio */
+  width: 30%;       /* Lebar gambar 30% dari halaman */
+  max-width: none;   /* Hapus max-width agar width berfungsi */
+  height: auto;           /* pertahankan rasio */
   display: block;
   margin: 0 auto 12px auto; /* tengah horizontal + jarak bawah */
   border-radius: 12px;
@@ -124,13 +123,15 @@ h3 {
   gap: 10px;
 }
 
-.gallery-img {
-  width: 100%;
+/* Atur lebar gambar di gallery menjadi 30% juga */
+.gallery-grid .gallery-img {
+  width: 30%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 12px;
   cursor: zoom-in;
   transition: transform .25s, box-shadow .25s;
+  margin: 0 auto; /* Tengah horizontal */
 }
 
 .gallery-img:hover {
@@ -332,6 +333,15 @@ h3 {
   justify-content: center;
   align-items: center;
   z-index: 6000;
+}
+
+/* Style untuk logo yang lebih kecil */
+.kecil-logo {
+  width: auto;        /* Biarkan tinggi menyesuaikan */
+  max-width: 100px;   /* Lebar maksimum logo (bisa disesuaikan) */
+  height: auto;       /* Tinggi menyesuaikan aspek rasio */
+  display: block;     /* Pastikan sebagai block element */
+  margin: 0 auto;      /* Tengah horizontal */
 }
 
 /* =========================
