@@ -63,22 +63,22 @@
 ‎/* =========================
 ‎   HERO SECTION
 ‎========================= */
-‎#section-hero {
-‎  padding: 12px 16px;       /* jarak atas-bawah dan kiri-kanan */
-‎  max-width: 720px;         /* lebar maksimal section */
-‎  margin: 0 auto;           /* tengah horizontal */
-‎  border-radius: 12px;
-‎  text-align: center;       /* agar teks h1 rata tengah */
+.hero-img {
+  width: 100%;       /* Gambar maksimal selebar container */
+  max-width: 600px;  /* Batas lebar gambar supaya tidak terlalu besar */
+  height: auto;      /* Menjaga rasio gambar */
+  display: block;
+  margin: 0 auto 12px auto; /* Tengah horizontal + jarak bawah */
+  border-radius: 12px;      /* Opsional, supaya sudut gambar melengkung */
+  text-align: center;       /* agar teks h1 rata tengah */
 ‎}
-‎
-‎#section-hero .hero-img {
-‎  width: 100%;              /* gambar mengikuti lebar section */
-‎  max-width: 600px;         /* gambar tidak terlalu besar */
-‎  height: auto;             /* pertahankan rasio */
-‎  display: block;
-‎  margin: 0 auto 12px auto; /* tengah horizontal + jarak bawah */
-‎  border-radius: 12px;
-‎}
+
+#section-hero .hero-img {
+  padding: 12px 16px; /* Atur kiri-kanan sesuai kebutuhan */
+  max-width: 720px;   /* Batas lebar section agar rapi */
+  margin: 0 auto;     /* Tengah horizontal */
+  border-radius: 12px;
+}
 ‎
 ‎/* =========================
 ‎   PROMO SLIDER
