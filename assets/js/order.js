@@ -3,10 +3,13 @@
    Final / Integrated — PART 1
    Blocks: 1..8
    =============================== */
+
 console.info("[order.js] Loaded — FINAL v2025.11");
 
 document.addEventListener("DOMContentLoaded", () => {
+
   /* ========== Block 1: Utilities & DOM ========== */
+
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
   const formatRp = n => "Rp " + Number(n || 0).toLocaleString("id-ID");
@@ -28,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const ultraJumlah = $("#ultraJumlah");
 
   /* ========== Block 2: Constants ========== */
+
   const MAX_TOPPING = 5;
   const MAX_TABURAN = 5;
   // Discount rule: Rp 500/box if beli >= 10 box BESAR (isi === "10")
@@ -49,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const DOUBLE_TABURAN = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
 
   /* ========== Block 3: Helpers ========== */
+
   function getSelectedRadioValue(name){
     const r = document.querySelector(`input[name="${name}"]:checked`);
     return r ? r.value : null;
@@ -63,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ========== Block 4: Queue / Antrian (auto reset harian) ========== */
+
   function getQueueInfo(){
     const keyDate = "queue_date";
     const keyNum = "queue_last";
@@ -87,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ========== Block 5: Price / Order calculation ========== */
+
   let currentOrder = {}; // will hold computed data
 
   function calculateOrderData(){
@@ -142,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ========== Block 6: Topping UI render & enforcement ========== */
+
   function renderToppings(){
     const mode = getSelectedRadioValue("ultraToppingMode") || "non";
     const isiVal = parseInt(safeGet(ultraIsi,"5"),10);
@@ -184,6 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ========== Block 7: Topping limits enforcement (delegated) ========== */
+
   document.addEventListener("change", (ev) => {
     const t = ev.target;
     if(!t) return;
@@ -221,6 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ========== Block 8: Event wiring for inputs ========== */
+
   // when user changes topping mode / jenis / isi / jumlah, update UI
   $$('input[name="ultraToppingMode"]').forEach(r => r.addEventListener("change", () => { renderToppings(); calculateOrderData(); }));
   $$('input[name="ultraJenis"]').forEach(r => r.addEventListener("change", calculateOrderData));
@@ -231,9 +241,10 @@ document.addEventListener("DOMContentLoaded", () => {
   renderToppings();
   calculateOrderData();
 
-  /* ========== End of PART 1 blocks ==========
+  /* ========== End of PART 1 blocks =
      Continue to PART 2 (submit, storage, PDF, helpers)
   */
+
 });
 
 /* ===============================
@@ -241,7 +252,9 @@ document.addEventListener("DOMContentLoaded", () => {
    Final / Integrated — PART 2
    Blocks: 9..end
    =============================== */
+
 (function(){ // keep scope isolated for subsequent functions
+
   const $ = s => document.querySelector(s);
   const formatRp = n => "Rp " + Number(n || 0).toLocaleString("id-ID");
   const ADMIN_WA = "6281296668670";
@@ -402,7 +415,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // quick message
     alert("Nota dibuat. Silakan cek dan tekan 'Cetak / PDF' atau 'Kirim WA Admin'.");
-
   });
 
   // close nota
@@ -433,6 +445,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ====== Block: Testimonial handling with admin moderation ====== */
+
   // Save testimonial as pending for moderation
   $("#testimonialForm")?.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -468,6 +481,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else { loadTestimonialsFallback(); }
 
   /* ========== Block: PDF generator ========== */
+
   async function generatePdf(order){
     showLoader("Membuat PDF...");
     try{
@@ -601,6 +615,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ========== Block: misc helpers used earlier but may not exist in scope ========== */
+
   // ensure functions referenced from PART1 are present in window
   if(typeof window.calculateOrderData !== "function"){
     // fallback: re-implement minimal calculateOrderData & expose globally
