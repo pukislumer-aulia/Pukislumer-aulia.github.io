@@ -102,31 +102,47 @@
 ‎/* =========================
 ‎   GALLERY — PREMIUM GRID
 ‎========================= */
+
+/* GALLERY SECTION */
+#section-gallery {
+  background: #ffffff;
+  border-radius: 12px;
+  margin-top: 18px;
+  padding: 12px 16px;       /* jarak atas-bawah dan kiri-kanan, sama seperti hero */
+  max-width: 720px;         /* lebar maksimal section, sama seperti hero */
+  margin: 18px auto 0 auto;           /* tengah horizontal */
+  text-align: center;       /* agar gambar rata tengah */
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.gallery-img {
+  width: 100%;              /* gambar mengikuti lebar section */
+  max-width: 600px;         /* gambar tidak terlalu besar */
+  height: auto;             /* pertahankan rasio */
+  display: block;
+  margin: 0 auto 12px auto; /* tengah horizontal + jarak bawah */
+  border-radius: 12px;      /* Opsional, supaya sudut gambar melengkung */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efek transisi untuk hover */
+}
+
+.gallery-img:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+
 ‎#section-gallery {
 ‎  background:#ffffff;
 ‎  border-radius: 12px;
 ‎  margin-top: 18px;
 ‎  padding: 24px 12px;
 ‎}
-‎
-‎.gallery-grid {
-‎  display: grid;
-‎  grid-template-columns: repeat(3, 1fr);
-‎  gap: 10px;
-‎}
-‎.gallery-img {
-  width: 100%;       /* Gambar maksimal selebar container */
-  max-width: 600px;  /* Batas lebar gambar supaya tidak terlalu besar */
-  height: auto;      /* Menjaga rasio gambar */
-  display: block;
-  margin: 0 auto 12px auto; /* Tengah horizontal + jarak bawah */
-  border-radius: 12px;      /* Opsional, supaya sudut gambar melengkung */
-  text-align: center;       /* agar teks h1 rata tengah */
-  ‎}
-‎.gallery-img:hover {
-‎  transform:scale(1.06);
-‎  box-shadow:0 6px 16px rgba(0,0,0,.2);
-‎}
+
 ‎
 ‎/* Mobile: 2 kolom */
 ‎@media(max-width:600px){
