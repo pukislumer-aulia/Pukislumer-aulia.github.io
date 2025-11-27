@@ -1,749 +1,340 @@
-/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
-
-/* Document
-   ========================================================================== */
-
-/**
- * 1. Correct the line height in all browsers.
- * 2. Prevent adjustments of font size after orientation changes in iOS.
- */
-
-html {
-  line-height: 1.15; /* 1 */
-  -webkit-text-size-adjust: 100%; /* 2 */
-}
-
-/* Sections
-   ========================================================================== */
-
-/**
- * Remove the margin in all browsers.
- */
-
-body {
-  margin: 0;
-}
-
-/**
- * Render the `main` element consistently in IE.
- */
-
-main {
-  display: block;
-}
-
-/**
- * Correct the font size and margin on `h1` elements within `section` and
- * `article` contexts in Chrome, Firefox, and Safari.
- */
-
-h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-}
-
-/* Grouping content
-   ========================================================================== */
-
-/**
- * 1. Add the correct box sizing in Firefox.
- * 2. Show the overflow in Edge and IE.
- */
-
-hr {
-  box-sizing: content-box; /* 1 */
-  height: 0; /* 1 */
-  overflow: visible; /* 2 */
-}
-
-/**
- * 1. Correct the inheritance and scaling of font size in all browsers.
- * 2. Correct the odd `em` font sizing in all browsers.
- */
-
-pre {
-  font-family: monospace, monospace; /* 1 */
-  font-size: 1em; /* 2 */
-}
-
-/* Text-level semantics
-   ========================================================================== */
-
-/**
- * Remove the gray background on active links in IE 10.
- */
-
-a {
-  background-color: transparent;
-}
-
-/**
- * 1. Remove the bottom border in Chrome 57-
- * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
- */
-
-abbr[title] {
-  border-bottom: none; /* 1 */
-  text-decoration: underline; /* 2 */
-  text-decoration: underline dotted; /* 2 */
-}
-
-/**
- * Add the correct font weight in Chrome, Edge, and Safari.
- */
-
-b,
-strong {
-  font-weight: bolder;
-}
-
-/**
- * 1. Correct the inheritance and scaling of font size in all browsers.
- * 2. Correct the odd `em` font sizing in all browsers.
- */
-
-code,
-kbd,
-samp {
-  font-family: monospace, monospace; /* 1 */
-  font-size: 1em; /* 2 */
-}
-
-/**
- * Add the correct font size in all browsers.
- */
-
-small {
-  font-size: 80%;
-}
-
-/**
- * Prevent `sub` and `sup` elements from affecting the line height in
- * all browsers.
- */
-
-sub,
-sup {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
-
-sub {
-  bottom: -0.25em;
-}
-
-sup {
-  top: -0.5em;
-}
-
-/* Embedded content
-   ========================================================================== */
-
-/**
- * Remove the border on images inside links in IE 10-.
- */
-
-img {
-  border-style: none;
-}
-
-/* Forms
-   ========================================================================== */
-
-/**
- * 1. Change the font styles in all browsers.
- * 2. Remove the margin in Firefox and Safari.
- */
-
-button,
-input,
-optgroup,
-select,
-textarea {
-  font-family: inherit; /* 1 */
-  font-size: 100%; /* 1 */
-  line-height: 1.15; /* 1 */
-  margin: 0; /* 2 */
-}
-
-/**
- * Show the overflow in IE.
- */
-
-button,
-input {
-  overflow: visible;
-}
-
-/**
- * Remove the inheritance of text transform in Edge, Firefox, and IE.
- */
-
-button,
-select {
-  text-transform: none;
-}
-
-/**
- * Correct the inability to style clickable types in iOS and Safari.
- */
-
-button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: button;
-}
-
-/**
- * Remove the inner border and padding in Firefox.
- */
-
-button::-moz-focus-inner,
-[type="button"]::-moz-focus-inner,
-[type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner {
-  border-style: none;
-  padding: 0;
-}
-
-/**
- * Restore the focus styles unset by the previous rule.
- */
-
-button:-moz-focusring,
-[type="button"]:-moz-focusring,
-[type="reset"]:-moz-focusring,
-[type="submit"]:-moz-focusring {
-  outline: 1px dotted ButtonText;
-}
-
-/**
- * Correct the padding on subsequently occurring `fieldset` elements in Safari.
- */
-
-fieldset {
-  padding: 0.35em 0.75em 0.625em;
-}
-
-/**
- * 1. Correct the text wrapping in Edge and IE.
- * 2. Correct the color inheritance from `fieldset` elements in IE.
- */
-
-legend {
-  box-sizing: border-box; /* 1 */
-  color: inherit; /* 2 */
-  display: table; /* 1 */
-  max-width: 100%; /* 1 */
-  padding: 0; /* 1 */
-  white-space: normal; /* 1 */
-}
-
-/**
- * Remove the default vertical scrollbar in IE 10-.
- */
-
-textarea {
-  overflow: auto;
-}
-
-/**
- * 1. Add the correct box sizing in IE 10-.
- * 2. Remove the padding in IE 10-.
- */
-
-[type="checkbox"],
-[type="radio"] {
-  box-sizing: border-box; /* 1 */
-  padding: 0; /* 2 */
-}
-
-/**
- * Correct the cursor style of increment and decrement buttons in Chrome.
- */
-
-[type="number"]::-webkit-inner-spin-button,
-[type="number"]::-webkit-outer-spin-button {
-  height: auto;
-}
-
-/**
- * 1. Correct the odd appearance in Chrome and Safari.
- * 2. Correct the outline style in Safari.
- */
-
-[type="search"] {
-  -webkit-appearance: textfield; /* 1 */
-  outline-offset: -2px; /* 2 */
-}
-
-/**
- * Remove the inner padding in Chrome and Safari on macOS.
- */
-
-[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-
-/**
- * 1. Correct the inability to style clickable types in iOS and Safari.
- * 2. Change font properties to `inherit` in Safari.
- */
-
-::-webkit-file-upload-button {
-  -webkit-appearance: button; /* 1 */
-  font: inherit; /* 2 */
-}
-
-/* Interactive
-   ========================================================================== */
-
-/*
- * Add the correct display in Edge, IE 10-, and Firefox.
- */
-
-details {
-  display: block;
-}
-
-/*
- * Add the correct display in all browsers.
- */
-
-summary {
-  display: list-item;
-}
-
-/* Misc
-   ========================================================================== */
-
-/**
- * Add the correct display in IE 10-.
- */
-
-template {
-  display: none;
-}
-
-/**
- * Add the correct display in IE 10.
- */
-
-[hidden] {
-  display: none;
-}
-
-/* =========================
-   GLOBAL UI STYLE — FINAL PRO
-   PUKIS LUMER AULIA
-   ========================= */
-:root {
-  --bg: #fff6f8;
-  --text: #333;
-  --accent: #ff5e7e;
-  --accent-dark: #e03954;
-  --card: #ffffff;
-  --radius: 14px;
-
-  --brand-dark: #1B2838;
-  --brand-light: #FFFAF2;
-  --brand-gold: #FFD93D;
-}
-
-/* GLOBAL FONT */
-body {
-  font-family: 'Nunito', sans-serif;
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.55;
-  padding-bottom: 80px;
-}
-
-h1,
-h2,
-h3 {
-  font-family: 'Pacifico', cursive;
-  text-align: center;
-  color: var(--accent);
-  letter-spacing: .6px;
-}
-
-/* BRAND LOGO */
-.brand-logo {
-  font-family: 'Pacifico', cursive;
-  font-size: 2.4rem;
-  color: var(--brand-gold);
-  text-align: center;
-  text-shadow: 0 4px 18px rgba(0, 0, 0, .4);
-  margin: 12px 0;
-}
-
-.tagline {
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-top: -4px;
-  color: #FFEAA7;
-}
-
-/* =========================
-   CONTAINER
-========================= */
-.container {
-  width: 100%;
-  max-width: 900px;
-  margin: auto;
-  padding: 12px;
-}
-
-/* =========================
-   HERO SECTION
-========================= */
-#section-hero {
-  padding: 12px 16px;
-  max-width: 720px;
-  margin: 0 auto;
-  border-radius: 12px;
-  text-align: center;
-}
-
-.hero-img {
-  width: 100%;
-  max-width: 600px;
-  /* Ukuran awal gambar */
-  height: auto;
-  display: block;
-  margin: 0 auto 12px auto;
-  border-radius: 12px;
-}
-
-/* Media query untuk layar ponsel (lebar maksimum 768px) */
-@media (max-width: 768px) {
-  .hero-img {
-    max-width: 48%;
-    /* Ukuran gambar pada ponsel, kurang dari setengah ukuran semula */
-  }
-}
-
-/* =========================
-   PROMO SLIDER
-========================= */
-.promo-slider {
-  display: flex;
-  gap: 40px;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: .94rem;
-  margin: 8px 0 18px;
-  animation: slideText 16s linear infinite;
-  color: #ff0000;
-  font-weight: bold;
-}
-
-@keyframes slideText {
-  0% {
-    transform: translateX(100%);
-  }
-
-  100% {
-    transform: translateX(-130%);
-  }
-}
-
-/* =========================
-   GALLERY — PREMIUM GRID
-========================= */
-
-/* GALLERY SECTION */
-#section-gallery {
-  background: #ffffff;
-  border-radius: 12px;
-  margin-top: 18px;
-  padding: 12px 16px;
-  /* jarak atas-bawah dan kiri-kanan, sama seperti hero */
-  max-width: 720px;
-  /* lebar maksimal section, sama seperti hero */
-  margin: 18px auto 0 auto;
-  /* tengah horizontal */
-  text-align: center;
-  /* agar gambar rata tengah */
-}
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.gallery-img {
-  width: 100%;
-  /* gambar mengikuti lebar section */
-  max-width: 600px;
-  /* gambar tidak terlalu besar */
-  height: auto;
-  /* pertahankan rasio */
-  display: block;
-  margin: 0 auto 12px auto;
-  /* tengah horizontal + jarak bawah */
-  border-radius: 12px;
-  /* Opsional, supaya sudut gambar melengkung */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  /* Efek transisi untuk hover */
-}
-
-.gallery-img:hover {
-  transform: scale(1.06);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-#section-gallery {
-  background: #ffffff;
-  border-radius: 12px;
-  margin-top: 18px;
-  padding: 24px 12px;
-}
-
-/* Mobile: 2 kolom */
-@media (max-width: 600px) {
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* LIGHTBOX */
-.lightbox-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .9);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9000;
-}
-
-.lightbox-overlay.show {
-  display: flex;
-}
-
-.lightbox-overlay img {
-  width: 90%;
-  max-width: 500px;
-  border-radius: 12px;
-}
-
-/* =========================
-   ORDER FORM — PRO
-========================= */
-#form-ultra {
-  background: var(--brand-dark);
-  color: #fff;
-  padding: 32px 20px;
-  border-radius: 12px;
-  margin-top: 22px;
-}
-
-#form-ultra input,
-#form-ultra select,
-#form-ultra textarea {
-  background: #fff;
-  border: none;
-  border-radius: 12px;
-  padding: 12px;
-  font-size: 1rem;
-  margin: 8px 0;
-  width: 100%;
-}
-
-.btn-primary {
-  background: var(--accent);
-  border: none;
-  color: #fff;
-  font-weight: 700;
-  border-radius: var(--radius);
-  margin-top: 14px;
-  padding: 14px;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  background: var(--accent-dark);
-}
-
-.btn-wa {
-  background: #25d366;
-  border: none;
-  color: #fff;
-  font-weight: 700;
-  padding: 14px;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.price-summary span {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 0;
-}
-
-/* =========================
-   NOTA POPUP
-========================= */
-.nota-overlay {
-  position: fixed;
-  inset: 0;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, .65);
-  z-index: 3000;
-}
-
-.nota-overlay.show {
-  display: flex;
-}
-
-.nota-card {
-  background: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 360px;
-}
-
-/* =========================
-   TESTIMONIAL
-========================= */
-#section-testimoni,
-#section-add-testimoni {
-  background: #3A3A44;
-  color: #fff;
-  padding: 30px 15px;
-  border-radius: 12px;
-  margin-top: 18px;
-}
-
-#section-add-testimoni input,
-#section-add-testimoni textarea {
-  background: #fff;
-  color: #000;
-}
-
-.testimonial-card {
-  background: #fff;
-  color: #000;
-  padding: 14px;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, .12);
-  margin: 10px 0;
-}
-
-/* =========================
-   LOCATION
-========================= */
-#section-location {
-  background: var(--brand-light);
-  padding: 30px 15px;
-  margin-top: 18px;
-  border-radius: 12px;
-}
-
-.btn-map {
-  display: inline-block;
-  background: #ff7f50;
-  padding: 12px 18px;
-  border-radius: 12px;
-  color: #fff;
-  font-weight: 700;
-}
-
-/* =========================
-   BOTTOM NAV
-========================= */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #ffffff;
-  display: flex;
-  justify-content: space-around;
-  padding: 8px 0;
-  border-radius: 16px 16px 0 0;
-  box-shadow: 0 -5px 16px rgba(0, 0, 0, .08);
-  z-index: 5000;
-}
-
-.bottom-nav a {
-  text-decoration: none;
-  color: #333;
-  font-size: .8rem;
-  text-align: center;
-}
-
-.bottom-nav i {
-  display: block;
-  font-size: 1.4rem;
-}
-
-/* =========================
-   LOADER
-========================= */
-.loader {
-  position: fixed;
-  inset: 0;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 6000;
-}
-
-/* =========================
-   FOOTER
-========================= */
-footer {
-  background: #121213;
-  color: #d8d8d8;
-  text-align: center;
-  padding: 25px 12px 100px;
-  border-radius: 12px 12px 0 0;
-  margin-top: 22px;
-}
-
-/* =========================
-   MEDIA QUERIES UNTUK PRINT
-========================= */
-@media print {
-
-  body {
-    color: #000 !important;
-    /* Paksa warna teks hitam */
-    background: #fff !important;
-    /* Paksa latar belakang putih */
-  }
-
-  h1,
-  h2,
-  h3 {
-    color: #000 !important;
-    /* Paksa warna judul hitam */
-  }
-
-  .promo-slider {
-    animation: none !important;
-    /* Hentikan animasi */
-  }
-
-  .bottom-nav {
-    display: none !important;
-    /* Sembunyikan bottom navigation */
-  }
-
-  /* Tambahkan style lain sesuai kebutuhan */
-  /* Paksa semua warna menggunakan !important */
-}
+‎/* =========================
+‎   GLOBAL UI STYLE — FINAL PRO
+‎   PUKIS LUMER AULIA
+‎   ========================= */
+‎:root {
+‎  --bg: #fff6f8;
+‎  --text: #333;
+‎  --accent: #ff5e7e;
+‎  --accent-dark: #e03954;
+‎  --card: #ffffff;
+‎  --radius: 14px;
+‎
+‎  --brand-dark: #1B2838;
+‎  --brand-light: #FFFAF2;
+‎  --brand-gold: #FFD93D;
+‎}
+‎
+‎/* GLOBAL FONT */
+‎body {
+‎  font-family: 'Nunito', sans-serif;
+‎  margin: 0;
+‎  background: var(--bg);
+‎  color: var(--text);
+‎  line-height: 1.55;
+‎  padding-bottom: 80px;
+‎}
+‎
+‎h1,h2,h3 {
+‎  font-family: 'Pacifico', cursive;
+‎  text-align: center;
+‎  color: var(--accent);
+‎  letter-spacing: .6px;
+‎}
+‎
+‎/* BRAND LOGO */
+‎.brand-logo {
+‎  font-family: 'Pacifico', cursive;
+‎  font-size: 2.4rem;
+‎  color: var(--brand-gold);
+‎  text-align: center;
+‎  text-shadow: 0 4px 18px rgba(0,0,0,.4);
+‎  margin: 12px 0;
+‎}
+‎
+‎.tagline {
+‎  text-align:center;
+‎  font-size:1rem;
+‎  font-weight:600;
+‎  margin-top:-4px;
+‎  color:#FFEAA7;
+‎}
+‎
+‎/* =========================
+‎   CONTAINER
+‎========================= */
+‎.container {
+‎  width: 100%;
+‎  max-width: 900px;
+‎  margin: auto;
+‎  padding: 12px;
+‎}
+‎
+‎/* =========================
+‎   HERO SECTION
+‎========================= */
+‎#section-hero {
+‎  padding: 12px 16px;
+‎  max-width: 720px;
+‎  margin: 0 auto;
+‎  border-radius: 12px;
+‎  text-align: center;
+‎}
+‎
+‎.hero-img {
+‎  width: 100%;
+‎  max-width: 600px; /* Ukuran awal gambar */
+‎  height: auto;
+‎  display: block;
+‎  margin: 0 auto 12px auto;
+‎  border-radius: 12px;
+‎}
+‎
+‎/* Media query untuk layar ponsel (lebar maksimum 768px) */
+‎@media (max-width: 768px) {
+‎  .hero-img {
+‎    max-width: 48%; /* Ukuran gambar pada ponsel, kurang dari setengah ukuran semula */
+‎  }
+‎}
+‎
+‎
+‎/* =========================
+‎   PROMO SLIDER
+‎========================= */
+‎.promo-slider {
+‎  display: flex;
+‎  gap: 40px;
+‎  overflow: hidden;
+‎  white-space: nowrap;
+‎  font-size: .94rem;
+‎  margin: 8px 0 18px;
+‎  animation: slideText 16s linear infinite;
+‎  color: #ff0000;
+‎  font-weight:bold;
+‎}
+‎@keyframes slideText {
+‎  0% { transform: translateX(100%); }
+‎  100% { transform: translateX(-130%); }
+‎}
+‎
+‎/* =========================
+‎   GALLERY — PREMIUM GRID
+‎========================= */
+‎
+‎/* GALLERY SECTION */
+‎#section-gallery {
+‎  background: #ffffff;
+‎  border-radius: 12px;
+‎  margin-top: 18px;
+‎  padding: 12px 16px;       /* jarak atas-bawah dan kiri-kanan, sama seperti hero */
+‎  max-width: 720px;         /* lebar maksimal section, sama seperti hero */
+‎  margin: 18px auto 0 auto;           /* tengah horizontal */
+‎  text-align: center;       /* agar gambar rata tengah */
+‎}
+‎
+‎.gallery-grid {
+‎  display: grid;
+‎  grid-template-columns: repeat(3, 1fr);
+‎  gap: 10px;
+‎}
+‎
+‎.gallery-img {
+‎  width: 100%;              /* gambar mengikuti lebar section */
+‎  max-width: 600px;         /* gambar tidak terlalu besar */
+‎  height: auto;             /* pertahankan rasio */
+‎  display: block;
+‎  margin: 0 auto 12px auto; /* tengah horizontal + jarak bawah */
+‎  border-radius: 12px;      /* Opsional, supaya sudut gambar melengkung */
+‎  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efek transisi untuk hover */
+‎}
+‎
+‎.gallery-img:hover {
+‎  transform: scale(1.06);
+‎  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+‎}
+‎
+‎
+‎#section-gallery {
+‎  background:#ffffff;
+‎  border-radius: 12px;
+‎  margin-top: 18px;
+‎  padding: 24px 12px;
+‎}
+‎
+‎
+‎/* Mobile: 2 kolom */
+‎@media(max-width:600px){
+‎  .gallery-grid{ grid-template-columns: repeat(2,1fr); }
+‎}
+‎
+‎/* LIGHTBOX */
+‎.lightbox-overlay {
+‎  position: fixed;
+‎  inset:0;
+‎  background: rgba(0,0,0,.9);
+‎  display:none;
+‎  justify-content:center;
+‎  align-items:center;
+‎  z-index:9000;
+‎}
+‎.lightbox-overlay.show { display:flex; }
+‎.lightbox-overlay img {
+‎  width:90%;
+‎  max-width:500px;
+‎  border-radius:12px;
+‎}
+‎
+‎/* =========================
+‎   ORDER FORM — PRO
+‎========================= */
+‎#form-ultra {
+‎  background: var(--brand-dark);
+‎  color:#fff;
+‎  padding:32px 20px;
+‎  border-radius:12px;
+‎  margin-top:22px;
+‎}
+‎#form-ultra input,
+‎#form-ultra select,
+‎#form-ultra textarea {
+‎  background:#fff;
+‎  border:none;
+‎  border-radius:12px;
+‎  padding:12px;
+‎  font-size:1rem;
+‎  margin:8px 0;
+‎  width:100%;
+‎}
+‎.btn-primary {
+‎  background: var(--accent);
+‎  border:none;
+‎  color:#fff;
+‎  font-weight:700;
+‎  border-radius:var(--radius);
+‎  margin-top:14px;
+‎  padding:14px;
+‎  cursor:pointer;
+‎}
+‎.btn-primary:hover {
+‎  background: var(--accent-dark);
+‎}
+‎.btn-wa {
+‎  background:#25d366;
+‎  border:none;
+‎  color:#fff;
+‎  font-weight:700;
+‎  padding:14px;
+‎  border-radius:var(--radius);
+‎  cursor:pointer;
+‎}
+‎.price-summary span {
+‎  display:flex;
+‎  justify-content:space-between;
+‎  padding:5px 0;
+‎}
+‎
+‎/* =========================
+‎   NOTA POPUP
+‎========================= */
+‎.nota-overlay {
+‎  position:fixed;
+‎  inset:0;
+‎  display:none;
+‎  justify-content:center;
+‎  align-items:center;
+‎  background:rgba(0,0,0,.65);
+‎  z-index:3000;
+‎}
+‎.nota-overlay.show { display:flex; }
+‎.nota-card {
+‎  background:#fff;
+‎  padding:16px;
+‎  border-radius:12px;
+‎  width:90%;
+‎  max-width:360px;
+‎}
+‎
+‎/* =========================
+‎   TESTIMONIAL
+‎========================= */
+‎#section-testimoni,
+‎#section-add-testimoni {
+‎  background:#3A3A44;
+‎  color:#fff;
+‎  padding:30px 15px;
+‎  border-radius: 12px;
+‎  margin-top:18px;
+‎}
+‎#section-add-testimoni input,
+‎#section-add-testimoni textarea {
+‎  background:#fff;
+‎  color:#000;
+‎}
+‎.testimonial-card {
+‎  background:#fff;
+‎  color:#000;
+‎  padding:14px;
+‎  border-radius:12px;
+‎  box-shadow:0 3px 10px rgba(0,0,0,.12);
+‎  margin:10px 0;
+‎}
+‎
+‎/* =========================
+‎   LOCATION
+‎========================= */
+‎#section-location {
+‎  background:var(--brand-light);
+‎  padding:30px 15px;
+‎  margin-top:18px;
+‎  border-radius:12px;
+‎}
+‎.btn-map {
+‎  display:inline-block;
+‎  background:#ff7f50;
+‎  padding:12px 18px;
+‎  border-radius:12px;
+‎  color:#fff;
+‎  font-weight:700;
+‎}
+‎
+‎/* =========================
+‎   BOTTOM NAV
+‎========================= */
+‎.bottom-nav {
+‎  position:fixed;
+‎  bottom:0; left:0; right:0;
+‎  background: #ffffff;
+‎  display:flex;
+‎  justify-content:space-around;
+‎  padding:8px 0;
+‎  border-radius: 16px 16px 0 0;
+‎  box-shadow:0 -5px 16px rgba(0,0,0,.08);
+‎  z-index:5000;
+‎}
+‎.bottom-nav a {
+‎  text-decoration:none;
+‎  color:#333;
+‎  font-size:.8rem;
+‎  text-align:center;
+‎}
+‎.bottom-nav i {
+‎  display:block;
+‎  font-size:1.4rem;
+‎}
+‎
+‎/* =========================
+‎   LOADER
+‎========================= */
+‎.loader {
+‎  position:fixed;
+‎  inset:0;
+‎  background:#fff;
+‎  display:flex;
+‎  flex-direction:column;
+‎  justify-content:center;
+‎  align-items:center;
+‎  z-index:6000;
+‎}
+‎
+‎/* =========================
+‎   FOOTER
+‎========================= */
+‎footer {
+‎  background:#121213;
+‎  color:#d8d8d8;
+‎  text-align:center;
+‎  padding:25px 12px 100px;
+‎  border-radius:12px 12px 0 0;
+‎  margin-top:22px;
+‎   }
+‎
