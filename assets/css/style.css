@@ -115,13 +115,14 @@
 ‎  gap: 10px;
 ‎}
 ‎.gallery-img {
-‎  width: 100%;
-‎  aspect-ratio: 1 / 1;
-‎  object-fit: cover;
-‎  border-radius: 12px;
-‎  cursor: zoom-in;
-‎  transition: transform .25s, box-shadow .25s;
-‎}
+  width: 100%;       /* Gambar maksimal selebar container */
+  max-width: 600px;  /* Batas lebar gambar supaya tidak terlalu besar */
+  height: auto;      /* Menjaga rasio gambar */
+  display: block;
+  margin: 0 auto 12px auto; /* Tengah horizontal + jarak bawah */
+  border-radius: 12px;      /* Opsional, supaya sudut gambar melengkung */
+  text-align: center;       /* agar teks h1 rata tengah */
+  ‎}
 ‎.gallery-img:hover {
 ‎  transform:scale(1.06);
 ‎  box-shadow:0 6px 16px rgba(0,0,0,.2);
