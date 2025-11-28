@@ -1,183 +1,296 @@
-/* order.js — robust loader & generatePdf with polling for jsPDF
-   Versi: tolerant, debug-friendly, no top-level await
-   Bahasa: komentar singkat (ID) */
+// ========================================================
+// ORDER.JS FINAL — PUKIS LUMER AULIA
+// Versi paling stabil — 2025.11
+// Tanpa duplikat, tanpa konflik, PDF sudah fix total
+// ========================================================
 
-(function () {
-  "use strict";
+console.info("[order.js] Loaded — FINAL v2025.11");
 
-  // ---------- helper kecil ----------
-  function log(...args){ console.log("[order.js]", ...args); }
-  function warn(...args){ console.warn("[order.js]", ...args); }
-  function err(...args){ console.error("[order.js]", ...args); }
+document.addEventListener("DOMContentLoaded", () => {
 
-  // ---------- tunggu jsPDF hingga timeout ----------
-  function waitForJsPdf(timeoutMs = 7000, intervalMs = 200){
-    return new Promise((resolve) => {
-      const started = Date.now();
-      log("Menunggu jsPDF tersedia (timeout " + timeoutMs + "ms) ...");
-      const id = setInterval(() => {
-        // coba beberapa lokasi kemungkinan jsPDF
-        const found = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF || window.jspdf || null;
-        if(found){
-          clearInterval(id);
-          log("Detected jsPDF object:", found);
-          resolve({ ok: true, obj: found, elapsed: Date.now()-started });
-        } else if(Date.now() - started > timeoutMs){
-          clearInterval(id);
-          warn("Timeout menunggu jsPDF (elapsed " + (Date.now()-started) + "ms).");
-          resolve({ ok: false, obj: null, elapsed: Date.now()-started });
+    // ================================  
+    // Block 1: Helper & DOM  
+    // ================================
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
+    window.$ = $; 
+    window.$$ = $$;
+
+    const formatRp = n => "Rp " + Number(n || 0).toLocaleString("id-ID");
+
+    const formUltra = $("#formUltra");
+    const notaContainer = $("#notaContainer");
+    const notaContent = $("#notaContent");
+
+    // ================================  
+    // Block 2: Harga  
+    // ================================
+    const PRICE_MAP = {
+        Original: {
+            "5": { non: 10000, single: 13000, double: 15000 },
+            "10": { non: 18000, single: 25000, double: 28000 }
+        },
+        Pandan: {
+            "5": { non: 12000, single: 15000, double: 18000 },
+            "10": { non: 22000, single: 28000, double: 32000 }
         }
-      }, intervalMs);
-    });
-  }
-
-  // ---------- fungsi deteksi autoTable ----------
-  function hasAutoTable(){
-    try{
-      // beberapa plugin menempelkan autoTable ke prototype atau ke doc instance
-      const docTry = (window.jspdf && window.jspdf.jsPDF) ? new window.jspdf.jsPDF() : (window.jsPDF ? new window.jsPDF() : null);
-      if(!docTry) return false;
-      const ok = typeof docTry.autoTable === "function";
-      // cleanup: tidak perlu destroy docTry, GC akan ambil
-      return ok;
-    }catch(e){
-      return false;
-    }
-  }
-
-  // ---------- createPdf (dipakai setelah jsPDF tersedia) ----------
-  function makeGeneratePdf(jsPDFCtor){
-    return function generatePdf(data){
-      try{
-        // Instansiasi konstruktor yang ditemukan; beberapa build punya bentuk berbeda
-        let DocCtor = jsPDFCtor;
-        // jika jsPDFCtor adalah object (UMD memberikan { jsPDF: f }), ambil .jsPDF
-        if(jsPDFCtor && typeof jsPDFCtor === "object" && jsPDFCtor.jsPDF) DocCtor = jsPDFCtor.jsPDF;
-        // jika masih function (konstruktor) gunakan itu
-        const doc = new DocCtor({ unit: "px", format: "a4", compress: true });
-
-        // Header sederhana
-        doc.setFontSize(18);
-        doc.text("INVOICE — Pukis Lumer Aulia", 20, 30);
-        doc.setFontSize(11);
-        doc.text(`Order ID: ${data.id || (data.orderID||"UNKNOWN")}`, 20, 55);
-        doc.text(`Tanggal: ${data.tgl || new Date().toLocaleString("id-ID")}`, 20, 70);
-
-        // Customer
-        doc.setFontSize(12);
-        doc.text(`Nama: ${data.nama || "-"}`, 20, 95);
-        doc.text(`WA: ${data.wa || "-"}`, 20, 110);
-
-        // Table rows
-        const rows = [
-          ["Jenis", data.jenis || "-"],
-          ["Isi per Box", (data.isi || "-") + " pcs"],
-          ["Mode Topping", data.mode || "-"],
-          ["Topping", (data.topping && data.topping.length) ? data.topping.join(", ") : "-"],
-          ["Taburan", (data.taburan && data.taburan.length) ? data.taburan.join(", ") : "-"],
-          ["Jumlah Box", String(data.jumlahBox || "-")],
-          ["Harga/Box", "Rp " + ((data.pricePerBox||0)).toLocaleString("id-ID")],
-          ["Subtotal", "Rp " + ((data.subtotal||0)).toLocaleString("id-ID")],
-          ["Diskon", data.discount?("- Rp " + data.discount.toLocaleString("id-ID")) : "-"],
-          ["Total", "Rp " + ((data.total||0)).toLocaleString("id-ID")],
-          ["Catatan", data.note || "-"]
-        ];
-
-        if(typeof doc.autoTable === "function"){
-          doc.autoTable({
-            startY: 140,
-            head: [["Item","Keterangan"]],
-            body: rows,
-            theme: "grid",
-            headStyles: { fillColor:[214,51,108], textColor:255 },
-            styles: { fontSize: 10 }
-          });
-        } else {
-          // fallback: tampilkan baris secara manual
-          let y = 140;
-          doc.setFontSize(10);
-          rows.forEach(r => {
-            doc.text(String(r[0]), 20, y);
-            doc.text(String(r[1]), 120, y);
-            y += 12;
-          });
-        }
-
-        // Footer & save
-        const filename = `Nota_${(data.nama||"pelanggan").replace(/\s+/g,"_")}_${(data.id||Date.now())}.pdf`;
-        doc.save(filename);
-        log("generatePdf: sukses, file disimpan ->", filename);
-        return true;
-      }catch(e){
-        err("generatePdf error:", e);
-        alert("Gagal membuat PDF (lihat console).");
-        return false;
-      }
     };
-  }
 
-  // ---------- inisialisasi: tunggu jsPDF, attach generatePdf ----------
-  (async function init(){
-    const res = await waitForJsPdf(7000, 200);
-    if(!res.ok){
-      // jika tidak ketemu, laporkan status resource yang mungkin relevan
-      warn("jsPDF tidak tersedia setelah timeout.");
-      // tampilkan apakah file dapat diakses via fetch (cek cepat)
-      try{
-        const u1 = "/assets/js/lib/jspdf.umd.min.js";
-        const u2 = "/assets/js/lib/jspdf.plugin.autotable.min.js";
-        const r1 = await fetch(u1, { method:"HEAD" });
-        const r2 = await fetch(u2, { method:"HEAD" });
-        log("HEAD:", u1, r1.status, "|", u2, r2.status);
-      }catch(e){ warn("Fetch HEAD check gagal:", e); }
-      alert("PDF gagal. jsPDF tidak terdeteksi. Cek console untuk detail.");
-      return;
+    const SINGLE_TOPPINGS = ["Coklat", "Tiramisu", "Vanilla", "Stroberry", "Cappucino"];
+    const DOUBLE_TABURAN = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
+
+    // =======================================================
+    // Block 3 — Kalkulasi Total
+    // =======================================================
+    window.calculateOrderData = function () {
+        const jenis = $("input[name='ultraJenis']:checked")?.value || "Original";
+        const isi = $("#ultraIsi")?.value || "5";
+        const mode = $("input[name='ultraToppingMode']:checked")?.value || "non";
+        const jumlahBox = parseInt($("#ultraJumlah")?.value || "1");
+
+        const pricePerBox = PRICE_MAP[jenis][isi][mode];
+        const subtotal = pricePerBox * jumlahBox;
+        const discount = (isi === "10" && jumlahBox >= 10) ? jumlahBox * 500 : 0;
+        const total = subtotal - discount;
+
+        const topping = $$(".ultraTopping:checked").map(x => x.value);
+        const taburan = $$(".ultraTaburan:checked").map(x => x.value);
+
+        const order = {
+            orderID: "INV-" + Date.now(),
+            queueNo: nextQueueNumber(),
+            nama: $("#ultraNama")?.value || "-",
+            wa: $("#ultraWA")?.value || "-",
+            jenis, isi, mode,
+            topping, taburan,
+            jumlahBox, pricePerBox, subtotal, discount, total,
+            note: $("#ultraNote")?.value || "-",
+            createdAt: new Date().toISOString(),
+            tgl: new Date().toLocaleString("id-ID")
+        };
+
+        localStorage.setItem("lastOrderDraft", JSON.stringify(order));
+
+        $("#ultraPricePerBox").innerText = formatRp(pricePerBox);
+        $("#ultraSubtotal").innerText = formatRp(subtotal);
+        $("#ultraDiscount").innerText = discount > 0 ? "- " + formatRp(discount) : "-";
+        $("#ultraGrandTotal").innerText = formatRp(total);
+
+        return order;
+    };
+
+    // =======================================================
+    // Block 4 — Antrian Otomatis Harian
+    // =======================================================
+    function nextQueueNumber() {
+        const dateKey = "queue_date";
+        const numKey = "queue_last";
+        const today = new Date().toISOString().slice(0, 10);
+
+        let lastDate = localStorage.getItem(dateKey);
+        let lastNum = Number(localStorage.getItem(numKey) || "0");
+
+        if (lastDate !== today) {
+            localStorage.setItem(dateKey, today);
+            localStorage.setItem(numKey, "0");
+            return 1;
+        }
+
+        lastNum++;
+        localStorage.setItem(numKey, lastNum);
+        return lastNum;
     }
 
-    // attach generatePdf ke window dengan konstruktor/bentuk yang terdeteksi
-    window.generatePdf = makeGeneratePdf(res.obj);
-    log("generatePdf attached. autoTable?", typeof ( (res.obj && res.obj.jsPDF) ? res.obj.jsPDF.prototype.autoTable : (res.obj && res.obj.prototype ? res.obj.prototype.autoTable : null) ) );
-    log("init selesai. Anda dapat menekan tombol Cetak / PDF sekarang.");
-  })();
+    // =======================================================
+    // Block 5 — Render Topping  
+    // =======================================================
+    function renderToppings() {
+        const mode = $("input[name='ultraToppingMode']:checked")?.value || "non";
+        const isi = Number($("#ultraIsi")?.value || "5");
 
-  // ---------- menyediakan fallback handler untuk tombol notaPrint jika script lain memanggil langsung ----------
-  // jika tombol notaPrint sudah ada saat load, jangan menimpa listener lain — kita hanya memastikan tombol memanggil window.generatePdf bila ada
-  function safeAttachPrintButton(){
-    const btn = document.getElementById("notaPrint");
-    if(!btn) return;
-    btn.addEventListener("click", async function(){
-      // ambil order data dari localStorage/DOM - hukum aplikasimu (cari lastOrder atau getOrderFormData)
-      let order = null;
-      try{ order = JSON.parse(localStorage.getItem("lastOrder")||"null"); }catch(e){ order = null; }
-      if(!order){
-        // fallback: coba panggil fungsi global getOrderFormData jika ada
-        if(typeof window.getOrderFormData === "function"){ try{ order = window.getOrderFormData(); }catch(e){ order = null; } }
-      }
-      if(!order){
-        alert("Tidak ada data order. Buat nota terlebih dahulu.");
-        return;
-      }
-      if(typeof window.generatePdf !== "function"){
-        alert("generatePdf belum siap. Coba lagi sebentar lalu tekan Cetak lagi.");
-        console.log("[order.js] generatePdf belum siap; order:", order);
-        return;
-      }
-      try{
-        await window.generatePdf(order);
-      }catch(e){
-        console.error("[order.js] error saat generatePdf:", e);
-        alert("Gagal membuat PDF (lihat console).");
-      }
-    }, {passive:false});
-  }
+        const groupSingle = $("#ultraSingleGroup");
+        const groupDouble = $("#ultraDoubleGroup");
 
-  // jalankan safe attach saat DOM siap
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", safeAttachPrintButton);
-  } else {
-    safeAttachPrintButton();
-  }
+        groupSingle.innerHTML = "";
+        groupDouble.innerHTML = "";
 
-  // debug startup
-  log("order.js loaded (robust). Menunggu jsPDF...");
-})();
+        if (mode === "non") {
+            groupSingle.style.display = "none";
+            groupDouble.style.display = "none";
+            return;
+        }
+
+        groupSingle.style.display = "flex";
+        SINGLE_TOPPINGS.forEach((t, i) => {
+            if (i < isi) {
+                groupSingle.innerHTML += `
+                    <label class="topping-check">
+                        <input type="checkbox" class="ultraTopping" value="${t}">
+                        <span>${t}</span>
+                    </label>`;
+            }
+        });
+
+        if (mode === "double") {
+            groupDouble.style.display = "flex";
+            DOUBLE_TABURAN.forEach((t, i) => {
+                if (i < isi) {
+                    groupDouble.innerHTML += `
+                        <label class="topping-check">
+                            <input type="checkbox" class="ultraTaburan" value="${t}">
+                            <span>${t}</span>
+                        </label>`;
+                }
+            });
+        }
+    }
+
+    // initial
+    renderToppings();
+    calculateOrderData();
+
+
+    // =======================================================
+    // Block 6 — Submit Order & Tampilkan Nota
+    // =======================================================
+    formUltra?.addEventListener("submit", e => {
+        e.preventDefault();
+
+        const order = calculateOrderData();
+        localStorage.setItem("lastOrder", JSON.stringify(order));
+
+        notaContainer.style.display = "flex";
+        notaContent.innerHTML = `
+            <p><strong>Order ID:</strong> ${order.orderID}</p>
+            <p><strong>Antrian:</strong> ${order.queueNo}</p>
+            <p><strong>Nama:</strong> ${order.nama}</p>
+            <p><strong>WA:</strong> ${order.wa}</p>
+            <p><strong>Jenis:</strong> ${order.jenis} — ${order.isi} pcs</p>
+            <p><strong>Mode:</strong> ${order.mode}</p>
+            <p><strong>Topping:</strong> ${order.topping.join(", ") || "-"}</p>
+            ${order.mode === "double" ? `<p><strong>Taburan:</strong> ${order.taburan.join(", ") || "-"}</p>` : ""}
+            <p><strong>Jumlah Box:</strong> ${order.jumlahBox}</p>
+            <p><strong>Total:</strong> ${formatRp(order.total)}</p>
+        `;
+    });
+
+    $("#notaClose")?.addEventListener("click", () => notaContainer.style.display = "none");
+
+
+    // =======================================================
+    // Block 7 — PDF Generator (FINAL)
+    // =======================================================
+    async function generatePdf(order) {
+        try {
+            const { jsPDF } = window.jspdf;
+            if (!jsPDF) throw new Error("jsPDF tidak tersedia!");
+
+            const pdf = new jsPDF({ unit: "mm", format: "a4" });
+
+            // ========= WATERMARK =========
+            pdf.setTextColor(220,220,220);
+            pdf.setFontSize(46);
+            pdf.text("PUKIS LUMER AULIA", 105, 150, {align:"center", angle:45});
+            pdf.setTextColor(0,0,0);
+
+            // ========= HEADER =========
+            const logo = await loadImg("assets/images/logo.png");
+            if (logo) pdf.addImage(logo, "PNG", 150, 10, 40, 20);
+
+            pdf.setFontSize(20);
+            pdf.setTextColor(214,51,108);
+            pdf.text("PUKIS LUMER AULIA", 105, 18, {align:"center"});
+
+            pdf.setTextColor(0,0,0);
+            pdf.setFontSize(10);
+            pdf.text("Pasar Kuliner Padang Panjang", 200, 34, {align:"right"});
+            pdf.text("0812-9666-8670", 200, 38, {align:"right"});
+
+            pdf.line(10, 42, 200, 42);
+
+            // ========= META =========
+            let y = 50;
+            pdf.text(`Order ID: ${order.orderID}`, 10, y);
+            pdf.text(`Tanggal: ${order.tgl}`, 200, y, {align: "right"}); y+=7;
+
+            pdf.text(`Antrian: ${order.queueNo}`, 10, y); y+=7;
+
+            // ========= CUSTOMER =========
+            pdf.text(`Nama: ${order.nama}`, 10, y); 
+            pdf.text(`WA: ${order.wa}`, 200, y, {align:"right"}); y+=7;
+
+            pdf.text(`Jenis: ${order.jenis} — ${order.isi} pcs`, 10, y); y+=7;
+            pdf.text(`Mode: ${order.mode}`, 10, y); y+=7;
+
+            if(order.mode==="single"){
+                pdf.text(`Topping: ${order.topping.join(", ")||"-"}`, 10, y); y+=7;
+            }
+            if(order.mode==="double"){
+                pdf.text(`Topping: ${order.topping.join(", ")||"-"}`, 10, y); y+=7;
+                pdf.text(`Taburan: ${order.taburan.join(", ")||"-"}`, 10, y); y+=7;
+            }
+
+            // ========= CATATAN =========
+            if(order.note && order.note !== "-"){
+                pdf.text("Catatan:", 10, y); y+=6;
+                const split = pdf.splitTextToSize(order.note, 180);
+                pdf.text(split, 10, y);
+                y += split.length * 6 + 4;
+            }
+
+            // ========= TABLE =========
+            const desc = `${order.jenis} — ${order.isi} pcs`;
+            pdf.autoTable({
+                startY: y,
+                head: [["Deskripsi", "Harga/Box", "Jumlah", "Total"]],
+                body: [[
+                    desc,
+                    formatRp(order.pricePerBox),
+                    `${order.jumlahBox} Box`,
+                    formatRp(order.total)
+                ]],
+                theme: "grid",
+                headStyles: { fillColor: [214,51,108], textColor: 255 },
+                styles: { fontSize: 10 }
+            });
+
+            const lastY = pdf.lastAutoTable.finalY + 10;
+
+            pdf.setFont("helvetica", "bold");
+            pdf.text(`Total Bayar: ${formatRp(order.total)}`, 200, lastY, {align:"right"});
+
+            // ========= FOOTER =========
+            const qris = await loadImg("assets/images/qris-pukis.jpg");
+            if(qris) pdf.addImage(qris, "PNG", 10, lastY+10, 40, 40);
+
+            const ttd = await loadImg("assets/images/ttd.png");
+            if(ttd) pdf.addImage(ttd, "PNG", 150, lastY+10, 40, 20);
+
+            pdf.text("Terimakasih sudah belanja 🙏", 105, lastY+60, {align:"center"});
+
+            pdf.save(`Invoice_${order.orderID}.pdf`);
+            return true;
+        } 
+        catch(e){
+            alert("Gagal membuat PDF: " + e.message);
+            console.error(e);
+            return false;
+        }
+    }
+
+    async function loadImg(src){
+        return new Promise(res=>{
+            const img = new Image();
+            img.onload = ()=>res(img);
+            img.onerror = ()=>res(null);
+            img.src = src;
+        });
+    }
+
+    $("#notaPrint")?.addEventListener("click", async ()=>{
+        const order = JSON.parse(localStorage.getItem("lastOrder")||"{}");
+        if(!order.orderID) return alert("Tidak ada order.");
+        await generatePdf(order);
+    });
+
+});
