@@ -232,7 +232,7 @@
         doc.setFontSize(10);
         doc.text("Hormat Kami,", pageW - 60, fy + 30);
         doc.setFontSize(11);
-        doc.text("Terimakasih sudah Belanja di toko Kami 🙏", pageW / 2, fy + 60, { align: "center" });
+        doc.text("Terimakasih sudah Belanja di toko Kami", pageW / 2, fy + 60, { align: "center" });
 
         // SIMPAN FILE
         const filename = "Invoice_" + (order.nama || "Pelanggan").replace(/\s+/g, "_") + "_" + order.orderID + ".pdf";
