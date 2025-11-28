@@ -172,11 +172,6 @@ function renderNota(data) {
     <p><strong>Order ID:</strong> ${escapeHtml(data.orderID || data.id || "-")}</p>
     <p><strong>Nama:</strong> ${escapeHtml(data.nama)}</p>
     <p><strong>WA:</strong> ${escapeHtml(data.wa)}</p>
-    <p><strong>Jenis:</strong> ${escapeHtml(data.jenis)}</p>
-    <p><strong>Isi per Box:</strong> ${escapeHtml(data.isi)} pcs</p>
-    <p><strong>Mode:</strong> ${escapeHtml(data.mode)}</p>
-    ${toppingHtml}
-    ${taburanHtml}
     <p><strong>Jumlah Box:</strong> ${escapeHtml(String(data.jumlahBox))}</p>
     <p><strong>Subtotal:</strong> ${formatRp(data.subtotal)}</p>
     <p><strong>Diskon:</strong> ${data.discount > 0 ? "-" + formatRp(data.discount) : "-"}</p>
