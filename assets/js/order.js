@@ -171,3 +171,132 @@ function renderNota(data) {
 document.getElementById("closeNota").addEventListener("click", () => {
   document.getElementById("notaContainer").classList.remove("show");
 });
+
+/* =========================================================
+   GENERATE PDF — FINAL
+   Termasuk:
+   - Logo (logo.png)
+   - QRIS (qris.jpg)
+   - TTD (ttd.png)
+   - Tabel lengkap (harga satuan, diskon, total bayar)
+   - Catatan paling bawah
+   - No Antrian paling atas
+========================================================= */
+
+function generatePdf(data) {
+  const doc = new jspdf.jsPDF();
+
+  /* ===== HEADER LOGO ===== */
+  doc.addImage("logo.png", "PNG", 14, 8, 32, 32);
+  doc.setFontSize(16);
+  doc.text("Aish Original", 52, 22);
+  doc.setFontSize(10);
+  doc.text("Invoice Pemesanan", 52, 30);
+
+  /* ===== TABEL ===== */
+  doc.autoTable({
+    head: [["Item", "Keterangan"]],
+    body: [
+      ["No. Antrian", data.antrian],
+      ["Nama", data.nama],
+      ["Jenis", data.jenis],
+      ["Mode", data.mode],
+      ["Topping", data.topping],
+      ["Taburan", data.taburan],
+      ["Jumlah Box", data.jumlahBox + " box"],
+      ["Harga Satuan", formatRp(data.pricePerBox)],
+      ["Subtotal", formatRp(data.subtotal)],
+      ["Diskon", data.discount > 0 ? "-" + formatRp(data.discount) : "-"],
+      ["Total Bayar", formatRp(data.total)],
+      ["Catatan", data.note || "-"]
+    ],
+    startY: 48
+  });
+
+  /* ===== QRIS ===== */
+  doc.addImage(
+    "qris.jpg",
+    "JPEG",
+    14,
+    doc.autoTable.previous.finalY + 12,
+    70,
+    70
+  );
+  doc.text("Scan untuk pembayaran QRIS", 14, doc.autoTable.previous.finalY + 88);
+
+  /* ===== TTD ===== */
+  doc.text("Hormat Kami,", 130, doc.autoTable.previous.finalY + 20);
+
+  doc.addImage(
+    "ttd.png",
+    "PNG",
+    130,
+    doc.autoTable.previous.finalY + 28,
+    50,
+    40
+  );
+
+  doc.text("Aish Original", 130, doc.autoTable.previous.finalY + 78);
+
+  /* ===== SAVE PDF ===== */
+  doc.save(`Invoice_${data.nama}_${data.antrian}.pdf`);
+}
+
+
+
+/* =========================================================
+   KIRIM WHATSAPP
+========================================================= */
+function sendWhatsapp(data) {
+  const pesan = `
+No. Antrian: ${data.antrian}
+Nama: ${data.nama}
+Jenis: ${data.jenis}
+Mode: ${data.mode}
+Topping: ${data.topping}
+Taburan: ${data.taburan}
+Jumlah Box: ${data.jumlahBox}
+Harga Satuan: ${formatRp(data.pricePerBox)}
+Subtotal: ${formatRp(data.subtotal)}
+Diskon: ${data.discount > 0 ? "-" + formatRp(data.discount) : "-"}
+Total Bayar: ${formatRp(data.total)}
+Catatan: ${data.note}
+  `.trim();
+
+  const nomor = "628xxxxxxxxxx"; // GANTI DGN NOMOR WA TOKO
+  const url = `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`;
+
+  window.open(url, "_blank");
+}
+
+
+
+/* =========================================================
+   SUBMIT FORM ORDER (TAMPILKAN POPUP NOTA)
+========================================================= */
+document.getElementById("form-ultra").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const data = getOrderFormData();
+  renderNota(data);
+});
+
+
+
+/* =========================================================
+   BUTTON PDF
+========================================================= */
+document.getElementById("btnPdf").addEventListener("click", () => {
+  const data = getOrderFormData();
+  generatePdf(data);
+});
+
+
+
+/* =========================================================
+   BUTTON WHATSAPP
+========================================================= */
+document.getElementById("btnWa").addEventListener("click", () => {
+  const data = getOrderFormData();
+  sendWhatsapp(data);
+});
