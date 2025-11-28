@@ -421,174 +421,236 @@
   };
 
 })();
+
 /* =========================================================
-   order.js — FINAL (PART 2/2) - FIXED
-   - PDF generator (makeGeneratePdf)
-   - includes local formatRp to avoid ReferenceError
-   - loads images to dataURL if possible
-   - uses jsPDF + autoTable if available
+   order.js — FINAL (PART 2/2)
+   Perbaikan besar sesuai 6 poin Sanak:
+   1. Logo kanan atas
+   2. QRIS benar
+   3. TTD benar dan simetris
+   4. Header tabel pink, baris selang-seling biru muda
+   5. Judul Pukis Lumer Aulia hitam pekat tebal
+   6. "Invoice Pemesanan" kiri atas
 ========================================================= */
 
 (function(){
   'use strict';
 
-  // local formatRp to make this module self-contained
+  /* ----------- formatter lokal Rp ------------- */
   function formatRp(num) {
     return "Rp " + Number(num || 0).toLocaleString('id-ID');
   }
 
-  // helper to load image as dataURL (for jsPDF.addImage)
-  function loadImageAsDataURL(src) {
-    return new Promise((resolve, reject) => {
-      try {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = function(){
-          try {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img,0,0);
-            const dataUrl = canvas.toDataURL('image/png');
-            resolve(dataUrl);
-          } catch (e) {
-            // fallback: resolve null
-            resolve(null);
-          }
-        };
-        img.onerror = function(){ resolve(null); };
-        // try both absolute/relative paths (best-effort)
-        img.src = window.location.origin + '/' + 'assets/images/logo.png';
-        setTimeout(()=>{ if (!img.complete) { img.src = 'assets/images/logo.png'; } }, 300);
-      } catch (err) { resolve(null); }
+  /* ------ load image → dataURL (tanpa fallback ke logo) ------ */
+  function loadPNGorJPG(path){
+    return new Promise(resolve=>{
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = ()=>{
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          canvas.getContext('2d').drawImage(img,0,0);
+          resolve(canvas.toDataURL("image/png"));
+        } catch(e){
+          resolve(null);
+        }
+      };
+      img.onerror = ()=> resolve(null);
+      img.src = path;
     });
   }
 
-  // makeGeneratePdf builds a generatePdf function when jsPDF ctor is available
-  function makeGeneratePdf(jsPDFlib) {
-    // jsPDFlib might be the constructor or object with .jsPDF
-    let Doc = jsPDFlib && jsPDFlib.jsPDF ? jsPDFlib.jsPDF : jsPDFlib;
-    if (typeof Doc !== 'function' && window.jsPDF) Doc = window.jsPDF;
-    return async function generatePdf(order) {
-      try {
-        if (!Doc) throw new Error('jsPDF constructor tidak ditemukan');
-        const doc = new Doc({ unit: 'mm', format: 'a4' });
-        const pageW = doc.internal.pageSize.getWidth();
+  /* ============================================================
+     makeGeneratePdf()
+  ============================================================ */
+  function makeGeneratePdf(JS){
 
-        // load images (logo, qris, ttd) as dataURL if possible
-        const logoPath = 'assets/images/logo.png';
-        const qrisPath = 'assets/images/qris.jpg';
-        const ttdPath = 'assets/images/ttd.png';
+    let Doc = JS && JS.jsPDF ? JS.jsPDF : JS;
+    if (!Doc && window.jsPDF) Doc = window.jsPDF;
 
-        // try to load images (non-blocking)
-        const [logoData, qrisData, ttdData] = await Promise.all([
-          loadImageAsDataURL(logoPath), loadImageAsDataURL(qrisPath), loadImageAsDataURL(ttdPath)
-        ]);
+    return async function generatePdf(order){
+      try{
+        if (!Doc) throw new Error("jsPDF tidak ditemukan");
 
-        // header
-        if (logoData) {
-          try { doc.addImage(logoData, 'PNG', 14, 8, 32, 32); } catch(e) {}
+        const doc = new Doc({ unit:'mm', format:'a4' });
+        const W = doc.internal.pageSize.getWidth();
+
+        /* ==== Load images BERSIH (tidak saling mengganti) ==== */
+        const logoData  = await loadPNGorJPG("assets/images/logo.png");
+        const qrisData  = await loadPNGorJPG("assets/images/qris.jpg");
+        const ttdData   = await loadPNGorJPG("assets/images/ttd.png");
+
+        /* ======================================================
+           HEADER
+        ====================================================== */
+
+        // 1) Logo kanan atas (32×32)
+        if (logoData){
+          doc.addImage(logoData, "PNG",
+            W - 14 - 32, // x
+            8,           // y
+            32, 32       // w,h
+          );
         }
-        doc.setFontSize(16);
-        doc.text('Pukis Lumer Aulia', pageW / 2, 18, { align: 'center' });
-        doc.setFontSize(10);
-        doc.text('Invoice Pemesanan', pageW / 2, 24, { align: 'center' });
 
-        // metadata
-        const startY = 32;
-        let y = startY;
+        // 2) Judul tengah — hitam pekat tebal
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+        doc.setTextColor(0,0,0);
+        doc.text("PUKIS LUMER AULIA", W/2, 18, { align:"center" });
+
+        // 3) "Invoice Pemesanan" kiri atas
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(12);
+        doc.setTextColor(0,0,0);
+        doc.text("Invoice Pemesanan", 14, 26);
+
+        /* ======================================================
+           Metadata
+        ====================================================== */
+        let y = 35;
+
         doc.setFontSize(10);
-        doc.text(`Order ID: ${order.orderID || order.id || '-'}`, 14, y);
-        doc.text(`Tanggal: ${order.tgl || new Date().toLocaleString('id-ID')}`, pageW - 14, y, { align: 'right' });
+        doc.text(`Order ID: ${order.orderID || '-'}`, 14, y);
+        doc.text(`Tanggal: ${order.tgl || new Date().toLocaleString('id-ID')}`,
+          W - 14, y, { align:'right' });
         y += 8;
-        doc.text(`Nama: ${order.nama}`, 14, y);
-        // nomor antrian - place above name as requested (we also show as separate row)
-        doc.text(`No. Antrian: ${order.antrian || '-'}`, pageW - 14, y, { align: 'right' });
+
+        // Nomor Antrian di atas nama pembeli (rata kanan)
+        doc.text(`No. Antrian: ${order.antrian || '-'}`,
+          W - 14, y, { align:'right' });
+
+        // Nama
+        doc.text(`Nama: ${order.nama || '-'}`, 14, y);
         y += 10;
 
-        // prepare table rows
-        const toppingText = (order.topping && order.topping.length) ? order.topping.join(', ') : '-';
-        const taburanText = (order.taburan && order.taburan.length) ? order.taburan.join(', ') : '-';
+        /* ======================================================
+           Tabel (autoTable)
+        ====================================================== */
+
+        const toppingTxt = (order.topping && order.topping.length)
+          ? order.topping.join(", ")
+          : "-";
+
+        const taburanTxt = (order.taburan && order.taburan.length)
+          ? order.taburan.join(", ")
+          : "-";
+
         const rows = [
-          ['Jenis', String(order.jenis || '-')],
-          ['Isi Box', String(order.isi || '-') + ' pcs'],
-          ['Mode', String(order.mode || '-')],
-          ['Topping', toppingText],
-          ['Taburan', taburanText],
-          ['Jumlah Box', String(order.jumlahBox || 0) + ' box'],
-          ['Harga Satuan', order.pricePerBox ? formatRp(order.pricePerBox) : '-'],
-          ['Subtotal', order.subtotal ? formatRp(order.subtotal) : '-'],
-          ['Diskon', order.discount > 0 ? '-' + formatRp(order.discount) : '-'],
-          ['Total Bayar', order.total ? formatRp(order.total) : '-'],
-          ['Catatan', order.note || '-']
+          ["Jenis", order.jenis || "-"],
+          ["Isi Box", (order.isi || '-') + " pcs"],
+          ["Mode", order.mode || "-"],
+          ["Topping", toppingTxt],
+          ["Taburan", taburanTxt],
+          ["Jumlah Box", order.jumlahBox + " box"],
+          ["Harga Satuan", formatRp(order.pricePerBox || 0)],
+          ["Subtotal", formatRp(order.subtotal || 0)],
+          ["Diskon", order.discount > 0 ? "-" + formatRp(order.discount) : "-"],
+          ["Total Bayar", formatRp(order.total || 0)],
+          ["Catatan", order.note || "-"]
         ];
 
-        // use autoTable if available
-        if (typeof doc.autoTable === 'function') {
+        if (typeof doc.autoTable === "function"){
           doc.autoTable({
             startY: y,
-            head: [['Item', 'Keterangan']],
+            head: [["Item", "Keterangan"]],
             body: rows,
-            theme: 'grid',
-            headStyles: { fillColor: [34, 34, 34], textColor: 255 },
-            styles: { fontSize: 10 },
-            columnStyles: { 0: { cellWidth: 50 }, 1: { cellWidth: 'auto' } }
+            theme: "grid",
+
+            /* -------------- Header PINK -------------- */
+            headStyles: {
+              fillColor: [255,105,180],
+              textColor: 255
+            },
+
+            /* -------------- Baris biru muda -------------- */
+            alternateRowStyles: {
+              fillColor: [230,240,255]
+            },
+
+            styles: {
+              fontSize: 10,
+              textColor: [0,0,0]
+            },
+
+            columnStyles:{
+              0: { cellWidth: 45 },
+              1: { cellWidth: W - 45 - 28 }
+            }
           });
         } else {
-          // fallback manual table
+          // fallback manual (jarang dipakai)
+          let yy = y;
+          const col1 = 14;
+          const col2 = 70;
           doc.setFontSize(10);
-          let ty = y;
-          const col1 = 16;
-          const col2 = 80;
-          rows.forEach(r => {
-            doc.text(String(r[0]), col1, ty);
-            const wrapped = doc.splitTextToSize(String(r[1]), pageW - col2 - 16);
-            doc.text(wrapped, col2, ty);
-            ty += Math.max(8, wrapped.length * 6);
+          rows.forEach(r=>{
+            doc.text(r[0], col1, yy);
+            const wrap = doc.splitTextToSize(String(r[1]), W - col2 - 14);
+            doc.text(wrap, col2, yy);
+            yy += wrap.length * 6 + 2;
           });
-          y = ty;
         }
 
-        // position after table
-        const finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY : (y + 10);
+        const endTableY = (doc.lastAutoTable && doc.lastAutoTable.finalY)
+          ? doc.lastAutoTable.finalY
+          : (y + 40);
 
-        // QRIS (left)
-        if (qrisData) {
-          try {
-            doc.addImage(qrisData, 'JPEG', 14, finalY + 8, 60, 60);
-            doc.setFontSize(9);
-            doc.text('Scan untuk pembayaran QRIS', 14, finalY + 72);
-          } catch (e) {}
+        /* ======================================================
+           QRIS (kiri bawah tabel) — ukuran besar (C)
+        ====================================================== */
+
+        if (qrisData){
+          const qrisW = 60;            // lebar
+          const qrisH = 60;            // tinggi
+          doc.addImage(qrisData, "JPEG", 14, endTableY + 10, qrisW, qrisH);
+          doc.setFontSize(9);
+          doc.text("Scan QRIS untuk pembayaran", 14, endTableY + 10 + qrisH + 4);
         }
 
-        // TTD (right, directly below "Hormat Kami")
-        const ttdX = pageW - 70;
-        const ttdY = finalY + 12;
+        /* ======================================================
+           TTD — simetris di kanan, ukuran A (40×30)
+        ====================================================== */
+
+        const ttdX = W - 14 - 50;   // kolom kanan
+        let ttdY = endTableY + 10;
+
         doc.setFontSize(10);
-        doc.text('Hormat Kami,', ttdX, ttdY);
-        if (ttdData) {
-          try {
-            doc.addImage(ttdData, 'PNG', ttdX, ttdY + 6, 50, 40);
-          } catch(e) {}
-        }
-        // signature name
-        doc.setFontSize(10);
-        doc.text('Pukis Lumer Aulia', ttdX, ttdY + 52);
+        doc.text("Hormat Kami,", ttdX, ttdY);
 
-        // save
-        const filename = `Invoice_${(order.nama||'Pelanggan').replace(/\s+/g,'_')}_${order.orderID||order.id||Date.now()}.pdf`;
+        if (ttdData){
+          doc.addImage(ttdData, "PNG",
+            ttdX,           // x
+            ttdY + 4,       // y
+            40, 30          // w,h (A)
+          );
+        }
+
+        // Nama penutup
+        doc.setFontSize(10);
+        doc.text("Pukis Lumer Aulia", ttdX, ttdY + 40);
+
+        /* ======================================================
+           Save PDF
+        ====================================================== */
+
+        const filename =
+          `Invoice_${(order.nama||'Pelanggan').replace(/\s+/g,'_')}_${order.orderID||Date.now()}.pdf`;
+
         doc.save(filename);
         return true;
-      } catch (err) {
-        console.error('generatePdf error', err);
-        alert('Gagal membuat PDF: ' + (err && err.message ? err.message : err));
+
+      } catch(err){
+        console.error(err);
+        alert("Gagal membuat PDF: " + err.message);
         return false;
       }
     };
   }
 
-  // attach makeGeneratePdf to window so PART1 can call tryAttachGeneratePdf
+  /* Pasang ke window agar PART 1 bisa attach */
   window.makeGeneratePdf = makeGeneratePdf;
 
 })();
