@@ -424,123 +424,127 @@
 
 /* =========================================================
    order.js — FINAL (PART 2/2)
-   Perbaikan besar sesuai 6 poin Sanak:
-   1. Logo kanan atas
-   2. QRIS benar
-   3. TTD benar dan simetris
-   4. Header tabel pink, baris selang-seling biru muda
-   5. Judul Pukis Lumer Aulia hitam pekat tebal
-   6. "Invoice Pemesanan" kiri atas
+   * Perubahan hanya sesuai permintaan Sanak di akhir:
+     - Logo dihapus
+     - QRIS 40×50 mm (lebar 40, tinggi 50)
+     - Invoice tetap di atas Order ID
+     - Catatan di bawah nama
+     - Watermark besar di tengah (Pukis Lumer Aulia)
+     - Header tabel pink + baris biru muda
+     - TTD ukuran 40×30
+     - Ucapan terima kasih tengah bawah
 ========================================================= */
 
-(function(){
-  'use strict';
+(function () {
+  "use strict";
 
-  /* ----------- formatter lokal Rp ------------- */
+  /* ---------- Format Rupiah ---------- */
   function formatRp(num) {
-    return "Rp " + Number(num || 0).toLocaleString('id-ID');
+    return "Rp " + Number(num || 0).toLocaleString("id-ID");
   }
 
-  /* ------ load image → dataURL (tanpa fallback ke logo) ------ */
-  function loadPNGorJPG(path){
-    return new Promise(resolve=>{
+  /* -------- Load PNG/JPG → dataURL -------- */
+  function loadPNGorJPG(path) {
+    return new Promise((resolve) => {
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.onload = ()=>{
+      img.onload = () => {
         try {
-          const canvas = document.createElement('canvas');
+          const canvas = document.createElement("canvas");
           canvas.width = img.naturalWidth;
           canvas.height = img.naturalHeight;
-          canvas.getContext('2d').drawImage(img,0,0);
+          canvas.getContext("2d").drawImage(img, 0, 0);
           resolve(canvas.toDataURL("image/png"));
-        } catch(e){
+        } catch (e) {
           resolve(null);
         }
       };
-      img.onerror = ()=> resolve(null);
+      img.onerror = () => resolve(null);
       img.src = path;
     });
   }
 
-  /* ============================================================
+  /* =======================================================
      makeGeneratePdf()
-  ============================================================ */
-  function makeGeneratePdf(JS){
-
+  ======================================================= */
+  function makeGeneratePdf(JS) {
     let Doc = JS && JS.jsPDF ? JS.jsPDF : JS;
     if (!Doc && window.jsPDF) Doc = window.jsPDF;
 
-    return async function generatePdf(order){
-      try{
+    return async function generatePdf(order) {
+      try {
         if (!Doc) throw new Error("jsPDF tidak ditemukan");
 
-        const doc = new Doc({ unit:'mm', format:'a4' });
+        const doc = new Doc({ unit: "mm", format: "a4" });
         const W = doc.internal.pageSize.getWidth();
+        const H = doc.internal.pageSize.getHeight();
 
-        /* ==== Load images BERSIH (tidak saling mengganti) ==== */
-        const logoData  = await loadPNGorJPG("assets/images/logo.png");
-        const qrisData  = await loadPNGorJPG("assets/images/qris.jpg");
-        const ttdData   = await loadPNGorJPG("assets/images/ttd.png");
+        /* LOAD GAMBAR */
+        const qrisData = await loadPNGorJPG("assets/images/qris.jpg");
+        const ttdData = await loadPNGorJPG("assets/images/ttd.png");
 
-        /* ======================================================
-           HEADER
-        ====================================================== */
+        /* =======================================================
+           HEADER PDF
+        ======================================================= */
 
-        // 1) Logo kanan atas (32×32)
-        if (logoData){
-          doc.addImage(logoData, "PNG",
-            W - 14 - 32, // x
-            8,           // y
-            32, 32       // w,h
-          );
-        }
-
-        // 2) Judul tengah — hitam pekat tebal
+        // Judul besar hitam tebal
         doc.setFont("helvetica", "bold");
         doc.setFontSize(16);
-        doc.setTextColor(0,0,0);
-        doc.text("PUKIS LUMER AULIA", W/2, 18, { align:"center" });
+        doc.setTextColor(0, 0, 0);
+        doc.text("PUKIS LUMER AULIA", W / 2, 15, { align: "center" });
 
-        // 3) "Invoice Pemesanan" kiri atas
+        // Invoice Pemesanan — kiri
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
-        doc.setTextColor(0,0,0);
-        doc.text("Invoice Pemesanan", 14, 26);
+        doc.text("Invoice Pemesanan", 14, 25);
 
-        /* ======================================================
-           Metadata
-        ====================================================== */
+        /* =======================================================
+           Metadata (Order ID & Informasi dasar)
+        ======================================================= */
         let y = 35;
 
         doc.setFontSize(10);
-        doc.text(`Order ID: ${order.orderID || '-'}`, 14, y);
-        doc.text(`Tanggal: ${order.tgl || new Date().toLocaleString('id-ID')}`,
-          W - 14, y, { align:'right' });
+        doc.text(`Order ID: ${order.orderID || "-"}`, 14, y);
+        doc.text(
+          `Tanggal: ${order.tgl || new Date().toLocaleString("id-ID")}`,
+          W - 14,
+          y,
+          { align: "right" }
+        );
         y += 8;
 
-        // Nomor Antrian di atas nama pembeli (rata kanan)
-        doc.text(`No. Antrian: ${order.antrian || '-'}`,
-          W - 14, y, { align:'right' });
+        // Antrian (kanan)
+        doc.text(`No. Antrian: ${order.antrian || "-"}`, W - 14, y, {
+          align: "right",
+        });
 
-        // Nama
-        doc.text(`Nama: ${order.nama || '-'}`, 14, y);
+        // Nama (kiri)
+        doc.text(`Nama: ${order.nama || "-"}`, 14, y);
+        y += 8;
+
+        // Catatan khusus — di bawah nama
+        doc.setFont("helvetica", "italic");
+        doc.text(`Catatan: ${order.note || "-"}`, 14, y);
+        doc.setFont("helvetica", "normal");
         y += 10;
 
-        /* ======================================================
-           Tabel (autoTable)
-        ====================================================== */
+        /* =======================================================
+           Tabel PDF (autoTable)
+        ======================================================= */
 
-        const toppingTxt = (order.topping && order.topping.length)
-          ? order.topping.join(", ")
-          : "-";
+        const toppingTxt =
+          order.topping && order.topping.length
+            ? order.topping.join(", ")
+            : "-";
 
-        const taburanTxt = (order.taburan && order.taburan.length)
-          ? order.taburan.join(", ")
-          : "-";
+        const taburanTxt =
+          order.taburan && order.taburan.length
+            ? order.taburan.join(", ")
+            : "-";
 
         const rows = [
           ["Jenis", order.jenis || "-"],
-          ["Isi Box", (order.isi || '-') + " pcs"],
+          ["Isi Box", (order.isi || "-") + " pcs"],
           ["Mode", order.mode || "-"],
           ["Topping", toppingTxt],
           ["Taburan", taburanTxt],
@@ -549,108 +553,105 @@
           ["Subtotal", formatRp(order.subtotal || 0)],
           ["Diskon", order.discount > 0 ? "-" + formatRp(order.discount) : "-"],
           ["Total Bayar", formatRp(order.total || 0)],
-          ["Catatan", order.note || "-"]
         ];
 
-        if (typeof doc.autoTable === "function"){
+        if (typeof doc.autoTable === "function") {
           doc.autoTable({
             startY: y,
             head: [["Item", "Keterangan"]],
             body: rows,
             theme: "grid",
 
-            /* -------------- Header PINK -------------- */
             headStyles: {
-              fillColor: [255,105,180],
-              textColor: 255
+              fillColor: [255, 105, 180], // Pink
+              textColor: 255,
             },
 
-            /* -------------- Baris biru muda -------------- */
             alternateRowStyles: {
-              fillColor: [230,240,255]
+              fillColor: [230, 240, 255], // Biru muda
             },
 
             styles: {
               fontSize: 10,
-              textColor: [0,0,0]
+              textColor: [0, 0, 0],
             },
 
-            columnStyles:{
+            columnStyles: {
               0: { cellWidth: 45 },
-              1: { cellWidth: W - 45 - 28 }
-            }
-          });
-        } else {
-          // fallback manual (jarang dipakai)
-          let yy = y;
-          const col1 = 14;
-          const col2 = 70;
-          doc.setFontSize(10);
-          rows.forEach(r=>{
-            doc.text(r[0], col1, yy);
-            const wrap = doc.splitTextToSize(String(r[1]), W - col2 - 14);
-            doc.text(wrap, col2, yy);
-            yy += wrap.length * 6 + 2;
+              1: { cellWidth: W - 45 - 28 },
+            },
           });
         }
 
-        const endTableY = (doc.lastAutoTable && doc.lastAutoTable.finalY)
-          ? doc.lastAutoTable.finalY
-          : (y + 40);
+        const endTableY =
+          doc.lastAutoTable && doc.lastAutoTable.finalY
+            ? doc.lastAutoTable.finalY
+            : y + 40;
 
-        /* ======================================================
-           QRIS (kiri bawah tabel) — ukuran besar (C)
-        ====================================================== */
-
-        if (qrisData){
-          const qrisW = 60;            // lebar
-          const qrisH = 60;            // tinggi
-          doc.addImage(qrisData, "JPEG", 14, endTableY + 10, qrisW, qrisH);
+        /* =======================================================
+           QRIS (40 × 50 mm) — kiri bawah tabel
+        ======================================================= */
+        if (qrisData) {
+          doc.addImage(qrisData, "JPEG", 14, endTableY + 8, 40, 50);
           doc.setFontSize(9);
-          doc.text("Scan QRIS untuk pembayaran", 14, endTableY + 10 + qrisH + 4);
+          doc.text("Scan QRIS untuk pembayaran", 14, endTableY + 62);
         }
 
-        /* ======================================================
-           TTD — simetris di kanan, ukuran A (40×30)
-        ====================================================== */
-
-        const ttdX = W - 14 - 50;   // kolom kanan
-        let ttdY = endTableY + 10;
+        /* =======================================================
+           TTD (40 × 30 mm) — kanan bawah, simetris
+        ======================================================= */
+        const ttdX = W - 14 - 50;
+        const ttdY = endTableY + 10;
 
         doc.setFontSize(10);
         doc.text("Hormat Kami,", ttdX, ttdY);
 
-        if (ttdData){
-          doc.addImage(ttdData, "PNG",
-            ttdX,           // x
-            ttdY + 4,       // y
-            40, 30          // w,h (A)
-          );
+        if (ttdData) {
+          doc.addImage(ttdData, "PNG", ttdX, ttdY + 4, 40, 30);
         }
 
-        // Nama penutup
-        doc.setFontSize(10);
         doc.text("Pukis Lumer Aulia", ttdX, ttdY + 40);
 
-        /* ======================================================
-           Save PDF
-        ====================================================== */
+        /* =======================================================
+           WATERMARK BESAR DI TENGAH HALAMAN
+        ======================================================= */
+        doc.setTextColor(150, 150, 150);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(48);
+        doc.text("Pukis Lumer Aulia", W / 2, H / 2, {
+          align: "center",
+          opacity: 0.1,
+        });
 
-        const filename =
-          `Invoice_${(order.nama||'Pelanggan').replace(/\s+/g,'_')}_${order.orderID||Date.now()}.pdf`;
+        doc.setTextColor(0, 0, 0);
+
+        /* =======================================================
+           UCAPAN TERIMA KASIH — tengah bawah
+        ======================================================= */
+        doc.setFontSize(13);
+        doc.setFont("helvetica", "bold");
+        doc.text(
+          "Terima kasih telah berbelanja di toko Kami",
+          W / 2,
+          H - 15,
+          { align: "center" }
+        );
+
+        /* SAVE FILE */
+        const filename = `Invoice_${(order.nama || "Pelanggan").replace(
+          /\s+/g,
+          "_"
+        )}_${order.orderID || Date.now()}.pdf`;
 
         doc.save(filename);
         return true;
-
-      } catch(err){
-        console.error(err);
+      } catch (err) {
         alert("Gagal membuat PDF: " + err.message);
+        console.error(err);
         return false;
       }
     };
   }
 
-  /* Pasang ke window agar PART 1 bisa attach */
   window.makeGeneratePdf = makeGeneratePdf;
-
 })();
