@@ -25,7 +25,7 @@
 
   const MAX_TOPPING = 5;
   const MAX_TABURAN = 5;
-  const DISCOUNT_RULE_BOXES = [10]; // contoh: >=10 box = 10% discount (implement below as needed)
+  const DISCOUNT_RULE_BOXES = [1]; // contoh: >=10 box = 10% discount (implement below as needed)
   // helper
   const $ = sel => document.querySelector(sel);
   const $$ = sel => Array.from(document.querySelectorAll(sel));
