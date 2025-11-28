@@ -34,7 +34,7 @@ h1, h2, h3 {
 
 /* BRAND LOGO */
 .brand-logo {
-  font-family: 'Pacifico', cursive;
+  font-family: 'Pacifico', curs-serif;
   font-size: 2.4rem;
   color: var(--brand-gold);
   text-align: center;
@@ -89,7 +89,6 @@ section,
   margin: 0 auto 12px auto;
 }
 
-/* Teks hero anti overflow */
 #section-hero p {
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -98,7 +97,7 @@ section,
 }
 
 /* =========================
-   GALLERY — PREMIUM GRID
+   GALLERY GRID
 ========================= */
 
 .gallery-grid {
@@ -121,12 +120,15 @@ section,
   box-shadow: 0 6px 16px rgba(0,0,0,0.2);
 }
 
-/* Mobile: 2 kolom */
+/* Mobile 2 kolom */
 @media(max-width:600px){
   .gallery-grid { grid-template-columns: repeat(2,1fr); }
 }
 
-/* LIGHTBOX */
+/* =========================
+   LIGHTBOX
+========================= */
+
 .lightbox-overlay {
   position: fixed;
   inset:0;
@@ -141,6 +143,39 @@ section,
   width:90%;
   max-width:500px;
   border-radius:12px;
+}
+
+/* =========================
+   TOPPING & TABURAN — (DIPULIHKAN)
+========================= */
+
+.topping-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.topping-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  cursor: pointer;
+  user-select: none;
+  background: #fff;
+}
+
+.topping-check input {
+  transform: scale(1.1);
+}
+
+.topping-check.checked {
+  background: linear-gradient(90deg,#fff9f9,#fff);
+  border-color:#ffb3c7;
+  box-shadow:0 4px 10px rgba(0,0,0,0.06);
 }
 
 /* =========================
@@ -221,7 +256,7 @@ section,
 }
 
 /* =========================
-   TESTIMONIAL
+   TESTIMONI
 ========================= */
 
 .testimonial-card {
