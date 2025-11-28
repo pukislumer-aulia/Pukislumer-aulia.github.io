@@ -1,56 +1,26 @@
-/* ======================================================
-   GLOBAL ROOT
-====================================================== */
-:root {
-  --bg: #fff6f8;
-  --text: #333;
-  --accent: #ff5e7e;
-  --accent-dark: #e03954;
-  --card: #ffffff;
-  --radius: 14px;
+/* =========================================================
+   STYLE.CSS — FINAL CLEAN (PART 1/2)
+========================================================= */
 
-  --brand-dark: #1B2838;
-  --brand-light: #FFFAF2;
-  --brand-gold: #FFD93D;
-}
-
-/* ======================================================
-   UNIVERSAL
-====================================================== */
-body {
-  font-family: 'Nunito', sans-serif;
+/* RESET */
+* {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.55;
-  padding-bottom: 90px;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-h1, h2, h3 {
-  font-family: 'Pacifico', cursive;
-  color: var(--accent);
-  text-align: center;
+/* BODY */
+body {
+  background: #f7f7f7;
+  color: #222;
+  padding-bottom: 50px;
 }
 
-/* Logo brand */
-.brand-logo {
-  font-family: 'Pacifico', cursive;
-  font-size: 2.4rem;
-  color: var(--brand-gold);
-  text-align: center;
-  text-shadow: 0 4px 18px rgba(0,0,0,.4);
-}
-
-.tagline {
-  color: #FFEAA7;
-  text-align: center;
-  font-weight: 600;
-  margin-top: -6px;
-}
-
-/* ======================================================
-   ANTI MELEBAR – SEMUA SECTION
-====================================================== */
+/* ============================
+   CONTAINER SECTION LIMIT
+   Agar semua konten tidak melebar
+============================ */
 section,
 .section-gallery,
 #form-ultra,
@@ -64,189 +34,131 @@ section,
   max-width: 720px;
   margin-left: auto;
   margin-right: auto;
-  padding: 16px;
-  box-sizing: border-box;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
-/* ======================================================
-   HERO
-====================================================== */
-#section-hero {
-  text-align: center;
-}
-
+/* ============================
+   HERO IMAGE
+============================ */
 .hero-img {
   width: 100%;
   height: auto;
   border-radius: 12px;
-  display: block;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 #section-hero p {
-  overflow-wrap: break-word;
+  max-width: 100%;
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: center;
+  padding: 5px;
 }
 
-/* ======================================================
-   GALLERY GRID
-====================================================== */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.gallery-img {
-  width: 100%;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform .3s, box-shadow .3s;
-}
-
-.gallery-img:hover {
-  transform: scale(1.06);
-  box-shadow: 0 8px 18px rgba(0,0,0,.2);
-}
-
-@media(max-width:600px){
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* LIGHTBOX */
-#lightboxOverlay {
-  position: fixed;
-  inset: 0;
-  display: none;
-  background: rgba(0,0,0,.88);
-  justify-content: center;
-  align-items: center;
-  z-index: 9000;
-}
-
-#lightboxOverlay.show {
-  display: flex;
-}
-
-#lightboxImg {
-  width: 90%;
-  max-width: 550px;
-  border-radius: 10px;
-}
-
-/* ======================================================
-   ORDER FORM ULTRA
-====================================================== */
+/* ============================
+   FORM ORDER
+============================ */
 #form-ultra {
-  background: var(--brand-dark);
-  color: white;
-  padding: 28px 16px;
+  background: #fff;
+  padding: 20px;
   border-radius: 14px;
-  margin-top: 22px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+#form-ultra label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
 }
 
 #form-ultra input,
 #form-ultra select,
 #form-ultra textarea {
   width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  margin: 8px 0;
-  font-size: 1rem;
-}
-
-/* ======================================================
-   TOPPING & TABURAN (FINAL)
-====================================================== */
-.topping-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-/* Topping = merah tebal */
-.topping-check label {
-  font-weight: 700;
-  color: #e00000;
-}
-
-/* Taburan = ungu tebal */
-.taburan-check label {
-  font-weight: 700;
-  color: #7a00d8;
-}
-
-.topping-check,
-.taburan-check {
-  background: #fff !important;
-  padding: 6px 10px;
+  padding: 10px;
   border-radius: 8px;
-  border: 1px solid #ddd;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 12px;
+}
+
+#form-ultra textarea {
+  min-height: 80px;
+}
+
+/* Buttons */
+.btn-basic {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #ff4971;
+  color: white;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.topping-check.checked,
-.taburan-check.checked {
-  background: #fff9fa !important;
-  border-color: #ff6e96 !important;
-  box-shadow: 0 3px 10px rgba(0,0,0,.12);
+.btn-basic:hover {
+  opacity: 0.85;
 }
 
+/* ============================
+   TOPPING & TABURAN — FINAL
+============================ */
+.topping-check,
+.taburan-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff !important;
+  margin: 4px 0;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 700;
+}
+
+/* TOPPING — MERAH */
+.topping-check {
+  color: #d80000 !important;
+}
+
+/* TABURAN — UNGU */
+.taburan-check {
+  color: #7a00d8 !important;
+}
+
+/* Checkbox diperbesar */
 .topping-check input,
 .taburan-check input {
   transform: scale(1.2);
 }
 
-/* ======================================================
-   PRICE SUMMARY
-====================================================== */
-.price-summary span {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 0;
+/* Efek selected */
+.topping-check.checked,
+.taburan-check.checked {
+  background: #fff5fa !important;
+  border-color: #ff6ea0 !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
 }
 
-.btn-primary {
-  background: var(--accent);
-  color: white;
-  padding: 14px;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-.btn-primary:hover {
-  background: var(--accent-dark);
-}
-
-.btn-wa {
-  background: #25d366;
-  color: white;
-  padding: 14px;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-/* ======================================================
+/* ============================
    NOTA POPUP
-====================================================== */
+============================ */
 #notaContainer {
-  display: none;
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.65);
-  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  display: none;
   align-items: center;
-  z-index: 5000;
+  justify-content: center;
+  padding: 20px;
 }
 
 #notaContainer.show {
@@ -254,74 +166,216 @@ section,
 }
 
 .nota-card {
-  background: white;
+  background: #fff;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.nota-card h2 {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.nota-card p {
+  margin-bottom: 6px;
+  line-height: 1.4em;
+}
+
+#closeNota {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  background: #333;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+/* =========================================================
+   STYLE.CSS — FINAL CLEAN (PART 2/2)
+========================================================= */
+
+/* ============================
+   TESTIMONI CARD
+============================ */
+.testi-card {
+  background: #fff;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.testi-name {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.testi-text {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.4em;
+}
+
+.testi-date {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #777;
+}
+
+/* ============================
+   TAMBAH TESTIMONI FORM
+============================ */
+#section-add-testimoni {
+  background: #fff;
   padding: 20px;
   border-radius: 14px;
-  width: 95%;
-  max-width: 520px;
-  max-height: 90vh;
-  overflow-y: auto;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
 }
 
-/* ======================================================
-   TESTIMONI
-====================================================== */
-.testimonial-card {
-  background: white;
-  padding: 14px;
-  border-radius: 12px;
-  margin: 10px 0;
-  box-shadow: 0 3px 12px rgba(0,0,0,.12);
+#section-add-testimoni textarea {
+  min-height: 90px;
 }
 
-/* ======================================================
-   LOCATION
-====================================================== */
-.btn-map {
-  background: #ff7f50;
-  color: #fff;
-  padding: 12px 16px;
+/* ============================
+   LOCATION SECTION
+============================ */
+#section-location {
+  background: #fff;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+#section-location iframe {
+  width: 100%;
+  height: 250px;
   border-radius: 12px;
-  display: inline-block;
+  margin-top: 10px;
+}
+
+/* ============================
+   WHY SECTION — ULTRA CARDS
+============================ */
+.ultra-card {
+  background: #fff;
+  padding: 18px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+.ultra-card h3 {
+  margin-bottom: 6px;
+  font-size: 17px;
   font-weight: 700;
 }
 
-/* ======================================================
-   BOTTOM NAV
-====================================================== */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0; right: 0;
-  background: white;
-  display: flex;
-  justify-content: space-around;
+.ultra-card p {
+  font-size: 14px;
+  line-height: 1.4em;
+}
+
+/* ============================
+   FACTS SECTION
+============================ */
+.fact-box {
+  background: #fff;
+  padding: 16px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+.fact-box h4 {
+  margin-bottom: 8px;
+}
+
+.fact-box p {
+  font-size: 14px;
+  line-height: 1.4em;
+}
+
+/* ============================
+   GALLERY SECTION
+============================ */
+.section-gallery {
   padding: 10px 0;
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 -6px 14px rgba(0,0,0,.08);
-  z-index: 6000;
 }
 
-.bottom-nav a {
-  text-align: center;
-  text-decoration: none;
-  color: #222;
-  font-size: .8rem;
-}
-
-.bottom-nav i {
-  font-size: 1.5rem;
+.gallery-img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 14px;
   display: block;
 }
 
-/* ======================================================
-   FOOTER
-====================================================== */
-footer {
-  background: #111;
-  color: #ddd;
-  text-align: center;
-  padding: 25px 12px 100px;
-  border-radius: 12px 12px 0 0;
-  margin-top: 24px;
+/* ============================
+   BUTTON GENERAL
+============================ */
+.btn-row {
+  margin-top: 10px;
+  display: flex;
+  gap: 12px;
 }
+
+.btn-pdf {
+  flex: 1;
+  padding: 12px;
+  background: #008cff;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-wa {
+  flex: 1;
+  padding: 12px;
+  background: #25D366;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-pdf:hover,
+.btn-wa:hover {
+  opacity: 0.85;
+}
+
+/* ============================
+   FIX RESPONSIVE FORM GRID
+============================ */
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row > div {
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+/* ============================
+   ANTI-MELEBAR (GLOBAL)
+============================ */
+img, iframe, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Scroll Smooth */
+html {
+  scroll-behavior: smooth;
+}
+
+/* DONE */
