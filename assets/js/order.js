@@ -279,31 +279,40 @@ async function generatePdf(order) {
             y += split.length * 6 + 4;
         }
 
-        /* ---- TABEL DETAIL (Versi Lama) ---- */
-        const detailRows = [
-            ["Jenis", order.jenis],
-            ["Isi Box", order.isi + " pcs"],
-            ["Mode", order.mode],
-            ["Topping", order.topping.length ? order.topping.join(", ") : "-"],
-            ["Taburan", order.taburan.length ? order.taburan.join(", ") : "-"],
-            ["Jumlah Box", order.jumlahBox + " Box"],
-            ["Harga per Box", formatRp(order.pricePerBox)],
-            ["Subtotal", formatRp(order.subtotal)],
-            ["Diskon", order.discount > 0 ? "- " + formatRp(order.discount) : "-"],
-            ["Total Bayar", formatRp(order.total)],
-            ["Catatan", order.note || "-"]
-        ];
-
-        pdf.autoTable({
-            startY: y,
-            head: [["Item", "Keterangan"]],
-            body: detailRows,
-            theme: "striped",
-            headStyles: { fillColor: [214, 51, 108], textColor: 255 },
-            styles: { fontSize: 10 }
-        });
-
-        const lastY = pdf.lastAutoTable.finalY + 10;
+          // Table rows
+‎        const rows = [
+‎          ["Jenis", data.jenis || "-"],
+‎          ["Isi per Box", (data.isi || "-") + " pcs"],
+‎          ["Mode Topping", data.mode || "-"],
+‎          ["Topping", (data.topping && data.topping.length) ? data.topping.join(", ") : "-"],
+‎          ["Taburan", (data.taburan && data.taburan.length) ? data.taburan.join(", ") : "-"],
+‎          ["Jumlah Box", String(data.jumlahBox || "-")],
+‎          ["Harga/Box", "Rp " + ((data.pricePerBox||0)).toLocaleString("id-ID")],
+‎          ["Subtotal", "Rp " + ((data.subtotal||0)).toLocaleString("id-ID")],
+‎          ["Diskon", data.discount?("- Rp " + data.discount.toLocaleString("id-ID")) : "-"],
+‎          ["Total", "Rp " + ((data.total||0)).toLocaleString("id-ID")],
+‎          ["Catatan", data.note || "-"]
+‎        ];
+‎
+‎        if(typeof doc.autoTable === "function"){
+‎          doc.autoTable({
+‎            startY: 140,
+‎            head: [["Item","Keterangan"]],
+‎            body: rows,
+‎            theme: "grid",
+‎            headStyles: { fillColor:[214,51,108], textColor:255 },
+‎            styles: { fontSize: 10 }
+‎          });
+‎        } else {
+‎          // fallback: tampilkan baris secara manual
+‎          let y = 140;
+‎          doc.setFontSize(10);
+‎          rows.forEach(r => {
+‎            doc.text(String(r[0]), 20, y);
+‎            doc.text(String(r[1]), 120, y);
+‎            y += 12;
+‎          });
+‎        }
 
         /* ---- FOOTER (QRIS + TTD + THANKS) ---- */
         if (qrisImg) pdf.addImage(qrisImg, "PNG", 14, lastY + 4, 36, 36);
