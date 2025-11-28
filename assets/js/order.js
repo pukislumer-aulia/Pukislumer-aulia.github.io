@@ -178,119 +178,162 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =======================================================
-    // Block 7 — PDF Generator (FINAL)
-    // =======================================================
-    async function generatePdf(order) {
-        try {
-            const { jsPDF } = window.jspdf;
-            if (!jsPDF) throw new Error("jsPDF tidak tersedia!");
+// Block 7 — PDF Generator (FINAL, TANPA DUPLIKAT)
+// =======================================================
 
-            const pdf = new jsPDF({ unit: "mm", format: "a4" });
+async function generatePdf(order) {
+    try {
+        const { jsPDF } = window.jspdf;
+        if (!jsPDF) throw new Error("jsPDF tidak tersedia!");
 
-            // ========= WATERMARK =========
-            pdf.setTextColor(220,220,220);
-            pdf.setFontSize(46);
-            pdf.text("PUKIS LUMER AULIA", 105, 150, {align:"center", angle:45});
-            pdf.setTextColor(0,0,0);
+        const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+        const formatRp = (n) => "Rp " + Number(n || 0).toLocaleString("id-ID");
 
-            // ========= HEADER =========
-            const logo = await loadImg("assets/images/logo.png");
-            if (logo) pdf.addImage(logo, "PNG", 150, 10, 40, 20);
-
-            pdf.setFontSize(20);
-            pdf.setTextColor(214,51,108);
-            pdf.text("PUKIS LUMER AULIA", 105, 18, {align:"center"});
-
-            pdf.setTextColor(0,0,0);
-            pdf.setFontSize(10);
-            pdf.text("Pasar Kuliner Padang Panjang", 200, 34, {align:"right"});
-            pdf.text("0812-9666-8670", 200, 38, {align:"right"});
-
-            pdf.line(10, 42, 200, 42);
-
-            // ========= META =========
-            let y = 50;
-            pdf.text(`Order ID: ${order.orderID}`, 10, y);
-            pdf.text(`Tanggal: ${order.tgl}`, 200, y, {align: "right"}); y+=7;
-
-            pdf.text(`Antrian: ${order.queueNo}`, 10, y); y+=7;
-
-            // ========= CUSTOMER =========
-            pdf.text(`Nama: ${order.nama}`, 10, y); 
-            pdf.text(`WA: ${order.wa}`, 200, y, {align:"right"}); y+=7;
-
-            pdf.text(`Jenis: ${order.jenis} — ${order.isi} pcs`, 10, y); y+=7;
-            pdf.text(`Mode: ${order.mode}`, 10, y); y+=7;
-
-            if(order.mode==="single"){
-                pdf.text(`Topping: ${order.topping.join(", ")||"-"}`, 10, y); y+=7;
-            }
-            if(order.mode==="double"){
-                pdf.text(`Topping: ${order.topping.join(", ")||"-"}`, 10, y); y+=7;
-                pdf.text(`Taburan: ${order.taburan.join(", ")||"-"}`, 10, y); y+=7;
-            }
-
-            // ========= CATATAN =========
-            if(order.note && order.note !== "-"){
-                pdf.text("Catatan:", 10, y); y+=6;
-                const split = pdf.splitTextToSize(order.note, 180);
-                pdf.text(split, 10, y);
-                y += split.length * 6 + 4;
-            }
-
-            // ========= TABLE =========
-            const desc = `${order.jenis} — ${order.isi} pcs`;
-            pdf.autoTable({
-                startY: y,
-                head: [["Deskripsi", "Harga/Box", "Jumlah", "Total"]],
-                body: [[
-                    desc,
-                    formatRp(order.pricePerBox),
-                    `${order.jumlahBox} Box`,
-                    formatRp(order.total)
-                ]],
-                theme: "grid",
-                headStyles: { fillColor: [214,51,108], textColor: 255 },
-                styles: { fontSize: 10 }
+        /* ---- Loader gambar ---- */
+        async function loadImage(src) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => resolve(img);
+                img.onerror = () => resolve(null);
+                img.src = src;
             });
-
-            const lastY = pdf.lastAutoTable.finalY + 10;
-
-            pdf.setFont("helvetica", "bold");
-            pdf.text(`Total Bayar: ${formatRp(order.total)}`, 200, lastY, {align:"right"});
-
-            // ========= FOOTER =========
-            const qris = await loadImg("assets/images/qris-pukis.jpg");
-            if(qris) pdf.addImage(qris, "PNG", 10, lastY+10, 40, 40);
-
-            const ttd = await loadImg("assets/images/ttd.png");
-            if(ttd) pdf.addImage(ttd, "PNG", 150, lastY+10, 40, 20);
-
-            pdf.text("Terimakasih sudah belanja 🙏", 105, lastY+60, {align:"center"});
-
-            pdf.save(`Invoice_${order.orderID}.pdf`);
-            return true;
-        } 
-        catch(e){
-            alert("Gagal membuat PDF: " + e.message);
-            console.error(e);
-            return false;
         }
-    }
 
-    async function loadImg(src){
-        return new Promise(res=>{
-            const img = new Image();
-            img.onload = ()=>res(img);
-            img.onerror = ()=>res(null);
-            img.src = src;
+        // Ambil logo, ttd, qris
+        const [logoImg, ttdImg, qrisImg] = await Promise.all([
+            loadImage("assets/images/logo.png"),
+            loadImage("assets/images/ttd.png"),
+            loadImage("assets/images/qris-pukis.jpg")
+        ]);
+
+        const pageW = pdf.internal.pageSize.getWidth();
+        const pageH = pdf.internal.pageSize.getHeight();
+
+        /* ---- WATERMARK ---- */
+        pdf.setTextColor(220, 220, 220);
+        pdf.setFontSize(48);
+        pdf.text("PUKIS LUMER AULIA", pageW / 2, pageH / 2, {
+            align: "center",
+            angle: 45
         });
+        pdf.setTextColor(0, 0, 0);
+
+        /* ---- HEADER ---- */
+        pdf.setFontSize(14);
+        pdf.setFont("helvetica", "bold");
+        pdf.text("INVOICE", 14, 16);
+
+        pdf.setFontSize(20);
+        pdf.setTextColor(214, 51, 108);
+        pdf.text("PUKIS LUMER AULIA", pageW / 2, 22, { align: "center" });
+        pdf.setTextColor(0, 0, 0);
+
+        if (logoImg) pdf.addImage(logoImg, "PNG", pageW - 55, 6, 40, 20);
+
+        pdf.setFontSize(9);
+        pdf.text("Pasar Kuliner Padang Panjang", pageW - 10, 28, { align: "right" });
+        pdf.text("📞 0812-9666-8670", pageW - 10, 32, { align: "right" });
+
+        pdf.line(10, 36, pageW - 10, 36);
+
+        /* ---- META DATA ---- */
+        let y = 44;
+        pdf.setFontSize(10);
+
+        pdf.text(`Order ID: ${order.orderID}`, 14, y);
+        pdf.text(`Tanggal: ${order.tgl}`, pageW - 14, y, { align: "right" });
+        y += 7;
+
+        pdf.text(`No. Antrian: ${order.queueNo}`, 14, y);
+        pdf.text(`Invoice by: Pukis Lumer Aulia`, pageW - 14, y, { align: "right" });
+        y += 8;
+
+        /* ---- CUSTOMER DATA ---- */
+        pdf.text(`Nama: ${order.nama}`, 14, y);
+        pdf.text(`WA: ${order.wa}`, pageW - 14, y, { align: "right" });
+        y += 7;
+
+        pdf.text(`Jenis: ${order.jenis} — ${order.isi} pcs`, 14, y);
+        y += 7;
+        pdf.text(`Mode: ${order.mode}`, 14, y);
+        y += 7;
+
+        if (order.mode === "single") {
+            pdf.text(`Topping: ${order.topping.join(", ") || "-"}`, 14, y);
+            y += 7;
+        }
+
+        if (order.mode === "double") {
+            pdf.text(`Topping: ${order.topping.join(", ") || "-"}`, 14, y);
+            y += 7;
+            pdf.text(`Taburan: ${order.taburan.join(", ") || "-"}`, 14, y);
+            y += 7;
+        }
+
+        if (order.note && order.note !== "-") {
+            pdf.text("Catatan:", 14, y);
+            y += 6;
+            const split = pdf.splitTextToSize(order.note, pageW - 28);
+            pdf.text(split, 14, y);
+            y += split.length * 6 + 4;
+        }
+
+        /* ---- TABEL DETAIL (Versi Lama) ---- */
+        const detailRows = [
+            ["Jenis", order.jenis],
+            ["Isi Box", order.isi + " pcs"],
+            ["Mode", order.mode],
+            ["Topping", order.topping.length ? order.topping.join(", ") : "-"],
+            ["Taburan", order.taburan.length ? order.taburan.join(", ") : "-"],
+            ["Jumlah Box", order.jumlahBox + " Box"],
+            ["Harga per Box", formatRp(order.pricePerBox)],
+            ["Subtotal", formatRp(order.subtotal)],
+            ["Diskon", order.discount > 0 ? "- " + formatRp(order.discount) : "-"],
+            ["Total Bayar", formatRp(order.total)],
+            ["Catatan", order.note || "-"]
+        ];
+
+        pdf.autoTable({
+            startY: y,
+            head: [["Item", "Keterangan"]],
+            body: detailRows,
+            theme: "striped",
+            headStyles: { fillColor: [214, 51, 108], textColor: 255 },
+            styles: { fontSize: 10 }
+        });
+
+        const lastY = pdf.lastAutoTable.finalY + 10;
+
+        /* ---- FOOTER (QRIS + TTD + THANKS) ---- */
+        if (qrisImg) pdf.addImage(qrisImg, "PNG", 14, lastY + 4, 36, 36);
+        if (ttdImg) pdf.addImage(ttdImg, "PNG", pageW - 60, lastY + 4, 46, 22);
+
+        pdf.setFontSize(10);
+        pdf.text("Hormat Kami,", pageW - 60, lastY + 30);
+
+        pdf.setFontSize(11);
+        pdf.text("Terimakasih sudah Belanja di toko Kami 🙏",
+            pageW / 2, lastY + 60,
+            { align: "center" }
+        );
+
+        /* ---- SIMPAN FILE ---- */
+        const filename = `Invoice_${(order.nama || "Pelanggan").replace(/\s+/g, "_")}_${order.orderID}.pdf`;
+        pdf.save(filename);
+
+        return true;
+
+    } catch (err) {
+        alert("Gagal membuat PDF: " + err.message);
+        console.error(err);
+        return false;
     }
+}
 
-    $("#notaPrint")?.addEventListener("click", async ()=>{
-        const order = JSON.parse(localStorage.getItem("lastOrder")||"{}");
-        if(!order.orderID) return alert("Tidak ada order.");
-        await generatePdf(order);
-    });
-
+/* ---- Button Print ---- */
+$("#notaPrint")?.addEventListener("click", async () => {
+    const order = JSON.parse(localStorage.getItem("lastOrder") || "{}");
+    if (!order.orderID) return alert("Tidak ada order.");
+    await generatePdf(order);
 });
