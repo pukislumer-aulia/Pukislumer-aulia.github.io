@@ -1,7 +1,6 @@
-/* =========================
-   GLOBAL STYLE
-========================= */
-
+/* ======================================================
+   GLOBAL ROOT
+====================================================== */
 :root {
   --bg: #fff6f8;
   --text: #333;
@@ -15,45 +14,43 @@
   --brand-gold: #FFD93D;
 }
 
-/* GLOBAL FONT */
+/* ======================================================
+   UNIVERSAL
+====================================================== */
 body {
   font-family: 'Nunito', sans-serif;
   margin: 0;
   background: var(--bg);
   color: var(--text);
   line-height: 1.55;
-  padding-bottom: 80px;
+  padding-bottom: 90px;
 }
 
 h1, h2, h3 {
   font-family: 'Pacifico', cursive;
-  text-align: center;
   color: var(--accent);
-  letter-spacing: .6px;
+  text-align: center;
 }
 
-/* BRAND LOGO */
+/* Logo brand */
 .brand-logo {
-  font-family: 'Pacifico', curs-serif;
+  font-family: 'Pacifico', cursive;
   font-size: 2.4rem;
   color: var(--brand-gold);
   text-align: center;
   text-shadow: 0 4px 18px rgba(0,0,0,.4);
-  margin: 12px 0;
 }
 
 .tagline {
-  text-align:center;
-  font-size:1rem;
-  font-weight:600;
-  margin-top:-4px;
-  color:#FFEAA7;
+  color: #FFEAA7;
+  text-align: center;
+  font-weight: 600;
+  margin-top: -6px;
 }
 
-/* =========================
-   FIX: ANTI MELEBAR
-========================= */
-
+/* ======================================================
+   ANTI MELEBAR — SEMUA SECTION
+====================================================== */
 section,
 .section-gallery,
 #form-ultra,
@@ -72,10 +69,9 @@ section,
   box-sizing: border-box;
 }
 
-/* =========================
-   HERO SECTION
-========================= */
-
+/* ======================================================
+   HERO
+====================================================== */
 #section-hero {
   padding: 12px 16px;
   text-align: center;
@@ -83,72 +79,88 @@ section,
 
 .hero-img {
   width: 100%;
-  max-width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto 12px auto;
+  margin-bottom: 16px;
 }
 
 #section-hero p {
-  word-wrap: break-word;
   overflow-wrap: break-word;
-  text-align: center;
+  word-wrap: break-word;
   padding: 0 6px;
 }
 
-/* =========================
+/* ======================================================
    GALLERY GRID
-========================= */
-
+====================================================== */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 12px;
 }
 
 .gallery-img {
   width: 100%;
-  height: auto;
-  display: block;
   border-radius: 12px;
-  margin: 0 auto 12px auto;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  transition: transform .3s, box-shadow .3s;
 }
 
 .gallery-img:hover {
   transform: scale(1.06);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 18px rgba(0,0,0,.2);
 }
 
-/* Mobile 2 kolom */
 @media(max-width:600px){
-  .gallery-grid { grid-template-columns: repeat(2,1fr); }
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-/* =========================
-   LIGHTBOX
-========================= */
-
+/* Lightbox */
 .lightbox-overlay {
   position: fixed;
-  inset:0;
-  background: rgba(0,0,0,.9);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:9000;
+  inset: 0;
+  display: none;
+  background: rgba(0,0,0,.88);
+  justify-content: center;
+  align-items: center;
+  z-index: 9000;
 }
-.lightbox-overlay.show { display:flex; }
-.lightbox-overlay img {
-  width:90%;
-  max-width:500px;
-  border-radius:12px;
+.lightbox-overlay.show {
+  display: flex;
+}
+#lightboxImg {
+  width: 90%;
+  max-width: 550px;
+  border-radius: 10px;
 }
 
-/* =========================
-   TOPPING & TABURAN — (DIPULIHKAN)
-========================= */
+/* ======================================================
+   ORDER FORM ULTRA
+====================================================== */
+#form-ultra {
+  background: var(--brand-dark);
+  color: white;
+  padding: 28px 16px;
+  border-radius: 14px;
+  margin-top: 22px;
+}
 
+#form-ultra input,
+#form-ultra select,
+#form-ultra textarea {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  margin: 8px 0;
+  font-size: 1rem;
+}
+
+/* ======================================================
+   TOPPING & TABURAN (DIKEMBALIKAN)
+====================================================== */
 .topping-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -156,168 +168,145 @@ section,
 }
 
 .topping-check {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
-  margin: 4px;
-  padding: 6px 8px;
-  border-radius: 8px;
   border: 1px solid #eee;
-  cursor: pointer;
-  user-select: none;
+  padding: 6px 10px;
+  border-radius: 8px;
   background: #fff;
-}
-
-.topping-check input {
-  transform: scale(1.1);
+  cursor: pointer;
+  transition: background .2s, box-shadow .2s;
 }
 
 .topping-check.checked {
-  background: linear-gradient(90deg,#fff9f9,#fff);
-  border-color:#ffb3c7;
-  box-shadow:0 4px 10px rgba(0,0,0,0.06);
+  background: #fff9fb;
+  border-color: var(--accent);
+  box-shadow: 0 3px 12px rgba(0,0,0,.1);
 }
 
-/* =========================
-   ORDER FORM — PRO
-========================= */
-
-#form-ultra {
-  background: var(--brand-dark);
-  color:#fff;
-  padding:32px 20px;
-  border-radius:12px;
-  margin-top:22px;
+.topping-check input {
+  transform: scale(1.2);
 }
 
-#form-ultra input,
-#form-ultra select,
-#form-ultra textarea {
-  background:#fff;
-  border:none;
-  border-radius:12px;
-  padding:12px;
-  font-size:1rem;
-  margin:8px 0;
-  width:100%;
+/* ======================================================
+   PRICE SUMMARY
+====================================================== */
+.price-summary span {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
 }
 
 .btn-primary {
   background: var(--accent);
-  border:none;
-  color:#fff;
-  font-weight:700;
-  border-radius:var(--radius);
-  margin-top:14px;
-  padding:14px;
-  cursor:pointer;
+  color: white;
+  padding: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  margin-top: 10px;
+  cursor: pointer;
 }
-
-.btn-primary:hover { background: var(--accent-dark); }
+.btn-primary:hover {
+  background: var(--accent-dark);
+}
 
 .btn-wa {
-  background:#25d366;
-  border:none;
-  color:#fff;
-  font-weight:700;
-  padding:14px;
-  border-radius:var(--radius);
-  cursor:pointer;
+  background: #25d366;
+  color: white;
+  padding: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
 }
 
-.price-summary span {
-  display:flex;
-  justify-content:space-between;
-  padding:5px 0;
-}
-
-/* =========================
+/* ======================================================
    NOTA POPUP
-========================= */
-
-.nota-overlay {
-  position:fixed;
-  inset:0;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  background:rgba(0,0,0,.65);
-  z-index:3000;
+====================================================== */
+#notaContainer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
 }
-
-.nota-overlay.show { display:flex; }
+#notaContainer.show {
+  display: flex;
+}
 
 .nota-card {
-  background:#fff;
-  padding:16px;
-  border-radius:12px;
-  width:95%;
-  max-width:520px;
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  width: 95%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-/* =========================
-   TESTIMONI
-========================= */
-
+/* ======================================================
+   TESTIMONIAL
+====================================================== */
 .testimonial-card {
-  background:#fff;
-  color:#000;
-  padding:14px;
-  border-radius:12px;
-  margin:10px 0;
-  box-shadow:0 3px 10px rgba(0,0,0,.12);
+  background: white;
+  padding: 14px;
+  border-radius: 12px;
+  margin: 10px 0;
+  box-shadow: 0 3px 12px rgba(0,0,0,.12);
 }
 
-/* =========================
+/* ======================================================
    LOCATION
-========================= */
-
+====================================================== */
 .btn-map {
-  display:inline-block;
-  background:#ff7f50;
-  padding:12px 18px;
-  border-radius:12px;
-  color:#fff;
-  font-weight:700;
+  background: #ff7f50;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  display: inline-block;
+  font-weight: 700;
 }
 
-/* =========================
+/* ======================================================
    BOTTOM NAV
-========================= */
-
+====================================================== */
 .bottom-nav {
-  position:fixed;
-  bottom:0; left:0; right:0;
-  background: #ffffff;
-  display:flex;
-  justify-content:space-around;
-  padding:8px 0;
-  border-radius: 16px 16px 0 0;
-  box-shadow:0 -5px 16px rgba(0,0,0,.08);
-  z-index:5000;
+  position: fixed;
+  bottom: 0;
+  left: 0; right: 0;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -6px 14px rgba(0,0,0,.08);
+  z-index: 6000;
 }
 
 .bottom-nav a {
-  text-decoration:none;
-  color:#333;
-  font-size:.8rem;
-  text-align:center;
+  text-align: center;
+  text-decoration: none;
+  color: #222;
+  font-size: .8rem;
 }
 
 .bottom-nav i {
-  display:block;
-  font-size:1.4rem;
+  font-size: 1.5rem;
+  display: block;
 }
 
-/* =========================
+/* ======================================================
    FOOTER
-========================= */
-
+====================================================== */
 footer {
-  background:#121213;
-  color:#d8d8d8;
-  text-align:center;
-  padding:25px 12px 100px;
-  border-radius:12px 12px 0 0;
-  margin-top:22px;
+  background: #111;
+  color: #ddd;
+  text-align: center;
+  padding: 25px 12px 100px;
+  border-radius: 12px 12px 0 0;
+  margin-top: 24px;
 }
