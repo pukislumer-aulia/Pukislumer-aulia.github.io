@@ -1,14 +1,13 @@
 /* =========================================================
-   ORDER.JS — FINAL SUPER CLEAN
+   ORDER.JS — FINAL SUPER CLEAN (PART 1/2)
    Semua fungsi order dipusatkan di file ini:
    - Ambil data form
    - Kalkulasi harga
    - Render nota popup
-   - Generate PDF (dengan Logo, QRIS, TTD)
+   - Update topping berdasarkan mode
+   - Generate PDF (di PART 2)
    - Nomor antrian otomatis
-   - Topping & Taburan
    - Kirim WhatsApp
-   - Event handler tombol WA, PDF, Submit
 ========================================================= */
 
 
@@ -60,7 +59,7 @@ function getOrderFormData() {
   const subtotal = jumlahBox * pricePerBox;
 
   let discount = 0;
-  if (jumlahBox >= 3) discount = 2000;   // Bisa diubah sewaktu-waktu
+  if (jumlahBox >= 3) discount = 2000; // boleh diganti sewaktu-waktu
 
   const total = subtotal - discount;
 
@@ -87,6 +86,51 @@ function getOrderFormData() {
     note
   };
 }
+
+
+/* =========================================================
+   SHOW/HIDE TOPPING & TABURAN BERDASARKAN MODE
+========================================================= */
+
+function updateToppingMode() {
+  const mode = document.getElementById("mode").value;
+
+  const toppingItems = document.querySelectorAll(".topping-check");
+  const taburanItems = document.querySelectorAll(".taburan-check");
+
+  // RESET SEMUA
+  toppingItems.forEach(el => el.style.display = "none");
+  taburanItems.forEach(el => el.style.display = "none");
+
+  /* === NON TOPPING === */
+  if (mode === "non") return;
+
+  /* === SINGLE TOPPING === */
+  if (mode === "single") {
+    toppingItems.forEach(el => {
+      const val = el.querySelector("input").value.toLowerCase();
+      if (
+        val.includes("coklat") ||
+        val.includes("tiramisu") ||
+        val.includes("vanilla") ||
+        val.includes("stroberi") ||
+        val.includes("cappucino")
+      ) {
+        el.style.display = "inline-flex";
+      }
+    });
+    return;
+  }
+
+  /* === DOUBLE TOPPING === */
+  if (mode === "double") {
+    toppingItems.forEach(el => el.style.display = "inline-flex");
+    taburanItems.forEach(el => el.style.display = "inline-flex");
+  }
+}
+
+document.getElementById("mode").addEventListener("change", updateToppingMode);
+document.addEventListener("DOMContentLoaded", updateToppingMode);
 
 
 /* =========================================================
@@ -120,138 +164,10 @@ function renderNota(data) {
 }
 
 
-/* =======================
-   Close nota popup
-======================= */
+/* =========================================================
+   TOMBOL CLOSE NOTA
+========================================================= */
+
 document.getElementById("closeNota").addEventListener("click", () => {
   document.getElementById("notaContainer").classList.remove("show");
-});
-
-/* =========================================================
-   GENERATE PDF — FINAL
-   Termasuk:
-   - Logo (logo.png)
-   - QRIS (qris.jpg)
-   - TTD (ttd.png)
-   - Tabel lengkap (harga satuan, diskon, total bayar)
-   - Catatan di bagian bawah
-   - No Antrian paling atas
-========================================================= */
-
-function generatePdf(data) {
-  const doc = new jspdf.jsPDF();
-
-  /* ===== HEADER LOGO ===== */
-  doc.addImage("logo.png", "PNG", 14, 8, 32, 32);    // kiri atas
-  doc.setFontSize(16);
-  doc.text("Aish Original", 52, 22);
-  doc.setFontSize(10);
-  doc.text("Invoice Pemesanan", 52, 30);
-
-  /* ===== TABEL ===== */
-  doc.autoTable({
-    head: [["Item", "Keterangan"]],
-    body: [
-      ["No. Antrian", data.antrian],
-      ["Nama", data.nama],
-      ["Jenis", data.jenis],
-      ["Mode", data.mode],
-      ["Topping", data.topping],
-      ["Taburan", data.taburan],
-      ["Jumlah Box", data.jumlahBox + " box"],
-      ["Harga Satuan", formatRp(data.pricePerBox)],
-      ["Subtotal", formatRp(data.subtotal)],
-      ["Diskon", data.discount > 0 ? "-" + formatRp(data.discount) : "-"],
-      ["Total Bayar", formatRp(data.total)],
-      ["Catatan", data.note || "-"]
-    ],
-    startY: 48
-  });
-
-  /* ===== qris.jpg (kiri bawah tabel) ===== */
-  doc.addImage(
-    "qris.jpg",
-    "JPEG",
-    14,
-    doc.autoTable.previous.finalY + 12,
-    70,
-    70
-  );
-  doc.text(
-    "Scan untuk pembayaran QRIS",
-    14,
-    doc.autoTable.previous.finalY + 88
-  );
-
-  /* ===== TTD (ttd.png di bawah 'Hormat Kami') ===== */
-  doc.text("Hormat Kami,", 130, doc.autoTable.previous.finalY + 20);
-
-  doc.addImage(
-    "ttd.png",
-    "PNG",
-    130,
-    doc.autoTable.previous.finalY + 28,
-    50,
-    40
-  );
-
-  doc.text("Aish Original", 130, doc.autoTable.previous.finalY + 78);
-
-  /* ===== Save file ===== */
-  doc.save(`Invoice_${data.nama}_${data.antrian}.pdf`);
-}
-
-
-
-/* =========================================================
-   KIRIM WHATSAPP
-========================================================= */
-function sendWhatsapp(data) {
-  const pesan = `
-No. Antrian: ${data.antrian}
-Nama: ${data.nama}
-Jenis: ${data.jenis}
-Mode: ${data.mode}
-Topping: ${data.topping}
-Taburan: ${data.taburan}
-Jumlah Box: ${data.jumlahBox}
-Harga Satuan: ${formatRp(data.pricePerBox)}
-Subtotal: ${formatRp(data.subtotal)}
-Diskon: ${data.discount > 0 ? "-" + formatRp(data.discount) : "-"}
-Total Bayar: ${formatRp(data.total)}
-Catatan: ${data.note}
-  `.trim();
-
-  const nomor = "628xxxxxxxxxx"; // GANTI DENGAN NOMOR WA TOKO
-  const url = `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`;
-
-  window.open(url, "_blank");
-}
-
-/* =========================================================
-   SUBMIT FORM ORDER (TAMPILKAN NOTA)
-========================================================= */
-document.getElementById("form-ultra").addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const data = getOrderFormData();
-  renderNota(data);
-});
-
-/* =========================================================
-   BUTTON PDF
-========================================================= */
-document.getElementById("btnPdf").addEventListener("click", () => {
-  const data = getOrderFormData();
-  generatePdf(data);
-});
-
-
-
-/* =========================================================
-   BUTTON WHATSAPP
-========================================================= */
-document.getElementById("btnWa").addEventListener("click", () => {
-  const data = getOrderFormData();
-  sendWhatsapp(data);
 });
