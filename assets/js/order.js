@@ -422,14 +422,20 @@
 
 })();
 /* =========================================================
-   order.js — FINAL (PART 2/2)
+   order.js — FINAL (PART 2/2) - FIXED
    - PDF generator (makeGeneratePdf)
+   - includes local formatRp to avoid ReferenceError
    - loads images to dataURL if possible
    - uses jsPDF + autoTable if available
 ========================================================= */
 
 (function(){
   'use strict';
+
+  // local formatRp to make this module self-contained
+  function formatRp(num) {
+    return "Rp " + Number(num || 0).toLocaleString('id-ID');
+  }
 
   // helper to load image as dataURL (for jsPDF.addImage)
   function loadImageAsDataURL(src) {
@@ -452,8 +458,8 @@
           }
         };
         img.onerror = function(){ resolve(null); };
-        img.src = /* try same path as HTML uses */ (window.location.origin + '/' + 'assets/images/logo.png');
-        // If path fails, try relative
+        // try both absolute/relative paths (best-effort)
+        img.src = window.location.origin + '/' + 'assets/images/logo.png';
         setTimeout(()=>{ if (!img.complete) { img.src = 'assets/images/logo.png'; } }, 300);
       } catch (err) { resolve(null); }
     });
@@ -497,7 +503,7 @@
         doc.text(`Tanggal: ${order.tgl || new Date().toLocaleString('id-ID')}`, pageW - 14, y, { align: 'right' });
         y += 8;
         doc.text(`Nama: ${order.nama}`, 14, y);
-        // nomor antrian di atas nama, per permintaan -> already displayed above as Order ID but add explicit
+        // nomor antrian - place above name as requested (we also show as separate row)
         doc.text(`No. Antrian: ${order.antrian || '-'}`, pageW - 14, y, { align: 'right' });
         y += 10;
 
@@ -511,10 +517,10 @@
           ['Topping', toppingText],
           ['Taburan', taburanText],
           ['Jumlah Box', String(order.jumlahBox || 0) + ' box'],
-          ['Harga Satuan', String(order.pricePerBox ? formatRp(order.pricePerBox) : '-')],
-          ['Subtotal', String(order.subtotal ? formatRp(order.subtotal) : '-')],
+          ['Harga Satuan', order.pricePerBox ? formatRp(order.pricePerBox) : '-'],
+          ['Subtotal', order.subtotal ? formatRp(order.subtotal) : '-'],
           ['Diskon', order.discount > 0 ? '-' + formatRp(order.discount) : '-'],
-          ['Total Bayar', String(order.total ? formatRp(order.total) : '-')],
+          ['Total Bayar', order.total ? formatRp(order.total) : '-'],
           ['Catatan', order.note || '-']
         ];
 
