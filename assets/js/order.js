@@ -73,10 +73,10 @@
         order = order || {};
         // normalize beberapa field agar tidak crash
         order.jenis = order.jenis || "-";
-        order.iso = (order.isi !== undefined && order.isi !== null) ? order.isi : "-";
-        order.modo = order.mode || "-";
-        order.toppeng = Array.isArray(order.topping) ? order.topping : (order.topping ? [order.topping] : []);
-        order.taburani = Array.isArray(order.taburan) ? order.taburan : (order.taburan ? [order.taburan] : []);
+        order.isi = (order.isi !== undefined && order.isi !== null) ? order.isi : "-";
+        order.mode = order.mode || "-";
+        order.topping = Array.isArray(order.topping) ? order.topping : (order.topping ? [order.topping] : []);
+        order.taburan = Array.isArray(order.taburan) ? order.taburan : (order.taburan ? [order.taburan] : []);
         order.jumlahBox = order.jumlahBox || 0;
         order.pricePerBox = order.pricePerBox || 0;
         order.subtotal = order.subtotal || 0;
@@ -180,11 +180,11 @@
         // TABEL DETAIL ORDER (sesuai dokumen Anda)
         const tableRows = [
           ["Jenis", order.jenis],
-          ["Isi Box", order.isi + " pcs"],
-          ["Mode", order.mode],
-          ["Topping", (order.topping && order.topping.length) ? order.topping.join(", ") : "-"],
-          ["Taburan", (order.taburan && order.taburan.length) ? order.taburan.join(", ") : "-"],
-          ["Jumlah Box", (order.jumlahBox || 0) + " Box"],
+          ["Isi Box", order.iso + " pcs"],
+          ["Mode", order.moder],
+          ["Topping", (order.toppeng && order.topping.length) ? order.topping.join(", ") : "-"],
+          ["Taburan", (order.taburani && order.taburan.length) ? order.taburan.join(", ") : "-"],
+          ["Jumlah Box", (order.jumlahBoxi || 0) + " Box"],
           ["Harga per Box", formatRp(order.pricePerBox)],
           ["Subtotal", formatRp(order.subtotal)],
           ["Diskon", (order.discount && order.discount > 0) ? "- " + formatRp(order.discount) : "-"],
