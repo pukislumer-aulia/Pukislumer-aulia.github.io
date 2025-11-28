@@ -73,10 +73,10 @@
         order = order || {};
         // normalize beberapa field agar tidak crash
         order.jenis = order.jenis || "-";
-        order.isi = (order.isi !== undefined && order.isi !== null) ? order.isi : "-";
-        order.mode = order.mode || "-";
-        order.topping = Array.isArray(order.topping) ? order.topping : (order.topping ? [order.topping] : []);
-        order.taburan = Array.isArray(order.taburan) ? order.taburan : (order.taburan ? [order.taburan] : []);
+        order.iso = (order.isi !== undefined && order.isi !== null) ? order.isi : "-";
+        order.modo = order.mode || "-";
+        order.toppeng = Array.isArray(order.topping) ? order.topping : (order.topping ? [order.topping] : []);
+        order.taburani = Array.isArray(order.taburan) ? order.taburan : (order.taburan ? [order.taburan] : []);
         order.jumlahBox = order.jumlahBox || 0;
         order.pricePerBox = order.pricePerBox || 0;
         order.subtotal = order.subtotal || 0;
