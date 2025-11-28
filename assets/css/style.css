@@ -49,7 +49,7 @@ h1, h2, h3 {
 }
 
 /* ======================================================
-   ANTI MELEBAR — SEMUA SECTION
+   ANTI MELEBAR – SEMUA SECTION
 ====================================================== */
 section,
 .section-gallery,
@@ -64,8 +64,7 @@ section,
   max-width: 720px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 16px;
   box-sizing: border-box;
 }
 
@@ -73,13 +72,13 @@ section,
    HERO
 ====================================================== */
 #section-hero {
-  padding: 12px 16px;
   text-align: center;
 }
 
 .hero-img {
   width: 100%;
   height: auto;
+  border-radius: 12px;
   display: block;
   margin-bottom: 16px;
 }
@@ -87,7 +86,6 @@ section,
 #section-hero p {
   overflow-wrap: break-word;
   word-wrap: break-word;
-  padding: 0 6px;
 }
 
 /* ======================================================
@@ -117,8 +115,8 @@ section,
   }
 }
 
-/* Lightbox */
-.lightbox-overlay {
+/* LIGHTBOX */
+#lightboxOverlay {
   position: fixed;
   inset: 0;
   display: none;
@@ -127,9 +125,11 @@ section,
   align-items: center;
   z-index: 9000;
 }
-.lightbox-overlay.show {
+
+#lightboxOverlay.show {
   display: flex;
 }
+
 #lightboxImg {
   width: 90%;
   max-width: 550px;
@@ -159,7 +159,7 @@ section,
 }
 
 /* ======================================================
-   TOPPING & TABURAN (DIKEMBALIKAN)
+   TOPPING & TABURAN (FINAL)
 ====================================================== */
 .topping-wrap {
   display: flex;
@@ -167,25 +167,39 @@ section,
   gap: 10px;
 }
 
-.topping-check {
+/* Topping = merah tebal */
+.topping-check label {
+  font-weight: 700;
+  color: #e00000;
+}
+
+/* Taburan = ungu tebal */
+.taburan-check label {
+  font-weight: 700;
+  color: #7a00d8;
+}
+
+.topping-check,
+.taburan-check {
+  background: #fff !important;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
   display: flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid #eee;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: #fff;
   cursor: pointer;
-  transition: background .2s, box-shadow .2s;
 }
 
-.topping-check.checked {
-  background: #fff9fb;
-  border-color: var(--accent);
-  box-shadow: 0 3px 12px rgba(0,0,0,.1);
+.topping-check.checked,
+.taburan-check.checked {
+  background: #fff9fa !important;
+  border-color: #ff6e96 !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,.12);
 }
 
-.topping-check input {
+.topping-check input,
+.taburan-check input {
   transform: scale(1.2);
 }
 
@@ -234,6 +248,7 @@ section,
   align-items: center;
   z-index: 5000;
 }
+
 #notaContainer.show {
   display: flex;
 }
@@ -249,7 +264,7 @@ section,
 }
 
 /* ======================================================
-   TESTIMONIAL
+   TESTIMONI
 ====================================================== */
 .testimonial-card {
   background: white;
