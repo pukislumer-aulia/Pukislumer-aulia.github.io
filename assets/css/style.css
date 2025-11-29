@@ -377,5 +377,19 @@ img, iframe, video {
 html {
   scroll-behavior: smooth;
 }
+/* ============================
+   DOUBLE TOPPING PINK & UNGU — SAFE INSERT
+   (Tidak konflik & tidak tumpang tindih)
+============================ */
 
+.double-taburan {
+  background: #ffe6ef !important; /* pink soft */
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.double-taburan label {
+  color: #7a009d !important; /* ungu tebal */
+  font-weight: 800 !important;
+}
 /* DONE */
