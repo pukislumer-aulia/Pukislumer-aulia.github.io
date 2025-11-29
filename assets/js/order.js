@@ -423,19 +423,15 @@
 })();
         /* =========================================================
    order.js — FINAL (PART 2/2)
-   PERUBAHAN SESUAI 9 POIN SANAK:
-
-   ✔ Watermark miring, tebal, sangat buram
-   ✔ INVOICE PEMBAYARAN (maroon, bold, besar)
-   ✔ Data invoice & pembeli di kiri
-   ✔ Identitas toko di kanan
-   ✔ QRIS file qris-pukis.jpg ukuran 40×50 mm
-   ✔ Footer sosial media
-   ✔ Terimakasih di atas footer
-   ✔ Nomor antrian dihapus
-   ✔ Tabel pink + biru muda tetap
-   ✔ TTD tetap (40×30)
-   ✔ Semua lain TIDAK DIUBAH
+   * Perubahan hanya sesuai permintaan Sanak di akhir:
+     - Logo dihapus
+     - QRIS 40×50 mm (lebar 40, tinggi 50)
+     - Invoice tetap di atas Order ID
+     - Catatan di bawah nama
+     - Watermark besar di tengah (Pukis Lumer Aulia)
+     - Header tabel pink + baris biru muda
+     - TTD ukuran 40×30
+     - Ucapan terima kasih tengah bawah
 ========================================================= */
 
 (function () {
@@ -483,97 +479,56 @@
         const H = doc.internal.pageSize.getHeight();
 
         /* LOAD GAMBAR */
-        const qrisData = await loadPNGorJPG("assets/images/qris-pukis.jpg");
+        const qrisData = await loadPNGorJPG("assets/images/qris.jpg");
         const ttdData = await loadPNGorJPG("assets/images/ttd.png");
 
         /* =======================================================
-           WATERMARK MIRING TEBAL
-        ======================================================= */
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(48);
-        doc.setTextColor(120, 120, 120);
-        doc.setGState(doc.GState({ opacity: 0.07 }));
-
-        // Miring -35°
-        doc.saveGraphicsState();
-        doc.rotate(-35 * Math.PI / 180, { origin: [W / 2, H / 2] });
-        doc.text("Pukis Lumer Aulia", W / 2, H / 2, { align: "center" });
-        doc.restoreGraphicsState();
-
-        doc.setGState(doc.GState({ opacity: 1 }));
-        doc.setTextColor(0, 0, 0);
-
-        /* =======================================================
-           HEADER
+           HEADER PDF
         ======================================================= */
 
-        // INVOICE PEMBAYARAN — maroon bold
+        // Judul besar hitam tebal
         doc.setFont("helvetica", "bold");
         doc.setFontSize(16);
-        doc.setTextColor(128, 0, 0);
-        doc.text("INVOICE PEMBAYARAN", 14, 20);
-
         doc.setTextColor(0, 0, 0);
+        doc.text("PUKIS LUMER AULIA", W / 2, 15, { align: "center" });
+
+        // Invoice Pemesanan — kiri
         doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
+        doc.setFontSize(12);
+        doc.text("Invoice Pemesanan", 14, 25);
 
         /* =======================================================
-           KIRI — DATA INVOICE & PEMBELI
+           Metadata (Order ID & Informasi dasar)
         ======================================================= */
-        let y = 28;
+        let y = 35;
 
-        doc.text(`Nomor Invoice : ${order.orderID || "-"}`, 14, y);
-        y += 6;
+        doc.setFontSize(10);
+        doc.text(`Order ID: ${order.orderID || "-"}`, 14, y);
+        doc.text(
+          `Tanggal: ${order.tgl || new Date().toLocaleString("id-ID")}`,
+          W - 14,
+          y,
+          { align: "right" }
+        );
+        y += 8;
 
-        doc.text(`Kepada        : ${order.nama || "-"}`, 14, y);
-        y += 6;
+        // Antrian (kanan)
+        doc.text(`No. Antrian: ${order.antrian || "-"}`, W - 14, y, {
+          align: "right",
+        });
 
-        doc.text(`Nomor Telp    : ${order.wa || "-"}`, 14, y);
-        y += 6;
+        // Nama (kiri)
+        doc.text(`Nama: ${order.nama || "-"}`, 14, y);
+        y += 8;
 
-        doc.text(`Catatan       : ${order.note || "-"}`, 14, y);
+        // Catatan khusus — di bawah nama
+        doc.setFont("helvetica", "italic");
+        doc.text(`Catatan: ${order.note || "-"}`, 14, y);
+        doc.setFont("helvetica", "normal");
         y += 10;
 
         /* =======================================================
-           KANAN — IDENTITAS TOKO
-        ======================================================= */
-
-        const Xright = W - 14;
-
-        // Judul toko maroon bold
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(14);
-        doc.setTextColor(128, 0, 0);
-        doc.text("PUKIS LUMER AULIA", Xright, 20, { align: "right" });
-
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(10);
-        doc.setTextColor(0, 0, 0);
-
-        doc.text("Alamat:", Xright, 28, { align: "right" });
-        doc.setFont("helvetica", "normal");
-        doc.text("Jl. Mr. Asa'ad, Kelurahan Balai-balai", Xright, 34, {
-          align: "right",
-        });
-        doc.text("(Pasar Kuliner Padang Panjang)", Xright, 40, {
-          align: "right",
-        });
-
-        doc.setFont("helvetica", "bold");
-        doc.text("Tanggal Cetak:", Xright, 48, { align: "right" });
-        doc.setFont("helvetica", "normal");
-        doc.text(new Date().toLocaleString("id-ID"), Xright, 54, {
-          align: "right",
-        });
-
-        doc.setFont("helvetica", "bold");
-        doc.text("Telp: 0812 966 68670", Xright, 62, { align: "right" });
-
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-
-        /* =======================================================
-           TABEL AUTO-TABLE
+           Tabel PDF (autoTable)
         ======================================================= */
 
         const toppingTxt =
@@ -628,10 +583,12 @@
         }
 
         const endTableY =
-          (doc.lastAutoTable && doc.lastAutoTable.finalY) || y + 40;
+          doc.lastAutoTable && doc.lastAutoTable.finalY
+            ? doc.lastAutoTable.finalY
+            : y + 40;
 
         /* =======================================================
-           QRIS 40 × 50 mm
+           QRIS (40 × 50 mm) — kiri bawah tabel
         ======================================================= */
         if (qrisData) {
           doc.addImage(qrisData, "JPEG", 14, endTableY + 8, 40, 50);
@@ -640,7 +597,7 @@
         }
 
         /* =======================================================
-           TTD 40×30
+           TTD (40 × 30 mm) — kanan bawah, simetris
         ======================================================= */
         const ttdX = W - 14 - 50;
         const ttdY = endTableY + 10;
@@ -655,41 +612,37 @@
         doc.text("Pukis Lumer Aulia", ttdX, ttdY + 40);
 
         /* =======================================================
-           UCAPAN TERIMAKASIH
+           WATERMARK BESAR DI TENGAH HALAMAN
         ======================================================= */
-
+        doc.setTextColor(150, 150, 150);
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(13);
-        doc.text("Terimakasih telah berbelanja di toko Kami", W / 2, H - 25, {
+        doc.setFontSize(48);
+        doc.text("Pukis Lumer Aulia", W / 2, H / 2, {
           align: "center",
+          opacity: 0.1,
         });
+
+        doc.setTextColor(0, 0, 0);
 
         /* =======================================================
-           FOOTER SOSIAL MEDIA
+           UCAPAN TERIMA KASIH — tengah bawah
         ======================================================= */
+        doc.setFontSize(13);
+        doc.setFont("helvetica", "bold");
+        doc.text(
+          "Terima kasih telah berbelanja di toko Kami",
+          W / 2,
+          H - 15,
+          { align: "center" }
+        );
 
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(9);
-
-        doc.text("FB     : PUKIS LUMER AULIA", W / 2, H - 18, {
-          align: "center",
-        });
-        doc.text("IG     : pukis.lumer_aulia", W / 2, H - 14, {
-          align: "center",
-        });
-        doc.text("Tiktok : pukislumer.aulia", W / 2, H - 10, {
-          align: "center",
-        });
-        doc.text("Twitter: pukislumer_", W / 2, H - 6, { align: "center" });
-
-        /* SAVE */
+        /* SAVE FILE */
         const filename = `Invoice_${(order.nama || "Pelanggan").replace(
           /\s+/g,
           "_"
         )}_${order.orderID || Date.now()}.pdf`;
 
         doc.save(filename);
-
         return true;
       } catch (err) {
         alert("Gagal membuat PDF: " + err.message);
