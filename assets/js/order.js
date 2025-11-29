@@ -1,85 +1,134 @@
 /* =========================================================
-   order.js — FINAL (REVISI)
-   - Mematuhi: hanya ubah apa yang diminta user pada PDF/nota
-   - Tidak membuat/mengganti checkbox topping/taburan (pakai HTML sebagai acuan)
-   - Mengembalikan hitung otomatis (live calculation)
-   - Nomor antrian dihapus dari invoice/penyimpanan
-   - QRIS: assets/images/qris-pukis.jpg
-   - Footer & teks sesuai permintaan
-   - Pastikan HTML Anda memiliki elemen dengan id/class yang dipakai di sini
+   order.js — FINAL (COMPATIBLE DENGAN HTML YANG DIBERIKAN)
+   - Mengembalikan pembuatan checkbox topping/taburan ke div kosong
+   - Hitung otomatis full (harga, subtotal, diskon, total)
+   - Validasi: jumlah topping/taburan max = isi box (sesuai catatan sebelumnya)
+   - PDF: INVOICE PEMBAYARAN maroon kiri, PUKIS LUMER AULIA kanan, QRIS menggunakan assets/images/qris-pukis.jpg
+   - Watermark: bold+italic, miring (rotasi) + low opacity, fallback apabila opacity/rotasi tidak didukung
+   - Nomor antrian DIHAPUS / tidak disertakan
+   - HANYA ubah JS; HTML tetap acuan
 ========================================================= */
 
 (function () {
   'use strict';
 
-  /* -----------------------
-     Konfigurasi (ubah jika butuh)
-  ------------------------*/
+  /* -------------------------
+     Konfigurasi & data tetap
+  --------------------------*/
   const ADMIN_WA = "6281296668670";
   const ASSET_PREFIX = "assets/images/";
   const QRIS_FILENAME = "qris-pukis.jpg";
 
-  // Struktur harga: tetap pakai data internal; cocokkan ke backend/HTML Anda jika berbeda
+  // topping / taburan sesuai permintaan
+  const SINGLE_TOPPINGS = ["Coklat","Tiramisu","Stroberi","Cappucino","Vanilla","Taro","Matcha"];
+  const DOUBLE_TABURAN = ["Meses","Keju","Kacang","Choco Chip","Oreo"];
+
+  // Harga dasar (sesuaikan bila backend berbeda)
   const BASE_PRICE = {
     Original: { "5": { non: 10000, single: 13000, double: 15000 }, "10": { non: 18000, single: 25000, double: 28000 } },
     Pandan:   { "5": { non: 13000, single: 15000, double: 18000 }, "10": { non: 25000, single: 28000, double: 32000 } }
   };
 
-  // helper sederhana DOM
-  const $ = sel => document.querySelector(sel);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  // helper DOM
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
 
-  function formatRp(num) { return "Rp " + Number(num || 0).toLocaleString('id-ID'); }
-  function esc(s){ return String(s == null ? "" : s); }
+  function formatRp(n){
+    // digit-by-digit safe formatting
+    const v = Number(n || 0);
+    if (Number.isNaN(v)) return "Rp 0";
+    return "Rp " + v.toLocaleString('id-ID');
+  }
 
-  /* -----------------------
-     Ambil nilai form dari HTML (HTML adalah acuan)
-     - Tidak membuat checkbox baru. Menggunakan apa yang tersedia:
-       * topping checkbox: selector '.topping-check input', '.topping input' atau input[name="topping[]"]
-       * taburan checkbox: '.taburan-check input', '.taburan input' atau input[name="taburan[]']
-  ------------------------*/
-  function getSelectedRadioValue(name) {
+  /* -------------------------
+     Build topping & taburan UI
+     - Isi #ultraSingleGroup & #ultraDoubleGroup sesuai arrays di atas
+     - Checkbox name: topping[] / taburan[]  (mempermudah seleksi)
+  --------------------------*/
+  function buildToppingUI(){
+    const singleGroup = $('#ultraSingleGroup');
+    const doubleGroup = $('#ultraDoubleGroup');
+    if (!singleGroup || !doubleGroup) return;
+
+    // clear existing (but preserve if developer prefilled — still re-create to ensure classes)
+    singleGroup.innerHTML = '';
+    doubleGroup.innerHTML = '';
+
+    // create single toppings
+    SINGLE_TOPPINGS.forEach(t => {
+      const id = 'topping_' + t.toLowerCase().replace(/\s+/g,'_');
+      const label = document.createElement('label');
+      label.className = 'topping-check';
+      label.style.display = 'inline-flex';
+      label.style.alignItems = 'center';
+      label.style.gap = '8px';
+      label.style.margin = '6px';
+      label.style.padding = '6px 8px';
+      label.style.borderRadius = '8px';
+      label.style.border = '1px solid rgba(255,255,255,0.06)';
+      label.style.cursor = 'pointer';
+      label.innerHTML = `<input type="checkbox" name="topping[]" value="${t}" id="${id}"> ${t}`;
+      singleGroup.appendChild(label);
+    });
+
+    // create double taburan
+    DOUBLE_TABURAN.forEach(t => {
+      const id = 'taburan_' + t.toLowerCase().replace(/\s+/g,'_');
+      const label = document.createElement('label');
+      label.className = 'taburan-check';
+      label.style.display = 'inline-flex';
+      label.style.alignItems = 'center';
+      label.style.gap = '8px';
+      label.style.margin = '6px';
+      label.style.padding = '6px 8px';
+      label.style.borderRadius = '8px';
+      label.style.border = '1px solid rgba(255,255,255,0.06)';
+      label.style.cursor = 'pointer';
+      label.innerHTML = `<input type="checkbox" name="taburan[]" value="${t}" id="${id}"> ${t}`;
+      doubleGroup.appendChild(label);
+    });
+
+    // attach checkbox listeners (delegation is safer but we'll attach to each checkbox here)
+    const toppingInputs = singleGroup.querySelectorAll('input[type="checkbox"]');
+    toppingInputs.forEach(inp => {
+      inp.addEventListener('change', handleCheckboxChange);
+    });
+    const taburanInputs = doubleGroup.querySelectorAll('input[type="checkbox"]');
+    taburanInputs.forEach(inp => {
+      inp.addEventListener('change', handleCheckboxChange);
+    });
+  }
+
+  /* -------------------------
+     Helpers - baca form values (dari HTML acuan)
+  --------------------------*/
+  function getSelectedRadioValue(name){
     const r = document.querySelector(`input[name="${name}"]:checked`);
     return r ? r.value : null;
   }
 
-  function getToppingValuesFromDOM() {
-    // beberapa kemungkinan selector yang biasa dipakai — baca yang ada di HTML
-    const sels = [
-      '.topping-check input:checked',
-      '.topping input:checked',
-      'input[name="topping[]"]:checked',
-      'input[name="topping"]:checked'
-    ];
-    for (let s of sels) {
-      const found = $$(s);
-      if (found && found.length) return found.map(i => i.value);
-    }
-    return [];
+  function getToppingValues(){
+    return Array.from(document.querySelectorAll('input[name="topping[]"]:checked')).map(i => i.value);
+  }
+  function getTaburanValues(){
+    return Array.from(document.querySelectorAll('input[name="taburan[]"]:checked')).map(i => i.value);
   }
 
-  function getTaburanValuesFromDOM() {
-    const sels = [
-      '.taburan-check input:checked',
-      '.taburan input:checked',
-      'input[name="taburan[]"]:checked',
-      'input[name="taburan"]:checked'
-    ];
-    for (let s of sels) {
-      const found = $$(s);
-      if (found && found.length) return found.map(i => i.value);
-    }
-    return [];
+  function getIsiValue(){
+    const el = $('#ultraIsi');
+    return el ? String(el.value) : '5';
   }
 
-  function getNumberFromSelector(sel, fallback=0) {
-    const el = $(sel);
-    if (!el) return fallback;
-    const v = Number(el.value);
-    return isNaN(v) ? fallback : v;
+  function getJumlahBox(){
+    const el = $('#ultraJumlah');
+    const v = el ? Number(el.value) : 1;
+    return Number.isFinite(v) && v > 0 ? Math.floor(v) : 1;
   }
 
-  function getPricePerBox(jenis, isi, mode) {
+  /* -------------------------
+     Harga & diskon
+  --------------------------*/
+  function getPricePerBox(jenis, isi, mode){
     jenis = jenis || 'Original';
     isi = String(isi || '5');
     mode = (mode || 'non').toLowerCase();
@@ -88,23 +137,20 @@
     } catch (e) { return 0; }
   }
 
-  function calcDiscount(jumlahBox, subtotal) {
+  function calcDiscount(jumlahBox, subtotal){
     if (jumlahBox >= 10) return Math.round(subtotal * 0.10);
     if (jumlahBox >= 5) return Math.round(subtotal * 0.05);
     return 0;
   }
 
-  /* -----------------------
-     Update harga otomatis ke UI (mengisi elemen hasil jika ada)
-     - Elemen yang diharapkan di HTML: #ultraPricePerBox, #ultraSubtotal, #ultraDiscount, #ultraGrandTotal
-  ------------------------*/
-  function updatePriceUI() {
+  /* -------------------------
+     Update price UI (live)
+  --------------------------*/
+  function updatePriceUI(){
     const jenis = getSelectedRadioValue('ultraJenis') || 'Original';
-    const isiEl = $('#ultraIsi') || $('#selectIsi') || document.querySelector('select[name="isi"]');
-    const isi = isiEl ? isiEl.value : '5';
-    const mode = getSelectedRadioValue('ultraToppingMode') || getSelectedRadioValue('toppingMode') || 'non';
-    const jumlahEl = $('#ultraJumlah') || document.querySelector('input[name="jumlah"]') || document.querySelector('#qty');
-    const jumlah = jumlahEl ? (Number(jumlahEl.value) || 1) : 1;
+    const isi = getIsiValue();
+    const mode = getSelectedRadioValue('ultraToppingMode') || 'non';
+    const jumlah = getJumlahBox();
 
     const pricePerBox = getPricePerBox(jenis, isi, mode);
     const subtotal = pricePerBox * jumlah;
@@ -118,42 +164,98 @@
 
     if (elPrice) elPrice.textContent = formatRp(pricePerBox);
     if (elSubtotal) elSubtotal.textContent = formatRp(subtotal);
-    if (elDiscount) elDiscount.textContent = (discount > 0) ? '-' + formatRp(discount) : '-';
+    if (elDiscount) elDiscount.textContent = discount > 0 ? '-' + formatRp(discount) : '-';
     if (elGrand) elGrand.textContent = formatRp(total);
 
-    // return object utk keperluan lain
     return { jenis, isi, mode, jumlah, pricePerBox, subtotal, discount, total };
   }
 
-  /* -----------------------
-     Build order object (tidak menyertakan nomor antrian)
-  ------------------------*/
-  function buildOrderObject() {
-    const nama = $('#ultraNama') ? $('#ultraNama').value.trim() : (document.querySelector('input[name="nama"]') ? document.querySelector('input[name="nama"]').value.trim() : '-');
-    const wa = $('#ultraWA') ? $('#ultraWA').value.trim() : (document.querySelector('input[name="wa"]') ? document.querySelector('input[name="wa"]').value.trim() : '-');
-    const note = $('#ultraNote') ? $('#ultraNote').value.trim() : (document.querySelector('textarea[name="note"]') ? document.querySelector('textarea[name="note"]').value.trim() : '-');
-
-    const jenis = getSelectedRadioValue('ultraJenis') || getSelectedRadioValue('jenis') || 'Original';
-    const isiEl = $('#ultraIsi') || $('#selectIsi') || document.querySelector('select[name="isi"]');
-    const isi = isiEl ? isiEl.value : '5';
+  /* -------------------------
+     Visibility control untuk group topping
+     - sesuai mode: non -> hide both; single -> show single only; double -> show both
+  --------------------------*/
+  function updateToppingVisibility(){
     const mode = getSelectedRadioValue('ultraToppingMode') || 'non';
+    const singleGroup = $('#ultraSingleGroup');
+    const doubleGroup = $('#ultraDoubleGroup');
 
-    const jumlahEl = $('#ultraJumlah') || document.querySelector('input[name="jumlah"]') || document.querySelector('#qty');
-    const jumlahBox = jumlahEl ? (Number(jumlahEl.value) || 1) : 1;
+    if (!singleGroup || !doubleGroup) return;
 
-    const topping = getToppingValuesFromDOM();
-    const taburan = getTaburanValuesFromDOM();
+    if (mode === 'non'){
+      singleGroup.style.display = 'none';
+      doubleGroup.style.display = 'none';
+      // uncheck all
+      singleGroup.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+      doubleGroup.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+    } else if (mode === 'single'){
+      singleGroup.style.display = 'flex';
+      doubleGroup.style.display = 'none';
+      doubleGroup.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+    } else if (mode === 'double'){
+      singleGroup.style.display = 'flex';
+      doubleGroup.style.display = 'flex';
+    }
+  }
 
+  /* -------------------------
+     Checkbox change handler: validate & recalc
+     - Validasi: jumlah topping/taburan maksimal = isi per box (sesuai catatan)
+  --------------------------*/
+  function handleCheckboxChange(e){
+    const isi = Number(getIsiValue()) || 5; // isi per box (5 atau 10)
+    const target = e.target;
+    // determine group
+    if (!target) return;
+    const isTopping = target.closest('#ultraSingleGroup') !== null;
+    const isTaburan = target.closest('#ultraDoubleGroup') !== null;
+
+    if (isTopping){
+      const selCount = getToppingValues().length;
+      if (selCount > isi){
+        // undo and alert
+        target.checked = false;
+        alert(`Maksimal topping (Single) = ${isi} (isi box).`);
+      }
+    }
+    if (isTaburan){
+      const selCount = getTaburanValues().length;
+      if (selCount > isi){
+        target.checked = false;
+        alert(`Maksimal taburan = ${isi} (isi box).`);
+      }
+    }
+
+    // visual cue (checked class)
+    const label = target.closest('label');
+    if (label){
+      if (target.checked) label.classList.add('checked'); else label.classList.remove('checked');
+    }
+
+    // update price when checkboxes change
+    updatePriceUI();
+  }
+
+  /* -------------------------
+     Build order object (no antrian)
+  --------------------------*/
+  function buildOrderObject(){
+    const nama = $('#ultraNama') ? $('#ultraNama').value.trim() : '-';
+    const wa = $('#ultraWA') ? $('#ultraWA').value.trim() : '-';
+    const note = $('#ultraNote') ? $('#ultraNote').value.trim() : '-';
+    const jenis = getSelectedRadioValue('ultraJenis') || 'Original';
+    const isi = getIsiValue();
+    const mode = getSelectedRadioValue('ultraToppingMode') || 'non';
+    const topping = getToppingValues();
+    const taburan = getTaburanValues();
+    const jumlahBox = getJumlahBox();
     const pricePerBox = getPricePerBox(jenis, isi, mode);
     const subtotal = pricePerBox * jumlahBox;
     const discount = calcDiscount(jumlahBox, subtotal);
     const total = subtotal - discount;
-
     const now = Date.now();
-    const orderID = 'INV' + now;
 
     return {
-      orderID,
+      orderID: 'INV' + now,
       nama: nama || '-',
       wa: wa || '-',
       note: note || '-',
@@ -161,73 +263,75 @@
       topping, taburan,
       jumlahBox, pricePerBox, subtotal, discount, total,
       tgl: new Date().toLocaleString('id-ID')
-      // antrian sengaja tidak disertakan / dihapus
+      // antrian intentionally omitted
     };
   }
 
-  /* -----------------------
-     Simpan order local (kompatibel, tidak menyertakan antrian)
-  ------------------------*/
-  function saveOrderLocal(order) {
+  /* -------------------------
+     Save to localStorage (compatibility)
+  --------------------------*/
+  function saveOrderLocal(order){
     try {
       const arr = JSON.parse(localStorage.getItem('orders') || '[]');
       arr.push(order);
       localStorage.setItem('orders', JSON.stringify(arr));
       localStorage.setItem('lastOrder', JSON.stringify(order));
-    } catch (e) {
-      console.error('saveOrderLocal error', e);
+    } catch (e){
+      console.error('saveOrderLocal', e);
     }
   }
 
-  /* -----------------------
-     Render nota sederhana ke elemen notaContent (HTML acuan)
-     - Menampilkan nomor invoice, kepada, nomor telp, catatan di kiri
-     - Tidak menyertakan antrian
-  ------------------------*/
-  function renderNotaOnScreen(order) {
-    const notaContent = $('#notaContent') || document.querySelector('.nota-content');
-    if (!notaContent) return;
+  /* -------------------------
+     Render nota on screen (uses #notaContent) - left block + details
+  --------------------------*/
+  function renderNotaOnScreen(order){
+    const c = $('#notaContent');
+    if (!c) return;
     const toppingText = order.topping && order.topping.length ? order.topping.join(', ') : '-';
     const taburanText = order.taburan && order.taburan.length ? order.taburan.join(', ') : '-';
 
-    notaContent.innerHTML = `
-      <div class="nota-left-block">
-        <p style="font-weight:700;color:#5f0000;font-size:14px;">INVOICE PEMBAYARAN</p>
-        <p><strong>Nomor Invoice:</strong> ${esc(order.orderID)}</p>
-        <p><strong>Kepada :</strong> ${esc(order.nama)}</p>
-        <p><strong>Nomor Telp:</strong> ${esc(order.wa)}</p>
-        <p><strong>Catatan:</strong> ${esc(order.note)}</p>
+    c.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:180px">
+          <div style="font-weight:800;color:#5f0000;font-size:14px;margin-bottom:6px;">INVOICE PEMBAYARAN</div>
+          <div><strong>Nomor Invoice:</strong> ${escapeHtml(order.orderID)}</div>
+          <div><strong>Kepada :</strong> ${escapeHtml(order.nama)}</div>
+          <div><strong>Nomor Telp:</strong> ${escapeHtml(order.wa)}</div>
+          <div><strong>Catatan:</strong> ${escapeHtml(order.note)}</div>
+        </div>
       </div>
-
-      <div style="margin-top:8px;">
-        <hr>
-        <p><strong>Jenis:</strong> ${esc(order.jenis)} — ${esc(String(order.isi))} pcs</p>
-        <p><strong>Mode:</strong> ${esc(order.mode)}</p>
-        <p><strong>Topping:</strong> ${esc(toppingText)}</p>
-        <p><strong>Taburan:</strong> ${esc(taburanText)}</p>
-        <p><strong>Jumlah Box:</strong> ${esc(String(order.jumlahBox))}</p>
-        <p><strong>Harga Satuan:</strong> ${formatRp(order.pricePerBox)}</p>
-        <p><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</p>
-        <p><strong>Diskon:</strong> ${order.discount > 0 ? '-' + formatRp(order.discount) : '-'}</p>
-        <p style="font-weight:700;"><strong>Total Bayar:</strong> ${formatRp(order.total)}</p>
-        <p style="margin-top:12px;"><em>Terima kasih telah berbelanja di toko Kami</em></p>
+      <hr style="margin:8px 0">
+      <div>
+        <div><strong>Jenis:</strong> ${escapeHtml(order.jenis)} — ${escapeHtml(String(order.isi))} pcs</div>
+        <div><strong>Mode:</strong> ${escapeHtml(order.mode)}</div>
+        <div><strong>Topping:</strong> ${escapeHtml(toppingText)}</div>
+        <div><strong>Taburan:</strong> ${escapeHtml(taburanText)}</div>
+        <div><strong>Jumlah Box:</strong> ${escapeHtml(String(order.jumlahBox))}</div>
+        <div><strong>Harga Satuan:</strong> ${formatRp(order.pricePerBox)}</div>
+        <div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>
+        <div><strong>Diskon:</strong> ${order.discount>0 ? '-' + formatRp(order.discount) : '-'}</div>
+        <div style="font-weight:800;"><strong>Total Bayar:</strong> ${formatRp(order.total)}</div>
+        <p style="margin-top:10px;font-style:italic">Terima kasih telah berbelanja di toko Kami</p>
       </div>
     `;
-    // tunjukkan popup jika ada container
-    const notaContainer = $('#notaContainer') || document.querySelector('.nota-container');
-    if (notaContainer) notaContainer.classList.add('show');
+
+    const container = $('#notaContainer');
+    if (container) container.classList.add('show');
   }
 
-  /* -----------------------
-     WA send (menggunakan order object). Tidak menyertakan antrian.
-  ------------------------*/
-  function sendOrderToAdminViaWA(order) {
+  /* escape helper */
+  function escapeHtml(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+  /* -------------------------
+     WA send (admin)
+  --------------------------*/
+  function sendOrderToAdminViaWA(order){
     const lines = [
       `Invoice: ${order.orderID}`,
       `Nama: ${order.nama}`,
       `WA: ${order.wa}`,
       `Jenis: ${order.jenis}`,
-      `Isi: ${order.isi} pcs`,
+      `Isi: ${order.isi} pcs`
     ];
     if (order.mode === 'single' && order.topping.length) lines.push(`Topping: ${order.topping.join(', ')}`);
     if (order.mode === 'double') {
@@ -242,30 +346,29 @@
     window.open(url, '_blank');
   }
 
-  /* -----------------------
-     PDF generator (jsPDF + autoTable jika tersedia)
-     - Implementasi perubahan sesuai permintaan user:
-       * Watermark miring (bold+italic, low opacity)
-       * INVOICE PEMBAYARAN kiri besar maroon
-       * Detail toko kanan (alamat, tanggal cetak, telp) tebal
-       * QRIS menggunakan assets/images/qris-pukis.jpg
-       * Footer social media sesuai instruksi
-       * Hapus nomor antrian dari PDF
-  ------------------------*/
+  /* -------------------------
+     PDF generator (jsPDF + autoTable if available)
+     - Watermark: rotated diagonal (angle) + opacity (GState) with fallback
+     - INVOICE PEMBAYARAN maroon on left
+     - PUKIS LUMER AULIA right block (bold), alamat + tanggal + telp bold below
+     - QRIS: assets/images/qris-pukis.jpg
+     - Footer social media + "terima kasih..." above footer
+  --------------------------*/
   (function () {
-    function loadImageToDataURL(path) {
+    // load image to dataURL
+    function loadImage(path){
       return new Promise((resolve) => {
         const img = new Image();
         img.crossOrigin = 'anonymous';
-        img.onload = () => {
+        img.onload = function(){
           try {
             const canvas = document.createElement('canvas');
             canvas.width = img.naturalWidth;
             canvas.height = img.naturalHeight;
             const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
+            ctx.drawImage(img,0,0);
             resolve(canvas.toDataURL('image/png'));
-          } catch (e) {
+          } catch(e){
             resolve(null);
           }
         };
@@ -274,40 +377,37 @@
       });
     }
 
-    function makePdfFactory(jsPDForLib) {
-      const jsPDFLib = jsPDForLib && jsPDForLib.jsPDF ? jsPDForLib.jsPDF : jsPDForLib;
-      return async function generatePdf(order) {
+    function makePdfFactory(jsPDFLib){
+      const jsPDFCtor = jsPDFLib && jsPDFLib.jsPDF ? jsPDFLib.jsPDF : jsPDFLib;
+      return async function generatePdf(order){
         try {
-          if (!jsPDFLib) throw new Error('jsPDF tidak ditemukan. Pastikan library jsPDF dimuat.');
+          if (!jsPDFCtor) throw new Error('jsPDF tidak ditemukan. Pastikan assets/js/lib/jspdf.umd.min.js ada');
 
-          const doc = new jsPDFLib({ unit: 'mm', format: 'a4' });
+          const doc = new jsPDFCtor({ unit: 'mm', format: 'a4' });
           const W = doc.internal.pageSize.getWidth();
           const H = doc.internal.pageSize.getHeight();
 
-          // Load qris
-          const qrisData = await loadImageToDataURL(ASSET_PREFIX + QRIS_FILENAME);
+          // load images
+          const qrisData = await loadImage(ASSET_PREFIX + QRIS_FILENAME);
 
-          // HEADER & teks sesuai permintaan
+          // Header center title (toko)
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(16);
+          doc.setTextColor(0,0,0);
+          doc.text('PUKIS LUMER AULIA', W/2, 15, { align: 'center' });
+
+          // Left: INVOICE PEMBAYARAN (maroon)
           const leftX = 14;
           const rightX = W - 14;
-
-          // Right: toko name centered top (tetap)
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(16);
-          doc.text('PUKIS LUMER AULIA', W / 2, 15, { align: 'center' });
-
-          // Left: INVOICE PEMBAYARAN - maroon tebal
           doc.setFontSize(14);
-          doc.setFont('helvetica', 'bold');
-          doc.setTextColor(96, 0, 0); // maroon-ish
+          doc.setFont('helvetica','bold');
+          doc.setTextColor(96,0,0); // maroon
           doc.text('INVOICE PEMBAYARAN', leftX, 26);
 
-          // Reset color untuk block lain
-          doc.setTextColor(0, 0, 0);
-
-          // Right block: toko info tebal
-          doc.setFont('helvetica', 'bold');
+          // Right block: toko info (bold)
+          doc.setFont('helvetica','bold');
           doc.setFontSize(9);
+          doc.setTextColor(0,0,0);
           const alamat = "Alamat: Jl. Mr. Asa'ad, Kel. Balai-balai (Pasar Kuliner Padang Panjang)";
           const tanggalCetak = `Tanggal cetak: ${order.tgl || new Date().toLocaleString('id-ID')}`;
           const telp = "Telp: 0812 966 68670";
@@ -317,18 +417,19 @@
             ry += 5;
           });
 
-          // Left metadata below INVOICE PEMBAYARAN
-          doc.setFont('helvetica', 'normal');
+          // Left metadata under invoice
+          doc.setFont('helvetica','normal');
           doc.setFontSize(10);
           let ly = 34;
-          doc.text(`Nomor Invoice: ${order.orderID || "-"}`, leftX, ly); ly += 6;
-          doc.text(`Kepada : ${order.nama || "-"}`, leftX, ly); ly += 6;
-          doc.text(`Nomor Telp: ${order.wa || "-"}`, leftX, ly); ly += 6;
-          doc.text(`Catatan : ${order.note || "-"}`, leftX, ly); ly += 8;
+          doc.text(`Nomor Invoice: ${order.orderID || '-'}`, leftX, ly); ly += 6;
+          doc.text(`Kepada : ${order.nama || '-'}`, leftX, ly); ly += 6;
+          doc.text(`Nomor Telp: ${order.wa || '-'}`, leftX, ly); ly += 6;
+          doc.text(`Catatan : ${order.note || '-'}`, leftX, ly); ly += 8;
 
-          // Table-like area (manual atau autoTable)
+          // Table rows (manual or autoTable)
           const toppingTxt = order.topping && order.topping.length ? order.topping.join(', ') : '-';
           const taburanTxt = order.taburan && order.taburan.length ? order.taburan.join(', ') : '-';
+
           const rows = [
             ["Jenis", order.jenis || "-"],
             ["Isi Box", (order.isi || "-") + " pcs"],
@@ -338,23 +439,24 @@
             ["Jumlah Box", (order.jumlahBox || 0) + " box"],
             ["Harga Satuan", formatRp(order.pricePerBox || 0)],
             ["Subtotal", formatRp(order.subtotal || 0)],
-            ["Diskon", order.discount > 0 ? "-" + formatRp(order.discount) : "-"],
+            ["Diskon", order.discount > 0 ? '-' + formatRp(order.discount) : '-'],
             ["Total Bayar", formatRp(order.total || 0)]
           ];
 
           let tableEndY = ly + 6;
-          if (typeof doc.autoTable === 'function') {
+          if (typeof doc.autoTable === 'function'){
             doc.autoTable({
               startY: ly + 4,
-              head: [['Item', 'Keterangan']],
+              head: [['Item','Keterangan']],
               body: rows,
               theme: 'grid',
+              headStyles: { fillColor: [245, 200, 220], textColor: 0 },
               styles: { fontSize: 10 },
               columnStyles: { 0: { cellWidth: 45 }, 1: { cellWidth: W - 45 - 28 } }
             });
-            tableEndY = doc.lastAutoTable ? doc.lastAutoTable.finalY : (ly + 80);
+            tableEndY = doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : (ly + 80);
           } else {
-            // fallback text table
+            // fallback
             let ty = ly + 8;
             rows.forEach(r => {
               doc.text(`${r[0]}: ${r[1]}`, leftX, ty);
@@ -363,59 +465,88 @@
             tableEndY = ty;
           }
 
-          // QRIS on left under table
-          if (qrisData) {
+          // QRIS left under table
+          if (qrisData){
             doc.addImage(qrisData, 'PNG', leftX, tableEndY + 8, 40, 50);
             doc.setFontSize(9);
             doc.text('Scan QRIS untuk pembayaran', leftX, tableEndY + 62);
           }
 
-          // TTD area on right
+          // TTD area right
           const ttdX = W - 14 - 50;
           const ttdY = tableEndY + 14;
           doc.setFontSize(10);
           doc.text('Hormat Kami,', ttdX, ttdY);
           doc.text('Pukis Lumer Aulia', ttdX, ttdY + 36);
 
-          // WATERMARK (besar di tengah, bold italic, buram)
+          // WATERMARK: attempt set opacity (GState) and rotation angle
+          const watermarkText = 'Pukis Lumer Aulia';
+          const angle = -35; // diagonal (negative = tilt left->right)
+          const wmSize = 48;
           try {
-            if (doc.setGState) {
+            // set opacity if supported
+            if (doc.setGState && typeof doc.GState === 'function') {
               doc.setGState(new doc.GState({ opacity: 0.06 }));
             }
-          } catch (e) { /* ignore if not supported */ }
+          } catch(e){ /* ignore */ }
 
-          doc.setFont('helvetica', 'bolditalic');
-          doc.setFontSize(48);
-          doc.setTextColor(110, 110, 110);
-          // Rotasi diagonal: beberapa versi jsPDF mungkin tidak support rotation pada textOptions, 
-          // jadi gunakan transform jika tersedia; tetap, untuk kompatibilitas kita letakkan center tanpa transformasi rotasi yang riskan.
-          doc.text('Pukis Lumer Aulia', W / 2, H / 2, { align: 'center', baseline: 'middle' });
-
-          // reset opacity
+          // draw rotated text center
           try {
-            if (doc.setGState) {
+            doc.setFont('helvetica','bolditalic');
+            doc.setFontSize(wmSize);
+            doc.setTextColor(120,120,120);
+            // newer jsPDF-supports angle option
+            if (typeof doc.text === 'function') {
+              // attempt angle option (supported in modern jsPDF)
+              try {
+                doc.text(watermarkText, W/2, H/2, { align: 'center', angle });
+              } catch(e2) {
+                // fallback: translate rotate then text (older jsPDF)
+                doc.saveGraphicsState && doc.saveGraphicsState();
+                try {
+                  // try doc.rotate - some builds support
+                  if (typeof doc.rotate === 'function') {
+                    doc.setFont(wmSize);
+                    doc.rotate(angle, { origin: [W/2, H/2] });
+                    doc.text(watermarkText, W/2, H/2, { align: 'center' });
+                    doc.rotate(-angle, { origin: [W/2, H/2] });
+                  } else {
+                    // last fallback: non-rotated center but low opacity (still usable)
+                    doc.text(watermarkText, W/2, H/2, { align: 'center' });
+                  }
+                } catch(e3){
+                  doc.text(watermarkText, W/2, H/2, { align: 'center' });
+                }
+                doc.restoreGraphicsState && doc.restoreGraphicsState();
+              }
+            }
+          } catch(e){ /* ignore watermark failures */ }
+
+          // reset opacity if supported
+          try {
+            if (doc.setGState && typeof doc.GState === 'function') {
               doc.setGState(new doc.GState({ opacity: 1 }));
             }
-          } catch (e) { }
+          } catch(e){}
 
-          // Terima kasih di atas footer (tengah)
-          doc.setFont('helvetica', 'bold');
+          // Terima kasih di atas footer (center)
+          doc.setFont('helvetica','bold');
           doc.setFontSize(13);
           doc.setTextColor(0,0,0);
-          doc.text('Terima kasih telah berbelanja di toko Kami', W / 2, H - 30, { align: 'center' });
+          doc.text('Terima kasih telah berbelanja di toko Kami', W/2, H - 30, { align: 'center' });
 
-          // Footer social media (tengah)
-          doc.setFont('helvetica', 'normal');
+          // Footer social media (center)
+          doc.setFont('helvetica','normal');
           doc.setFontSize(9);
           const footerText = `FB : PUKIS LUMER AULIA    IG : pukis.lumer_aulia    Tiktok: pukislumer.aulia    Twitter: pukislumer_`;
-          doc.text(footerText, W / 2, H - 18, { align: 'center' });
+          doc.text(footerText, W/2, H - 18, { align: 'center' });
 
-          // Save file
-          const filename = `Invoice_${(order.nama || 'Pelanggan').replace(/\s+/g,'_')}_${order.orderID || Date.now()}.pdf`;
+          // save
+          const safeName = (order.nama || 'Pelanggan').replace(/\s+/g,'_').replace(/[^\w-_\.]/g,'');
+          const filename = `Invoice_${safeName}_${order.orderID || Date.now()}.pdf`;
           doc.save(filename);
-
           return true;
-        } catch (err) {
+        } catch (err){
           console.error('generatePdf error', err);
           alert('Gagal membuat PDF: ' + (err && err.message ? err.message : err));
           return false;
@@ -423,48 +554,55 @@
       };
     }
 
-    // expose factory jika jsPDF tersedia nanti
+    // expose factory and, if jsPDF already loaded, prepare generatePdf
     window._makePdfFactory = makePdfFactory;
-    // jika jsPDF sudah ada saat ini, siapakan generatePdf
-    if (window.jsPDF || (window.jspdf && window.jspdf.jsPDF)) {
+    if (window.jsPDF || (window.jspdf && window.jspdf.jsPDF)){
       window.generatePdf = makePdfFactory(window.jsPDF || window.jspdf);
     }
   })();
 
-  /* -----------------------
-     Attach listeners: gunakan elemen yang ada di HTML
-     - Jangan ubah HTML
-     - Pastikan selectors cocok dengan HTML Anda
-  ------------------------*/
-  function attachListeners() {
-    // recalc when options change
-    const selectorsToWatch = [
-      'input[name="ultraJenis"]',
-      'input[name="jenis"]',
-      '#ultraIsi',
-      'select[name="isi"]',
-      'input[name="ultraToppingMode"]',
-      'input[name="toppingMode"]',
-      '#ultraJumlah',
-      'input[name="jumlah"]',
-      '#ultraJumlah',
-      'input[type="checkbox"]' // generic: recalc when checkboxes change (topping/taburan)
-    ];
+  /* -------------------------
+     Attach listeners to form controls (HTML acuan)
+  --------------------------*/
+  function attachListeners(){
+    // build toppings into DOM
+    buildToppingUI();
 
-    selectorsToWatch.forEach(sel => {
-      $$(sel).forEach(el => {
-        el.addEventListener('change', updatePriceUI);
-        el.addEventListener('input', updatePriceUI);
+    // show/hide based on mode
+    const modeRadios = document.querySelectorAll('input[name="ultraToppingMode"]');
+    modeRadios.forEach(r => r.addEventListener('change', function(){
+      updateToppingVisibility();
+      updatePriceUI();
+    }));
+
+    // jenis radio change
+    const jenisRadios = document.querySelectorAll('input[name="ultraJenis"]');
+    jenisRadios.forEach(r => r.addEventListener('change', updatePriceUI));
+
+    // isi select & jumlah input
+    const isiSel = $('#ultraIsi');
+    if (isiSel) isiSel.addEventListener('change', function(){
+      // when isi changes we must enforce topping limits (max=isi)
+      updateToppingVisibility();
+      updatePriceUI();
+    });
+    const jumlahInp = $('#ultraJumlah');
+    if (jumlahInp) jumlahInp.addEventListener('input', updatePriceUI);
+
+    // also attach delegation to checkbox changes inside groups (in case new created later)
+    const singleGroup = $('#ultraSingleGroup');
+    const doubleGroup = $('#ultraDoubleGroup');
+    [singleGroup, doubleGroup].forEach(g => {
+      if (!g) return;
+      g.addEventListener('change', function(e){
+        if (e.target && e.target.matches('input[type="checkbox"]')) handleCheckboxChange(e);
       });
     });
 
-    // initial calc
-    updatePriceUI();
-
-    // form submit (jaga kompatibilitas nama form di HTML)
-    const form = $('#formUltra') || document.querySelector('form#form-ultra') || document.querySelector('form[name="orderForm"]') || document.querySelector('form');
-    if (form) {
-      form.addEventListener('submit', function (e) {
+    // form submit (Buat Nota)
+    const form = $('#formUltra');
+    if (form){
+      form.addEventListener('submit', function(e){
         e.preventDefault();
         const order = buildOrderObject();
         saveOrderLocal(order);
@@ -472,10 +610,10 @@
       });
     }
 
-    // tombol kirim admin WA
-    const btnWa = $('#ultraSendAdmin') || $('#btnWa') || $('#sendAdmin') || document.querySelector('.btn-send-wp');
-    if (btnWa) {
-      btnWa.addEventListener('click', function (e) {
+    // WA send
+    const btnWa = $('#ultraSendAdmin');
+    if (btnWa){
+      btnWa.addEventListener('click', function(e){
         e.preventDefault();
         const order = buildOrderObject();
         saveOrderLocal(order);
@@ -483,21 +621,20 @@
       });
     }
 
-    // tombol print/pdf
-    const btnPdf = $('#notaPrint') || $('#btnPdf') || document.querySelector('.btn-pdf');
-    if (btnPdf) {
-      btnPdf.addEventListener('click', async function (e) {
+    // print/pdf
+    const btnPdf = $('#notaPrint');
+    if (btnPdf){
+      btnPdf.addEventListener('click', async function(e){
         e.preventDefault();
         const order = buildOrderObject();
         saveOrderLocal(order);
-        // ensure generator available
-        if (typeof window.generatePdf !== 'function') {
-          // attempt to create generator if jsPDF present
-          if (window.jsPDF || (window.jspdf && window.jspdf.jsPDF)) {
+        // ensure generatePdf exists or create if jsPDF present
+        if (typeof window.generatePdf !== 'function'){
+          if (window.jsPDF || (window.jspdf && window.jspdf.jsPDF)){
             window.generatePdf = window._makePdfFactory(window.jsPDF || window.jspdf);
           }
         }
-        if (typeof window.generatePdf === 'function') {
+        if (typeof window.generatePdf === 'function'){
           await window.generatePdf(order);
         } else {
           alert('PDF generator belum tersedia. Pastikan jsPDF dimuat di halaman.');
@@ -505,29 +642,38 @@
       });
     }
 
-    // close nota jika ada tombol tertutup
-    const notaClose = $('#notaClose') || document.querySelector('.nota-close');
-    if (notaClose) {
-      notaClose.addEventListener('click', function () {
-        const container = $('#notaContainer') || document.querySelector('.nota-container');
-        if (container) container.classList.remove('show');
+    // nota close
+    const notaClose = $('#notaClose');
+    if (notaClose){
+      notaClose.addEventListener('click', function(){
+        const nc = $('#notaContainer');
+        if (nc) nc.classList.remove('show');
       });
     }
+
+    // initial display state & price calc
+    updateToppingVisibility();
+    updatePriceUI();
   }
 
-  /* -----------------------
-     Init when DOM ready
-  ------------------------*/
-  function init() {
+  /* -------------------------
+     Init on DOM ready
+  --------------------------*/
+  function init(){
     attachListeners();
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 
-  // expose small helpers (debug)
-  window._orderjs = {
-    updatePriceUI, buildOrderObject, saveOrderLocal, getToppingValuesFromDOM, getTaburanValuesFromDOM
+  /* -------------------------
+     Expose for debug if needed
+  --------------------------*/
+  window._orderjs_final = {
+    buildToppingUI, updateToppingVisibility, updatePriceUI, buildOrderObject
   };
 
 })();
