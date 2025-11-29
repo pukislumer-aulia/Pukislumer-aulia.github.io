@@ -1,222 +1,150 @@
-// ================================
-// ADMIN.JS FINAL — PUKIS LUMER AULIA
-// Versi: Ultimate Stable
-// ================================
-console.info("[admin.js] Loaded Final");
+/* ==========================================================
+   ADMIN PANEL — PUKIS LUMER AULIA
+   FINAL VERSION
+========================================================== */
 
-// =========================
-// KONFIGURASI ADMIN
-// =========================
-const ADMIN_PIN = "8670";
-const loginModal = document.getElementById("adminLoginModal");
-const adminContent = document.getElementById("adminContent");
-const promoInput = document.getElementById("promoValue");
-const promoStatus = document.getElementById("promoStatus");
-const promoBtn = document.getElementById("promoSet");
-
-// =========================
-// LOGIN SYSTEM
-// =========================
-function showLogin() {
-  loginModal.style.display = "flex";
-  adminContent.style.display = "none";
+// 🔒 CEK LOGIN
+if (!localStorage.getItem("isAdminLogin")) {
+    window.location.href = "login.html";
 }
 
-function showDashboard() {
-  loginModal.style.display = "none";
-  adminContent.style.display = "block";
-  loadAllData();
+// Ambil data pesanan
+let orders = JSON.parse(localStorage.getItem("pukisOrders") || "[]");
+
+// Elemen
+const tableBody = document.querySelector("#orderTable tbody");
+const filterAll = document.getElementById("filterAll");
+const filterPending = document.getElementById("filterPending");
+const filterDone = document.getElementById("filterDone");
+const printLastBtn = document.getElementById("printLastInvoice");
+
+// Render tabel
+function renderTable(filter = "all") {
+    tableBody.innerHTML = "";
+
+    let filtered = orders;
+
+    if (filter === "pending") {
+        filtered = orders.filter(o => o.status === "Pending");
+    } else if (filter === "done") {
+        filtered = orders.filter(o => o.status === "Done");
+    }
+
+    filtered.forEach((order, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${order.invoice}</td>
+            <td>${order.nama}</td>
+            <td>Rp ${order.total.toLocaleString()}</td>
+            <td>
+                <span class="${order.status === "Pending" ? "status-pending" : "status-done"}">
+                    ${order.status}
+                </span>
+            </td>
+            <td>
+                <button class="btn-green" onclick="printInvoice(${index})">Cetak</button>
+                <button class="btn-orange" onclick="markDone(${index})">Done</button>
+                <button class="btn-blue" onclick="sendInvoiceWA(${index})">Kirim WA</button>
+            </td>
+        `;
+
+        tableBody.appendChild(row);
+    });
 }
 
-document.getElementById("adminLoginBtn")?.addEventListener("click", () => {
-  const pin = document.getElementById("adminPinInput")?.value;
-  if (!pin) return alert("Masukkan PIN admin");
+renderTable();
 
-  if (pin === ADMIN_PIN) {
-    localStorage.setItem("adminLoggedIn", "yes");
-    showDashboard();
-  } else {
-    alert("PIN salah!");
-  }
+
+// =============================
+//  CETAK NOTA (PDF)
+// =============================
+async function printInvoice(index) {
+    const order = orders[index];
+    if (!order) return;
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Nota Pemesanan — Pukis Lumer Aulia", 10, 15);
+
+    doc.setFontSize(12);
+    doc.text(`Invoice : ${order.invoice}`, 10, 30);
+    doc.text(`Nama    : ${order.nama}`, 10, 40);
+    doc.text(`WA      : ${order.wa}`, 10, 50);
+    doc.text(`Jenis   : ${order.jenis}`, 10, 60);
+    doc.text(`Isi Box : ${order.isi} pcs`, 10, 70);
+    doc.text(`Jumlah  : ${order.jumlah} box`, 10, 80);
+
+    doc.text("Topping:", 10, 95);
+    order.topping.forEach((t, i) => {
+        doc.text(`- ${t}`, 15, 105 + (i * 8));
+    });
+
+    doc.text(`Catatan: ${order.catatan || "-"}`, 10, 140);
+
+    doc.setFontSize(14);
+    doc.text(`Total Bayar: Rp ${order.total.toLocaleString()}`, 10, 160);
+
+    doc.save(`${order.invoice}.pdf`);
+}
+
+// =============================
+//  CETAK NOTA TERBARU
+// =============================
+printLastBtn.addEventListener("click", () => {
+    if (orders.length === 0) {
+        alert("Belum ada pesanan.");
+        return;
+    }
+    printInvoice(orders.length - 1);
 });
 
-if (localStorage.getItem("adminLoggedIn") === "yes") showDashboard();
-else showLogin();
-
-
-// ===================================
-// LOAD SEMUA BAGIAN DASHBOARD
-// ===================================
-function loadAllData() {
-  loadOrders();
-  loadStatistics();
-  loadPromo();
-  loadQueue();
-  loadHistory();
-  loadAnalytics();
+// =============================
+//  TANDAI SUDAH DICETAK
+// =============================
+function markDone(index) {
+    orders[index].status = "Done";
+    localStorage.setItem("pukisOrders", JSON.stringify(orders));
+    renderTable();
 }
 
+// =============================
+//  KIRIM INVOICE KE WA
+// =============================
+function sendInvoiceWA(index) {
+    const order = orders[index];
 
-// ================================
-// ANTRIAN otomatis (reset harian)
-// ================================
-function loadQueue() {
-  const today = new Date().toLocaleDateString();
-  const savedDay = localStorage.getItem("queueDay");
+    let text = 
+`Assalamu'alaikum 👋
+Berikut invoice pesanan Pukis Lumer Aulia:
 
-  if (savedDay !== today) {
-    localStorage.setItem("queueDay", today);
-    localStorage.setItem("queueNumber", "0");
-  }
+Invoice : ${order.invoice}
+Nama    : ${order.nama}
+Jumlah  : ${order.jumlah} box
+Total   : Rp ${order.total.toLocaleString()}
+
+Silahkan ambil ya 😊`;
+
+    const url = `https://wa.me/${order.wa.replace(/^0/, "62")}?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
 }
 
-function getNewQueueNumber() {
-  let num = Number(localStorage.getItem("queueNumber") || 0) + 1;
-  localStorage.setItem("queueNumber", num);
-  return num;
+// =============================
+//  FILTER TABEL
+// =============================
+filterAll.onclick = () => renderTable("all");
+filterPending.onclick = () => renderTable("pending");
+filterDone.onclick = () => renderTable("done");
+
+// =============================
+//  LOGOUT
+// =============================
+document.getElementById("logoutBtn").onclick = logout;
+document.getElementById("logoutBtn2").onclick = logout;
+
+function logout() {
+    localStorage.removeItem("isAdminLogin");
+    window.location.href = "login.html";
 }
-
-
-// ================================
-// PROMO ADMIN
-// ================================
-function loadPromo() {
-  const promo = localStorage.getItem("promoValue") || 0;
-  promoInput.value = promo;
-  promoStatus.textContent = promo > 0 ? `Promo aktif: Rp${Number(promo).toLocaleString()}` : "Promo OFF";
-}
-
-promoBtn?.addEventListener("click", () => {
-  const v = Number(promoInput.value);
-  if (isNaN(v) || v < 0) return alert("Promo tidak valid!");
-
-  localStorage.setItem("promoValue", v);
-  loadPromo();
-  alert("Promo berhasil diperbarui!");
-});
-
-
-// ================================
-// LOAD ORDERS
-// ================================
-function loadOrders() {
-  const tbody = document.querySelector("#ordersTable tbody");
-  tbody.innerHTML = "";
-
-  const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-
-  orders.forEach(o => {
-    tbody.innerHTML += `
-      <tr>
-        <td>${o.invoice}</td>
-        <td>${o.nama}</td>
-        <td>${o.wa}</td>
-        <td>${o.jenis} (${o.isi})</td>
-        <td>${o.toppingList.join(", ") || "-"}</td>
-        <td>${o.taburanList.join(", ") || "-"}</td>
-        <td>${o.jumlahBox} box</td>
-        <td>Rp${Number(o.total).toLocaleString()}</td>
-        <td>${o.queue}</td>
-        <td>${o.lunas ? "LUNAS" : "BELUM"}</td>
-        <td>${new Date(o.createdAt).toLocaleString()}</td>
-      </tr>
-    `;
-  });
-}
-
-
-// ================================
-// HISTORY — CETAK ULANG
-// ================================
-function loadHistory() {
-  const wrap = document.getElementById("historyList");
-  wrap.innerHTML = "";
-
-  const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-
-  orders.forEach(o => {
-    wrap.innerHTML += `
-      <div class="history-card">
-        <p><strong>${o.invoice}</strong> — ${o.nama}</p>
-        <small>${new Date(o.createdAt).toLocaleString()}</small>
-        <button onclick="reprintInvoice('${o.invoice}')">Cetak Ulang</button>
-      </div>
-    `;
-  });
-}
-
-
-// ================================
-// CETAK ULANG INVOICE
-// ================================
-function reprintInvoice(inv) {
-  const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-  const data = orders.find(o => o.invoice === inv);
-  if (!data) return alert("Invoice tidak ditemukan");
-
-  generatePDF(data, true);
-}
-
-
-
-// ================================
-// STATISTIK
-// ================================
-function loadStatistics() {
-  const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-
-  const totalOrder = orders.length;
-  const revenue = orders.reduce((a, c) => a + Number(c.total || 0), 0);
-
-  document.getElementById("statOrders").textContent = totalOrder;
-  document.getElementById("statRevenue").textContent = "Rp" + revenue.toLocaleString();
-}
-
-
-
-// ================================
-// ANALYTICS
-// ================================
-function loadAnalytics() {
-  const analytics = JSON.parse(localStorage.getItem("pukis-analytics") || "[]");
-  document.getElementById("analyticsData").textContent = JSON.stringify(analytics, null, 2);
-}
-
-
-
-// ================================
-// EXPORT CSV
-// ================================
-document.getElementById("exportCSV")?.addEventListener("click", () => {
-  const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-
-  let csv = "invoice,nama,wa,jenis,isi,topping,taburan,jumlah,total,queue,lunas,tanggal\n" +
-    orders.map(o =>
-      `${o.invoice},${o.nama},${o.wa},${o.jenis},${o.isi},"${o.toppingList.join(";")}","${o.taburanList.join(";")}",${o.jumlahBox},${o.total},${o.queue},${o.lunas},${o.createdAt}`
-    ).join("\n");
-
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
-  a.download = "orders-export.csv";
-  a.click();
-});
-
-
-// ================================
-// CLEAR ORDERS
-// ================================
-document.getElementById("clearOrders")?.addEventListener("click", () => {
-  if (!confirm("Hapus semua pesanan offline?")) return;
-
-  localStorage.removeItem("orders");
-  loadOrders();
-});
-
-
-// ================================
-// LOGOUT
-// ================================
-document.getElementById("logoutBtn")?.addEventListener("click", () => {
-  localStorage.removeItem("adminLoggedIn");
-  showLogin();
-});
