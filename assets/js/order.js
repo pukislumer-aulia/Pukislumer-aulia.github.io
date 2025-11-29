@@ -421,21 +421,21 @@
   };
 
 })();
-/* =========================================================
+        /* =========================================================
    order.js — FINAL (PART 2/2)
    PERUBAHAN SESUAI 9 POIN SANAK:
 
    ✔ Watermark miring, tebal, sangat buram
    ✔ INVOICE PEMBAYARAN (maroon, bold, besar)
    ✔ Data invoice & pembeli di kiri
-   ✔ Identitas toko di kanan (polos)
+   ✔ Identitas toko di kanan
    ✔ QRIS file qris-pukis.jpg ukuran 40×50 mm
    ✔ Footer sosial media
    ✔ Terimakasih di atas footer
    ✔ Nomor antrian dihapus
-   ✔ TTD 40×30 tetap
-   ✔ Tabel pink + biru muda
-   ✔ Tidak ada perubahan lain selain poin-poin tersebut
+   ✔ Tabel pink + biru muda tetap
+   ✔ TTD tetap (40×30)
+   ✔ Semua lain TIDAK DIUBAH
 ========================================================= */
 
 (function () {
@@ -451,7 +451,6 @@
     return new Promise((resolve) => {
       const img = new Image();
       img.crossOrigin = "anonymous";
-
       img.onload = () => {
         try {
           const canvas = document.createElement("canvas");
@@ -463,9 +462,7 @@
           resolve(null);
         }
       };
-
       img.onerror = () => resolve(null);
-
       img.src = path;
     });
   }
@@ -485,21 +482,19 @@
         const W = doc.internal.pageSize.getWidth();
         const H = doc.internal.pageSize.getHeight();
 
-        /* ==== Load Gambar ==== */
+        /* LOAD GAMBAR */
         const qrisData = await loadPNGorJPG("assets/images/qris-pukis.jpg");
         const ttdData = await loadPNGorJPG("assets/images/ttd.png");
 
         /* =======================================================
-           WATERMARK MIRING
+           WATERMARK MIRING TEBAL
         ======================================================= */
         doc.setFont("helvetica", "bold");
         doc.setFontSize(48);
-        doc.setTextColor(150, 150, 150);
+        doc.setTextColor(120, 120, 120);
+        doc.setGState(doc.GState({ opacity: 0.07 }));
 
-        // buram
-        const gs = doc.GState({ opacity: 0.07 });
-        doc.setGState(gs);
-
+        // Miring -35°
         doc.saveGraphicsState();
         doc.rotate(-35 * Math.PI / 180, { origin: [W / 2, H / 2] });
         doc.text("Pukis Lumer Aulia", W / 2, H / 2, { align: "center" });
@@ -512,7 +507,7 @@
            HEADER
         ======================================================= */
 
-        // INVOICE PEMBAYARAN — maroon
+        // INVOICE PEMBAYARAN — maroon bold
         doc.setFont("helvetica", "bold");
         doc.setFontSize(16);
         doc.setTextColor(128, 0, 0);
@@ -523,11 +518,11 @@
         doc.setFontSize(10);
 
         /* =======================================================
-           DATA INVOICE & PEMBELI (KIRI)
+           KIRI — DATA INVOICE & PEMBELI
         ======================================================= */
         let y = 28;
 
-        doc.text(`Nomor Invoice : ${order.orderID || "-"}`, 14, y); 
+        doc.text(`Nomor Invoice : ${order.orderID || "-"}`, 14, y);
         y += 6;
 
         doc.text(`Kepada        : ${order.nama || "-"}`, 14, y);
@@ -540,39 +535,45 @@
         y += 10;
 
         /* =======================================================
-           IDENTITAS TOKO (KANAN)
+           KANAN — IDENTITAS TOKO
         ======================================================= */
 
-        const Xr = W - 14;
+        const Xright = W - 14;
 
+        // Judul toko maroon bold
         doc.setFont("helvetica", "bold");
         doc.setFontSize(14);
         doc.setTextColor(128, 0, 0);
-        doc.text("PUKIS LUMER AULIA", Xr, 20, { align: "right" });
+        doc.text("PUKIS LUMER AULIA", Xright, 20, { align: "right" });
 
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
+
+        doc.text("Alamat:", Xright, 28, { align: "right" });
+        doc.setFont("helvetica", "normal");
+        doc.text("Jl. Mr. Asa'ad, Kelurahan Balai-balai", Xright, 34, {
+          align: "right",
+        });
+        doc.text("(Pasar Kuliner Padang Panjang)", Xright, 40, {
+          align: "right",
+        });
+
+        doc.setFont("helvetica", "bold");
+        doc.text("Tanggal Cetak:", Xright, 48, { align: "right" });
+        doc.setFont("helvetica", "normal");
+        doc.text(new Date().toLocaleString("id-ID"), Xright, 54, {
+          align: "right",
+        });
+
+        doc.setFont("helvetica", "bold");
+        doc.text("Telp: 0812 966 68670", Xright, 62, { align: "right" });
+
+        doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
 
-        doc.setFont("helvetica", "bold");
-        doc.text("Alamat:", Xr, 28, { align: "right" });
-
-        doc.setFont("helvetica", "normal");
-        doc.text("Jl. Mr. Asa'ad, Kelurahan Balai-balai", Xr, 34, { align: "right" });
-        doc.text("(Pasar Kuliner Padang Panjang)", Xr, 40, { align: "right" });
-
-        doc.setFont("helvetica", "bold");
-        doc.text("Tanggal Cetak:", Xr, 48, { align: "right" });
-
-        doc.setFont("helvetica", "normal");
-        doc.text(new Date().toLocaleString("id-ID"), Xr, 54, { align: "right" });
-
-        doc.setFont("helvetica", "bold");
-        doc.text("Telp: 0812 966 68670", Xr, 62, { align: "right" });
-
-        doc.setFont("helvetica", "normal");
-
         /* =======================================================
-           TABEL PESANAN
+           TABEL AUTO-TABLE
         ======================================================= */
 
         const toppingTxt =
@@ -639,9 +640,8 @@
         }
 
         /* =======================================================
-           TTD 40 × 30 (Kanan)
+           TTD 40×30
         ======================================================= */
-
         const ttdX = W - 14 - 50;
         const ttdY = endTableY + 10;
 
@@ -655,7 +655,7 @@
         doc.text("Pukis Lumer Aulia", ttdX, ttdY + 40);
 
         /* =======================================================
-           UCAPAN TERIMA KASIH
+           UCAPAN TERIMAKASIH
         ======================================================= */
 
         doc.setFont("helvetica", "bold");
@@ -665,7 +665,7 @@
         });
 
         /* =======================================================
-           FOOTER SOSMED
+           FOOTER SOSIAL MEDIA
         ======================================================= */
 
         doc.setFont("helvetica", "normal");
@@ -680,14 +680,9 @@
         doc.text("Tiktok : pukislumer.aulia", W / 2, H - 10, {
           align: "center",
         });
-        doc.text("Twitter: pukislumer_", W / 2, H - 6, {
-          align: "center",
-        });
+        doc.text("Twitter: pukislumer_", W / 2, H - 6, { align: "center" });
 
-        /* =======================================================
-           SAVE FILE
-        ======================================================= */
-
+        /* SAVE */
         const filename = `Invoice_${(order.nama || "Pelanggan").replace(
           /\s+/g,
           "_"
