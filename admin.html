@@ -1,129 +1,54 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin Panel — Pukis Lumer Aulia</title>
 
+  <!-- CSS admin -->
   <link rel="stylesheet" href="assets/css/admin.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Poppins, sans-serif;
-      background: #f7f7f7;
-    }
-    header {
-      background: #ff5e7e;
-      padding: 14px;
-      color: #fff;
-      text-align: center;
-      font-size: 20px;
-      font-weight: 700;
-    }
-    .admin-container {
-      padding: 18px;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .admin-tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-    button {
-      padding: 10px 14px;
-      border: 0;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-    }
-    .btn-primary { background:#ff5e7e; color:#fff; }
-    .btn-green { background:#1abf4b; color:#fff; }
-    .btn-blue { background:#007bff; color:#fff; }
-    .btn-gray { background:#444; color:#fff; }
-    .btn-orange { background:#ff9800; color:#fff; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #eee;
-      text-align: left;
-      font-size: 14px;
-    }
-    th {
-      background: #fafafa;
-      font-weight: 700;
-    }
-    tr:hover {
-      background: #f8f8f8;
-    }
-    .status-pending { color:#d9534f; font-weight:700; }
-    .status-done { color:#28a745; font-weight:700; }
-
-    .logout {
-      margin-top: 20px;
-      text-align:center;
-    }
-  </style>
+  <script>
+    // Cegah loop, cek login sekali saja
+    document.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("adminLoggedIn") !== "true") {
+        window.location.href = "login.html";
+      }
+    });
+  </script>
 </head>
 
 <body>
+  <header class="admin-header">
+    <h1>Panel Admin — Pukis Lumer Aulia</h1>
+    <button id="btnLogout">Logout</button>
+  </header>
 
-<header>Admin Panel — Pukis Lumer Aulia</header>
+  <main class="admin-main">
+    <section class="orders">
+      <h2>Daftar Pesanan</h2>
+      <div id="ordersList">Memuat...</div>
+    </section>
+  </main>
 
-<div class="admin-container">
+  <!-- TEMPLATE -->
+  <template id="orderTemplate">
+    <div class="order-item">
+      <div class="meta">
+        <div><strong>Invoice:</strong> <span class="invoice"></span></div>
+        <div><strong>Nama:</strong> <span class="name"></span></div>
+        <div><strong>Total:</strong> Rp <span class="total"></span></div>
+      </div>
 
-  <!-- =======================
-       TOOLS ADMIN
-  ======================== -->
-  <div class="admin-tools">
-    <button id="printLastInvoice" class="btn-green"><i class="fa fa-file-invoice"></i> Cetak Nota Terbaru</button>
-    <button id="filterAll" class="btn-gray">Semua</button>
-    <button id="filterPending" class="btn-orange">Belum Dicetak</button>
-    <button id="filterDone" class="btn-green">Sudah Dicetak</button>
-    <button id="logoutBtn" class="btn-blue">Logout</button>
-  </div>
+      <div class="actions">
+        <button class="viewBtn">Lihat</button>
+        <a class="waBtn" target="_blank" rel="noopener">Kirim WA</a>
+      </div>
+    </div>
+  </template>
 
-  <!-- =======================
-       TABEL PESANAN
-  ======================== -->
-  <table id="orderTable">
-    <thead>
-      <tr>
-        <th>Invoice</th>
-        <th>Nama</th>
-        <th>Total</th>
-        <th>Status</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <!-- LOGOUT -->
-  <div class="logout">
-    <button id="logoutBtn2" class="btn-blue">Keluar Admin</button>
-  </div>
-
-</div>
-
-<!-- LIBRARY PDF -->
-<script src="assets/js/lib/jspdf.umd.min.js"></script>
-<script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
-
-<!-- SCRIPT ADMIN -->
-<script src="assets/js/admin.js"></script>
+  <!-- SCRIPT admin -->
+  <script src="assets/js/admin.js"></script>
 
 </body>
 </html>
