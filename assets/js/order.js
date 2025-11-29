@@ -96,8 +96,8 @@
     catch(e){ return 0; }
   }
   function calcDiscount(jumlahBox, subtotal){
-    if (jumlahBox >= 10) return Math.round(subtotal * 0.10);
-    if (jumlahBox >= 5) return Math.round(subtotal * 0.05);
+    if (jumlahBox >= 10) return Math.round(subtotal * 0.01);
+    if (jumlahBox >= 5) return Math.round(subtotal * 0.01);
     return 0;
   }
 
