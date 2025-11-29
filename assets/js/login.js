@@ -1,35 +1,55 @@
-/* ================================
-   LOGIN ADMIN — Pukis Lumer Aulia
-   ================================ */
+/* =====================================================
+   LOGIN.JS — FINAL STABIL TANPA KEDIP / REDIRECT LOOP
+   - Tidak auto-redirect ke admin.html
+   - Hanya redirect jika PIN benar
+   - Menggunakan localStorage adminLoggedIn
+   ===================================================== */
 
-const CORRECT_PIN = "2369"; // PIN ADMIN (boleh diganti)
+document.addEventListener("DOMContentLoaded", () => {
 
-/* ===========================================
-   CEK STATUS — jika sudah login → masuk admin
-   =========================================== */
-if (localStorage.getItem("adminLoggedIn") === "true") {
-  window.location.href = "admin.html";
-}
+    console.log("Login page loaded without auto-redirect.");
 
-/* ===================
-   EVENT LOGIN BUTTON
-   =================== */
-document.getElementById("loginBtn")?.addEventListener("click", () => {
-  const pin = document.getElementById("adminPin").value.trim();
+    // Ambil elemen form & input PIN
+    const form = document.getElementById("loginForm");
+    const pinInput = document.getElementById("adminPin");
 
-  if (pin === "") {
-    alert("PIN tidak boleh kosong");
-    return;
-  }
+    if (!form || !pinInput) {
+        console.error("Elemen loginForm atau adminPin tidak ditemukan dalam login.html");
+        return;
+    }
 
-  if (pin !== CORRECT_PIN) {
-    alert("PIN salah! Coba lagi.");
-    return;
-  }
+    // *** PERHATIKAN ***
+    // Tidak ada kode auto-redirect di sini!
+    // Tidak ada:
+    // if (localStorage.getItem("adminLoggedIn") === "true") { ... }
 
-  // Simpan status login
-  localStorage.setItem("adminLoggedIn", "true");
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-  // Masuk ke halaman admin
-  window.location.href = "admin.html";
+        const pin = pinInput.value.trim();
+
+        if (pin === "") {
+            alert("Masukkan PIN admin.");
+            pinInput.focus();
+            return;
+        }
+
+        // PIN ADMIN — silakan ubah sesuai kebutuhan
+        const ADMIN_PIN = "12345";
+
+        if (pin === ADMIN_PIN) {
+
+            // Simpan status login
+            localStorage.setItem("adminLoggedIn", "true");
+
+            // Arahkan ke halaman admin
+            window.location.href = "admin.html";
+        
+        } else {
+            alert("PIN salah. Silakan coba lagi.");
+            pinInput.value = "";
+            pinInput.focus();
+        }
+    });
+
 });
