@@ -18,7 +18,7 @@
 ‎  const TTD_IMAGE = "ttd.png";         // optional
 ‎
 ‎  // Topping lists (sesuaikan jika perlu)
-‎  const SINGLE_TOPPINGS = ["Coklat","Tiramisu","Vanilla","Stroberi","Cappucino","Taro","Matcha"];
+‎  const SINGLE_TOPPINGS = ["Coklat","Tiramisu","Vanilla","Stroberi","Cappucino"];
 ‎  const DOUBLE_TABURAN  = ["Meses","Keju","Kacang","Choco Chip","Oreo"];
 ‎
 ‎  // Price table (sesuaikan dengan harga aktualmu)
