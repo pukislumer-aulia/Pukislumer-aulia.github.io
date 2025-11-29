@@ -1,11 +1,8 @@
 /* =========================================================
-   order.js — FINAL (single-file, tolerant to HTML)
-   - Merge Part1/2/3
-   - Safe guards: create missing hidden elements (notaPrint) so JS won't fail
-   - Keeps all features: toppings, auto-calc, taburan, PDF, saveLastNota
-   - No auto WA send, no redirect loops
+   order.js — FINAL (improved, diagnostic, tolerant)
+   - All features preserved: toppings, taburan, auto-calc, nota, save, PDF
+   - Extra: robust ensureRequiredUI, diagnostic selfTest(), clear console hints
    ========================================================= */
-
 (function(){
   'use strict';
 
@@ -30,53 +27,74 @@
   const MAX_DOUBLE_TOPPING = 5;
   const MAX_DOUBLE_TABURAN = 5;
 
-  // helpers
+  // small helpers
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
-
-  function formatRp(n){ const v = Number(n || 0); if (Number.isNaN(v)) return "Rp 0"; return "Rp " + v.toLocaleString('id-ID'); }
-  function escapeHtml(s){ return String(s==null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function formatRp(n){ const v = Number(n||0); if (Number.isNaN(v)) return "Rp 0"; return "Rp " + v.toLocaleString('id-ID'); }
+  function escapeHtml(s){ return String(s==null? '': s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function debugLog(...args){ if (window && window.console) console.log('[order.js]', ...args); }
 
   // ----------------------
   //  TOLERANCE HELPERS
-  //  - Create hidden notaPrint if missing (to keep JS paths stable)
-  //  - Ensure containers exist (ultraSingleGroup, ultraDoubleGroup, notaContainer, notaContent)
   // ----------------------
   function ensureElement(selector, tag='div', attributes={}){
     let el = document.querySelector(selector);
     if (el) return el;
-    // create and append near form if possible, else append to body
     el = document.createElement(tag);
-    // apply attributes
-    Object.entries(attributes).forEach(([k,v]) => el.setAttribute(k, v));
-    // If selector is id like '#notaPrint' append to notaContainer if exists
+    // set id if selector is id
     if (selector.startsWith('#')) {
-      const id = selector.slice(1);
-      el.id = id;
+      el.id = selector.slice(1);
     }
-    // try to find sensible parent
+    Object.entries(attributes).forEach(([k,v]) => {
+      if (k === 'class') el.className = v;
+      else el.setAttribute(k,v);
+    });
+    // choose reasonable parent
     const form = document.querySelector('#formUltra') || document.querySelector('#form-ultra');
     if (form && (selector === '#ultraSingleGroup' || selector === '#ultraDoubleGroup')) {
       form.appendChild(el);
     } else {
       document.body.appendChild(el);
     }
+    debugLog('ensureElement created', selector);
     return el;
   }
 
   function ensureRequiredUI(){
     ensureElement('#ultraSingleGroup', 'div', { 'class': 'topping-wrap', 'style': 'display:none;margin-bottom:8px;' });
     ensureElement('#ultraDoubleGroup', 'div', { 'class': 'topping-wrap', 'style': 'display:none;margin-bottom:8px;' });
-    ensureElement('#notaContainer', 'div', { 'class':'nota-overlay','style':'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:none;align-items:center;justify-content:center;' });
-    ensureElement('#notaContent', 'div', { 'style':'margin-top:12px;font-size:14px;line-height:1.4;' });
-    // create hidden notaPrint if not exists (JS expects it; keep hidden to not change UI)
-    let printBtn = document.querySelector('#notaPrint');
-    if (!printBtn){
-      printBtn = document.createElement('button');
-      printBtn.id = 'notaPrint';
-      printBtn.type = 'button';
-      printBtn.style.display = 'none';
-      document.body.appendChild(printBtn);
+
+    // nota container & content
+    let nc = document.querySelector('#notaContainer');
+    if (!nc){
+      nc = ensureElement('#notaContainer','div', { 'class':'nota-overlay','style':'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:none;align-items:center;justify-content:center;' });
+      // create inner nota card to avoid breaking layout expectations
+      const card = document.createElement('div'); card.className = 'nota-card'; nc.appendChild(card);
+    }
+    let ncont = document.querySelector('#notaContent');
+    if (!ncont){
+      ncont = document.createElement('div');
+      ncont.id = 'notaContent';
+      ncont.setAttribute('style','margin-top:12px;font-size:14px;line-height:1.4;');
+      // append inside notaContainer .nota-card if exists
+      const card = nc.querySelector('.nota-card') || nc;
+      card.appendChild(ncont);
+      debugLog('notaContent auto-created and appended');
+    } else {
+      // if content exists but not inside container, move it
+      if (!nc.contains(ncont)){
+        const card = nc.querySelector('.nota-card') || nc;
+        card.appendChild(ncont);
+        debugLog('notaContent moved into notaContainer');
+      }
+    }
+
+    // create hidden notaPrint if missing
+    if (!document.querySelector('#notaPrint')){
+      const btn = document.createElement('button');
+      btn.id = 'notaPrint'; btn.type = 'button'; btn.style.display = 'none';
+      document.body.appendChild(btn);
+      debugLog('notaPrint created (hidden)');
     }
   }
 
@@ -86,11 +104,12 @@
   function buildToppingUI(){
     const singleWrap = $('#ultraSingleGroup');
     const doubleWrap = $('#ultraDoubleGroup');
-    if (!singleWrap || !doubleWrap) return;
-
+    if (!singleWrap || !doubleWrap) {
+      debugLog('buildToppingUI aborted: missing wrappers');
+      return;
+    }
     singleWrap.innerHTML = '';
     doubleWrap.innerHTML = '';
-
     SINGLE_TOPPINGS.forEach(t => {
       const id = 'topping_' + t.toLowerCase().replace(/\s+/g,'_');
       const label = document.createElement('label');
@@ -99,7 +118,6 @@
       label.innerHTML = `<input type="checkbox" name="topping" value="${t}" id="${id}"> ${t}`;
       singleWrap.appendChild(label);
     });
-
     DOUBLE_TABURAN.forEach(t => {
       const id = 'taburan_' + t.toLowerCase().replace(/\s+/g,'_');
       const label = document.createElement('label');
@@ -108,61 +126,51 @@
       doubleWrap.appendChild(label);
     });
 
-    singleWrap.addEventListener('change', e => {
-      if (!e.target.matches('input[type="checkbox"]')) return;
-      const mode = getSelectedToppingMode();
+    // delegate events
+    singleWrap.addEventListener('change', function(e){
+      if (!e.target || !e.target.matches('input[type="checkbox"]')) return;
       const label = e.target.closest('label');
-      if (label){
-        if (e.target.checked) label.classList.add('checked'); else label.classList.remove('checked');
-      }
+      if (label) e.target.checked ? label.classList.add('checked') : label.classList.remove('checked');
+      const mode = getSelectedToppingMode();
       if (mode === 'single'){
         const sel = $$('input[name="topping"]:checked').length;
-        if (sel > MAX_SINGLE_TOPPING){
-          e.target.checked = false; label.classList.remove('checked');
-          alert(`Maksimal ${MAX_SINGLE_TOPPING} topping untuk mode Single.`);
-        }
-      }
-      if (mode === 'double'){
+        if (sel > MAX_SINGLE_TOPPING){ e.target.checked = false; label.classList.remove('checked'); alert(`Maksimal ${MAX_SINGLE_TOPPING} topping untuk mode Single.`); }
+      } else if (mode === 'double'){
         const sel = $$('input[name="topping"]:checked').length;
-        if (sel > MAX_DOUBLE_TOPPING){
-          e.target.checked = false; label.classList.remove('checked');
-          alert(`Maksimal ${MAX_DOUBLE_TOPPING} topping untuk mode Double.`);
-        }
+        if (sel > MAX_DOUBLE_TOPPING){ e.target.checked = false; label.classList.remove('checked'); alert(`Maksimal ${MAX_DOUBLE_TOPPING} topping untuk mode Double.`); }
       }
       updatePriceUI();
     });
 
-    doubleWrap.addEventListener('change', e => {
-      if (!e.target.matches('input[type="checkbox"]')) return;
+    doubleWrap.addEventListener('change', function(e){
+      if (!e.target || !e.target.matches('input[type="checkbox"]')) return;
       const mode = getSelectedToppingMode();
-      if (mode !== 'double'){
-        e.target.checked = false; alert("Taburan hanya aktif di mode Double."); return;
-      }
+      if (mode !== 'double'){ e.target.checked = false; alert('Taburan hanya aktif pada mode Double.'); return; }
       const sel = $$('input[name="taburan"]:checked').length;
       if (sel > MAX_DOUBLE_TABURAN){ e.target.checked = false; alert(`Maksimal ${MAX_DOUBLE_TABURAN} taburan.`); }
       updatePriceUI();
     });
+
+    debugLog('Topping UI built', { singleCount: SINGLE_TOPPINGS.length, taburanCount: DOUBLE_TABURAN.length });
   }
 
   // =====================================================
-  //   RADIO / INPUT HELPERS
+  //   HELPERS / PRICE
   // =====================================================
   const getSelectedRadioValue = (name) => {
     const r = document.querySelector(`input[name="${name}"]:checked`);
-    return r ? r.value : null;
+    return r? r.value : null;
   };
   const getToppingValues = () => $$('input[name="topping"]:checked').map(i=>i.value);
   const getTaburanValues = () => $$('input[name="taburan"]:checked').map(i=>i.value);
-  const getIsiValue = () => { const el = $('#ultraIsi'); return el ? String(el.value) : '5'; };
-  const getJumlahBox = () => { const el = $('#ultraJumlah'); if (!el) return 1; const v=parseInt(el.value,10); return (isNaN(v)||v<1)?1:v; };
-
+  const getIsiValue = () => { const el = $('#ultraIsi'); return el? String(el.value) : '5'; };
+  const getJumlahBox = () => { const el = $('#ultraJumlah'); if (!el) return 1; const v = parseInt(el.value,10); return (isNaN(v)||v<1)?1:v; };
   function getSelectedToppingMode(){ return getSelectedRadioValue('ultraToppingMode') || 'non'; }
 
   function getPricePerBox(jenis, isi, mode){
-    jenis = jenis || "Original"; isi = String(isi || "5"); mode = (mode||"non").toLowerCase();
-    try { return BASE_PRICE[jenis][isi][mode] || 0; } catch(e){ return 0; }
+    jenis = jenis || 'Original'; isi = String(isi || '5'); mode = (mode||'non').toLowerCase();
+    try { return (BASE_PRICE[jenis] && BASE_PRICE[jenis][isi] && BASE_PRICE[jenis][isi][mode]) || 0; } catch(e){ return 0; }
   }
-
   function calcDiscount(jumlahBox, subtotal){
     if (jumlahBox >= 10) return 1000;
     if (jumlahBox >= 5) return Math.round(subtotal * 0.01);
@@ -170,19 +178,24 @@
   }
 
   function updatePriceUI(){
-    const jenis = getSelectedRadioValue('ultraJenis') || 'Original';
-    const isi = getIsiValue(); const mode = getSelectedToppingMode(); const jumlah = getJumlahBox();
-    const pricePerBox = getPricePerBox(jenis, isi, mode);
-    const subtotal = pricePerBox * jumlah; const discount = calcDiscount(jumlah, subtotal); const total = subtotal - discount;
-    $('#ultraPricePerBox')?.textContent = formatRp(pricePerBox);
-    $('#ultraSubtotal')?.textContent = formatRp(subtotal);
-    $('#ultraDiscount')?.textContent = discount>0 ? '-' + formatRp(discount) : '-';
-    $('#ultraGrandTotal')?.textContent = formatRp(total);
-    return { pricePerBox, subtotal, discount, total };
+    try {
+      const jenis = getSelectedRadioValue('ultraJenis') || 'Original';
+      const isi = getIsiValue(); const mode = getSelectedToppingMode(); const jumlah = getJumlahBox();
+      const pricePerBox = getPricePerBox(jenis, isi, mode);
+      const subtotal = pricePerBox * jumlah; const discount = calcDiscount(jumlah, subtotal); const total = subtotal - discount;
+      $('#ultraPricePerBox') && ($('#ultraPricePerBox').textContent = formatRp(pricePerBox));
+      $('#ultraSubtotal') && ($('#ultraSubtotal').textContent = formatRp(subtotal));
+      $('#ultraDiscount') && ($('#ultraDiscount').textContent = discount>0? '-' + formatRp(discount) : '-');
+      $('#ultraGrandTotal') && ($('#ultraGrandTotal').textContent = formatRp(total));
+      return { pricePerBox, subtotal, discount, total };
+    } catch(err){
+      console.error('[order.js] updatePriceUI error', err);
+      return { pricePerBox:0, subtotal:0, discount:0, total:0 };
+    }
   }
 
   // =====================================================
-  //   BUILD ORDER OBJECT
+  //   ORDER BUILD / STORAGE / RENDER
   // =====================================================
   function buildOrderObject(){
     const jenis = getSelectedRadioValue('ultraJenis') || 'Original';
@@ -193,20 +206,18 @@
     const nama = $('#ultraNama')?.value.trim() || '';
     const waRaw = $('#ultraWA')?.value.trim() || '';
     const note = $('#ultraNote')?.value.trim() || '-';
-    if (!nama){ alert("Nama harus diisi."); return null; }
-    if (!waRaw){ alert("Nomor WA harus diisi."); return null; }
+    if (!nama){ alert('Nama harus diisi.'); return null; }
+    if (!waRaw){ alert('Nomor WA harus diisi.'); return null; }
     let digits = waRaw.replace(/\D/g,'');
-    if (digits.length < 9){ alert("Nomor WA tidak valid."); return null; }
+    if (digits.length < 9){ alert('Nomor WA tampak tidak valid.'); return null; }
     let wa = waRaw.replace(/\s+/g,'').replace(/\+/g,'');
     if (wa.startsWith('0')) wa = '62' + wa.slice(1);
     if (/^8\d{6,}$/.test(wa)) wa = '62' + wa;
-    const invoice = "INV-" + Date.now();
-    return { invoice, nama, wa, jenis, isi, mode, topping, taburan, jumlah: jumlahBox, pricePerBox, subtotal, discount, total, note, tgl: new Date().toLocaleString('id-ID'), status: "Pending" };
+    const invoice = 'INV-' + Date.now();
+    const order = { invoice, nama, wa, jenis, isi, mode, topping, taburan, jumlah: jumlahBox, pricePerBox, subtotal, discount, total, note, tgl: new Date().toLocaleString('id-ID'), status: 'Pending' };
+    return order;
   }
 
-  // =====================================================
-  //   STORAGE
-  // =====================================================
   function saveOrderLocal(order){
     if (!order) return;
     try {
@@ -214,31 +225,24 @@
       arr.push(order);
       localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(arr));
       localStorage.setItem(STORAGE_LAST_ORDER_KEY, JSON.stringify(order));
-      // also set generic lastOrder key for compatibility
-      localStorage.setItem("lastOrder", JSON.stringify(order));
-      // expose for fallback UI
+      localStorage.setItem('lastOrder', JSON.stringify(order)); // compatibility
       window._lastNotaData = order;
-    } catch(e){ console.error('saveOrderLocal error', e); }
+      debugLog('Order saved to localStorage', order.invoice);
+    } catch(e){ console.error('[order.js] saveOrderLocal error', e); }
   }
 
   function getLastOrder(){
-    try { return JSON.parse(localStorage.getItem("lastOrder") || 'null'); } catch(e){ return null; }
+    try { return JSON.parse(localStorage.getItem('lastOrder') || 'null'); } catch(e){ return null; }
   }
 
-  // =====================================================
-  //   SAVE LAST NOTA (explicit patch)
-  // =====================================================
   function saveLastNota(order){
-    try { localStorage.setItem("lastOrder", JSON.stringify(order)); window._lastNotaData = order; } catch(e){ console.error(e); }
+    try { localStorage.setItem('lastOrder', JSON.stringify(order)); window._lastNotaData = order; } catch(e){ console.error(e); }
   }
 
-  // =====================================================
-  //   RENDER NOTA POPUP
-  // =====================================================
   function renderNotaOnScreen(order){
     if (!order) return;
     const c = $('#notaContent');
-    if (!c) return;
+    if (!c){ debugLog('renderNotaOnScreen: #notaContent missing'); return; }
     const toppingText = order.topping && order.topping.length ? order.topping.join(', ') : '-';
     const taburanText = order.taburan && order.taburan.length ? order.taburan.join(', ') : '-';
     c.innerHTML = `
@@ -266,13 +270,13 @@
       </div>
     `;
     const container = $('#notaContainer');
-    if (container){ container.style.display = 'flex'; container.classList.add('show'); }
+    if (container) { container.style.display = 'flex'; container.classList.add('show'); }
     try { localStorage.setItem(STORAGE_LAST_ORDER_KEY, JSON.stringify(order)); } catch(e){}
     window._lastNota = order;
   }
 
   // =====================================================
-  //   SEND TO ADMIN VIA WA (manual)
+  //   SEND TO ADMIN VIA WA
   // =====================================================
   function sendOrderToAdminViaWA(order){
     if (!order) return;
@@ -302,92 +306,80 @@
   //   ATTACH LISTENERS
   // =====================================================
   function attachFormListeners(){
-    // ensure required UI elements exist
-    ensureRequiredUI();
+    try {
+      ensureRequiredUI();
+      buildToppingUI();
+      updateToppingVisibility();
 
-    // build topping UI
-    buildToppingUI();
+      $$('input[name="ultraToppingMode"]').forEach(r => r.addEventListener('change', () => { updateToppingVisibility(); updatePriceUI(); }));
+      $$('input[name="ultraJenis"]').forEach(r => r.addEventListener('change', updatePriceUI));
+      $('#ultraIsi')?.addEventListener('change', updatePriceUI);
+      $('#ultraJumlah')?.addEventListener('input', updatePriceUI);
 
-    // initial visibility
-    updateToppingVisibility();
+      const form = document.querySelector('#formUltra') || document.querySelector('#form-ultra');
+      if (form){
+        // remove prior identical handler: defensive (can't remove anonymous, so just add)
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          const order = buildOrderObject();
+          if (!order) return;
+          saveOrderLocal(order);
+          renderNotaOnScreen(order);
+        });
+      }
 
-    // watchers
-    document.querySelectorAll('input[name="ultraToppingMode"]').forEach(r => r.addEventListener('change', () => { updateToppingVisibility(); updatePriceUI(); }));
-    document.querySelectorAll('input[name="ultraJenis"]').forEach(r => r.addEventListener('change', updatePriceUI));
-    $('#ultraIsi')?.addEventListener('change', updatePriceUI);
-    $('#ultraJumlah')?.addEventListener('input', updatePriceUI);
+      const sendBtn = document.querySelector('#ultraSendAdmin');
+      if (sendBtn){
+        sendBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          const last = getLastOrder();
+          if (!last){ alert('Belum ada nota yang dibuat.'); return; }
+          sendOrderToAdminViaWA(last);
+          alert('Permintaan cetak sudah dikirim ke WhatsApp Admin.');
+        });
+      }
 
-    // form submit
-    const form = document.querySelector('#formUltra') || document.querySelector('#form-ultra');
-    if (form){
-      // remove previously attached submit handler if any (defensive)
-      form.addEventListener('submit', function(e){
-        e.preventDefault();
-        const order = buildOrderObject();
-        if (!order) return;
-        saveOrderLocal(order);
-        renderNotaOnScreen(order);
-      });
-    }
+      const notaClose = document.querySelector('#notaClose');
+      if (notaClose) notaClose.addEventListener('click', () => { const nc = $('#notaContainer'); if (nc){ nc.classList.remove('show'); nc.style.display = 'none'; } });
 
-    // send admin button
-    const sendBtn = document.querySelector('#ultraSendAdmin');
-    if (sendBtn){
-      sendBtn.addEventListener('click', function(e){
-        e.preventDefault();
-        const order = getLastOrder();
-        if (!order){ alert('Belum ada nota yang dibuat.'); return; }
-        sendOrderToAdminViaWA(order);
-        alert('Permintaan cetak sudah dikirim ke WhatsApp Admin.');
-      });
-    }
-
-    // nota close
-    const notaClose = document.querySelector('#notaClose');
-    if (notaClose) notaClose.addEventListener('click', () => { const nc = $('#notaContainer'); if (nc){ nc.classList.remove('show'); nc.style.display = 'none'; } });
-
-    // print/pdf button (if exists) -> uses window.generatePdf
-    const printBtn = document.querySelector('#notaPrint');
-    if (printBtn){
-      printBtn.addEventListener('click', async function(e){
-        e.preventDefault();
-        const last = getLastOrder();
-        if (!last){ alert('Data nota belum tersedia. Silakan buat nota terlebih dahulu.'); return; }
-        if (typeof window.generatePdf !== 'function'){
-          // try to attach factory if available
-          if (window.makeGeneratePdf && (window.jspdf || window.jsPDF)) {
-            window.generatePdf = window.makeGeneratePdf(window.jspdf || window.jsPDF);
+      const printBtn = document.querySelector('#notaPrint');
+      if (printBtn){
+        printBtn.addEventListener('click', async function(e){
+          e.preventDefault();
+          const last = getLastOrder();
+          if (!last){ alert('Data nota belum tersedia. Silakan buat nota terlebih dahulu.'); return; }
+          if (typeof window.generatePdf !== 'function'){
+            if (window.makeGeneratePdf && (window.jspdf || window.jsPDF)) window.generatePdf = window.makeGeneratePdf(window.jspdf || window.jsPDF);
           }
-        }
-        if (typeof window.generatePdf === 'function'){
-          await window.generatePdf(last);
-        } else {
-          alert('PDF generator belum siap. Pastikan library jsPDF dimuat.');
-        }
-      });
-    }
+          if (typeof window.generatePdf === 'function'){ await window.generatePdf(last); }
+          else alert('PDF generator belum siap. Pastikan library jsPDF dimuat.');
+        });
+      }
 
-    // fallback buttons inside notaContainer: notaAskAdmin & notaSendWA -> keep them working even if order.js runs late
-    const notaAskAdmin = document.querySelector('#notaAskAdmin');
-    if (notaAskAdmin){
-      notaAskAdmin.addEventListener('click', (e) => {
-        e.preventDefault();
-        const last = getLastOrder();
-        if (!last){ alert('Belum ada nota. Silakan buat nota terlebih dahulu.'); return; }
-        // open WA asking admin to print (not auto-send)
-        sendOrderToAdminViaWA(last);
-      });
-    }
-    const notaSendWA = document.querySelector('#notaSendWA');
-    if (notaSendWA){
-      notaSendWA.addEventListener('click', (e) => {
-        e.preventDefault();
-        const last = getLastOrder();
-        if (!last){ alert('Belum ada nota. Silakan buat nota terlebih dahulu.'); return; }
-        // quick summary to admin
-        const msg = `Order baru:\nInvoice: ${last.invoice}\nNama: ${last.nama}\nTotal: ${formatRp(last.total)}`;
-        window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, '_blank');
-      });
+      const notaAskAdmin = document.querySelector('#notaAskAdmin');
+      if (notaAskAdmin){
+        notaAskAdmin.addEventListener('click', (e) => {
+          e.preventDefault();
+          const last = getLastOrder();
+          if (!last){ alert('Belum ada nota. Silakan buat nota terlebih dahulu.'); return; }
+          sendOrderToAdminViaWA(last);
+        });
+      }
+
+      const notaSendWA = document.querySelector('#notaSendWA');
+      if (notaSendWA){
+        notaSendWA.addEventListener('click', (e) => {
+          e.preventDefault();
+          const last = getLastOrder();
+          if (!last){ alert('Belum ada nota. Silakan buat nota terlebih dahulu.'); return; }
+          const msg = `Order baru:\nInvoice: ${last.invoice}\nNama: ${last.nama}\nTotal: ${formatRp(last.total)}`;
+          window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+      }
+
+      debugLog('Listeners attached');
+    } catch(err){
+      console.error('[order.js] attachFormListeners error', err);
     }
   }
 
@@ -411,9 +403,8 @@
   }
 
   // =====================================================
-  //   PDF PART (makeGeneratePdf & auto attach)
+  //   PDF PART (factory)
   // =====================================================
-  // load image to data URL
   function loadImageAsDataURL(path, timeoutMs = 5000){
     return new Promise(resolve => {
       if (!path) return resolve(null);
@@ -476,7 +467,7 @@
           ['Total Bayar', formatRp(order.total)]
         ];
         if (typeof doc.autoTable === 'function'){
-          doc.autoTable({ startY: y, head:[['Item','Keterangan']], body: rows, styles:{ fontSize:10 }, headStyles:{ fillColor:[255,105,180], textColor:255 }, alternateRowStyles:{ fillColor:[230,240,255] } });
+          doc.autoTable({ startY: y, head:[['Item','Keterangan']], body: rows, styles:{ fontSize:10 }, headStyles:{ fillColor:[255,105,180], textColor:255 }, alternateRowStyles:{ fillColor:[240,240,250] } });
           y = doc.lastAutoTable.finalY + 10;
         } else {
           rows.forEach(r => { doc.text(`${r[0]} : ${r[1]}`, 14, y); y += 6; });
@@ -493,7 +484,7 @@
         const fileName = `Invoice_${safeName}_${order.invoice}.pdf`;
         doc.save(fileName);
         return true;
-      } catch(err){ console.error('generatePdf error', err); alert('Gagal membuat PDF.'); return false; }
+      } catch(err){ console.error('[order.js] generatePdf error', err); alert('Gagal membuat PDF.'); return false; }
     };
   }
 
@@ -502,31 +493,60 @@
   (function tryAttachNow(){
     const lib = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf : (window.jsPDF ? window.jsPDF : null);
     if (lib){
-      try { window.generatePdf = makeGeneratePdf(lib); } catch(e) {}
+      try { window.generatePdf = makeGeneratePdf(lib); debugLog('generatePdf auto-attached'); } catch(e){}
     }
   })();
 
   // =====================================================
-  //   INIT
+  //   INIT + SELFTEST
   // =====================================================
   function init(){
-    ensureRequiredUI();
-    attachFormListeners();
-    updatePriceUI();
-    // Defensive: if jsPDF loads later, auto attach
-    setTimeout(() => {
-      const lib = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf : (window.jsPDF ? window.jsPDF : null);
-      if (lib && !window.generatePdf){
-        window.generatePdf = makeGeneratePdf(lib);
-      }
-    }, 1200);
+    try {
+      ensureRequiredUI();
+      attachFormListeners();
+      updatePriceUI();
+      // auto attach pdf after slight delay if library loads late
+      setTimeout(()=>{ const lib = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf : (window.jsPDF ? window.jsPDF : null); if (lib && !window.generatePdf){ window.generatePdf = makeGeneratePdf(lib); debugLog('generatePdf late-attached'); } }, 1000);
+      debugLog('order.js initialized');
+    } catch(err){
+      console.error('[order.js] init error', err);
+    }
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  // Self-test helper: run after page loaded or call manually
+  function selfTest(){
+    try {
+      console.group('%c order.js selfTest', 'color:#fff;background:#5e8af7;padding:4px;border-radius:4px');
+      debugLog('Running selfTest...');
+      ensureRequiredUI();
+      buildToppingUI();
+      const singleInputs = document.querySelectorAll('input[name="topping"]');
+      const taburanInputs = document.querySelectorAll('input[name="taburan"]');
+      debugLog('Counts', { toppings: singleInputs.length, taburans: taburanInputs.length });
+      // simulate selecting single mode + 1 topping
+      const singleMode = document.querySelector('input[name="ultraToppingMode"][value="single"]');
+      if (singleMode){ singleMode.checked = true; singleMode.dispatchEvent(new Event('change',{bubbles:true})); }
+      if (singleInputs.length){
+        singleInputs[0].checked = true;
+        singleInputs[0].dispatchEvent(new Event('change',{bubbles:true}));
+      }
+      const price = updatePriceUI();
+      console.table([{ pricePerBox: price.pricePerBox, subtotal: price.subtotal, discount: price.discount, total: price.total }]);
+      debugLog('SelfTest done — if toppings count = 0, check that order.js was loaded and no earlier script error exists.');
+      console.groupEnd();
+      return { toppings: singleInputs.length, taburans: taburanInputs.length, price };
+    } catch(err){
+      console.error('[order.js] selfTest error', err);
+      return { error: String(err) };
+    }
+  }
 
-  // Expose for debug
+  // expose debug/test
   window._orderjs = {
-    buildToppingUI, updatePriceUI, buildOrderObject, saveOrderLocal, getLastOrder, renderNotaOnScreen, sendOrderToAdminViaWA, saveLastNota
+    buildToppingUI, updatePriceUI, buildOrderObject, saveOrderLocal, getLastOrder, renderNotaOnScreen, sendOrderToAdminViaWA, saveLastNota, selfTest
   };
 
-})(); // end file
+  // run init when DOM ready
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+
+})();
