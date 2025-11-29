@@ -1,333 +1,234 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pukis Lumer Aulia — Best Seller Padang Panjang</title>
-
-  <meta name="description" content="Pukis Lumer topping melimpah — nomor #1 di Padang Panjang">
-  <meta property="og:title" content="Pukis Lumer Aulia">
-  <meta property="og:description" content="Pukis Lumer kekinian dengan topping lumer dan rasa juara.">
-  <meta property="og:image" content="assets/images/pukis-og.jpg">
-
-  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
-
-  <!-- STYLE UTAMA -->
-  <link rel="stylesheet" href="assets/css/style.css">
-
-  <!-- Fonts & icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;900&family=Poppins:wght@300;500;600&family=Pacifico&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <!-- Sembunyikan tombol print PDF untuk user -->
-  <style>#notaPrint{display:none!important;}</style>
-
-  <!-- Style tambahan (tidak bentrok dengan style.css) -->
-  <style>
-    .nota-overlay{display:none;}
-    .nota-overlay.show{display:flex!important;align-items:center;justify-content:center;}
-
-    .topping-check{
-      display:inline-flex;align-items:center;gap:8px;margin:6px;
-      padding:6px 10px;border-radius:8px;border:1px solid #ccc;
-      cursor:pointer;background:#fff;font-weight:700;
-    }
-    .topping-check.checked{
-      background:#fff5fa;border-color:#ff6ea0;
-      box-shadow:0 3px 10px rgba(0,0,0,0.12);
-    }
-    .topping-check input{transform:scale(1.2);}
-
-    .floating-icons-container{
-      transition:.25s ease;opacity:0;visibility:hidden;transform:translateY(8px);
-      position:fixed;right:18px;bottom:90px;display:flex;flex-direction:column;
-      gap:10px;z-index:2000;
-    }
-    .floating-icons-container.show{opacity:1;visibility:visible;transform:translateY(0);}
-    .admin-float-btn{
-      position:fixed;left:18px;bottom:20px;background:#1f2937;color:#fff;
-      width:50px;height:50px;display:flex;align-items:center;justify-content:center;
-      border-radius:10px;z-index:2000;box-shadow:0 6px 18px rgba(0,0,0,.18);
-      text-decoration:none;
-    }
-    .toggle-float-btn{
-      position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;
-      background:#ff5e7e;color:#fff;display:flex;align-items:center;justify-content:center;
-      font-size:22px;z-index:2100;box-shadow:0 8px 24px rgba(0,0,0,.18);
-    }
-    #lightboxOverlay{
-      position:fixed;inset:0;display:none;align-items:center;justify-content:center;
-      background:rgba(0,0,0,.85);z-index:9999;
-    }
-    #lightboxOverlay.show{display:flex;}
-    #lightboxImg{max-width:92%;max-height:86%;border-radius:12px;}
-
-    .bottom-nav{
-      position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;
-      background:#121213;padding:8px 0;z-index:1500;transition:transform .3s ease;
-    }
-    .bottom-nav.hide{transform:translateY(100%);}
-
-    .nota-card{
-      background:#fff;width:100%;max-width:520px;border-radius:12px;
-      padding:16px;box-shadow:0 8px 30px rgba(0,0,0,0.12);
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- Loader -->
-  <div id="site-loader" class="loader" style="display:flex;align-items:center;justify-content:center;flex-direction:column;">
-    <img src="assets/images/logo.png" width="110" alt="Logo Pukis Lumer Aulia">
-    <p style="margin-top:15px">Menyiapkan kelezatan 🤤...</p>
-  </div>
-
-  <!-- HERO -->
-  <section id="section-hero">
-    <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="hero-img">
-    <h1 style="margin:6px 0;color:#ff5e7e">PUKIS LUMER AULIA</h1>
-    <p style="font-weight:700;color:#000">Assalamu'alaikum</p>
-    <p style="font-weight:700;color:#000">Dimana saja kamu insyaAllah selalu Sehat…</p>
-    <p style="font-weight:700;color:#021b54">Padang Panjang Kota Kuliner…</p>
-    <p style="font-weight:700;color:#5b0080">Jika Sanak mampir…</p>
-    <p style="font-weight:700;color:#0b6500">Tersedia Rasa Original dan Pandan…</p>
-    <p style="font-weight:700;color:#5a2b0c">OPERASIONAL Jam: 16.00 - 23.59</p>
-    <p style="font-weight:700;color:#ff47b0">Location : pasar kuliner atas…</p>
-    <p style="font-weight:700;color:#5b2d02">Temukan Pukis Lumer Aulia di aplikasi…</p>
-    <p style="font-weight:700;color:#0067d6">BEST SELLER : DOUBLE TOPPING VANILLA - KEJU</p>
-    <p style="font-weight:700;color:#000">SATU PORSI bisa di mix ya…</p>
-    <p style="font-weight:700;color:#ff009e">Mau jajan manis, enak, KENYANG…</p>
-  </section>
-
-  <!-- WHY -->
-  <section id="section-why" style="margin-top:18px;padding:18px;border-radius:12px;">
-    <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
-    <p>Pukis kami dibuat dengan resep rahasia…</p>
-  </section>
-
-  <!-- FACTS -->
-  <section id="section-facts" style="margin-top:18px;padding:18px;border-radius:12px;">
-    <h2>Fakta Unik Tentang Kami</h2>
-    <ul style="color:#2E8B57;">
-      <li>Resep adonan spesial keluarga sejak 2023!</li>
-      <li>Pionir Pukis Lumer kekinian…</li>
-      <li>Tekstur lembut sempurna…</li>
-      <li>Lebih dari 10 varian topping…</li>
-      <li>100% bahan premium…</li>
-      <li>Jajanan nomor #1…</li>
-    </ul>
-  </section>
-
-  <!-- GALLERY -->
-  <section class="section-gallery"><img loading="lazy" src="assets/images/pukis1.jpg" class="gallery-img"></section>
-  <section class="section-gallery"><img loading="lazy" src="assets/images/pukis2.jpg" class="gallery-img"></section>
-  <section class="section-gallery"><img loading="lazy" src="assets/images/pukis3.jpg" class="gallery-img"></section>
-  <section class="section-gallery"><img loading="lazy" src="assets/images/pukis4.jpg" class="gallery-img"></section>
-  <section class="section-gallery"><img loading="lazy" src="assets/images/pukis5.jpg" class="gallery-img"></section>
-
-  <!-- ================== ORDER FORM ================== -->
-  <section id="form-ultra" style="margin-top:18px;padding:18px;border-radius:12px;background:#1b2838;color:#fff;">
-    <h2 style="color:#fff">Pemesanan Pukis Lumer Aulia</h2>
-
-    <form id="formUltra">
-
-      <!-- NAMA -->
-      <label>Nama Pemesan:</label>
-      <input type="text" id="ultraNama" required class="inpt">
-
-      <!-- WA -->
-      <label>Nomor WhatsApp:</label>
-      <input type="tel" id="ultraWA" required placeholder="0812..." class="inpt">
-
-      <!-- JENIS -->
-      <label>Jenis Pukis:</label>
-      <div class="opt-group">
-        <label><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
-        <label><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
-      </div>
-
-      <!-- ISI -->
-      <label>Isi per Box:</label>
-      <select id="ultraIsi" class="inpt">
-        <option value="5">5 pcs</option>
-        <option value="10">10 pcs</option>
-      </select>
-
-      <!-- MODE TOPPING -->
-      <label>Pilih Mode Topping:</label>
-      <div class="opt-group">
-        <label><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
-        <label><input type="radio" name="ultraToppingMode" value="single"> Single</label>
-        <label><input type="radio" name="ultraToppingMode" value="double"> Double</label>
-      </div>
-
-      <!-- GROUP TOPPING — auto diisi order.js -->
-      <div id="ultraSingleGroup" style="display:none;margin-bottom:8px;"></div>
-      <div id="ultraDoubleGroup" style="display:none;margin-bottom:8px;"></div>
-
-      <!-- CATATAN -->
-      <label>Catatan Khusus:</label>
-      <textarea id="ultraNote" placeholder="Contoh: Tanpa kacang / Ambil jam 19.00" class="textarea"></textarea>
-
-      <!-- JUMLAH -->
-      <label>Jumlah Box:</label>
-      <input type="number" id="ultraJumlah" min="1" value="1" class="inpt">
-
-      <!-- PRICE SUMMARY -->
-      <div class="price-summary">
-        <div><span>Harga per Box:</span><span id="ultraPricePerBox">Rp0</span></div>
-        <div><span>Subtotal:</span><span id="ultraSubtotal">Rp0</span></div>
-        <div><span>Diskon:</span><span id="ultraDiscount">-</span></div>
-        <div style="font-weight:700;"><span>Total Bayar:</span><span id="ultraGrandTotal">Rp0</span></div>
-      </div>
-
-      <!-- BUTTON NOTE -->
-      <button type="submit" id="ultraSubmit" class="btn-primary">Buat Nota</button>
-      <button type="button" id="ultraSendAdmin" class="btn-wa">Kirim WA Admin</button>
-    </form>
-  </section>
-
-  <!-- ================== NOTA POPUP ================== -->
-  <div id="notaContainer" class="nota-overlay" aria-hidden="true">
-    <div class="nota-card">
-
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h3 style="margin:0">Nota Pemesanan</h3>
-        <button id="notaClose" type="button" class="btn-x">✕</button>
-      </div>
-
-      <div id="notaContent" style="margin-top:12px;font-size:14px;line-height:1.4;"></div>
-
-      <div style="margin-top:12px;display:flex;gap:8px;">
-        <button id="notaAskAdmin" type="button" class="btn-wa" style="flex:1">
-          Minta Admin Cetak Invoice
-        </button>
-        <button id="notaSendWA" type="button" class="btn-blue" style="flex:1">
-          Kirim WA ke Admin
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ================== LOKASI ================== -->
-  <section id="section-location" class="white-card">
-    <h2>Lokasi Kami</h2>
-    <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" class="loc-link">📍 Klik untuk buka Google Maps</a></p>
-  </section>
-
-  <!-- ================== TESTIMONI ================== -->
-  <section id="section-testimoni" style="margin-top:18px;padding:12px;border-radius:12px;background:#3A3A44;color:#fff;">
-    <h2>Testimoni Pelanggan</h2>
-    <ul id="testimonialsList" style="list-style:none;padding:0;margin:0;">
-      <li class="testimonial-card"><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
-      <li class="testimonial-card"><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
-      <li class="testimonial-card"><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
-      <li class="testimonial-card"><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"</li>
-    </ul>
-  </section>
-
-  <!-- ================== FORM TAMBAH TESTIMONI ================== -->
-  <section id="section-add-testimoni" class="white-card">
-    <h2>Tulis Testimoni Kamu</h2>
-    <form id="testimonialForm">
-      <input id="nameInput" placeholder="Nama Kamu" class="inpt">
-      <textarea id="testimonialInput" placeholder="Testimoni..." class="textarea"></textarea>
-      <button type="submit" class="btn-primary">Kirim</button>
-    </form>
-  </section>
-
-  <!-- ================== FLOATING ADMIN BUTTON ================== -->
-  <a href="login.html" class="admin-float-btn" title="Masuk Admin">
-    <i class="fas fa-user-shield"></i>
-  </a>
-
-  <!-- ================== FLOATING SHARE BUTTON ================== -->
-  <button id="toggleShareBtn" class="toggle-float-btn" aria-label="Tombol Share">+</button>
-
-  <div class="floating-icons-container" id="floatingIcons">
-    <a href="https://wa.me/6281296668670" target="_blank" class="floating-icon"><i class="fab fa-whatsapp"></i></a>
-    <a href="https://www.facebook.com/pukislumer.aulia" target="_blank" class="floating-icon"><i class="fab fa-facebook-f"></i></a>
-    <a href="https://www.instagram.com/pukis.lumer_aulia" target="_blank" class="floating-icon"><i class="fab fa-instagram"></i></a>
-    <a href="https://www.twitter.com/pukislumer_" target="_blank" class="floating-icon"><i class="fab fa-twitter"></i></a>
-    <a href="https://www.tiktok.com/@pukislumer.aulia" target="_blank" class="floating-icon"><i class="fab fa-tiktok"></i></a>
-  </div>
-
-  <!-- ================== LIGHTBOX ================== -->
-  <div id="lightboxOverlay">
-    <img id="lightboxImg" src="" alt="Preview">
-  </div>
-
-  <!-- ================== BOTTOM NAV ================== -->
-  <nav class="bottom-nav">
-    <a href="https://wa.me/6281296668670" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat</span></a>
-    <a href="#form-ultra"><i class="fas fa-cart-shopping"></i><span>Order</span></a>
-    <a href="https://shopee.co.id/" target="_blank"><i class="fas fa-store"></i><span>Shopee</span></a>
-    <a href="https://food.maxim.com/" target="_blank"><i class="fas fa-motorcycle"></i><span>Maxim</span></a>
-    <a href="https://gofood.co.id/" target="_blank"><i class="fas fa-motorcycle"></i><span>GoFood</span></a>
-  </nav>
-
-  <!-- ================== FOOTER ================== -->
-  <footer class="footer">
-    © 2025 Pukis Lumer Aulia — Hak Cipta Dilindungi
-  </footer>
-
-  <!-- ================== SCRIPTS ================== -->
-
-  <!-- Script utama website -->
-  <script src="assets/js/script.js"></script>
-
-  <!-- jsPDF library -->
-  <script src="assets/js/lib/jspdf.umd.min.js"></script>
-  <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
-
-  <!-- ORDER.JS (core) -->
-  <script src="assets/js/order.js"></script>
-
-  <!-- ================== LOADER & FALLBACK ================== -->
-  <script>
-    // Hide loader
-    window.addEventListener("load", () => {
-      const loader = document.getElementById("site-loader");
-      if (loader) loader.style.display = "none";
-    });
-
-    // Floating Share
-    (function(){
-      const toggleShareBtn = document.getElementById("toggleShareBtn");
-      const floatingIcons = document.getElementById("floatingIcons");
-      toggleShareBtn?.addEventListener("click", () => {
-        floatingIcons.classList.toggle("show");
-      });
-    })();
-
-    // Fallback Nota WA
-    (function(){
-      const notaContainer = document.getElementById("notaContainer");
-      const notaClose = document.getElementById("notaClose");
-      const notaAskAdmin = document.getElementById("notaAskAdmin");
-      const notaSendWA = document.getElementById("notaSendWA");
-
-      notaClose?.addEventListener("click", () => {
-        notaContainer.style.display = "none";
-      });
-
-      notaAskAdmin?.addEventListener("click", () => {
-        const d = window._lastNotaData;
-        if (!d) return alert("Nota belum dibuat.");
-        const msg = `Halo Admin, saya ingin cetak invoice.\nInvoice: ${d.invoice}\nNama: ${d.nama}\nTotal: Rp${d.total.toLocaleString("id-ID")}`;
-        window.open(`https://wa.me/6281296668670?text=${encodeURIComponent(msg)}`);
-      });
-
-      notaSendWA?.addEventListener("click", () => {
-        const d = window._lastNotaData;
-        if (!d) return alert("Nota belum dibuat.");
-        const msg = `Order baru!\nInvoice: ${d.invoice}\nNama: ${d.nama}\nTotal: Rp${d.total.toLocaleString("id-ID")}`;
-        window.open(`https://wa.me/6281296668670?text=${encodeURIComponent(msg)}`);
-      });
-    })();
-  </script>
-
-</body>
-</html>
+‎<!DOCTYPE html>
+‎<html lang="id">
+‎<head>
+‎  <meta charset="utf-8" />
+‎  <meta name="viewport" content="width=device-width,initial-scale=1" />
+‎  <title>Pukis Lumer Aulia — Best Seller Padang Panjang</title>
+‎
+‎  <meta name="description" content="Pukis Lumer topping melimpah — nomor #1 di Padang Panjang">
+‎  <meta property="og:title" content="Pukis Lumer Aulia">
+‎  <meta property="og:description" content="Pukis Lumer kekinian dengan topping lumer dan rasa juara.">
+‎  <meta property="og:image" content="assets/images/pukis-og.jpg">
+‎
+‎  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+‎  <link rel="stylesheet" href="assets/css/style.css">
+‎  <link rel="stylesheet" href="assets/css/form-style.css">
+‎  <link rel="stylesheet" href="assets/css/admin.css">
+‎
+‎  <!-- Fonts & icons -->
+‎  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;900&family=Poppins:wght@300;500;600&family=Pacifico&display=swap" rel="stylesheet">
+‎  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+‎
+‎  <style>
+‎    /* Safety styles for nota overlay & topping visuals */
+‎    .nota-overlay.show, .nota-overlay { display:none; }
+‎    .nota-overlay.show { display:flex; }
+‎    .topping-check { display:inline-flex; align-items:center; gap:8px; margin:6px; padding:6px 8px; border-radius:8px; border:1px solid #eee; cursor:pointer; user-select:none; }
+‎    .topping-check input { transform:scale(1.05); }
+‎    .topping-check.checked { background:linear-gradient(90deg,#fff9f9,#fff); border-color:#ffb3c7; box-shadow:0 4px 10px rgba(0,0,0,0.06); }
+‎    .floating-icons-container { transition: all .25s ease; opacity:0; visibility:hidden; transform:translateY(8px); position:fixed; right:18px; bottom:90px; display:flex; flex-direction:column; gap:10px; z-index:2000; }
+‎    .floating-icons-container.show { opacity:1; visibility:visible; transform:translateY(0); }
+‎    .admin-float-btn { position:fixed; left:18px; bottom:20px; background:#1f2937; color:#fff; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px; z-index:2000; box-shadow:0 6px 18px rgba(0,0,0,.18); text-decoration:none; }
+‎    .toggle-float-btn { position:fixed; right:18px; bottom:18px; width:56px; height:56px; border-radius:50%; background:#ff5e7e; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; z-index:2100; box-shadow:0 8px 24px rgba(0,0,0,.18); }
+‎    #lightboxOverlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.85); z-index:9999; }
+‎    #lightboxOverlay.show { display:flex; }
+‎    #lightboxImg { max-width:92%; max-height:86%; border-radius:12px; }
+‎    /* Bottom nav hide on scroll */
+‎    .bottom-nav { position:fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around; background:#121213; padding:8px 0; z-index:1500; transition:transform .3s ease; }
+‎    .bottom-nav.hide { transform:translateY(100%); }
+‎  </style>
+‎</head>
+‎<body>
+‎
+‎  <!-- Loader -->
+‎  <div id="site-loader" class="loader" style="display:flex;align-items:center;justify-content:center;flex-direction:column;">
+‎    <img src="assets/images/logo.png" width="110" alt="Logo Pukis Lumer Aulia">
+‎    <p style="margin-top:15px">Menyiapkan kelezatan 🤤...</p>
+‎  </div>
+‎
+‎  <div class="container">
+‎    <!-- Hero -->
+‎    <section id="section-hero">
+‎      <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="hero-img">
+‎      <h1 style="margin:6px 0;color:#ff5e7e">PUKIS LUMER AULIA</h1>
+‎      <p style="font-weight:700;color:#000">Assalamu'alaikum</p>
+‎      <p style="font-weight:700;color:#000">Dimana saja kamu insyaAllah selalu Sehat, diberikan keberkahan, rejeki berlimpah<br>Aamiin Allahumma Aamiiin</p>
+‎      <p style="font-weight:700;color:#021b54">Padang Panjang Kota Kuliner — Serambi Mekkah orang mengenalnya</p>
+‎      <p style="font-weight:700;color:#5b0080">Jika Sanak mampir ke Pasar Kuliner Jangan lupa mampir ke PUKIS LUMER AULIA!</p>
+‎      <p style="font-weight:700;color:#0b6500">Tersedia Rasa Original dan Rasa Pandan, beragam varian Topping & Taburan bisa di mix — HARGA MULAI DARI 10K</p>
+‎      <p style="font-weight:700;color:#5a2b0c">OPERASIONAL Jam: 16.00pm - 23.59pm (selama persediaan masih ada)</p>
+‎      <p style="font-weight:700;color:#ff47b0">Location : pasar kuliner atas Padang Panjang deket roti TENONK , depan Aquarium ( Gerobak Pink)</p>
+‎      <p style="font-weight:700;color:#5b2d02">Temukan Pukis Lumer Aulia di aplikasi: Maxim Food, Grab Food and Go Food</p>
+‎      <p style="font-weight:700;color:#0067d6">BEST SELLER : DOUBLETOPING VANILLA - KEJU</p>
+‎      <p style="font-weight:700;color:#000">SATU PORSI bisa di mix ya topingnya..</p>
+‎      <p style="font-weight:700;color:#ff009e">Mau jajan manis, enak, KENYANG, ramah dan irit dikantong yuk jajan PUKIS LUMER AULIA aja.. PORSI BESAR ADA DISKONYAHH LOH</p>
+‎    </section>
+‎
+‎    <!-- WHY -->
+‎    <section id="section-why" style="margin-top:18px;padding:18px;border-radius:12px;">
+‎      <h2>Kenapa Pilih Pukis Lumer Aulia?</h2>
+‎      <p>Pukis kami dibuat dengan resep rahasia keluarga, menghasilkan tekstur super lembut dan rasa luar biasa. Tersedia berbagai varian topping favorit semua umur!</p>
+‎    </section>
+‎
+‎    <!-- FACTS -->
+‎    <section id="section-facts" style="margin-top:18px;padding:18px;border-radius:12px;">
+‎      <h2>Fakta Unik Tentang Kami</h2>
+‎      <ul style="color:#2E8B57;">
+‎        <li>Resep adonan spesial keluarga sejak 2023!</li>
+‎        <li>Pionir Pukis Lumer kekinian di Padang Panjang.</li>
+‎        <li>Tekstur lembut sempurna berkat teknik panggang tradisional.</li>
+‎        <li>Lebih dari 10 varian topping siap setiap hari.</li>
+‎        <li>100% bahan premium tanpa pengawet.</li>
+‎        <li>Jajanan nomor #1 di Pasar Kuliner Padang Panjang!</li>
+‎      </ul>
+‎    </section>
+‎
+‎    <!-- GALLERY -->
+‎    <section id="section-gallery" style="margin-top:18px;padding:12px;border-radius:12px;">
+‎      <h2>Galeri Pilihan</h2>
+‎      <div class="gallery-grid" style="margin-top:12px;">
+‎        <img loading="lazy" src="assets/images/pukis1.jpg" class="gallery-img" alt="Pukis 1">
+‎        <img loading="lazy" src="assets/images/pukis2.jpg" class="gallery-img" alt="Pukis 2">
+‎        <img loading="lazy" src="assets/images/pukis3.jpg" class="gallery-img" alt="Pukis 3">
+‎        <img loading="lazy" src="assets/images/pukis4.jpg" class="gallery-img" alt="Pukis 4">
+‎        <img loading="lazy" src="assets/images/pukis5.jpg" class="gallery-img" alt="Pukis 5">
+‎      </div>
+‎    </section>
+‎
+‎    <!-- ORDER FORM + TOPPING LOGIC -->
+‎    <section id="form-ultra" style="margin-top:18px;padding:18px;border-radius:12px;background:#1b2838;color:#fff;">
+‎
+‎      <h2 style="color:#fff">Pemesanan Pukis Lumer Aulia</h2>
+‎
+‎      <form id="formUltra">
+‎        <label style="color:#fff">Nama Pemesan:</label>
+‎        <input type="text" id="ultraNama" required style="padding:10px;border-radius:8px;border:0;margin-bottom:8px;">
+‎
+‎        <label style="color:#fff">Nomor WhatsApp:</label>
+‎        <input type="tel" id="ultraWA" required placeholder="0812..." style="padding:10px;border-radius:8px;border:0;margin-bottom:8px;">
+‎
+‎        <label style="color:#fff">Jenis Pukis:</label>
+‎        <div class="opt-group" style="display:flex;gap:8px;margin-bottom:8px;">
+‎          <label style="color:#fff"><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
+‎          <label style="color:#fff"><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
+‎        </div>
+‎
+‎        <label style="color:#fff">Isi per Box:</label>
+‎        <select id="ultraIsi" style="padding:8px;border-radius:8px;margin-bottom:8px;">
+‎          <option value="5">5 pcs</option>
+‎          <option value="10">10 pcs</option>
+‎        </select>
+‎
+‎        <label style="color:#fff">Pilih Mode Topping:</label>
+‎        <div class="opt-group" style="display:flex;gap:8px;margin-bottom:8px;color:#fff;">
+‎          <label><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
+‎          <label><input type="radio" name="ultraToppingMode" value="single"> Single</label>
+‎          <label><input type="radio" name="ultraToppingMode" value="double"> Double</label>
+‎        </div>
+‎
+‎        <!-- Single Topping -->
+‎        <div id="ultraSingleGroup" class="topping-wrap" style="display:none;margin-bottom:8px;"></div>
+‎        <!-- Double Topping + Taburan -->
+‎        <div id="ultraDoubleGroup" class="topping-wrap" style="display:none;margin-bottom:8px;"></div>
+‎
+‎        <label style="color:#fff">Catatan Khusus:</label>
+‎        <textarea id="ultraNote" placeholder="Contoh: Tanpa kacang / Ambil jam 19.00" style="width:100%;padding:8px;border-radius:8px;margin-bottom:8px;"></textarea>
+‎
+‎        <label style="color:#fff">Jumlah Box:</label>
+‎        <input type="number" id="ultraJumlah" min="1" value="1" style="padding:8px;border-radius:8px;margin-bottom:12px;">
+‎
+‎        <div class="price-summary" style="background:rgba(255,255,255,0.06);padding:10px;border-radius:8px;margin-bottom:12px;">
+‎          <div style="display:flex;justify-content:space-between;"><span>Harga per Box:</span><span id="ultraPricePerBox">Rp0</span></div>
+‎          <div style="display:flex;justify-content:space-between;"><span>Subtotal:</span><span id="ultraSubtotal">Rp0</span></div>
+‎          <div style="display:flex;justify-content:space-between;"><span>Diskon:</span><span id="ultraDiscount">-</span></div>
+‎          <div style="display:flex;justify-content:space-between;font-weight:700;"><span>Total Bayar:</span><span id="ultraGrandTotal">Rp0</span></div>
+‎        </div>
+‎
+‎        <button type="submit" id="ultraSubmit" class="btn-primary" style="width:100%;padding:12px;border-radius:10px;border:0;margin-bottom:8px;">Buat Nota</button>
+‎        <button type="button" id="ultraSendAdmin" class="btn-wa" style="width:100%;padding:12px;border-radius:10px;border:0;">Kirim WA Admin</button>
+‎      </form>
+‎    </section>
+‎
+‎    <!-- NOTA POPUP -->
+‎    <div id="notaContainer" class="nota-overlay" style="display:none;align-items:center;justify-content:center;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;">
+‎      <div class="nota-card" style="background:#fff;padding:16px;border-radius:12px;width:95%;max-width:520px;">
+‎        <div style="display:flex;justify-content:space-between;align-items:center;">
+‎          <h3 style="margin:0">Nota Pemesanan</h3>
+‎          <button id="notaClose" style="background:#eee;border:0;padding:6px;border-radius:8px;cursor:pointer">✕</button>
+‎        </div>
+‎        <div id="notaContent" style="margin-top:12px"></div>
+‎        <div style="margin-top:12px;display:flex;gap:8px">
+‎          <button id="notaPrint" style="flex:1;padding:10px;border-radius:8px;border:0;background:#ff5e7e;color:#fff">Cetak / PDF</button>
+‎        </div>
+‎      </div>
+‎    </div>
+‎
+‎    <!-- LOCATION -->
+‎    <section id="section-location" style="margin-top:18px;padding:12px;border-radius:12px;background:#fff8f8;">
+‎      <h2>Lokasi Kami</h2>
+‎      <p><a href="https://maps.app.goo.gl/rTUSmpDvrbQb6rZE6" target="_blank" style="color:#e67e22;font-weight:700">📍 Klik untuk buka Google Maps</a></p>
+‎    </section>
+‎
+‎    <!-- TESTIMONI -->
+‎    <section id="section-testimoni" style="margin-top:18px;padding:12px;border-radius:12px;background:#3A3A44;color:#fff;">
+‎      <h2>Testimoni Pelanggan</h2>
+‎      <ul id="testimonialsList" style="list-style:none;padding:0;margin:0;">
+‎        <li class="testimonial-card" style="background:#fff;padding:12px;border-radius:8px;margin-bottom:8px;color:#000;"><strong>Anggi, Payakumbuh</strong><br>"Pukisnya lembut dan toppingnya melimpah! Bakalan order lagi."</li>
+‎        <li class="testimonial-card" style="background:#fff;padding:12px;border-radius:8px;margin-bottom:8px;color:#000;"><strong>Wenni, Pekanbaru</strong><br>"Rasa pandan-nya mantap, cocok buat cemilan sore!"</li>
+‎        <li class="testimonial-card" style="background:#fff;padding:12px;border-radius:8px;margin-bottom:8px;color:#000;"><strong>Annisa, Bukittinggi</strong><br>"Pukis terenak yang pernah aku coba. Anak-anak juga suka!"</li>
+‎        <li class="testimonial-card" style="background:#fff;padding:12px;border-radius:8px;margin-bottom:8px;color:#000;"><strong>Maulana, Padang Panjang</strong><br>"Awalnya penasaran, sekali coba ketagihan, Topping nya gak pelit, penjual juga Ramah"</li>
+‎      </ul>
+‎    </section>
+‎
+‎    <section id="section-add-testimoni" style="margin-top:12px;padding:12px;border-radius:12px;background:#fff;">
+‎      <h2>Tulis Testimoni Kamu</h2>
+‎      <form id="testimonialForm">
+‎        <input id="nameInput" placeholder="Nama Kamu" style="width:100%;padding:8px;border-radius:8px;margin-bottom:8px;">
+‎        <textarea id="testimonialInput" placeholder="Testimoni..." style="width:100%;padding:8px;border-radius:8px;margin-bottom:8px;"></textarea>
+‎        <button type="submit" style="padding:10px;border-radius:8px;border:0;background:#ff5e7e;color:#fff">Kirim</button>
+‎      </form>
+‎    </section>
+‎
+‎  </div> <!-- END container -->
+‎
+‎  <!-- ADMIN FLOAT LEFT -->
+‎  <a href="admin.html" class="admin-float-btn" title="Masuk Admin">
+‎    <i class="fas fa-user-shield"></i>
+‎  </a>
+‎
+‎  <!-- FLOATING SHARE BUTTON -->
+‎  <button id="toggleShareBtn" class="toggle-float-btn" aria-label="Tombol Share">+</button>
+‎  <div class="floating-icons-container" id="floatingIcons" aria-hidden="true">
+‎    <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+‎    <a href="https://www.facebook.com/pukislumer.aulia" class="floating-icon facebook" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+‎    <a href="https://www.instagram.com/pukis.lumer_aulia" class="floating-icon instagram" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+‎    <a href="https://www.x.com/pukislumer_" class="floating-icon twitter" target="_blank" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+‎    <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+‎  </div>
+‎
+‎  <!-- LIGHTBOX -->
+‎  <div id="lightboxOverlay"><img id="lightboxImg" src="" alt="Preview"></div>
+‎
+‎  <!-- BOTTOM NAV -->
+‎  <nav class="bottom-nav">
+‎    <a href="https://wa.me/6281296668670" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat</span></a>
+‎    <a href="#form-ultra"><i class="fas fa-cart-shopping"></i><span>Order</span></a>
+‎    <a href="https://shopee.co.id/" target="_blank"><i class="fas fa-store"></i><span>Shopee</span></a>
+‎    <a href="https://food.maxim.com/" target="_blank"><i class="fa-solid fa-motorcycle"></i><span>Maxim</span></a>
+‎    <a href="https://food.maxim.com/" target="_blank"><i class="fa-solid fa-motorcycle"></i><span>Kombi</span></a>
+‎    <a href="https://food.maxim.com/" target="_blank"><i class="fa-solid fa-motorcycle"></i><span>Gofood</span></a>
+‎  </nav>
+‎
+‎  <footer style="padding:18px;text-align:center;background:#121213;color:#d8d8d8;margin-top:18px;border-radius:12px 12px 0 0;">
+‎    © 2025 Pukis Lumer Aulia — Hak Cipta Dilindungi
+‎  </footer>
+‎
+‎  <!-- SCRIPTS -->
+‎  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+‎  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+‎  <script src="assets/js/order.js"></script>
+‎  <script src="assets/js/script.js"></script>
+‎
+‎</body>
+‎</html>
+‎
