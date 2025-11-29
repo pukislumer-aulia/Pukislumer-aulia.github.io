@@ -1,147 +1,141 @@
-/* ===========================================================
-   order.js — REKONSTRUKSI FINAL
-   - Single topping = gaya A (.topping-check)
-   - Double taburan = gaya B (label sederhana)
-   - Hitung otomatis, validasi topping<=isi box
-   - Simpan ke localStorage keys: pukisOrders, lastOrder
-   - Tombol Minta Admin Cetak -> WA admin (ADMIN_WA)
-   - PDF generator (jsPDF + autotable if available)
-   - Render nota popup dan fallback handlers
-   =========================================================== */
-
+/* =========================================================
+   order.js — FINAL (PART 1)
+   - Mengembalikan fungsi asli + tambahan admin/save/pdf hooks
+   - Single topping = gaya A (.topping-check) max 5
+   - Double: topping max 5 + taburan max 5
+   - Semua event, auto-calc, render nota tetap
+   ======================================================== */
 (function(){
   'use strict';
 
-  // ---------- Configuration ----------
-  const ADMIN_WA = "6281296668670"; // nomor admin (E.164 tanpa +)
-  const STORAGE_ORDERS_KEY = "pukisOrders";
+  // ---------------------- CONFIG ----------------------
+  const ADMIN_WA = "6281296668670";
+  const STORAGE_ORDERS_KEY = "pukisOrders"; // sinkron dengan admin.js
   const STORAGE_LAST_ORDER_KEY = "lastOrder";
 
-  const ASSET_IMAGES = "assets/images/";
-  const QRIS_IMAGE = "qris-pukis.jpg"; // optional, used in PDF
-  const TTD_IMAGE = "ttd.png";         // optional, signature in PDF
+  const ASSET_PREFIX = "assets/images/";
+  const QRIS_IMAGE = "qris-pukis.jpg"; // optional
+  const TTD_IMAGE = "ttd.png";         // optional
 
-  // Topping lists (adjust to your original choices)
-  const SINGLE_TOPPINGS = ["Coklat","Tiramisu","Stroberi","Cappucino","Vanilla","Taro","Matcha"];
+  // Topping lists (sesuaikan jika perlu)
+  const SINGLE_TOPPINGS = ["Coklat","Tiramisu","Vanilla","Stroberi","Cappucino","Taro","Matcha"];
   const DOUBLE_TABURAN  = ["Meses","Keju","Kacang","Choco Chip","Oreo"];
 
-  // Base price table (example — keep as your original)
+  // Price table (sesuaikan dengan harga aktualmu)
   const BASE_PRICE = {
-    Original: {
-      "5":   { non: 10000, single: 13000, double: 15000 },
-      "10":  { non: 18000, single: 25000, double: 28000 }
-    },
-    Pandan: {
-      "5":   { non: 12000, single: 15000, double: 17000 },
-      "10":  { non: 21000, single: 28000, double: 32000 }
-    }
+    Original: { "5": { non: 10000, single: 13000, double: 15000 }, "10": { non: 18000, single: 25000, double: 28000 } },
+    Pandan:   { "5": { non: 12000, single: 15000, double: 17000 }, "10": { non: 21000, single: 28000, double: 32000 } }
   };
 
-  // Helpers for DOM
-  const $ = (sel) => document.querySelector(sel);
-  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+  // VALIDATION RULES (sesuai permintaan)
+  const MAX_SINGLE_TOPPING = 5; // single mode max
+  const MAX_DOUBLE_TOPPING = 5; // double mode: topping main (single) max 5
+  const MAX_DOUBLE_TABURAN = 5; // double mode: taburan max 5
 
-  // Rupiah formatter
-  function formatRp(amount){
-    const n = Number(amount || 0);
-    if (Number.isNaN(n)) return "Rp 0";
-    return "Rp " + n.toLocaleString('id-ID');
-  }
+  // helpers
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  function formatRp(n){ const v = Number(n||0); if (Number.isNaN(v)) return "Rp 0"; return "Rp " + v.toLocaleString('id-ID'); }
+  function escapeHtml(s){ return String(s==null? '': s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
-  // ---------- Build Topping UI ----------
+  // ---------------------- BUILD UI ----------------------
   function buildToppingUI(){
     const singleWrap = $('#ultraSingleGroup');
     const doubleWrap = $('#ultraDoubleGroup');
     if (!singleWrap || !doubleWrap) return;
 
-    // Clear existing
     singleWrap.innerHTML = '';
     doubleWrap.innerHTML = '';
 
-    // Single toppings — gaya A (with class topping-check)
+    // Single toppings — gaya A (.topping-check)
     SINGLE_TOPPINGS.forEach(t => {
-      const id = `top_${t.toLowerCase().replace(/\s+/g,'_')}`;
-      const label = document.createElement('label');
-      label.className = 'topping-check'; // style A
-      label.innerHTML = `<input type="checkbox" name="topping" value="${t}" id="${id}"> ${t}`;
-      singleWrap.appendChild(label);
+      const id = 'topping_' + t.toLowerCase().replace(/\s+/g,'_');
+      const lab = document.createElement('label');
+      lab.className = 'topping-check';
+      lab.style.margin = '6px';
+      lab.innerHTML = `<input type="checkbox" name="topping" value="${t}" id="${id}"> ${t}`;
+      singleWrap.appendChild(lab);
     });
 
-    // Double taburan — gaya B (simple labels)
+    // Double taburan — gaya B (simple label)
     DOUBLE_TABURAN.forEach(t => {
-      const id = `tab_${t.toLowerCase().replace(/\s+/g,'_')}`;
-      const label = document.createElement('label');
-      label.style.margin = '6px';
-      label.innerHTML = `<input type="checkbox" name="taburan" value="${t}" id="${id}"> ${t}`;
-      doubleWrap.appendChild(label);
+      const id = 'taburan_' + t.toLowerCase().replace(/\s+/g,'_');
+      const lab = document.createElement('label');
+      lab.style.margin = '6px';
+      lab.innerHTML = `<input type="checkbox" name="taburan" value="${t}" id="${id}"> ${t}`;
+      doubleWrap.appendChild(lab);
     });
 
-    // Add visual toggle for checked (for gaya A we want .checked class)
+    // delegate change events for visual .checked & validation
     singleWrap.addEventListener('change', function(e){
-      if (!e.target) return;
-      const inp = e.target;
-      if (inp.matches('input[type="checkbox"]')){
-        const lab = inp.closest('label');
-        if (lab) {
-          if (inp.checked) lab.classList.add('checked'); else lab.classList.remove('checked');
+      const target = e.target;
+      if (!target || !target.matches('input[type="checkbox"]')) return;
+      const label = target.closest('label');
+      if (label) { if (target.checked) label.classList.add('checked'); else label.classList.remove('checked'); }
+
+      // validate counts depending on mode
+      const mode = getSelectedToppingMode();
+      if (mode === 'single'){
+        const sel = $$('input[name="topping"]:checked').length;
+        if (sel > MAX_SINGLE_TOPPING){
+          target.checked = false;
+          if (label) label.classList.remove('checked');
+          alert(`Maksimal ${MAX_SINGLE_TOPPING} topping untuk mode Single.`);
         }
-        validateToppingCounts();
-        updatePriceUI();
+      } else if (mode === 'double'){
+        const sel = $$('input[name="topping"]:checked').length;
+        if (sel > MAX_DOUBLE_TOPPING){
+          target.checked = false;
+          if (label) label.classList.remove('checked');
+          alert(`Maksimal ${MAX_DOUBLE_TOPPING} topping untuk mode Double.`);
+        }
       }
+      updatePriceUI();
     });
 
     doubleWrap.addEventListener('change', function(e){
-      if (!e.target) return;
-      const inp = e.target;
-      if (inp.matches('input[type="checkbox"]')){
-        validateToppingCounts();
-        updatePriceUI();
+      const target = e.target;
+      if (!target || !target.matches('input[type="checkbox"]')) return;
+      const mode = getSelectedToppingMode();
+      if (mode === 'double'){
+        const selTab = $$('input[name="taburan"]:checked').length;
+        if (selTab > MAX_DOUBLE_TABURAN){
+          target.checked = false;
+          alert(`Maksimal ${MAX_DOUBLE_TABURAN} taburan untuk mode Double.`);
+        }
+      } else {
+        // if not double mode, auto-uncheck taburan
+        if (target.checked) { target.checked = false; alert('Taburan hanya aktif pada mode Double.'); }
       }
+      updatePriceUI();
     });
   }
 
-  // ---------- Form helpers ----------
-  function getSelectedRadio(name){
-    const r = document.querySelector(`input[name="${name}"]:checked`);
-    return r ? r.value : null;
-  }
-  function getToppingSelected(){
-    return Array.from(document.querySelectorAll('input[name="topping"]:checked')).map(i=>i.value);
-  }
-  function getTaburanSelected(){
-    return Array.from(document.querySelectorAll('input[name="taburan"]:checked')).map(i=>i.value);
-  }
-  function getIsi(){
-    const el = $('#ultraIsi'); return el ? String(el.value) : '5';
-  }
-  function getJumlahBox(){
-    const el = $('#ultraJumlah'); if (!el) return 1;
-    const v = parseInt(el.value,10);
-    return (isNaN(v) || v < 1) ? 1 : v;
-  }
+  // ---------------------- FORM HELPERS ----------------------
+  function getSelectedRadioValue(name){ const r = document.querySelector(`input[name="${name}"]:checked`); return r? r.value : null; }
+  function getToppingValues(){ return Array.from(document.querySelectorAll('input[name="topping"]:checked')).map(i=>i.value); }
+  function getTaburanValues(){ return Array.from(document.querySelectorAll('input[name="taburan"]:checked')).map(i=>i.value); }
+  function getIsiValue(){ const el = $('#ultraIsi'); return el? String(el.value) : '5'; }
+  function getJumlahBox(){ const el = $('#ultraJumlah'); if (!el) return 1; const v = parseInt(el.value,10); return (isNaN(v)||v<1)?1:v; }
+
+  // ---------------------- PRICE LOGIC ----------------------
   function getPricePerBox(jenis, isi, mode){
-    jenis = jenis || 'Original'; isi = String(isi || '5'); mode = (mode || 'non').toLowerCase();
-    try {
-      return BASE_PRICE[jenis] && BASE_PRICE[jenis][isi] && BASE_PRICE[jenis][isi][mode] ? BASE_PRICE[jenis][isi][mode] : 0;
-    } catch(e){ return 0; }
+    jenis = jenis || 'Original'; isi = String(isi || '5'); mode = (mode||'non').toLowerCase();
+    try { return (BASE_PRICE[jenis] && BASE_PRICE[jenis][isi] && BASE_PRICE[jenis][isi][mode]) || 0; }
+    catch(e) { return 0; }
   }
 
-  // Discount logic (example: fixed Rp1.000 for 10 box, or 1% for >=5)
   function calcDiscount(jumlahBox, subtotal){
-    if (jumlahBox >= 10) {
-      // if you asked earlier "beli 10 box besar, dapat Rp 1.000"
-      return 1000;
-    }
-    // example small discount for >=5, else 0
+    // keep business rule: fixed Rp1000 for 10+ OR percentage if you prefer.
+    if (jumlahBox >= 10) return 1000;
     if (jumlahBox >= 5) return Math.round(subtotal * 0.01);
     return 0;
   }
 
-  // ---------- Price update UI ----------
   function updatePriceUI(){
-    const jenis = getSelectedRadio('ultraJenis') || 'Original';
-    const isi   = getIsi();
-    const mode  = getSelectedRadio('ultraToppingMode') || 'non';
+    const jenis = getSelectedRadioValue('ultraJenis') || 'Original';
+    const isi = getIsiValue();
+    const mode = getSelectedToppingMode();
     const jumlah = getJumlahBox();
 
     const pricePerBox = getPricePerBox(jenis, isi, mode);
@@ -156,71 +150,45 @@
 
     if (elPrice) elPrice.textContent = formatRp(pricePerBox);
     if (elSubtotal) elSubtotal.textContent = formatRp(subtotal);
-    if (elDiscount) elDiscount.textContent = discount > 0 ? '-' + formatRp(discount) : '-';
+    if (elDiscount) elDiscount.textContent = discount>0 ? '-' + formatRp(discount) : '-';
     if (elGrand) elGrand.textContent = formatRp(total);
 
-    return { jenis, isi, mode, jumlah, pricePerBox, subtotal, discount, total };
+    return { pricePerBox, subtotal, discount, total };
   }
 
-  // ---------- Topping validation ----------
-  function validateToppingCounts(){
-    const isi = parseInt(getIsi(),10) || 5;
-    const selectedTopping = getToppingSelected().length;
-    const selectedTaburan = getTaburanSelected().length;
+  function getSelectedToppingMode(){ return getSelectedRadioValue('ultraToppingMode') || 'non'; }
 
-    if (selectedTopping > isi) {
-      alert(`Maksimal topping = ${isi} (jumlah isi box). Pilihan topping akan dikurangi.`);
-      // uncheck extras (leave first isi)
-      const boxes = document.querySelectorAll('input[name="topping"]:checked');
-      Array.from(boxes).slice(isi).forEach(i=>i.checked = false);
-      // update visuals
-      document.querySelectorAll('.topping-check').forEach(lab=>{
-        const inp = lab.querySelector('input[type="checkbox"]');
-        if (inp) {
-          if (inp.checked) lab.classList.add('checked'); else lab.classList.remove('checked');
-        }
-      });
-    }
-    if (selectedTaburan > isi) {
-      alert(`Maksimal taburan = ${isi} (jumlah isi box). Pilihan taburan akan dikurangi.`);
-      const boxes = document.querySelectorAll('input[name="taburan"]:checked');
-      Array.from(boxes).slice(isi).forEach(i=>i.checked = false);
-    }
-  }
-
-  // ---------- Build order object ----------
+  // ---------------------- BUILD ORDER OBJECT ----------------------
   function buildOrderObject(){
-    const nama = ($('#ultraNama') ? $('#ultraNama').value.trim() : '') || '';
-    const waRaw = ($('#ultraWA') ? $('#ultraWA').value.trim() : '') || '';
-    const jenis = getSelectedRadio('ultraJenis') || 'Original';
-    const isi = getIsi();
-    const mode = getSelectedRadio('ultraToppingMode') || 'non';
-    const topping = getToppingSelected(); // array
-    const taburan = getTaburanSelected(); // array
-    const jumlah = getJumlahBox();
-    const note = ($('#ultraNote') ? $('#ultraNote').value.trim() : '') || '';
-
-    // Validations (must keep)
-    if (!nama) { alert('Nama harus diisi'); return null; }
-    if (!waRaw) { alert('Nomor WhatsApp harus diisi'); return null; }
-    const digits = waRaw.replace(/\D/g,'');
-    if (digits.length < 9) { alert('Nomor WA tidak valid (min 9 digit).'); return null; }
-
-    // normalize WA to 62... (no +)
-    let wa = waRaw.replace(/\s+/g,'').replace(/\+/g,'');
-    if (wa.startsWith('0')) wa = '62' + wa.slice(1);
-    if (/^8\d{7,}$/.test(wa)) wa = '62' + wa; // if user typed starting 8xx
-
-    // price calc
+    const jenis = getSelectedRadioValue('ultraJenis') || 'Original';
+    const isi = getIsiValue();
+    const mode = getSelectedToppingMode();
+    const jumlahBox = getJumlahBox();
+    const topping = getToppingValues();
+    const taburan = getTaburanValues();
     const pricePerBox = getPricePerBox(jenis, isi, mode);
-    const subtotal = pricePerBox * jumlah;
-    const discount = calcDiscount(jumlah, subtotal);
+    const subtotal = pricePerBox * jumlahBox;
+    const discount = calcDiscount(jumlahBox, subtotal);
     const total = subtotal - discount;
 
-    // Invoice: INV-<timestamp>
+    const nama = $('#ultraNama') ? $('#ultraNama').value.trim() : '-';
+    const waRaw = $('#ultraWA') ? $('#ultraWA').value.trim() : '-';
+    const note = $('#ultraNote') ? $('#ultraNote').value.trim() : '-';
+
+    // basic validation
+    if (!nama) { alert('Nama pemesan harus diisi.'); return null; }
+    if (!waRaw) { alert('Nomor WA harus diisi.'); return null; }
+    const digits = waRaw.replace(/\D/g,'');
+    if (digits.length < 9) { alert('Nomor WA tampak tidak valid (min 9 digit).'); return null; }
+
+    // normalize WA
+    let wa = waRaw.replace(/\s+/g,'').replace(/\+/g,'');
+    if (wa.startsWith('0')) wa = '62' + wa.slice(1);
+    if (/^8\d{6,}$/.test(wa)) wa = '62' + wa;
+
     const invoice = 'INV-' + Date.now();
 
-    return {
+    const order = {
       invoice,
       nama,
       wa,
@@ -229,7 +197,7 @@
       mode,
       topping,
       taburan,
-      jumlah,
+      jumlah: jumlahBox,
       pricePerBox,
       subtotal,
       discount,
@@ -238,30 +206,29 @@
       tgl: new Date().toLocaleString('id-ID'),
       status: 'Pending'
     };
+
+    return order;
   }
 
-  // ---------- Storage ----------
-  function getOrdersFromStorage(){
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_ORDERS_KEY) || '[]');
-    } catch(e){ return []; }
-  }
-  function saveOrdersToStorage(arr){
-    try { localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(arr)); } catch(e){}
-  }
+  // ---------------------- STORAGE ----------------------
   function saveOrderLocal(order){
     if (!order) return;
-    const arr = getOrdersFromStorage();
-    arr.push(order);
-    saveOrdersToStorage(arr);
-    try { localStorage.setItem(STORAGE_LAST_ORDER_KEY, JSON.stringify(order)); } catch(e){}
-    // also expose global lastNota for backward compat
-    window._lastNotaData = order;
+    try {
+      const arr = JSON.parse(localStorage.getItem(STORAGE_ORDERS_KEY) || '[]');
+      arr.push(order);
+      localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(arr));
+      localStorage.setItem(STORAGE_LAST_ORDER_KEY, JSON.stringify(order));
+    } catch(e){
+      console.error('saveOrderLocal error', e);
+    }
   }
 
-  // ---------- Render Nota in Popup ----------
-  function escapeHtml(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function getLastOrder(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_LAST_ORDER_KEY) || 'null'); }
+    catch(e){ return null; }
+  }
 
+  // ---------------------- RENDER NOTA POPUP ----------------------
   function renderNotaOnScreen(order){
     if (!order) return;
     const c = $('#notaContent');
@@ -273,7 +240,7 @@
       <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
         <div style="flex:1;min-width:200px">
           <div style="font-weight:800;color:#5f0000;font-size:14px;margin-bottom:6px;">INVOICE PEMESANAN</div>
-          <div><strong>Nomor Invoice:</strong> ${escapeHtml(order.invoice)}</div>
+          <div><strong>Invoice:</strong> ${escapeHtml(order.invoice)}</div>
           <div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>
           <div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>
           <div><strong>Tanggal:</strong> ${escapeHtml(order.tgl)}</div>
@@ -285,7 +252,7 @@
         <div><strong>Mode:</strong> ${escapeHtml(order.mode)}</div>
         <div><strong>Topping:</strong> ${escapeHtml(toppingText)}</div>
         <div><strong>Taburan:</strong> ${escapeHtml(taburanText)}</div>
-        <div><strong>Jumlah Box:</strong> ${escapeHtml(String(order.jumlah))}</div>
+        <div><strong>Jumlah:</strong> ${escapeHtml(String(order.jumlah))} box</div>
         <div><strong>Harga Satuan:</strong> ${formatRp(order.pricePerBox)}</div>
         <div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>
         <div><strong>Diskon:</strong> ${order.discount>0 ? '-' + formatRp(order.discount) : '-'}</div>
@@ -294,14 +261,13 @@
       </div>
     `;
     const container = $('#notaContainer');
-    if (container) {
-      container.style.display = 'flex';
-      container.classList.add('show');
-    }
-    window._lastNotaData = order;
+    if (container) { container.style.display = 'flex'; container.classList.add('show'); }
+    // store lastOrder for other handlers
+    try { localStorage.setItem(STORAGE_LAST_ORDER_KEY, JSON.stringify(order)); } catch(e){}
+    window._lastNota = order;
   }
 
-  // ---------- Send to Admin via WA ----------
+  // ---------------------- SEND TO ADMIN WA ----------------------
   function sendOrderToAdminViaWA(order){
     if (!order) return;
     const lines = [
@@ -312,7 +278,7 @@
       `Nama    : ${order.nama}`,
       `WA      : ${order.wa}`,
       `Jenis   : ${order.jenis}`,
-      `Isi Box : ${order.isi} pcs`,
+      `Isi     : ${order.isi} pcs`,
       `Mode    : ${order.mode}`,
       `Topping : ${order.topping && order.topping.length ? order.topping.join(', ') : '-'}`,
       `Taburan : ${order.taburan && order.taburan.length ? order.taburan.join(', ') : '-'}`,
@@ -323,131 +289,318 @@
       "",
       "Mohon bantu cetak invoice. Terima kasih 😊"
     ];
-    const waUrl = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(lines.join('\n'))}`;
-    window.open(waUrl, '_blank');
+    window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
   }
 
-  // ---------- Fallback utility to read last order ----------
-  function getLastOrder(){
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_LAST_ORDER_KEY) || 'null');
-    } catch(e){ return null; }
-  }
-   /* --------------------------
-   PDF generator factory + image loader
-   -------------------------- */
+  // ---------------------- Attach listeners (form + buttons) ----------------------
+  function attachFormListeners(){
+    // build topping UI
+    buildToppingUI();
 
+    // initial visibility based on current selected mode
+    updateToppingVisibility();
+
+    // watch mode change
+    $$('input[name="ultraToppingMode"]').forEach(r => r.addEventListener('change', () => { updateToppingVisibility(); updatePriceUI(); }));
+
+    // watch jenis
+    $$('input[name="ultraJenis"]').forEach(r => r.addEventListener('change', updatePriceUI));
+
+    // watch isi change (although validation doesn't depend on isi in final rule)
+    $('#ultraIsi')?.addEventListener('change', updatePriceUI);
+
+    // watch jumlah
+    $('#ultraJumlah')?.addEventListener('input', updatePriceUI);
+
+    // form submit (buat nota)
+    const form = $('#formUltra') || document.querySelector('#form-ultra') || document.querySelector('form#formUltra');
+    if (form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const order = buildOrderObject();
+        if (!order) return;
+        saveOrderLocal(order);
+        renderNotaOnScreen(order);
+      });
+    }
+
+    // send admin button
+    const sendBtn = $('#ultraSendAdmin');
+    if (sendBtn){
+      sendBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        const order = buildOrderObject();
+        if (!order) return;
+        saveOrderLocal(order);
+        sendOrderToAdminViaWA(order);
+        alert('Permintaan cetak sudah dikirim ke WhatsApp Admin.');
+      });
+    }
+
+    // nota close
+    const notaClose = $('#notaClose');
+    if (notaClose) notaClose.addEventListener('click', () => { const nc = $('#notaContainer'); if (nc) { nc.classList.remove('show'); nc.style.display = 'none'; } });
+
+    // print/pdf button (uses lastOrder)
+    const printBtn = $('#notaPrint');
+    if (printBtn){
+      printBtn.addEventListener('click', async function(e){
+        e.preventDefault();
+        let last = getLastOrder();
+        if (!last) { alert('Data nota belum tersedia. Silakan buat nota terlebih dahulu.'); return; }
+        if (typeof window.generatePdf !== 'function'){
+          // try to attach factory if available
+          if (window.makeGeneratePdf && (window.jspdf || window.jsPDF)) {
+            window.generatePdf = window.makeGeneratePdf(window.jspdf || window.jsPDF);
+          }
+        }
+        if (typeof window.generatePdf === 'function'){
+          await window.generatePdf(last);
+        } else {
+          alert('PDF generator belum siap. Pastikan library jsPDF dimuat.');
+        }
+      });
+    }
+  }
+
+  // ---------------------- Topping visibility ----------------------
+  function updateToppingVisibility(){
+    const mode = getSelectedToppingMode();
+    const singleGroup = $('#ultraSingleGroup');
+    const doubleGroup = $('#ultraDoubleGroup');
+    if (!singleGroup || !doubleGroup) return;
+    if (mode === 'non'){
+      singleGroup.style.display = 'none';
+      doubleGroup.style.display = 'none';
+      // uncheck existing
+      $$('input[name="topping"]:checked').forEach(i => { i.checked = false; i.closest('label')?.classList.remove('checked'); });
+      $$('input[name="taburan"]:checked').forEach(i => { i.checked = false; });
+    } else if (mode === 'single'){
+      singleGroup.style.display = 'flex';
+      doubleGroup.style.display = 'none';
+    } else if (mode === 'double'){
+      singleGroup.style.display = 'flex';
+      doubleGroup.style.display = 'flex';
+    }
+  }
+
+  // ---------------------- INIT ----------------------
+  function init(){
+    attachFormListeners();
+    updatePriceUI();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+
+  // expose for debug / quick access
+  window._orderjs_final = {
+    buildToppingUI, updateToppingVisibility, updatePriceUI, buildOrderObject, saveOrderLocal, getLastOrder, sendOrderToAdminViaWA, renderNotaOnScreen
+  };
+
+})(); // end PART 1
+/* =========================================================
+   order.js — FINAL (PART 2)
+   - PDF generator (jsPDF + autoTable if available)
+   - Load images (QRIS, TTD) as dataURL safely
+   - Expose window.makeGeneratePdf and auto-attach window.generatePdf
+   ========================================================= */
 (function(){
-  // load image as dataURL
-  function loadImageDataURL(path){
-    return new Promise(resolve => {
+  'use strict';
+
+  const ASSET_PREFIX = "assets/images/"; // same as Part 1
+  const QRIS_FILE = "qris-pukis.jpg"; // optional; keep same filename as assets
+  const TTD_FILE = "ttd.png";
+
+  // small formatRp for PDF usage (kept consistent)
+  function formatRp(num){
+    const n = Number(num || 0);
+    if (Number.isNaN(n)) return "Rp 0";
+    return "Rp " + n.toLocaleString('id-ID');
+  }
+
+  // load image to dataURL (works for PNG/JPG)
+  function loadImageAsDataURL(path, timeoutMs = 4000){
+    return new Promise((resolve) => {
+      if (!path) return resolve(null);
       const img = new Image();
+      let settled = false;
       img.crossOrigin = "anonymous";
-      img.onload = function(){
+      const timer = setTimeout(()=> {
+        if (!settled){ settled = true; resolve(null); }
+      }, timeoutMs);
+      img.onload = () => {
+        if (settled) return;
         try {
           const canvas = document.createElement('canvas');
           canvas.width = img.naturalWidth;
           canvas.height = img.naturalHeight;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0);
-          resolve(canvas.toDataURL('image/png'));
-        } catch(e){ resolve(null); }
+          const data = canvas.toDataURL('image/png');
+          settled = true;
+          clearTimeout(timer);
+          resolve(data);
+        } catch (e){
+          settled = true;
+          clearTimeout(timer);
+          resolve(null);
+        }
       };
-      img.onerror = function(){ resolve(null); };
+      img.onerror = () => {
+        if (!settled){ settled = true; clearTimeout(timer); resolve(null); }
+      };
       img.src = path;
     });
   }
 
-  function makePdfGenerator(jsPDFLib){
-    const jsPDFCtor = jsPDFLib && jsPDFLib.jsPDF ? jsPDFLib.jsPDF : jsPDFLib;
+  // factory that returns generatePdf(order)
+  function makeGeneratePdf(JS){
+    // JS can be window.jspdf or window.jsPDF or the module object with .jsPDF
+    let jsPDFCtor = null;
+    if (!JS) {
+      if (window.jspdf && window.jspdf.jsPDF) jsPDFCtor = window.jspdf.jsPDF;
+      else if (window.jsPDF) jsPDFCtor = window.jsPDF;
+    } else {
+      jsPDFCtor = JS.jsPDF ? JS.jsPDF : JS;
+    }
+    if (!jsPDFCtor) {
+      // no jsPDF available, factory will still return a function that errors
+      return async function generatePdfUnavailable(){
+        throw new Error('jsPDF tidak tersedia');
+      };
+    }
+
     return async function generatePdf(order){
       try {
-        if (!jsPDFCtor) throw new Error('jsPDF tidak tersedia');
+        if (!order) throw new Error('Order tidak diberikan ke generatePdf');
 
         const doc = new jsPDFCtor({ unit: 'mm', format: 'a4' });
         const W = doc.internal.pageSize.getWidth();
-        const centerX = W / 2;
+        const H = doc.internal.pageSize.getHeight();
 
-        // load assets (qris & ttd) if exist
-        const qrisData = await loadImageDataURL(ASSET_IMAGES + QRIS_IMAGE).catch(()=>null);
-        const ttdData  = await loadImageDataURL(ASSET_IMAGES + TTD_IMAGE).catch(()=>null);
+        // load optional assets (non-blocking if failed)
+        const qrisPath = ASSET_PREFIX + QRIS_FILE;
+        const ttdPath = ASSET_PREFIX + TTD_FILE;
 
-        // header
+        const [qrisData, ttdData] = await Promise.all([
+          loadImageAsDataURL(qrisPath).catch(()=>null),
+          loadImageAsDataURL(ttdPath).catch(()=>null)
+        ]);
+
+        // Header
         doc.setFont('helvetica','bold');
         doc.setFontSize(16);
-        doc.text('PUKIS LUMER AULIA', centerX, 15, { align: 'center' });
+        doc.setTextColor(0,0,0);
+        doc.text('PUKIS LUMER AULIA', W/2, 15, { align: 'center' });
 
+        // Subheader / invoice label
+        doc.setFont('helvetica','normal');
         doc.setFontSize(11);
-        doc.setFont('helvetica','normal');
-        const leftX = 14;
-        let y = 30;
-        doc.text(`Invoice: ${order.invoice}`, leftX, y); y += 6;
-        doc.text(`Nama   : ${order.nama}`, leftX, y); y += 6;
-        doc.text(`WA     : ${order.wa}`, leftX, y); y += 6;
-        doc.text(`Tanggal: ${order.tgl}`, leftX, y); y += 10;
+        doc.text('Invoice Pemesanan', 14, 25);
 
-        // items
-        doc.setFont('helvetica','bold');
-        doc.text('Rincian Pesanan', leftX, y); y += 6;
+        // metadata block
+        let y = 34;
+        doc.setFontSize(10);
+        doc.text(`Order ID: ${order.orderID || order.invoice || '-'}`, 14, y);
+        doc.text(`Tanggal: ${order.tgl || new Date().toLocaleString('id-ID')}`, W-14, y, { align: 'right' });
+        y += 7;
+        doc.text(`No. Antrian: ${order.antrian || '-'}`, W-14, y, { align: 'right' });
+        doc.text(`Nama: ${order.nama || '-'}`, 14, y);
+        y += 7;
+        doc.setFont('helvetica','italic');
+        doc.text(`Catatan: ${order.note || '-'}`, 14, y);
         doc.setFont('helvetica','normal');
+        y += 10;
+
+        // Build table rows (Item / Keterangan)
+        const toppingTxt = order.topping && order.topping.length ? order.topping.join(', ') : '-';
+        const taburanTxt = order.taburan && order.taburan.length ? order.taburan.join(', ') : '-';
+
         const rows = [
           ['Jenis', order.jenis || '-'],
-          ['Isi Box', `${order.isi} pcs`],
+          ['Isi Box', (order.isi || '-') + ' pcs'],
           ['Mode', order.mode || '-'],
-          ['Topping', (order.topping && order.topping.length) ? order.topping.join(', ') : '-'],
-          ['Taburan', (order.taburan && order.taburan.length) ? order.taburan.join(', ') : '-'],
-          ['Jumlah Box', `${order.jumlah} box`],
-          ['Harga Satuan', formatRp(order.pricePerBox)],
-          ['Subtotal', formatRp(order.subtotal)],
+          ['Topping', toppingTxt],
+          ['Taburan', taburanTxt],
+          ['Jumlah Box', (order.jumlah || order.jumlahBox || 0) + ' box'],
+          ['Harga Satuan', formatRp(order.pricePerBox || 0)],
+          ['Subtotal', formatRp(order.subtotal || 0)],
           ['Diskon', order.discount > 0 ? '-' + formatRp(order.discount) : '-'],
-          ['Total', formatRp(order.total)]
+          ['Total Bayar', formatRp(order.total || 0)]
         ];
 
-        // use autoTable if available
+        // If autoTable available, use it
         if (typeof doc.autoTable === 'function'){
           doc.autoTable({
             startY: y,
             head: [['Item','Keterangan']],
             body: rows,
-            styles: { fontSize: 10 },
-            headStyles: { fillColor: [199,0,86], textColor: 255 },
-            columnStyles: { 0: { cellWidth: 40 }, 1: { cellWidth: W - 40 - 28 } }
+            styles: { fontSize: 10, textColor: 0 },
+            headStyles: { fillColor: [255,105,180], textColor: 255 }, // pink header
+            alternateRowStyles: { fillColor: [230,240,255] }, // light blue rows
+            columnStyles: { 0: { cellWidth: 45 }, 1: { cellWidth: W - 45 - 28 } }
           });
-          y = doc.lastAutoTable.finalY + 8;
         } else {
+          // simple fallback table
+          let ty = y;
           rows.forEach(r => {
-            doc.text(`${r[0]}: ${r[1]}`, leftX, y);
-            y += 6;
+            doc.text(`${r[0]}: ${r[1]}`, 14, ty);
+            ty += 6;
           });
-          y += 6;
         }
 
-        // QRIS on left
+        const endTableY = doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : (y + (rows.length*6) + 8);
+
+        // QRIS on left under table (40 x 50 mm)
         if (qrisData){
-          doc.addImage(qrisData, 'PNG', leftX, y, 40, 40);
-          doc.setFontSize(9);
-          doc.text('Scan QRIS untuk pembayaran', leftX + 46, y + 8);
+          try {
+            doc.addImage(qrisData, 'PNG', 14, endTableY + 8, 40, 50);
+            doc.setFontSize(9);
+            doc.text('Scan QRIS untuk pembayaran', 14 + 46, endTableY + 30);
+          } catch(e){}
         }
 
-        // Signature on right
-        const sigX = W - 80;
-        let sigY = y;
-        doc.setFontSize(11);
-        doc.text('Hormat Kami,', sigX + 20, sigY);
-        sigY += 8;
-        if (ttdData){
-          doc.addImage(ttdData, 'PNG', sigX + 5, sigY, 60, 30);
-          sigY += 34;
-        } else { sigY += 30; }
-        doc.setFont('helvetica','bold');
-        doc.text('Pukis Lumer Aulia', sigX + 20, sigY);
-
-        // footer
+        // Signature area right
+        const sigX = W - 14 - 50; // leave margin
+        let sigY = Math.max(endTableY + 8, 120);
         doc.setFontSize(10);
-        doc.text('Terima kasih telah berbelanja', centerX, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
+        doc.text('Hormat Kami,', sigX + 8, sigY);
+        sigY += 6;
+        if (ttdData){
+          try {
+            doc.addImage(ttdData, 'PNG', sigX, sigY, 40, 30);
+            sigY += 36;
+          } catch(e){
+            sigY += 30;
+          }
+        } else {
+          sigY += 30;
+        }
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(10);
+        doc.text('Pukis Lumer Aulia', sigX + 8, sigY);
 
-        const safeName = (order.nama || 'pelanggan').replace(/\s+/g,'_').replace(/[^\w\-_.]/g,'');
-        const fileName = `Invoice_${safeName}_${order.invoice || Date.now()}.pdf`;
+        // Watermark large center
+        try {
+          doc.setTextColor(150,150,150);
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(48);
+          // jsPDF doesn't support opacity param in all versions; keep it simple
+          doc.text('Pukis Lumer Aulia', W/2, H/2, { align: 'center' });
+          doc.setTextColor(0,0,0);
+        } catch(e){
+          // ignore watermark errors
+          doc.setTextColor(0,0,0);
+        }
+
+        // Footer thank you
+        doc.setFontSize(13);
+        doc.setFont('helvetica','bold');
+        doc.text('Terima kasih telah berbelanja di toko Kami', W/2, H - 15, { align: 'center' });
+
+        // Filename and save
+        const safeName = (order.nama || 'Pelanggan').replace(/\s+/g,'_').replace(/[^\w\-_.]/g,'');
+        const fileName = `Invoice_${safeName}_${order.orderID || order.invoice || Date.now()}.pdf`;
         doc.save(fileName);
         return true;
       } catch(err){
@@ -458,139 +611,39 @@
     };
   }
 
-  // expose generator if jsPDF present
-  window._pdfFactory = makePdfGenerator;
-  if (window.jsPDF || (window.jspdf && window.jspdf.jsPDF)) {
-    window.generatePdf = makePdfGenerator(window.jsPDF || window.jspdf);
-  }
-})();
+  // Expose factory as window.makeGeneratePdf (used in Part1)
+  window.makeGeneratePdf = makeGeneratePdf;
 
-/* --------------------------
-   Attach events & init
-   -------------------------- */
-
-function attachOrderListeners(){
-  // Build UI
-  buildToppingUI();
-
-  // radio mode change (non/single/double)
-  $$('input[name="ultraToppingMode"]').forEach(r => r.addEventListener('change', () => {
-    const mode = document.querySelector('input[name="ultraToppingMode"]:checked')?.value || 'non';
-    const sg = $('#ultraSingleGroup');
-    const dg = $('#ultraDoubleGroup');
-    if (sg && dg){
-      if (mode === 'non'){ sg.style.display = 'none'; dg.style.display = 'none'; }
-      else if (mode === 'single'){ sg.style.display = 'flex'; dg.style.display = 'none'; }
-      else { sg.style.display = 'flex'; dg.style.display = 'flex'; }
+  // If jsPDF already loaded, auto-create window.generatePdf
+  (function tryAttachNow(){
+    const lib = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf : (window.jsPDF ? window.jsPDF : null);
+    if (lib){
+      try {
+        window.generatePdf = makeGeneratePdf(lib);
+      } catch(e){}
     }
-    updatePriceUI();
-  }));
+  })();
 
-  // jenis change
-  $$('input[name="ultraJenis"]').forEach(r => r.addEventListener('change', updatePriceUI));
-  // isi change
-  const isiSel = $('#ultraIsi');
-  if (isiSel) isiSel.addEventListener('change', () => { validateToppingCounts(); updatePriceUI(); });
-  // jumlah change
-  const jumlahEl = $('#ultraJumlah');
-  if (jumlahEl) jumlahEl.addEventListener('input', updatePriceUI);
-
-  // submit form -> buat nota
-  const form = $('#formUltra');
-  if (form){
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      const order = buildOrderObject();
-      if (!order) return;
-      saveOrderLocal(order);
-      renderNotaOnScreen(order);
-      // optional: scroll to nota or focus
-    });
-  }
-
-  // ultraSendAdmin -> immediate save + send WA
-  const btnSendAdmin = $('#ultraSendAdmin');
-  if (btnSendAdmin){
-    btnSendAdmin.addEventListener('click', function(e){
-      e.preventDefault();
-      const order = buildOrderObject();
-      if (!order) return;
-      saveOrderLocal(order);
-      sendOrderToAdminViaWA(order);
-      alert('Permintaan cetak telah dikirim ke WhatsApp Admin.');
-    });
-  }
-
-  // notaAskAdmin (in popup) -> send lastOrder to admin
-  const notaAskAdmin = $('#notaAskAdmin');
-  if (notaAskAdmin){
-    notaAskAdmin.addEventListener('click', function(){
-      const last = getLastOrder();
-      if (!last) return alert('Data nota belum tersedia. Silakan buat nota terlebih dahulu.');
-      sendOrderToAdminViaWA(last);
-    });
-  }
-  // notaSendWA (short chat)
-  const notaSendWA = $('#notaSendWA');
-  if (notaSendWA){
-    notaSendWA.addEventListener('click', function(){
-      const last = getLastOrder();
-      if (!last) return alert('Data nota belum tersedia. Silakan buat nota terlebih dahulu.');
-      const msg = `Order baru:\nInvoice: ${last.invoice}\nNama: ${last.nama}\nTotal: ${formatRp(last.total)}`;
-      window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, '_blank');
-    });
-  }
-
-  // notaPrint (hidden for user) -> uses lastOrder
-  const notaPrint = $('#notaPrint');
-  if (notaPrint){
-    notaPrint.addEventListener('click', async function(e){
-      e.preventDefault();
-      const last = getLastOrder();
-      if (!last) return alert('Data nota belum tersedia. Silakan buat nota terlebih dahulu.');
-      if (typeof window.generatePdf !== 'function'){
-        if (window.jsPDF || (window.jspdf && window.jspdf.jsPDF)) {
-          window.generatePdf = window._pdfFactory(window.jsPDF || window.jspdf);
+  // Also expose a helper to wait for jsPDF and attach (used elsewhere)
+  window._attachGeneratePdfWhenReady = async function(timeoutMs = 7000){
+    const start = Date.now();
+    return new Promise((resolve) => {
+      const id = setInterval(() => {
+        const lib = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf : (window.jsPDF ? window.jsPDF : null);
+        if (lib){
+          try {
+            window.generatePdf = makeGeneratePdf(lib);
+            clearInterval(id);
+            resolve(true);
+            return;
+          } catch(e){}
         }
-      }
-      if (typeof window.generatePdf === 'function'){
-        await window.generatePdf(last);
-      } else {
-        alert('PDF generator belum tersedia.');
-      }
+        if (Date.now() - start > timeoutMs){
+          clearInterval(id);
+          resolve(false);
+        }
+      }, 200);
     });
-  }
+  };
 
-  // nota close button
-  const notaClose = $('#notaClose');
-  if (notaClose){
-    notaClose.addEventListener('click', function(){
-      const c = $('#notaContainer'); if (c) { c.classList.remove('show'); c.style.display = 'none'; }
-    });
-  }
-
-  // initial states
-  updatePriceUI();
-  // set initial visibility for topping groups
-  const currentMode = $('input[name="ultraToppingMode"]:checked') ? $('input[name="ultraToppingMode"]:checked').value : 'non';
-  const sg = $('#ultraSingleGroup'), dg = $('#ultraDoubleGroup');
-  if (sg && dg){
-    if (currentMode === 'non'){ sg.style.display='none'; dg.style.display='none'; }
-    else if (currentMode === 'single'){ sg.style.display='flex'; dg.style.display='none'; }
-    else { sg.style.display='flex'; dg.style.display='flex'; }
-  }
-}
-
-// init on DOM ready
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attachOrderListeners);
-else attachOrderListeners();
-
-// Expose internal for debug
-window._orderjs = {
-  buildToppingUI,
-  buildOrderObject,
-  saveOrderLocal,
-  getLastOrder,
-  sendOrderToAdminViaWA,
-  updatePriceUI
-};
+})(); // end PART 2
