@@ -323,6 +323,12 @@
         renderNotaOnScreen(order);
       });
     }
+     let order = JSON.parse(localStorage.getItem("lastOrder"));
+if (!order) {
+    alert("Data nota belum tersedia, silakan buat nota terlebih dahulu.");
+    return;
+}
+sendOrderToAdminViaWA(order);
 
     // send admin button
     const sendBtn = $('#ultraSendAdmin');
