@@ -167,10 +167,27 @@
       <div id="notaContent" style="margin-top:12px;font-size:14px;line-height:1.4;"></div>
 
       <div style="margin-top:12px;display:flex;gap:8px">
-        <!-- Tombol cetak PDF DISABLED untuk user; kita ganti tombol 'Minta Admin Cetak Invoice' -->
-        <button id="notaAskAdmin" type="button" class="btn btn-wa" style="flex:1;padding:10px;border-radius:8px;border:0;background:#25D366;color:#fff">
-          Minta Admin Cetak Invoice
-        </button>
+
+  <!-- TOMBOL PRINT PDF (DISEMBUNYIKAN TAPI WAJIB ADA UNTUK JS) -->
+  <button id="notaPrint" type="button" 
+          style="display:none;flex:1;padding:10px;border-radius:8px;border:0;background:#008cff;color:#fff">
+    Cetak PDF
+  </button>
+
+  <!-- TOMBOL MINTA ADMIN -->
+  <button id="notaAskAdmin" type="button" class="btn btn-wa"
+          style="flex:1;padding:10px;border-radius:8px;border:0;background:#25D366;color:#fff">
+    Minta Admin Cetak Invoice
+  </button>
+
+  <!-- WA ADMIN -->
+  <button id="notaSendWA" type="button" 
+          style="flex:1;padding:10px;border-radius:8px;border:0;background:#008cff;color:#fff">
+    Kirim WA ke Admin
+  </button>
+
+</div>
+  
 
         <!-- (Opsional tombol WA langsung ke admin untuk chat order) -->
         <button id="notaSendWA" type="button" class="btn" style="flex:1;padding:10px;border-radius:8px;border:0;background:#008cff;color:#fff">
