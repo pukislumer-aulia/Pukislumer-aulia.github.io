@@ -392,4 +392,98 @@ html {
   color: #7a009d !important; /* ungu tebal */
   font-weight: 800 !important;
 }
+
+/* ===========================
+   COMPATIBILITY PATCH (ADD)
+   Untuk memperbaiki layout setelah revisi order.js
+   Paste di akhir assets/css/style.css
+   =========================== */
+
+/* Topping wrapper: jangan overflow — tampil rapi */
+#ultraSingleGroup, #ultraDoubleGroup, .topping-wrap {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  align-items: flex-start;
+  margin-bottom: 8px !important;
+  padding: 4px 2px;
+}
+
+/* Make topping-check responsive inside the wrapper */
+.topping-check {
+  flex: 0 0 auto !important;
+  min-width: 90px;
+  max-width: 45%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 10px !important;
+  box-sizing: border-box;
+}
+
+/* On small screens allow topping to be smaller */
+@media (max-width: 420px){
+  .topping-check { max-width: 100%; }
+}
+
+/* Testimoni card restore */
+.testimonial-card, .testi-card, .testimonial-card * {
+  box-sizing: border-box;
+}
+.testimonial-card {
+  background: #fff !important;
+  color: #000 !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  margin-bottom: 8px !important;
+  line-height: 1.35 !important;
+  word-break: break-word !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+/* If a global rule forced list items to be flex, constrain it here */
+#testimonialsList { display: block !important; padding: 0; margin: 0; }
+#testimonialsList .testimonial-card { display: block !important; }
+
+/* Price summary spacing */
+.price-summary > div { display:flex; justify-content:space-between; gap:8px; margin-bottom:6px; align-items:center; }
+
+/* Nota popup visibility & max-width */
+#notaContainer.nota-overlay, #notaContainer { display:none; align-items:center; justify-content:center; }
+#notaContainer.show { display:flex !important; }
+.nota-card { max-width:520px; width:100%; }
+
+/* Prevent bottom nav / floating icons from covering form */
+.bottom-nav { z-index:1500; }
+.floating-icons-container { z-index:1600; }
+
+/* Fix admin floating button flicker: make it not animate opacity on load */
+.admin-float-btn, .toggle-float-btn { transition: transform .18s ease, box-shadow .12s ease !important; opacity:1 !important; }
+
+/* Buttons consistent */
+.btn, .btn-primary, .btn-wa, .btn-blue { border:0; cursor:pointer; padding:10px 12px; border-radius:8px; }
+
+/* Ensure nota buttons have unique IDs (visual safety) */
+#notaAskAdmin, #notaSendWA { min-height:40px; }
+
+/* Safety: ensure images don't overflow columns */
+.gallery-img, .hero-img { max-width:100%; height:auto; display:block; }
+
+/* Prevent global heavy rules from breaking inputs */
+.inpt, input[type="text"], input[type="tel"], select, textarea {
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+/* If any rule made label width 100%, restore inline labels for radios */
+.opt-group label { display:inline-flex; align-items:center; gap:6px; margin-right:8px; color:inherit; }
+
+/* Minor aesthetic: align nota content text */
+#notaContent { color:#222; }
+
+/* Admin panel overlay fix: don't show until login verified (if admin panel uses .admin-panel) */
+.admin-panel { opacity:1; transition: opacity .18s ease; }
+
+/* Remove sudden focus outline that may look like blinking */
+*:focus { outline-color: rgba(0,0,0,0.12); outline-offset: 1px; }
 /* DONE */
