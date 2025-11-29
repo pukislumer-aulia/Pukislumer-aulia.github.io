@@ -22,7 +22,7 @@
   // topping list
   const SINGLE_TOPPINGS = [
     "Coklat","Tiramisu","Vanilla","Stroberi",
-    "Cappucino","Taro","Matcha"
+    "Cappucino"
   ];
 
   // taburan list (untuk mode double)
