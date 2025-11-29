@@ -26,7 +26,7 @@
   </style>
 
   <style>
-    /* Local helper styles so index looks good even without touching global CSS */
+    /* Local helper styles so index looks good */
     .nota-overlay { display: none; }
     .nota-overlay.show { display:flex !important; align-items:center; justify-content:center; }
     .topping-check { display:inline-flex; align-items:center; gap:8px; margin:6px; padding:6px 8px; border-radius:8px; border:1px solid #eee; cursor:pointer; user-select:none; }
@@ -44,11 +44,14 @@
     .bottom-nav { position:fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around; background:#121213; padding:8px 0; z-index:1500; transition:transform .3s ease; }
     .bottom-nav.hide { transform:translateY(100%); }
 
-    /* Nota popup styles (fallback) */
+    /* Nota popup styles */
     .nota-card { background:#fff; width:100%; max-width:520px; border-radius:12px; padding:16px; box-shadow:0 8px 30px rgba(0,0,0,0.12); }
     .btn { padding:10px 12px; border-radius:8px; border:0; cursor:pointer; }
     .btn-primary { background:#ff5e7e; color:#fff; }
     .btn-wa { background:#25D366; color:#fff; }
+
+    /* small responsive helper so topping group can be flex-wrapped */
+    .topping-wrap { display:flex; flex-wrap:wrap; gap:6px; }
   </style>
 </head>
 
@@ -103,7 +106,7 @@
   <section class="section-gallery"><img loading="lazy" src="assets/images/pukis4.jpg" alt="Pukis 4" class="gallery-img"></section>
   <section class="section-gallery"><img loading="lazy" src="assets/images/pukis5.jpg" alt="Pukis 5" class="gallery-img"></section>
 
-  <!-- ORDER FORM (tidak diubah fungsionalitasnya; hanya disertakan lengkap) -->
+  <!-- ORDER FORM -->
   <section id="form-ultra" style="margin-top:18px;padding:18px;border-radius:12px;background:#1b2838;color:#fff;">
     <h2 style="color:#fff">Pemesanan Pukis Lumer Aulia</h2>
 
@@ -133,9 +136,9 @@
         <label><input type="radio" name="ultraToppingMode" value="double"> Double</label>
       </div>
 
-      <!-- Single Topping (kontainer; isi oleh order.js) -->
+      <!-- Single Topping (diisi oleh order.js) -->
       <div id="ultraSingleGroup" class="topping-wrap" style="display:none;margin-bottom:8px;"></div>
-      <!-- Double Topping + Taburan -->
+      <!-- Double Topping + Taburan (diisi oleh order.js) -->
       <div id="ultraDoubleGroup" class="topping-wrap" style="display:none;margin-bottom:8px;"></div>
 
       <label style="color:#fff">Catatan Khusus:</label>
@@ -168,31 +171,24 @@
 
       <div style="margin-top:12px;display:flex;gap:8px">
 
-  <!-- TOMBOL PRINT PDF (DISEMBUNYIKAN TAPI WAJIB ADA UNTUK JS) -->
-  <button id="notaPrint" type="button" 
-          style="display:none;flex:1;padding:10px;border-radius:8px;border:0;background:#008cff;color:#fff">
-    Cetak PDF
-  </button>
+        <!-- TOMBOL PRINT PDF (DISEMBUNYIKAN TAPI WAJIB ADA UNTUK JS) -->
+        <button id="notaPrint" type="button" 
+                style="display:none;flex:1;padding:10px;border-radius:8px;border:0;background:#008cff;color:#fff">
+          Cetak PDF
+        </button>
 
-  <!-- TOMBOL MINTA ADMIN -->
-  <button id="notaAskAdmin" type="button" class="btn btn-wa"
-          style="flex:1;padding:10px;border-radius:8px;border:0;background:#25D366;color:#fff">
-    Minta Admin Cetak Invoice
-  </button>
+        <!-- TOMBOL MINTA ADMIN -->
+        <button id="notaAskAdmin" type="button" class="btn btn-wa"
+                style="flex:1;padding:10px;border-radius:8px;border:0;background:#25D366;color:#fff">
+          Minta Admin Cetak Invoice
+        </button>
 
-  <!-- WA ADMIN -->
-  <button id="notaSendWA" type="button" 
-          style="flex:1;padding:10px;border-radius:8px;border:0;background:#008cff;color:#fff">
-    Kirim WA ke Admin
-  </button>
-
-</div>
-  
-
-        <!-- (Opsional tombol WA langsung ke admin untuk chat order) -->
-        <button id="notaSendWA" type="button" class="btn" style="flex:1;padding:10px;border-radius:8px;border:0;background:#008cff;color:#fff">
+        <!-- TOMBOL WA (HARUS TUNGGAL) -->
+        <button id="notaSendWA" type="button" 
+                style="flex:1;padding:10px;border-radius:8px;border:0;background:#008cff;color:#fff">
           Kirim WA ke Admin
         </button>
+
       </div>
     </div>
   </div>
@@ -256,17 +252,17 @@
   </footer>
 
   <!-- SCRIPTS -->
-  <!-- core site script (keberadaan script.js diasumsikan) -->
+  <!-- core site script (opsional) -->
   <script src="assets/js/script.js"></script>
 
-  <!-- Library PDF Offline (tetap dimuat karena admin.js membutuhkan library di admin page) -->
+  <!-- Library PDF Offline (dibutuhkan untuk fitur PDF) -->
   <script src="assets/js/lib/jspdf.umd.min.js"></script>
   <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
 
-  <!-- order.js menangani pembuatan nota, menyimpan ke localStorage, dan logic 'minta admin cetak' -->
+  <!-- order.js (pakai versi Rani) -->
   <script src="assets/js/order.js"></script>
 
-  <!-- Loader Fix + Floating Share Toggle + Nota button (fallback jika order.js tidak memuat handler) -->
+  <!-- Loader Fix + Floating Share Toggle (light, non-conflicting) -->
   <script>
     // hide loader when page fully loaded
     window.addEventListener("load", () => {
@@ -283,62 +279,6 @@
           floatingIcons.classList.toggle("show");
         });
       }
-    })();
-
-    // Nota popup handlers (basic fallback if order.js not loaded yet)
-    (function(){
-      const notaContainer = document.getElementById("notaContainer");
-      const notaClose = document.getElementById("notaClose");
-      const notaAskAdmin = document.getElementById("notaAskAdmin");
-      const notaSendWA = document.getElementById("notaSendWA");
-
-      // close nota
-      notaClose?.addEventListener("click", () => {
-        if (notaContainer) notaContainer.style.display = "none";
-      });
-
-      // fallback: if notaAskAdmin clicked but order.js hasn't attached, attempt to open WA with lastNotaData
-      notaAskAdmin?.addEventListener("click", () => {
-        try {
-          if (typeof window._lastNotaData === "undefined" || !window._lastNotaData) {
-            return alert("Data nota belum tersedia. Silakan buat nota terlebih dahulu.");
-          }
-          const d = window._lastNotaData;
-          const admin = "6281296668670";
-          const msg = `
-Halo Admin Pukis Lumer Aulia 🙏
-
-Saya ingin minta dicetak invoice.
-
-🧾 Kode Invoice: ${d.invoice}
-👤 Nama: ${d.nama}
-🍰 Pesanan: ${d.ringkasan}
-💰 Total Bayar: Rp ${d.total.toLocaleString("id-ID")}
-
-Terima kasih.
-          `.trim();
-          window.open(`https://wa.me/${admin}?text=${encodeURIComponent(msg)}`, "_blank");
-        } catch(e){
-          console.error(e);
-          alert("Gagal membuka WhatsApp. Coba lagi.");
-        }
-      });
-
-      // fallback: langsung kirim WA ringkasan order ke admin
-      notaSendWA?.addEventListener("click", () => {
-        try {
-          if (typeof window._lastNotaData === "undefined" || !window._lastNotaData) {
-            return alert("Data nota belum tersedia. Silakan buat nota terlebih dahulu.");
-          }
-          const d = window._lastNotaData;
-          const admin = "6281296668670";
-          const msg = `Order baru:\nInvoice: ${d.invoice}\nNama: ${d.nama}\nTotal: Rp ${d.total.toLocaleString("id-ID")}`;
-          window.open(`https://wa.me/${admin}?text=${encodeURIComponent(msg)}`, "_blank");
-        } catch(e){
-          console.error(e);
-          alert("Gagal membuka WhatsApp. Coba lagi.");
-        }
-      });
     })();
   </script>
 
