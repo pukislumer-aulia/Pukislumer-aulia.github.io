@@ -48,3 +48,11 @@ button {
   text-align: center;
   margin-top: 10px;
 }
+.logout-button {
+  background:#dd6b20;
+  padding:8px 12px;
+  border:0;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+}
