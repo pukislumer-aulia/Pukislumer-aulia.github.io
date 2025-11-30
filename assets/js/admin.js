@@ -112,3 +112,7 @@ function sendInvoiceWA(index) {
     const url = `https://wa.me/${order.wa.replace(/^0/, "62")}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
 }
+document.getElementById("logoutBtn").onclick = ()=>{
+  sessionStorage.removeItem("adminLogin");
+  window.location.href = "admin-login.html";
+};
