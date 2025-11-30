@@ -1,11 +1,6 @@
 /*
-  order.js — Final Revised (single-file)
-  - Fully synchronized with provided HTML
-  - Builds single & double topping UIs into #ultraSingleGroup and #ultraDoubleGroup
-  - Uses IDs exactly as in HTML canvas file
-  - Validation, pricing, PDF, WA, storage, and nota rendering included
-  - No automatic WA send on load; only via button click
-  - Defensive: checks DOM elements and libraries before running features
+  assets/js/order.js — Final Revised (single-file)
+  Fully synchronized with provided HTML
 */
 
 (function(){
@@ -30,9 +25,9 @@
   };
 
   // Validation rules
-  const MAX_SINGLE_TOPPING = 5; // for single mode
-  const MAX_DOUBLE_TOPPING = 5; // main toppings in double mode
-  const MAX_DOUBLE_TABURAN = 5; // taburan in double mode
+  const MAX_SINGLE_TOPPING = 5;
+  const MAX_DOUBLE_TOPPING = 5;
+  const MAX_DOUBLE_TABURAN = 5;
 
   // Helper selectors
   const $ = (s) => document.querySelector(s);
@@ -47,11 +42,10 @@
     const doubleWrap = $('#ultraDoubleGroup');
     if (!singleWrap || !doubleWrap){ console.warn('Topping containers missing'); return; }
 
-    // clear previous
     singleWrap.innerHTML = '';
     doubleWrap.innerHTML = '';
 
-    // create single toppings (label + checkbox)
+    // single toppings
     SINGLE_TOPPINGS.forEach(t => {
       const id = 'topping_' + t.toLowerCase().replace(/\s+/g,'_');
       const lab = document.createElement('label');
@@ -64,17 +58,25 @@
       input.value = t;
       input.id = id;
 
+      input.addEventListener('change', () => {
+        lab.classList.toggle('checked', input.checked);
+      });
+
+      const span = document.createElement('span');
+      span.textContent = ' ' + t;
+
       lab.appendChild(input);
-      lab.appendChild(document.createTextNode(' ' + t));
+      lab.appendChild(span);
       singleWrap.appendChild(lab);
     });
 
-    // create double taburan
+    // double taburan (ensure class taburan-check is present)
     DOUBLE_TABURAN.forEach(t => {
       const id = 'taburan_' + t.toLowerCase().replace(/\s+/g,'_');
       const lab = document.createElement('label');
-      lab.style.margin = '6px';
+      lab.className = 'taburan-check';
       lab.htmlFor = id;
+      lab.style.margin = '6px';
 
       const input = document.createElement('input');
       input.type = 'checkbox';
@@ -82,8 +84,15 @@
       input.value = t;
       input.id = id;
 
+      input.addEventListener('change', () => {
+        lab.classList.toggle('checked', input.checked);
+      });
+
+      const span = document.createElement('span');
+      span.textContent = ' ' + t;
+
       lab.appendChild(input);
-      lab.appendChild(document.createTextNode(' ' + t));
+      lab.appendChild(span);
       doubleWrap.appendChild(lab);
     });
 
@@ -107,7 +116,6 @@
       if (!target || target.type !== 'checkbox') return;
       const mode = getSelectedToppingMode();
       if (mode !== 'double'){
-        // disallow
         if (target.checked){ target.checked = false; alert('Taburan hanya aktif pada mode Double.'); }
       } else {
         const selTab = $$('input[name="taburan"]:checked').length;
@@ -138,7 +146,6 @@
   function getSelectedToppingMode(){ return getSelectedRadioValue('ultraToppingMode') || 'non'; }
 
   function updatePriceUI(){
-    // calculate and render
     const jenis = getSelectedRadioValue('ultraJenis') || 'Original';
     const isi = getIsiValue();
     const mode = getSelectedToppingMode();
@@ -211,7 +218,6 @@
       localStorage.setItem(STORAGE_LAST_ORDER_KEY, JSON.stringify(order));
     }catch(e){ console.error('saveOrderLocal', e); }
   }
-
   function getLastOrder(){ try{ return JSON.parse(localStorage.getItem(STORAGE_LAST_ORDER_KEY) || 'null'); } catch(e){ return null; } }
 
   // ---------------- RENDER NOTA ----------------
@@ -220,7 +226,30 @@
     const c = $('#notaContent'); if (!c) return;
     const toppingText = order.topping && order.topping.length ? order.topping.join(', ') : '-';
     const taburanText = order.taburan && order.taburan.length ? order.taburan.join(', ') : '-';
-    c.innerHTML = `\n      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">\n        <div style="flex:1;min-width:200px">\n          <div style="font-weight:800;color:#5f0000;font-size:14px;margin-bottom:6px;">INVOICE PEMESANAN</div>\n          <div><strong>Invoice:</strong> ${escapeHtml(order.invoice)}</div>\n          <div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>\n          <div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>\n          <div><strong>Tanggal:</strong> ${escapeHtml(order.tgl)}</div>\n        </div>\n      </div>\n      <hr style="margin:8px 0">\n      <div>\n        <div><strong>Jenis:</strong> ${escapeHtml(order.jenis)} — ${escapeHtml(String(order.isi))} pcs</div>\n        <div><strong>Mode:</strong> ${escapeHtml(order.mode)}</div>\n        <div><strong>Topping:</strong> ${escapeHtml(toppingText)}</div>\n        <div><strong>Taburan:</strong> ${escapeHtml(taburanText)}</div>\n        <div><strong>Jumlah:</strong> ${escapeHtml(String(order.jumlah))} box</div>\n        <div><strong>Harga Satuan:</strong> ${formatRp(order.pricePerBox)}</div>\n        <div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>\n        <div><strong>Diskon:</strong> ${order.discount>0 ? '-' + formatRp(order.discount) : '-'}</div>\n        <div style="font-weight:800;margin-top:6px;"><strong>Total Bayar:</strong> ${formatRp(order.total)}</div>\n        <p style="margin-top:10px;font-style:italic">Terima kasih telah berbelanja di Pukis Lumer Aulia.</p>\n      </div>\n    `;
+    c.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <div style="font-weight:800;color:#5f0000;font-size:14px;margin-bottom:6px;">INVOICE PEMESANAN</div>
+          <div><strong>Invoice:</strong> ${escapeHtml(order.invoice)}</div>
+          <div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>
+          <div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>
+          <div><strong>Tanggal:</strong> ${escapeHtml(order.tgl)}</div>
+        </div>
+      </div>
+      <hr style="margin:8px 0">
+      <div>
+        <div><strong>Jenis:</strong> ${escapeHtml(order.jenis)} — ${escapeHtml(String(order.isi))} pcs</div>
+        <div><strong>Mode:</strong> ${escapeHtml(order.mode)}</div>
+        <div><strong>Topping:</strong> ${escapeHtml(toppingText)}</div>
+        <div><strong>Taburan:</strong> ${escapeHtml(taburanText)}</div>
+        <div><strong>Jumlah:</strong> ${escapeHtml(String(order.jumlah))} box</div>
+        <div><strong>Harga Satuan:</strong> ${formatRp(order.pricePerBox)}</div>
+        <div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>
+        <div><strong>Diskon:</strong> ${order.discount>0 ? '-' + formatRp(order.discount) : '-'}</div>
+        <div style="font-weight:800;margin-top:6px;"><strong>Total Bayar:</strong> ${formatRp(order.total)}</div>
+        <p style="margin-top:10px;font-style:italic">Terima kasih telah berbelanja di Pukis Lumer Aulia.</p>
+      </div>
+    `;
     const container = $('#notaContainer'); if (container){ container.classList.add('show'); container.style.display='flex'; }
     try{ localStorage.setItem(STORAGE_LAST_ORDER_KEY, JSON.stringify(order)); }catch(e){}
     window._lastNota = order;
@@ -252,19 +281,11 @@
 
   // ---------------- ATTACH LISTENERS ----------------
   function attachFormListeners(){
-    // Build topping UI
     buildToppingUI();
-    // initial visibility
     updateToppingVisibility();
 
-    // Topping mode radios
-    $$('input[name="ultraToppingMode"]').forEach(r => {
-      r.removeEventListener('change', onToppingModeChange);
-      r.addEventListener('change', onToppingModeChange);
-    });
-
-    // jenis radios
-    $$('input[name="ultraJenis"]').forEach(r => { r.removeEventListener('change', updatePriceUI); r.addEventListener('change', updatePriceUI); });
+    $$('input[name="ultraToppingMode"]').forEach(r => { r.removeEventListener('change', onToppingModeChange); r.addEventListener('change', onToppingModeChange); });
+    $$('input[name="ultraJenis"]').forEach(r=>{ r.removeEventListener('change', updatePriceUI); r.addEventListener('change', updatePriceUI); });
 
     $('#ultraIsi')?.removeEventListener('change', updatePriceUI);
     $('#ultraIsi')?.addEventListener('change', updatePriceUI);
@@ -272,37 +293,28 @@
     $('#ultraJumlah')?.removeEventListener('input', updatePriceUI);
     $('#ultraJumlah')?.addEventListener('input', updatePriceUI);
 
-    // form submit
     const form = $('#formUltra');
-    if (form){
-      form.removeEventListener('submit', onFormSubmit);
-      form.addEventListener('submit', onFormSubmit);
-    }
+    if (form){ form.removeEventListener('submit', onFormSubmit); form.addEventListener('submit', onFormSubmit); }
 
-    // send admin button
     const sendBtn = $('#ultraSendAdmin');
-    if (sendBtn){
-      sendBtn.removeEventListener('click', onSendAdminClick);
-      sendBtn.addEventListener('click', onSendAdminClick);
-    }
+    if (sendBtn){ sendBtn.removeEventListener('click', onSendAdminClick); sendBtn.addEventListener('click', onSendAdminClick); }
 
-    // nota close
     const notaClose = $('#notaClose');
     if (notaClose){ notaClose.removeEventListener('click', hideNota); notaClose.addEventListener('click', hideNota); }
 
-    // print/pdf
     const printBtn = $('#notaPrint');
-    if (printBtn){
-      printBtn.removeEventListener('click', onNotaPrint);
-      printBtn.addEventListener('click', onNotaPrint);
-    }
+    if (printBtn){ printBtn.removeEventListener('click', onNotaPrint); printBtn.addEventListener('click', onNotaPrint); }
 
+    // testimonials form (simple)
+    const tform = $('#testimonialForm');
+    if (tform){ tform.removeEventListener('submit', onTestimonialSubmit); tform.addEventListener('submit', onTestimonialSubmit); }
   }
 
   function onToppingModeChange(){ updateToppingVisibility(); updatePriceUI(); }
   function onFormSubmit(e){ e.preventDefault(); const order = buildOrderObject(); if (!order) return; saveOrderLocal(order); renderNotaOnScreen(order); }
   function onSendAdminClick(e){ e.preventDefault(); const order = buildOrderObject(); if (!order) return; saveOrderLocal(order); sendOrderToAdminViaWA(order); alert('Permintaan WA ke admin terbuka di jendela baru.'); }
   function hideNota(){ const nc = $('#notaContainer'); if (nc){ nc.classList.remove('show'); nc.style.display='none'; } }
+
   async function onNotaPrint(e){ e.preventDefault(); const last = getLastOrder(); if (!last){ alert('Data nota belum tersedia. Silakan buat nota terlebih dahulu.'); return; } if (typeof window.generatePdf !== 'function'){ if (window.makeGeneratePdf && (window.jspdf || window.jsPDF)){ window.generatePdf = window.makeGeneratePdf(window.jspdf || window.jsPDF); } }
     if (typeof window.generatePdf === 'function'){ await window.generatePdf(last); } else { alert('PDF generator belum siap. Pastikan library jsPDF dimuat.'); } }
 
@@ -315,7 +327,7 @@
     if (mode === 'non'){
       singleGroup.style.display = 'none'; doubleGroup.style.display = 'none';
       $$('input[name="topping"]:checked').forEach(i => { i.checked = false; i.closest('label')?.classList.remove('checked'); });
-      $$('input[name="taburan"]:checked').forEach(i => { i.checked = false; });
+      $$('input[name="taburan"]:checked').forEach(i => { i.checked = false; i.closest('label')?.classList.remove('checked'); });
     } else if (mode === 'single'){
       singleGroup.style.display = 'flex'; doubleGroup.style.display = 'none';
     } else if (mode === 'double'){
@@ -377,6 +389,7 @@
         try{ doc.setTextColor(150,150,150); doc.setFont('helvetica','bold'); doc.setFontSize(48); doc.text('Pukis Lumer Aulia', W/2, H/2, { align: 'center' }); doc.setTextColor(0,0,0); }catch(e){ doc.setTextColor(0,0,0); }
 
         doc.setFontSize(13); doc.setFont('helvetica','bold'); doc.text('Terima kasih telah berbelanja di toko Kami', W/2, H - 15, { align: 'center' });
+
         const safeName = (order.nama || 'Pelanggan').replace(/\s+/g,'_').replace(/[^\w\-_.]/g,'');
         const fileName = `Invoice_${safeName}_${order.orderID || order.invoice || Date.now()}.pdf`;
         doc.save(fileName);
