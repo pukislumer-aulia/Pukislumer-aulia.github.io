@@ -1,56 +1,34 @@
-‎/* =====================================================
-‎   LOGIN.JS — FINAL STABIL TANPA KEDIP / REDIRECT LOOP
-‎   - Tidak auto-redirect ke admin.html
-‎   - Hanya redirect jika PIN benar
-‎   - Menggunakan localStorage adminLoggedIn
-‎   ===================================================== */
-‎
-‎document.addEventListener("DOMContentLoaded", () => {
-‎
-‎    console.log("Login page loaded without auto-redirect.");
-‎
-‎    // Ambil elemen form & input PIN
-‎    const form = document.getElementById("loginForm");
-‎    const pinInput = document.getElementById("adminPin");
-‎
-‎    if (!form || !pinInput) {
-‎        console.error("Elemen loginForm atau adminPin tidak ditemukan dalam login.html");
-‎        return;
-‎    }
-‎
-‎    // *** PERHATIKAN ***
-‎    // Tidak ada kode auto-redirect di sini!
-‎    // Tidak ada:
-‎    // if (localStorage.getItem("adminLoggedIn") === "true") { ... }
-‎
-‎    form.addEventListener("submit", function (e) {
-‎        e.preventDefault();
-‎
-‎        const pin = pinInput.value.trim();
-‎
-‎        if (pin === "") {
-‎            alert("Masukkan PIN admin.");
-‎            pinInput.focus();
-‎            return;
-‎        }
-‎
-‎        // PIN ADMIN — silakan ubah sesuai kebutuhan
-‎        const ADMIN_PIN = "12345";
-‎
-‎        if (pin === ADMIN_PIN) {
-‎
-‎            // Simpan status login
-‎            localStorage.setItem("adminLoggedIn", "true");
-‎
-‎            // Arahkan ke halaman admin
-‎            window.location.href = "admin.html";
-‎        
-‎        } else {
-‎            alert("PIN salah. Silakan coba lagi.");
-‎            pinInput.value = "";
-‎            pinInput.focus();
-‎        }
-‎    });
-‎
-‎});
-‎
+(async function(){
+  const FORM = document.getElementById("loginForm");
+  const ERR = document.getElementById("loginError");
+
+  // Kredensial admin
+  const ADMIN_USER = "pukislumer";
+  const ADMIN_PASS_HASH = "fb24e79e927651c01fb9b31c7648206dfa81857232ece2b2043614d00f90e1a5";
+
+  async function sha256(text){
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hashBuffer))
+      .map(b => b.toString(16).padStart(2,"0"))
+      .join("");
+  }
+
+  FORM.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    ERR.style.display = "none";
+
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const passHash = await sha256(pass);
+
+    if(user === ADMIN_USER && passHash === ADMIN_PASS_HASH){
+      sessionStorage.setItem("adminLogin","active");
+      window.location.href = "admin.html";
+    } else {
+      ERR.style.display = "block";
+    }
+  });
+
+})();
