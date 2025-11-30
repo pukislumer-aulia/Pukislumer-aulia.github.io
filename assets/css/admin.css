@@ -1,104 +1,104 @@
 :root {
-  --pink: #ff5e7e;
-  --bg: #f7f7fb;
-  --card: #ffffff;
-  --text: #222;
-  --muted: #666;
-  --blue: #4a76ff;
+    --pink: #ff5e7e;
+    --bg: #f7f7fb;
+    --card: #ffffff;
+    --text: #222;
+    --muted: #666;
+    --blue: #4a76ff;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Inter, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Inter, Arial, sans-serif;
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
+    background: var(--bg);
+    color: var(--text);
 }
 
 /* HEADER */
 .admin-header {
-  background: var(--card);
-  padding: 16px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,.07);
+    background: var(--card);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .07);
 }
 
 .admin-header h1 {
-  font-size: 18px;
+    font-size: 18px;
 }
 
 .admin-header button {
-  padding: 8px 14px;
-  background: var(--pink);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
+    padding: 8px 14px;
+    background: var(--pink);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 /* MAIN */
 .admin-main {
-  padding: 20px;
+    padding: 20px;
 }
 
 .orders h2 {
-  margin-bottom: 14px;
-  font-size: 16px;
+    margin-bottom: 14px;
+    font-size: 16px;
 }
 
 #ordersList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 /* ORDER ITEM */
 .order-item {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .08);
 }
 
 .order-item .meta {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 .order-item .actions {
-  display: flex;
-  gap: 8px;
+    display: flex;
+    gap: 8px;
 }
 
 .order-item button,
 .order-item a {
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: none;
-  background: var(--blue);
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-  text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: none;
+    background: var(--blue);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
 }
 
 /* DOUBLE TOPPING PINK UNGU */
 .double-taburan {
-  background: #ffe6ef !important;
-  padding: 8px;
-  border-radius: 8px;
+    background: #ffe6ef !important;
+    padding: 8px;
+    border-radius: 8px;
 }
 
 .double-taburan label {
-  color: #7a009d !important;
-  font-weight: 800 !important;
+    color: #7a009d !important;
+    font-weight: 800 !important;
 }
