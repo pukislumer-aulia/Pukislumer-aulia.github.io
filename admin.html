@@ -1,186 +1,87 @@
-‎/* ================================
-‎   ADMIN DASHBOARD — SUPER FINAL PRO
-‎   PUKIS LUMER AULIA
-‎   ================================= */
-‎
-‎/* COLOR VARIABLES */
-‎:root {
-‎  --brand: #d6336c;
-‎  --accent: #ffb74d;
-‎  --bg: #fafafa;
-‎  --card: #ffffff;
-‎  --text: #222;
-‎  --muted: #777;
-‎}
-‎
-‎/* GLOBAL */
-‎body {
-‎  font-family: 'Kanit', sans-serif;
-‎  background: var(--bg);
-‎  margin: 0;
-‎  padding: 20px;
-‎  color: var(--text);
-‎}
-‎
-‎/* WRAPPER */
-‎.admin-wrapper {
-‎  max-width: 1000px;
-‎  margin: 0 auto;
-‎  background: var(--card);
-‎  padding: 24px;
-‎  border-radius: 16px;
-‎  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-‎}
-‎
-‎/* HEADER */
-‎.admin-header {
-‎  display: flex;
-‎  justify-content: space-between;
-‎  align-items: center;
-‎  background: var(--brand);
-‎  padding: 18px;
-‎  border-radius: 14px;
-‎  color: #fff;
-‎  margin-bottom: 20px;
-‎}
-‎.admin-header h1 {
-‎  font-size: 1.4rem;
-‎  margin: 0;
-‎}
-‎
-‎/* BUTTON TYPES */
-‎.btn-primary, .btn-secondary, .btn-danger, .btn-logout {
-‎  padding: 10px 14px;
-‎  border: none;
-‎  border-radius: 8px;
-‎  cursor: pointer;
-‎  font-weight: bold;
-‎  transition: .25s;
-‎}
-‎.btn-primary { background: var(--brand); color: #fff; }
-‎.btn-secondary { background: #555; color: #fff; }
-‎.btn-danger { background: #d32626; color: #fff; }
-‎.btn-logout { background: #333; color:#fff; }
-‎
-‎.btn-primary:hover { background: #b42158; }
-‎.btn-secondary:hover { background: #222; }
-‎.btn-danger:hover { background:#ff0000; }
-‎.btn-logout:hover { opacity:.85; }
-‎
-‎.action-buttons {
-‎  display:flex;
-‎  gap:10px;
-‎  margin: 10px 0 18px;
-‎}
-‎
-‎/* STATS SECTION */
-‎.stat-section {
-‎  display:grid;
-‎  grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
-‎  gap:14px;
-‎  margin-bottom:20px;
-‎}
-‎.stat-card {
-‎  background:#fff;
-‎  padding:20px;
-‎  border-radius:14px;
-‎  text-align:center;
-‎  border-left:6px solid var(--accent);
-‎  box-shadow:0 4px 10px rgba(0,0,0,0.06);
-‎  transition:transform .25s;
-‎}
-‎.stat-card:hover { transform:translateY(-6px); }
-‎.stat-number {
-‎  font-size:1.8rem;
-‎  font-weight:800;
-‎  color:var(--brand);
-‎}
-‎
-‎/* TABLE */
-‎.order-section table {
-‎  width:100%;
-‎  border-collapse:collapse;
-‎}
-‎th,td {
-‎  padding:12px 10px;
-‎  border-bottom:1px solid #ddd;
-‎  font-size:.92rem;
-‎  text-align:center;
-‎}
-‎th {
-‎  background:var(--brand);
-‎  color:#fff;
-‎  text-transform:uppercase;
-‎}
-‎tr:hover {
-‎  background:#fff1f5;
-‎}
-‎
-‎/* TESTIMONIALS */
-‎.testimonial-card {
-‎  background:#ffeaea;
-‎  padding:14px;
-‎  border-radius:14px;
-‎  margin-bottom:12px;
-‎  box-shadow:0 4px 12px rgba(0,0,0,.05);
-‎  animation:fadeUp .4s ease;
-‎}
-‎@keyframes fadeUp {
-‎  from {opacity:0; transform:translateY(10px);}
-‎  to {opacity:1; transform:translateY(0);}
-‎}
-‎.testimonial-card small {
-‎  display:block;
-‎  margin-top:6px;
-‎  color:var(--muted);
-‎}
-‎
-‎/* ANALYTICS */
-‎.analytics-section {
-‎  margin-top:20px;
-‎}
-‎.analytics-section pre {
-‎  background:#0c1624;
-‎  color:#00ffea;
-‎  padding:16px;
-‎  border-radius:10px;
-‎  font-size:.85rem;
-‎  overflow-x:auto;
-‎}
-‎
-‎/* LOGIN MODAL */
-‎.modal {
-‎  position:fixed;
-‎  inset:0;
-‎  background:rgba(0,0,0,.6);
-‎  display:none;
-‎  align-items:center;
-‎  justify-content:center;
-‎  z-index:9999;
-‎}
-‎.modal-box {
-‎  background:#fff;
-‎  padding:28px;
-‎  border-radius:14px;
-‎  width:90%;
-‎  max-width:350px;
-‎  text-align:center;
-‎  animation:fadeUp .4s ease;
-‎}
-‎.modal-box input {
-‎  width:100%;
-‎  margin:12px 0;
-‎  padding:12px;
-‎  border:2px solid #ccc;
-‎  border-radius:10px;
-‎  font-size:1.1rem;
-‎  text-align:center;
-‎}
-‎
-‎/* RESPONSIVE */
-‎@media(max-width:768px){
-‎  .admin-wrapper { padding:18px; }
-‎  th,td { font-size:.78rem; padding:8px; }
-‎  .action-buttons { flex-wrap:wrap; justify-content:center; }
-‎}
-‎
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Pukis Lumer Aulia</title>
+    <link rel="stylesheet" href="Admin.css">
+    <!-- Tambahkan link ke Font Awesome jika belum ada -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="admin-wrapper">
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <div>
+                <button class="btn-logout" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <div class="stat-section">
+            <div class="stat-card">
+                <div class="stat-number" id="totalOrders">0</div>
+                Total Orders
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingOrders">0</div>
+                Pending Orders
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedOrders">0</div>
+                Completed Orders
+            </div>
+        </div>
+
+        <div class="order-section">
+            <h2>Order Management</h2>
+            <div class="action-buttons">
+                <button class="btn-primary" id="filterAll">Semua</button>
+                <button class="btn-secondary" id="filterPending">Pending</button>
+                <button class="btn-secondary" id="filterDone">Selesai</button>
+                <button class="btn-primary" id="printLastInvoice">Cetak Nota Terakhir</button>
+            </div>
+
+            <table id="orderTable">
+                <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Nama</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data pesanan akan ditampilkan di sini -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="analytics-section">
+            <h2>Analytics</h2>
+            <pre>
+                <!-- Kode analitik atau statistik lainnya bisa ditambahkan di sini -->
+                Statistik penjualan, tren produk, dll.
+            </pre>
+        </div>
+    </div>
+
+    <!-- Modal Logout (opsional) -->
+    <div class="modal" id="logoutModal">
+        <div class="modal-box">
+            <h3>Yakin ingin logout?</h3>
+            <button class="btn-logout" id="logoutBtn2">Logout</button>
+            <button class="btn-secondary" onclick="document.getElementById('logoutModal').style.display='none'">Batal</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="Admin.js"></script>
+</body>
+
+</html>
