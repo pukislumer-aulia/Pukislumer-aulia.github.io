@@ -12,35 +12,19 @@
 
   <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/form-style.css">
-  <link rel="stylesheet" href="assets/css/admin.css">
+  <!-- if you have extra CSS files, keep them after the main one so they don't override important rules -->
+  <!-- <link rel="stylesheet" href="assets/css/form-style.css"> -->
+  <!-- <link rel="stylesheet" href="assets/css/admin.css"> -->
 
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;900&family=Poppins:wght@300;500;600&family=Pacifico&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
   <style>
-    /* Lightweight layout & safety styles specific to this page */
+    /* Lightweight page-specific safety CSS (small) — main CSS is in assets/css/style.css */
     :root{--accent:#ff5e7e;--muted:#6b7280}
     body{font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0;background:#fff;color:#111}
     .container{max-width:980px;margin:18px auto;padding:18px}
     section{margin-bottom:18px}
     h1,h2{margin:0 0 8px 0}
-    .hero-img{width:100%;height:auto;border-radius:12px;object-fit:cover}
-    .topping-wrap{display:none;gap:8px;flex-wrap:wrap}
-    .topping-check{display:inline-flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid #eee;cursor:pointer}
-    .topping-check.checked{background:linear-gradient(90deg,#fff9f9,#fff);border-color:#ffb3c7;box-shadow:0 4px 10px rgba(0,0,0,0.06)}
-    .price-summary{background:rgba(0,0,0,0.03);padding:10px;border-radius:8px}
-    .nota-overlay{display:none;align-items:center;justify-content:center;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999}
-    .nota-overlay.show{display:flex}
-    .nota-card{background:#fff;padding:16px;border-radius:12px;width:95%;max-width:540px}
-    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
-    .gallery-img{width:100%;height:120px;object-fit:cover;border-radius:8px}
-    .admin-float-btn{position:fixed;left:18px;bottom:20px;background:#1f2937;color:#fff;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:10px;z-index:2000}
-    .toggle-float-btn{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;z-index:2100}
-    .floating-icons-container{position:fixed;right:18px;bottom:90px;display:flex;flex-direction:column;gap:10px;z-index:2000;opacity:0;visibility:hidden;transform:translateY(8px);transition:all .25s}
-    .floating-icons-container.show{opacity:1;visibility:visible;transform:none}
-    .bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#121213;padding:8px 0;z-index:1500}
-    footer{padding:18px;text-align:center;background:#121213;color:#d8d8d8;margin-top:18px;border-radius:12px 12px 0 0}
     input,select,textarea,button{font-family:inherit}
     input[type=text],input[type=tel],select,textarea,input[type=number]{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-bottom:8px}
     button.btn-primary{background:var(--accent);color:#fff;border:0;padding:12px;border-radius:10px}
@@ -49,14 +33,14 @@
 </head>
 <body>
 
-  <div id="site-loader" style="display:none;align-items:center;justify-content:center;flex-direction:column;"> <!-- kept hidden by default -->
+  <div id="site-loader" style="display:none;align-items:center;justify-content:center;flex-direction:column;">
     <img src="assets/images/logo.png" width="110" alt="Logo Pukis Lumer Aulia">
     <p style="margin-top:15px">Menyiapkan kelezatan 🤤...</p>
   </div>
 
   <div class="container">
 
-    <!-- HERO & Intro Texts (user requested content) -->
+    <!-- HERO & Intro Texts -->
     <section id="section-hero">
       <img src="assets/images/pukis.jpg" alt="Pukis Lumer Aulia" class="hero-img">
       <h1 style="margin-top:12px;color:var(--accent)">PUKIS LUMER AULIA</h1>
@@ -159,7 +143,7 @@
     </section>
 
     <!-- NOTA POPUP -->
-    <div id="notaContainer" class="nota-overlay">
+    <div id="notaContainer" class="nota-overlay" style="display:none;">
       <div class="nota-card">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <h3 style="margin:0">Nota Pemesanan</h3>
@@ -195,9 +179,7 @@
   </div> <!-- END container -->
 
   <!-- ADMIN FLOAT LEFT -->
-  <a href="admin.html" class="admin-float-btn" title="Masuk Admin">
-    <i class="fas fa-user-shield"></i>
-  </a>
+  <a href="admin.html" class="admin-float-btn" title="Masuk Admin"><i class="fas fa-user-shield"></i></a>
 
   <!-- FLOATING SHARE BUTTON -->
   <button id="toggleShareBtn" class="toggle-float-btn" aria-label="Tombol Share">+</button>
@@ -209,8 +191,10 @@
     <a href="https://www.tiktok.com/@pukislumer.aulia" class="floating-icon tiktok" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
   </div>
 
-  <!-- LIGHTBOX -->
-  <div id="lightboxOverlay"><img id="lightboxImg" src="" alt="Preview"></div>
+  <!-- LIGHTBOX (optional simple implementation) -->
+  <div id="lightboxOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;z-index:99999">
+    <img id="lightboxImg" src="" alt="Preview" style="max-width:90%;max-height:80%;border-radius:8px">
+  </div>
 
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
@@ -224,11 +208,12 @@
     © 2025 Pukis Lumer Aulia — Hak Cipta Dilindungi
   </footer>
 
-  <!-- SCRIPTS: jsPDF dulu, lalu order.js -->
+  <!-- SCRIPTS: jsPDF for PDF generation then order.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-  <script src="assets/js/order.js"></script>
-  <script src="assets/js/script.js"></script>
 
+  <script src="assets/js/order.js"></script>
+  <!-- optional extra script (UI helpers) if you have one -->
+  <!-- <script src="assets/js/script.js"></script> -->
 </body>
 </html>
