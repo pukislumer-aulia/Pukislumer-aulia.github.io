@@ -1,52 +1,106 @@
-‎<!-- FILE: login.html -->
-‎<!DOCTYPE html>
-‎<html lang="id">
-‎<head>
-‎  <meta charset="UTF-8">
-‎  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-‎  <title>Login Admin – Pukis Lumer Aulia</title>
-‎  <style>
-‎    body { font-family: Arial, sans-serif; background: #ffe6f0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-‎    .login-box { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 320px; }
-‎    h1 { text-align: center; color: #d6336c; margin-bottom: 20px; }
-‎    label { display: block; margin-top: 10px; font-weight: bold; }
-‎    input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
-‎    button { width: 100%; margin-top: 15px; padding: 10px; border: none; border-radius: 5px; background: #d6336c; color: white; font-weight: bold; cursor: pointer; }
-‎    button:hover { background: #b2224d; }
-‎    .error { color: red; margin-top: 10px; text-align: center; }
-‎  </style>
-‎</head>
-‎<body>
-‎  <div class="login-box">
-‎    <h1>Login Admin</h1>
-‎    <form id="loginForm">
-‎      <label>Email</label>
-‎      <input type="email" id="email" required>
-‎      <label>Password</label>
-‎      <input type="password" id="password" required>
-‎      <button type="submit">Login</button>
-‎      <p id="errorMsg" class="error"></p>
-‎    </form>
-‎  </div>
-‎
-‎  <script type="module">
-‎    import { loginEmailPassword } from './assets/js/firebase.js';
-‎    const form = document.getElementById('loginForm');
-‎    const errorMsg = document.getElementById('errorMsg');
-‎
-‎    form.addEventListener('submit', async (e) => {
-‎      e.preventDefault();
-‎      errorMsg.textContent = '';
-‎      const email = document.getElementById('email').value;
-‎      const password = document.getElementById('password').value;
-‎      try {
-‎        await loginEmailPassword(email, password);
-‎        window.location.href = 'admin.html';
-‎      } catch (err) {
-‎        errorMsg.textContent = '❌ Login gagal: ' + (err?.message || err);
-‎      }
-‎    });
-‎  </script>
-‎</body>
-‎</html>
-‎
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin – Pukis Lumer Aulia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffe6f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 320px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #d6336c;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 15px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #d6336c;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #b2224d;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+        <h1>Login Admin</h1>
+        <form id="loginForm">
+            <label>Email</label>
+            <input type="email" id="email" required>
+            <label>Password</label>
+            <input type="password" id="password" required>
+            <button type="submit">Login</button>
+            <p id="errorMsg" class="error"></p>
+        </form>
+    </div>
+
+    <script type="module">
+        import {
+            loginEmailPassword
+        } from './assets/js/firebase.js';
+        const form = document.getElementById('loginForm');
+        const errorMsg = document.getElementById('errorMsg');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMsg.textContent = '';
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                await loginEmailPassword(email, password);
+                window.location.href = 'admin.html';
+            } catch (err) {
+                errorMsg.textContent = '❌ Login gagal: ' + (err?.message || err);
+            }
+        });
+    </script>
+</body>
+
+</html>
