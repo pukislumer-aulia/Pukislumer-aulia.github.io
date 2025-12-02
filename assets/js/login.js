@@ -1,38 +1,25 @@
-/* assets/js/login.js */
-(async function() {
+(function() {
     'use strict';
 
     const VALID_USER = "pukislumer";
-// SHA256("Aulia1234")
-const VALID_PASS_HASH = "1afd7064e91e80a2415cd304ada5b3fbb82e25914d216c077236da002ad32e7c";
+    const VALID_PASS = "Aulia1234"; // <-- password offline langsung
+
     const $ = s => document.querySelector(s);
 
-    async function sha256(str) {
-        const buf = new TextEncoder().encode(str);
-        const hash = await crypto.subtle.digest('SHA-256', buf);
-        return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
     const form = document.getElementById('loginForm');
-    form.addEventListener('submit', async (e) => {
+
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
+
         const user = $('#username').value.trim();
-        const pass = $('#password').value;
+        const pass = $('#password').value.trim();
 
-        try {
-            const passHash = await sha256(pass);
-
-            if (user === VALID_USER && passHash === VALID_PASS_HASH) {
-                sessionStorage.setItem('adminLogged', 'true'); // <-- konsisten
-                window.location.href = "admin.html";
-                return;
-            }
-
-            $('#errorMsg').textContent = "Username atau password salah";
-        } catch (error) {
-            console.error("Error hashing password:", error);
-            $('#errorMsg').textContent = "Terjadi kesalahan saat login.";
+        if (user === VALID_USER && pass === VALID_PASS) {
+            sessionStorage.setItem('adminLogged', 'true');
+            window.location.href = "admin.html";
+            return;
         }
-    });
 
+        $('#errorMsg').textContent = "Username atau password salah";
+    });
 })();
