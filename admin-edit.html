@@ -87,6 +87,15 @@
   <button class="btn-back" onclick="window.location.href='admin.html'">Kembali</button>
 </div>
 
+
+ <!-- untuk admin edit: allow editing same topping UI -->
+<div class="topping-edit-block">
+  <div class="topping-label">Pilih Topping Single (maks 5)</div>
+  <div id="editSingleGroup" class="topping-wrap"></div>
+
+  <div style="margin-top:8px" class="topping-label">Pilih Taburan (maks 5)</div>
+  <div id="editTaburanGroup" class="topping-wrap"></div>
+</div> 
 <script>
   /* --- PROTECT PAGE --- */
   if (!sessionStorage.getItem("adminLogged")) {
