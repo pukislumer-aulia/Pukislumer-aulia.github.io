@@ -67,15 +67,17 @@
         note: $("#ultraNote"),
 
         singleGroup: $("#ultraSingleGroup"),
-        doubleWrapper: $("#ultraDoubleWrapper"),
-        doubleSingle: $("#ultraDoubleSingle"),
-        doubleTaburan: $("#ultraDoubleTaburan"),
+        doubleGroup: $("#ultraDoubleGroup"),
 
         pricePerBox: $("#ultraPricePerBox"),
         subtotal: $("#ultraSubtotal"),
         grandTotal: $("#ultraGrandTotal"),
 
-        submitBtn: $("#ultraSubmit")
+        submitBtn: $("#ultraSubmit"),
+        notaContainer: $("#notaContainer"),
+        notaContent: $("#notaContent"),
+        notaClose: $("#notaClose"),
+        notaPrint: $("#notaPrint")
     };
 
     /* =============================
@@ -89,77 +91,51 @@
     ============================= */
     function renderToppingButtons() {
         el.singleGroup.innerHTML = "";
-        el.doubleSingle.innerHTML = "";
-        el.doubleTaburan.innerHTML = "";
+        el.doubleGroup.innerHTML = "";
 
-        TOPPINGS_SINGLE.forEach(name => {
-            el.singleGroup.appendChild(makeToppingButton(name, "single"));
-            el.doubleSingle.appendChild(makeToppingButton(name, "doubleSingle"));
-        });
+        const renderButtons = (container, toppings, isSingle) => {
+            toppings.forEach(name => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "topping-btn";
+                btn.textContent = name;
+                btn.dataset.name = name;
 
-        TOPPINGS_TABURAN.forEach(name => {
-            el.doubleTaburan.appendChild(makeToppingButton(name, "taburan"));
-        });
+                const isSelected = isSingle ? selectedSingle.includes(name) : selectedTaburan.includes(name);
+                if (isSelected) btn.classList.add("active");
+
+                btn.addEventListener("click", () => {
+                    toggleTopping(btn, name, isSingle);
+                });
+
+                container.appendChild(btn);
+            });
+        };
+
+        renderButtons(el.singleGroup, TOPPINGS_SINGLE, true);
+        renderButtons(el.doubleGroup, [...TOPPINGS_SINGLE, ...TOPPINGS_TABURAN], false);
 
         refreshDisabledStates();
     }
 
-    function makeToppingButton(name, type) {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "topping-btn";
-        btn.textContent = name;
-        btn.dataset.name = name;
+    function toggleTopping(button, topping, isSingle) {
+        const toppingArray = isSingle ? selectedSingle : selectedTaburan;
+        const maxToppings = MAX_TOPPINGS;
 
-        const isSelected = (type === "taburan") ? selectedTaburan.includes(name) : selectedSingle.includes(name);
-        if (isSelected) btn.classList.add("active");
-
-        btn.addEventListener("click", () => {
-            if (type === "taburan") {
-                toggleTaburan(btn, name);
-            } else {
-                toggleSingle(btn, name);
-            }
-        });
-
-        return btn;
-    }
-
-    function toggleSingle(button, topping) {
-        const index = selectedSingle.indexOf(topping);
-
+        const index = toppingArray.indexOf(topping);
         if (index >= 0) {
-            selectedSingle.splice(index, 1); // Remove
+            toppingArray.splice(index, 1);
         } else {
-            if (selectedSingle.length >= MAX_TOPPINGS) {
-                return showLimitMessage(button);
+            if (toppingArray.length >= maxToppings) {
+                button.classList.add("disabled");
+                setTimeout(() => button.classList.remove("disabled"), 300);
+                return;
             }
-            selectedSingle.push(topping); // Add
+            toppingArray.push(topping);
         }
 
         renderToppingButtons();
         calcPrice();
-    }
-
-    function toggleTaburan(button, taburan) {
-        const index = selectedTaburan.indexOf(taburan);
-
-        if (index >= 0) {
-            selectedTaburan.splice(index, 1); // Remove
-        } else {
-            if (selectedTaburan.length >= MAX_TOPPINGS) {
-                return showLimitMessage(button);
-            }
-            selectedTaburan.push(taburan); // Add
-        }
-
-        renderToppingButtons();
-        calcPrice();
-    }
-
-    function showLimitMessage(button) {
-        button.classList.add("disabled");
-        setTimeout(() => button.classList.remove("disabled"), 300);
     }
 
     function refreshDisabledStates() {
@@ -173,8 +149,9 @@
         const mode = $$("input[name='ultraToppingMode']:checked")[0]?.value || "non";
 
         el.singleGroup.style.display = (mode === "single") ? "flex" : "none";
-        el.doubleWrapper.style.display = (mode === "double") ? "block" : "none";
+        el.doubleGroup.style.display = (mode === "double") ? "flex" : "none";
 
+        renderToppingButtons();
         calcPrice();
     }
 
@@ -204,26 +181,22 @@
           VALIDATE
     ============================= */
     function validateForm() {
-        let isValid = true;
         if (!el.nama.value.trim()) {
-            isValid = false;
             alert("Nama harus diisi.");
             el.nama.focus();
-            return false
+            return false;
         }
         if (!isValidWA(el.wa.value)) {
-            isValid = false;
             alert("Nomor WA tidak valid.");
             el.wa.focus();
             return false;
         }
         if (Number(el.jml.value) <= 0) {
-            isValid = false;
             alert("Jumlah harus lebih dari 0.");
             el.jml.focus();
             return false;
         }
-        return isValid;
+        return true;
     }
 
     /* =============================
@@ -260,6 +233,53 @@
     }
 
     /* =============================
+       GENERATE NOTA
+    ============================= */
+    function generateNotaHTML(order) {
+        let toppingText = "";
+        if (order.mode === "single") {
+            toppingText = `Topping: ${order.single.join(", ") || "-"}`;
+        } else if (order.mode === "double") {
+            toppingText = `Topping Single: ${order.single.join(", ") || "-"}<br>Taburan: ${order.taburan.join(", ") || "-"}`;
+        } else {
+            toppingText = "Tanpa Topping";
+        }
+
+        return `
+            <p><strong>Nama:</strong> ${order.nama}</p>
+            <p><strong>Jenis:</strong> ${order.jenis}</p>
+            <p><strong>${toppingText}</strong></p>
+            <p><strong>Isi per Box:</strong> ${order.isi} pcs</p>
+            <p><strong>Jumlah Box:</strong> ${order.jumlah}</p>
+            <hr>
+            <p><strong>Total Harga:</strong> ${formatRupiah(order.total)}</p>
+        `;
+    }
+
+    /* -------------------------------------------------------------
+       EVENT: Gen PDF
+    ------------------------------------------------------------- */
+    function handleNotaPrint() {
+        const {
+            jsPDF
+        } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.setFontSize(14);
+        doc.text("Nota Pemesanan Pukis Lumer Aulia", 14, 14);
+
+        let y = 26;
+        const lines = el.notaContent.innerText.split("\n");
+
+        lines.forEach(line => {
+            doc.text(line, 14, y);
+            y += 8;
+        });
+
+        doc.save("nota-pesan.pdf");
+    }
+
+    /* =============================
           HANDLE SUBMIT
     ============================= */
     function handleSubmit(e) {
@@ -287,19 +307,17 @@
             jumlah: jml,
             note: el.note.value.trim(),
             total,
+            single: selectedSingle.slice(0, MAX_TOPPINGS),
+            taburan: selectedTaburan.slice(0, MAX_TOPPINGS),
             tanggal: new Date().toLocaleString("id-ID"),
-            status: "pending"
         };
-
-        if (mode === "single") {
-            order.single = selectedSingle.slice(0, MAX_TOPPINGS);
-        } else if (mode === "double") {
-            order.single = selectedSingle.slice(0, MAX_TOPPINGS);
-            order.taburan = selectedTaburan.slice(0, MAX_TOPPINGS);
-        }
 
         saveOrder(order);
         sendToAdmin(order);
+
+        // popup nota
+        el.notaContent.innerHTML = generateNotaHTML(order);
+        el.notaContainer.classList.add("show");
 
         // Reset UI
         el.form.reset();
@@ -326,6 +344,8 @@
         el.jml.addEventListener("input", calcPrice);
 
         el.form.addEventListener("submit", handleSubmit);
+        el.notaClose.addEventListener("click", () => el.notaContainer.classList.remove("show"));
+        el.notaPrint.addEventListener("click", handleNotaPrint);
     }
 
     document.addEventListener("DOMContentLoaded", init);
