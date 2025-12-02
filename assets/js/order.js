@@ -68,18 +68,33 @@ document.addEventListener("DOMContentLoaded", () => {
     /* -------------------------------------------------------------
        BUILD CHECKBOX ( dinamic)
     ------------------------------------------------------------- */
-     // [FUNCTION] Build Topping List UI
-     function buildToppingList(list, target) {
-        target.innerHTML = "";
-        list.forEach(item => {
-            const lbl = document.createElement("label");
-            lbl.innerHTML = `<input type="checkbox" class="topping-check" value="${item}"> ${item}`;
-            target.appendChild(lbl);
-        });
+    function buildToppingList(list, target) {
+      target.innerHTML = "";
+      list.forEach(item => {
+        const lbl = document.createElement("label");
+        lbl.innerHTML = `<input type="checkbox" class="topping-check" value="${item}"> ${item}`;
+        target.appendChild(lbl);
+      });
     }
 
-       buildToppingList(singleToppings, singleToppingGroup);
-       buildToppingList(doubleToppings, doubleToppingGroup);
+    /* -------------------------------------------------------------
+       UPDATE SECTION TOPPING
+    ------------------------------------------------------------- */
+    function updateToppingVisibility() {
+      const topping = document.querySelector('input[name="topping"]:checked').value;
+
+        singleToppingGroup.style.display = "none";
+        doubleToppingGroup.style.display = "none";
+
+        if (topping === "single") {
+            buildToppingList(singleToppings, singleToppingGroup);
+            singleToppingGroup.style.display = "block";
+        } else if (topping === "double") {
+            const allToppings = [...singleToppings, ...doubleToppings];
+            buildToppingList(allToppings, doubleToppingGroup);
+            doubleToppingGroup.style.display = "block";
+        }
+    }
 
     /* -------------------------------------------------------------
        GET SELECTED CHECKBOX FUNCTION
@@ -108,22 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         totalHargaEl.innerText = formatRupiah(total);
         return total;
-    }
-
-    /* -------------------------------------------------------------
-       UPDATE SECTION TOPPING
-    ------------------------------------------------------------- */
-    function updateToppingVisibility() {
-        const topping = document.querySelector('input[name="topping"]:checked').value;
-        singleToppingGroup.style.display = (topping === "single") ? "block" : "none";
-        doubleToppingGroup.style.display = (topping === "double") ? "block" : "none";
-        const isi = parseInt(document.getElementById("isiBox").value);
-
-        // Get all Single Topping value
-        const singleTopping = Array.from(document.querySelectorAll('.singleTopping:checked')).map(el => el.value);
-
-        // Get all Double Topping value
-        const doubleTopping = Array.from(document.querySelectorAll('.doubleTopping:checked')).map(el => el.value);
     }
 
     /* -------------------------------------------------------------
@@ -171,11 +170,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const jumlah = document.getElementById("jumlahBox").value;
         let toppingText = '';
 
-         if (topping === 'single') {
+        if (topping === 'single') {
             toppingText = getSelectedToppings('.topping-check').join(', ');
-         } else if (topping === 'double') {
-            toppingText = `Rasa: ${getSelectedToppings('.topping-check').join(', ')}<br>Taburan: ${getSelectedToppings('.topping-check').join(', ')}`;
-         }
+        } else if (topping === 'double') {
+            toppingText = `Rasa: ${getSelectedToppings('.topping-check').slice(0, singleToppings.length).join(', ')}\nTaburan: ${getSelectedToppings('.topping-check').slice(singleToppings.length).join(', ')}`;
+        }
 
         return {
             nama,
@@ -183,8 +182,8 @@ document.addEventListener("DOMContentLoaded", () => {
             topping,
             isi,
             jumlah,
-            singleTopping: getSelectedToppings('.topping-check'),
-            doubleTopping: getSelectedToppings('.topping-check'),
+            singleTopping: getSelectedToppings('.topping-check').slice(0, singleToppings.length),
+            doubleTopping: getSelectedToppings('.topping-check').slice(singleToppings.length),
             total: calculatePrice()
         };
     }
@@ -195,8 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function validateTopping() {
         const topping = document.querySelector('input[name="topping"]:checked').value;
         const isi = parseInt(document.getElementById("isiBox").value);
-        const single = getSelectedToppings('.topping-check');
-        const double = getSelectedToppings('.topping-check');
+        const single = getSelectedToppings('.topping-check').slice(0, singleToppings.length);
+        const double = getSelectedToppings('.topping-check').slice(singleToppings.length);
 
         if (topping === 'single' && single.length > isi) {
             alert(`Single topping maksimal ${isi} rasa.`);
@@ -208,16 +207,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return true;
     }
-       /* -------------------------------------------------------------
-        EVENT: Form Submit
+
+    /* -------------------------------------------------------------
+       INIT SECTION
     ------------------------------------------------------------- */
+        function ubahTopping() {
+        const topping = document.querySelector('input[name="topping"]:checked').value;
+        updateToppingVisibility();
+        calculatePrice();
+    }
+    // Attach event listener
     formPukis.addEventListener("submit", function(e) {
         e.preventDefault();
         if (!validateTopping()) return;
-          const data = getFormData();
+        const data = getFormData();
 
-          /* popup WA inside nota */
-          sendWhatsApp(data)
+        /* popup WA inside nota */
+        sendWhatsApp(data);
     });
     /* -------------------------------------------------------------
      EVENT: notaClose
@@ -249,18 +255,6 @@ document.addEventListener("DOMContentLoaded", () => {
         doc.save("nota-pesan.pdf");
     });
 
-    /* -------------------------------------------------------------
-       INIT SECTION
-    ------------------------------------------------------------- */
-    // [FUNGSI] Ubah tampilan topping
-    function ubahTopping() {
-        const topping = document.querySelector('input[name="topping"]:checked').value;
-        singleToppingGroup.style.display = (topping === "single") ? "block" : "none";
-        doubleToppingGroup.style.display = (topping === "double") ? "block" : "none";
-        calculatePrice();
-
-    }
-
     document.querySelectorAll('input[name="jenis"], input[name="topping"], #isiBox, #jumlahBox').forEach(el => {
         el.addEventListener('change', () => {
             ubahTopping();
@@ -268,9 +262,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    document.querySelectorAll('.topping-check').forEach(el => el.addEventListener('change', calculatePrice));
     window.addEventListener('load', () => {
         ubahTopping();
         calculatePrice();
     });
+
+    // Inisialisasi tampilan awal
+    updateToppingVisibility();
 });
