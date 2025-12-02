@@ -84,7 +84,7 @@
 
   <button class="btn-save" id="saveBtn">Simpan Perubahan</button>
   <button class="btn-delete" id="deleteBtn">Hapus Pesanan</button>
-  <button class="btn-back" onclick="window.location.href='admin.html'">Kembali</button>
+  <button class="btn-back" id="backBtn">Kembali</button>
 </div>
 
 
@@ -122,7 +122,20 @@
   document.getElementById("editTotal").value = order.total;
 
   /* --- SAVE CHANGES --- */
-  document.getElementById("saveBtn").onclick = () => {
+  document.getElementById("saveBtn").addEventListener("click", () => {
+       // Validasi input
+      const jumlah = parseInt(document.getElementById("editJumlah").value);
+      const total = parseInt(document.getElementById("editTotal").value);
+
+      if (isNaN(jumlah) || jumlah < 1) {
+          alert("Jumlah Box harus berupa angka positif.");
+          return;
+      }
+
+      if (isNaN(total) || total < 0) {
+          alert("Total Harga harus berupa angka non-negatif.");
+          return;
+      }
       order.nama = document.getElementById("editNama").value;
       order.wa = document.getElementById("editWA").value;
       order.jenis = document.getElementById("editJenis").value;
@@ -135,10 +148,10 @@
 
       alert("Perubahan disimpan!");
       window.location.href = "admin.html";
-  };
+  });
 
   /* --- DELETE ORDER --- */
-  document.getElementById("deleteBtn").onclick = () => {
+  document.getElementById("deleteBtn").addEventListener("click", () => {
       if (!confirm("Hapus pesanan ini?")) return;
 
       const index = orders.indexOf(order);
@@ -148,7 +161,13 @@
 
       alert("Pesanan telah dihapus.");
       window.location.href = "admin.html";
-  };
+  });
+
+    /* --- NAV BACK --- */
+    document.getElementById("backBtn").addEventListener("click", () => {
+        window.location.href = "admin.html";
+    });
+
 </script>
 
 </body>
