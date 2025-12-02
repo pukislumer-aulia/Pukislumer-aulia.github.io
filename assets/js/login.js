@@ -4,7 +4,7 @@
 
     const VALID_USER = "pukislumer";
     // SHA256("Aulia1234")
-    const VALID_PASS_HASH = "cb969b5cb364a7e06e5e853ee1bc74d2c4aa1bea1261d6ae2bc1d1bff0f90f95";
+    const VALID_PASS_HASH = "1afd7064e91e80a2415cd304ada5b3fbb82e25914d216c077236da002ad32e7c";
 
     const $ = s => document.querySelector(s);
 
