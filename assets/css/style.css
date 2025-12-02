@@ -99,3 +99,60 @@ label.topping-check.checked,label.taburan-check.checked{background:#fff5fa;borde
   .bottom-nav,.admin-float-btn,.toggle-float-btn,.floating-icons-container{display:none!important}
   #notaContainer{position:static!important;background:none!important}
 }
+
+/* =====================================================
+   TOPPING BUILDER BUTTONS — PUKIS LUMER AULIA
+===================================================== */
+
+.topping-wrap {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:10px 0;
+}
+
+.topping-btn {
+  padding:8px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.15s ease;
+}
+
+.topping-btn:hover {
+  transform:translateY(-2px);
+}
+
+/* ACTIVE — SINGLE TOPPING (pink muda + hitam tebal) */
+.topping-btn.single.active {
+  background:#ffd6e6;       /* pink muda */
+  color:#000;               /* hitam */
+  font-weight:900;
+  border-color:#ffb0d0;
+}
+
+/* ACTIVE — TABURAN (hijau muda + merah tebal) */
+.topping-btn.taburan.active {
+  background:#dff7e6;       /* hijau muda */
+  color:#b91c1c;            /* merah */
+  font-weight:900;
+  border-color:#bfe9c9;
+}
+
+/* Disabled state when limit reached */
+.topping-btn.disabled {
+  opacity:0.45;
+  pointer-events:none;
+  filter:grayscale(0.3);
+}
+
+/* Label */
+.topping-label {
+  font-weight:800;
+  margin-bottom:5px;
+  color:#fff;
+}
