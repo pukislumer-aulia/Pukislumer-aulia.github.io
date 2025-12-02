@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit Pesanan — Admin</title>
+
+<style>
+  body{
+    margin:0;
+    font-family:'Poppins', sans-serif;
+    background:#f7f7f7;
+  }
+  header{
+    background:#ff5e7e;
+    padding:16px;
+    text-align:center;
+    color:#fff;
+    font-weight:700;
+    font-size:20px;
+  }
+  .wrap{
+    padding:16px;
+    max-width:600px;
+    margin:auto;
+  }
+
+  .card{
+    background:white;
+    padding:16px;
+    border-radius:14px;
+    margin-bottom:18px;
+    box-shadow:0 3px 12px rgba(0,0,0,0.08);
+  }
+
+  label{font-weight:600;margin:6px 0 4px;display:block;}
+  input,select,textarea{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    margin-bottom:12px;
+    font-family:inherit;
+  }
+
+  .btn{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:600;
+    margin-top:10px;
+  }
+  .btn-save{background:#28a745;color:#fff;}
+  .btn-delete{background:#ff3f3f;color:#fff;}
+  .btn-back{background:#444;color:#fff;}
+
+  .row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .badge{
+    padding:5px 10px;
+    border-radius:8px;
+    font-size:12px;
+    color:#fff;
+  }
+  .badge-pending{background:#ff9f0f;}
+  .badge-done{background:#28a745;}
+</style>
+
+</head>
+<body>
+
+<header>Edit Pesanan</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <h3 id="invTitle">Memuat...</h3>
+
+    <div class="row">
+      <div>Status:</div>
+      <div id="statusBadge"></div>
+    </div>
+
+    <label>Nama Pemesan</label>
+    <input id="editNama">
+
+    <label>WhatsApp</label>
+    <input id="editWA">
+
+    <label>Jenis Pukis</label>
+    <input id="editJenis">
+
+    <label>Mode Topping</label>
+    <input id="editMode">
+
+    <label>Isi Box</label>
+    <input id="editIsi">
+
+    <label>Jumlah Box</label>
+    <input id="editJumlah">
+
+    <label>Total Bayar</label>
+    <input id="editTotal">
+
+    <label>Catatan</label>
+    <textarea id="editNote"></textarea>
+
+    <label>Status Pesanan</label>
+    <select id="editStatus">
+      <option value="Pending">Pending</option>
+      <option value="Selesai">Selesai</option>
+    </select>
+
+    <button class="btn btn-save" onclick="saveOrder()">Simpan Perubahan</button>
+    <button class="btn btn-delete" onclick="deleteOrder()">Hapus Pesanan</button>
+    <button class="btn btn-back" onclick="backAdmin()">Kembali</button>
+  </div>
+
+</div>
+
+<script>
+/* ===================================
+      CEK LOGIN
+=================================== */
+if(localStorage.getItem("adminLogged") !== "yes"){
+  window.location.href = "admin-login.html";
+}
+
+/* ===================================
+      LOAD ORDER 
+=================================== */
+let inv = localStorage.getItem("editOrderInv");
+let orders = JSON.parse(localStorage.getItem("pukisOrders") || "[]");
+
+let order = orders.find(o => o.invoice == inv);
+
+if(!order){
+  alert("Pesanan tidak ditemukan!");
+  window.location.href = "admin.html";
+}
+
+/* Render detail */
+document.getElementById("invTitle").textContent = "Invoice #" + order.invoice;
+
+document.getElementById("editNama").value = order.nama;
+document.getElementById("editWA").value = order.wa;
+document.getElementById("editJenis").value = order.jenis;
+document.getElementById("editMode").value = order.mode;
+document.getElementById("editIsi").value = order.isi;
+document.getElementById("editJumlah").value = order.jumlah;
+document.getElementById("editTotal").value = order.total;
+document.getElementById("editNote").value = order.catatan;
+document.getElementById("editStatus").value = order.status || "Pending";
+
+/* Badge */
+document.getElementById("statusBadge").innerHTML =
+  `<span class="badge ${order.status==="Selesai"?"badge-done":"badge-pending"}">${order.status}</span>`;
+
+/* ===================================
+      SIMPAN ORDER
+=================================== */
+function saveOrder(){
+  order.nama = document.getElementById("editNama").value;
+  order.wa = document.getElementById("editWA").value;
+  order.jenis = document.getElementById("editJenis").value;
+  order.mode = document.getElementById("editMode").value;
+  order.isi = document.getElementById("editIsi").value;
+  order.jumlah = document.getElementById("editJumlah").value;
+  order.total = document.getElementById("editTotal").value;
+  order.catatan = document.getElementById("editNote").value;
+  order.status = document.getElementById("editStatus").value;
+
+  localStorage.setItem("pukisOrders", JSON.stringify(orders));
+  alert("Berhasil disimpan!");
+  window.location.href = "admin.html";
+}
+
+/* ===================================
+      HAPUS ORDER
+=================================== */
+function deleteOrder(){
+  if(!confirm("Hapus pesanan ini?")) return;
+
+  let newList = orders.filter(o => o.invoice != inv);
+  localStorage.setItem("pukisOrders", JSON.stringify(newList));
+
+  alert("Pesanan berhasil dihapus.");
+  window.location.href = "admin.html";
+}
+
+/* ===================================
+      KEMBALI KE ADMIN
+=================================== */
+function backAdmin(){
+  window.location.href = "admin.html";
+}
+</script>
+
+</body>
+</html>
