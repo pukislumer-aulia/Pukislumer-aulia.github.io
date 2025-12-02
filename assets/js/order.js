@@ -1,294 +1,333 @@
-/* assets/js/order.js — FINAL FULL VERSION */
-(function(){
-  'use strict';
+/* assets/js/order.js — FINAL FULL VERSION (REVISI) */
+(function() {
+    'use strict';
 
-  const ADMIN_WA = "6281296668670"; // nomor admin WA
-  const $ = s => document.querySelector(s);
-  const $$ = s => Array.from(document.querySelectorAll(s));
+    const ADMIN_WA = "6281296668670";
 
-  /* =============================
-        TOPPING LISTS
-  ============================= */
-  const TOPPINGS_SINGLE = ["Coklat","Tiramisu","Vanilla","Stroberi","Cappucino"];
-  const TOPPINGS_TABURAN = ["Meses","Keju","Kacang","Choco Chip","Oreo"];
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
 
-  const MAX_SINGLE = 5;
-  const MAX_TABURAN = 5;
+    /* =============================
+          DATA & CONFIG
+    ============================= */
+    const TOPPINGS_SINGLE = ["Coklat", "Tiramisu", "Vanilla", "Stroberi", "Cappucino"];
+    const TOPPINGS_TABURAN = ["Meses", "Keju", "Kacang", "Choco Chip", "Oreo"];
 
-  /* =============================
-        HARGA PUKIS BERDASARKAN
-        JENIS, ISI BOX & MODE
-  ============================= */
-  const priceMap = {
-    "Original": {
-      5:   { non: 10000, single: 13000, double: 15000 },
-      10:  { non: 18000, single: 25000, double: 28000 }
-    },
-    "Pandan": {
-      5:   { non: 13000, single: 15000, double: 18000 },
-      10:  { non: 25000, single: 28000, double: 32000 }
-    }
-  };
+    const MAX_TOPPINGS = 5; // Maksimum topping/taburan yg boleh dipilih
 
-  /* =============================
-        UTIL
-  ============================= */
-  function validateWA(wa){
-    wa = (wa||"").replace(/\s+/g,'').trim();
-    return /^(08\d{8,13}|\+628\d{7,13})$/.test(wa);
-  }
-
-  function genInvoice(){
-    return "INV-" + (crypto.randomUUID 
-      ? crypto.randomUUID().split("-")[0].toUpperCase()
-      : Date.now().toString(36).toUpperCase());
-  }
-
-  function genId(){
-    return "o" + (crypto.randomUUID 
-      ? crypto.randomUUID().split("-")[0]
-      : Date.now().toString(36));
-  }
-
-  /* =============================
-     STATE SELECTION
-  ============================= */
-  let selectedSingle = [];
-  let selectedTaburan = [];
-
-  /* =============================
-     RENDER TOPPING BUTTONS
-  ============================= */
-  function renderToppingButtons(){
-    const single = $("#ultraSingleGroup");
-    const doubleSingle = $("#ultraDoubleSingle");
-    const doubleTaburan = $("#ultraDoubleTaburan");
-
-    if(single) single.innerHTML = "";
-    if(doubleSingle) doubleSingle.innerHTML = "";
-    if(doubleTaburan) doubleTaburan.innerHTML = "";
-
-    // SINGLE TOPPING BUTTONS
-    TOPPINGS_SINGLE.forEach(name=>{
-      const btn = makeSingleButton(name);
-      if(single) single.appendChild(btn);
-
-      if(doubleSingle){
-        const clone = makeSingleButton(name);
-        doubleSingle.appendChild(clone);
-      }
-    });
-
-    // TABURAN BUTTONS
-    TOPPINGS_TABURAN.forEach(name=>{
-      const b = makeTaburanButton(name);
-      if(doubleTaburan) doubleTaburan.appendChild(b);
-    });
-
-    refreshDisabledStates();
-  }
-
-  function makeSingleButton(name){
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "topping-btn single";
-    b.textContent = name;
-    b.dataset.name = name;
-
-    if(selectedSingle.includes(name)) b.classList.add("active");
-
-    b.addEventListener("click", ()=>{
-      const i = selectedSingle.indexOf(name);
-      if(i>=0){
-        selectedSingle.splice(i,1);
-      } else {
-        if(selectedSingle.length >= MAX_SINGLE){
-          b.classList.add("disabled");
-          return setTimeout(()=>b.classList.remove("disabled"),300);
+    const HARGA_PUKIS = {
+        "Original": {
+            5: {
+                non: 10000,
+                single: 13000,
+                double: 15000
+            },
+            10: {
+                non: 18000,
+                single: 25000,
+                double: 28000
+            }
+        },
+        "Pandan": {
+            5: {
+                non: 13000,
+                single: 15000,
+                double: 18000
+            },
+            10: {
+                non: 25000,
+                single: 28000,
+                double: 32000
+            }
         }
-        selectedSingle.push(name);
-      }
-      renderToppingButtons();
-      calcPrice();
-    });
+    };
 
-    return b;
-  }
+    /* =============================
+          UTIL FUNCTIONS
+    ============================= */
+    const isValidWA = wa => /^(08\d{8,13}|\+628\d{7,13})$/.test((wa || "").replace(/\s+/g, '').trim());
 
-  function makeTaburanButton(name){
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "topping-btn taburan";
-    b.textContent = name;
-    b.dataset.name = name;
+    const genInvoice = () => "INV-" + (crypto.randomUUID ? crypto.randomUUID().split("-")[0].toUpperCase() : Date.now().toString(36).toUpperCase());
 
-    if(selectedTaburan.includes(name)) b.classList.add("active");
+    const genId = () => "o" + (crypto.randomUUID ? crypto.randomUUID().split("-")[0] : Date.now().toString(36));
 
-    b.addEventListener("click", ()=>{
-      const i = selectedTaburan.indexOf(name);
-      if(i>=0){
-        selectedTaburan.splice(i,1);
-      } else {
-        if(selectedTaburan.length >= MAX_TABURAN){
-          b.classList.add("disabled");
-          return setTimeout(()=>b.classList.remove("disabled"),300);
+    const formatRupiah = num => "Rp " + (num || 0).toLocaleString("id-ID");
+
+    /* =============================
+       ELEMENT REFERENCES
+    ============================= */
+    const el = {
+        form: $("#formUltra"),
+        nama: $("#ultraNama"),
+        wa: $("#ultraWA"),
+        jenis: $$("input[name='ultraJenis']"),
+        isi: $("#ultraIsi"),
+        toppingMode: $$("input[name='ultraToppingMode']"),
+        jml: $("#ultraJumlah"),
+        note: $("#ultraNote"),
+
+        singleGroup: $("#ultraSingleGroup"),
+        doubleWrapper: $("#ultraDoubleWrapper"),
+        doubleSingle: $("#ultraDoubleSingle"),
+        doubleTaburan: $("#ultraDoubleTaburan"),
+
+        pricePerBox: $("#ultraPricePerBox"),
+        subtotal: $("#ultraSubtotal"),
+        grandTotal: $("#ultraGrandTotal"),
+
+        submitBtn: $("#ultraSubmit")
+    };
+
+    /* =============================
+       STATE
+    ============================= */
+    let selectedSingle = [];
+    let selectedTaburan = [];
+
+    /* =============================
+       TOPPING BUTTONS
+    ============================= */
+    function renderToppingButtons() {
+        el.singleGroup.innerHTML = "";
+        el.doubleSingle.innerHTML = "";
+        el.doubleTaburan.innerHTML = "";
+
+        TOPPINGS_SINGLE.forEach(name => {
+            el.singleGroup.appendChild(makeToppingButton(name, "single"));
+            el.doubleSingle.appendChild(makeToppingButton(name, "doubleSingle"));
+        });
+
+        TOPPINGS_TABURAN.forEach(name => {
+            el.doubleTaburan.appendChild(makeToppingButton(name, "taburan"));
+        });
+
+        refreshDisabledStates();
+    }
+
+    function makeToppingButton(name, type) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "topping-btn";
+        btn.textContent = name;
+        btn.dataset.name = name;
+
+        const isSelected = (type === "taburan") ? selectedTaburan.includes(name) : selectedSingle.includes(name);
+        if (isSelected) btn.classList.add("active");
+
+        btn.addEventListener("click", () => {
+            if (type === "taburan") {
+                toggleTaburan(btn, name);
+            } else {
+                toggleSingle(btn, name);
+            }
+        });
+
+        return btn;
+    }
+
+    function toggleSingle(button, topping) {
+        const index = selectedSingle.indexOf(topping);
+
+        if (index >= 0) {
+            selectedSingle.splice(index, 1); // Remove
+        } else {
+            if (selectedSingle.length >= MAX_TOPPINGS) {
+                return showLimitMessage(button);
+            }
+            selectedSingle.push(topping); // Add
         }
-        selectedTaburan.push(name);
-      }
-      renderToppingButtons();
-      calcPrice();
-    });
 
-    return b;
-  }
-
-  /* =============================
-     UPDATE UI BASED ON MODE
-  ============================= */
-  function updateToppingUI(){
-    const mode = $("input[name='ultraToppingMode']:checked")?.value || "non";
-
-    const single = $("#ultraSingleGroup");
-    const wrapper = $("#ultraDoubleWrapper");
-
-    if(mode === "non"){
-      if(single) single.style.display = "none";
-      if(wrapper) wrapper.style.display = "none";
-    }
-    else if(mode === "single"){
-      if(single) single.style.display = "flex";
-      if(wrapper) wrapper.style.display = "none";
-    }
-    else if(mode === "double"){
-      if(single) single.style.display = "none";
-      if(wrapper) wrapper.style.display = "block";
+        renderToppingButtons();
+        calcPrice();
     }
 
-    calcPrice();
-  }
+    function toggleTaburan(button, taburan) {
+        const index = selectedTaburan.indexOf(taburan);
 
-  /* =============================
-        PRICE CALC
-  ============================= */
-  function calcPrice(){
-    const jenis = $("input[name='ultraJenis']:checked")?.value || "Original";
-    const isi   = Number($("#ultraIsi").value) || 5;
-    const mode  = $("input[name='ultraToppingMode']:checked")?.value || "non";
-    const jml   = Math.max(1, Number($("#ultraJumlah").value) || 1);
+        if (index >= 0) {
+            selectedTaburan.splice(index, 1); // Remove
+        } else {
+            if (selectedTaburan.length >= MAX_TOPPINGS) {
+                return showLimitMessage(button);
+            }
+            selectedTaburan.push(taburan); // Add
+        }
 
-    const base = priceMap[jenis][isi][mode] || 0;
-    const total = base * jml;
-
-    $("#ultraPricePerBox").textContent = "Rp " + base.toLocaleString();
-    $("#ultraSubtotal").textContent = "Rp " + (base*jml).toLocaleString();
-    $("#ultraGrandTotal").textContent = "Rp " + total.toLocaleString();
-
-    return { base, total };
-  }
-
-  /* =============================
-        SAVE ORDER
-  ============================= */
-  function saveOrder(order){
-    const arr = JSON.parse(localStorage.getItem("orders") || "[]");
-    arr.push(order);
-    localStorage.setItem("orders", JSON.stringify(arr));
-  }
-
-  /* =============================
-      SEND WA TO ADMIN
-  ============================= */
-  function sendToAdmin(order){
-    let msg =
-`*ORDER BARU MASUK*
-• Invoice: ${order.invoice}
-• Nama: ${order.nama}
-• WA: ${order.wa}
-• Jenis: ${order.jenis}
-• Isi: ${order.isi} pcs
-• Mode: ${order.mode}
-• Jumlah Box: ${order.jumlah}
-• Total: Rp ${order.total.toLocaleString()}
-`;
-
-    if(order.mode === "single"){
-      msg += `• Topping: ${order.single.join(", ") || "-"}\n`;
-    }
-    if(order.mode === "double"){
-      msg += `• Topping Single: ${order.single.join(", ") || "-"}\n`;
-      msg += `• Taburan: ${order.taburan.join(", ") || "-"}\n`;
+        renderToppingButtons();
+        calcPrice();
     }
 
-    msg += `\n*Catatan:* ${order.note || "-"}\n\nSilakan diproses admin 🙏`;
+    function showLimitMessage(button) {
+        button.classList.add("disabled");
+        setTimeout(() => button.classList.remove("disabled"), 300);
+    }
 
-    const url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
-    window.open(url, "_blank");
-  }
+    function refreshDisabledStates() {
+        // (optional) disable buttons when limit is reached
+    }
 
-  /* =============================
-        INIT
-  ============================= */
-  function init(){
-    renderToppingButtons();
+    /* =============================
+       UPDATE UI BASED ON MODE
+    ============================= */
+    function updateToppingUI() {
+        const mode = $$("input[name='ultraToppingMode']:checked")[0]?.value || "non";
 
-    // radio events
-    $$("input[name='ultraToppingMode']").forEach(r => r.addEventListener("change", updateToppingUI));
-    $$("input[name='ultraJenis']").forEach(r => r.addEventListener("change", calcPrice));
-    $("#ultraIsi").addEventListener("change", calcPrice);
-    $("#ultraJumlah").addEventListener("input", calcPrice);
+        el.singleGroup.style.display = (mode === "single") ? "flex" : "none";
+        el.doubleWrapper.style.display = (mode === "double") ? "block" : "none";
 
-    // SUBMIT
-    $("#ultraSubmit").addEventListener("click", (e)=>{
-      e.preventDefault();
+        calcPrice();
+    }
 
-      const nama = $("#ultraNama").value.trim();
-      const wa   = $("#ultraWA").value.trim();
+    /* =============================
+          PRICE CALC
+    ============================= */
+    function calcPrice() {
+        const jenis = $$("input[name='ultraJenis']:checked")[0]?.value || "Original";
+        const isi = Number(el.isi.value) || 5;
+        const mode = $$("input[name='ultraToppingMode']:checked")[0]?.value || "non";
+        const jml = Math.max(1, Number(el.jml.value) || 1);
 
-      if(!nama) return alert("Nama harus diisi");
-      if(!validateWA(wa)) return alert("Nomor WA tidak valid");
+        let base = HARGA_PUKIS[jenis][isi][mode] || 0;
+        let total = base * jml;
 
-      const jenis = $("input[name='ultraJenis']:checked").value;
-      const isi   = Number($("#ultraIsi").value);
-      const mode  = $("input[name='ultraToppingMode']:checked").value;
-      const jml   = Math.max(1, Number($("#ultraJumlah").value) || 1);
-      const note  = $("#ultraNote").value.trim();
+        el.pricePerBox.textContent = formatRupiah(base);
+        el.subtotal.textContent = formatRupiah(base * jml);
+        el.grandTotal.textContent = formatRupiah(total);
 
-      const { total } = calcPrice();
+        return {
+            base,
+            total
+        };
+    }
 
-      const order = {
-        id: genId(),
-        invoice: genInvoice(),
-        nama, wa, jenis, isi, mode, jumlah:jml, note,
-        total,
-        tanggal: new Date().toLocaleString("id-ID"),
-        status: "pending"
-      };
+    /* =============================
+          VALIDATE
+    ============================= */
+    function validateForm() {
+        let isValid = true;
+        if (!el.nama.value.trim()) {
+            isValid = false;
+            alert("Nama harus diisi.");
+            el.nama.focus();
+            return false
+        }
+        if (!isValidWA(el.wa.value)) {
+            isValid = false;
+            alert("Nomor WA tidak valid.");
+            el.wa.focus();
+            return false;
+        }
+        if (Number(el.jml.value) <= 0) {
+            isValid = false;
+            alert("Jumlah harus lebih dari 0.");
+            el.jml.focus();
+            return false;
+        }
+        return isValid;
+    }
 
-      if(mode === "single"){
-        order.single = selectedSingle.slice(0, MAX_SINGLE);
-      }
-      else if(mode === "double"){
-        order.single = selectedSingle.slice(0, MAX_SINGLE);
-        order.taburan = selectedTaburan.slice(0, MAX_TABURAN);
-      }
+    /* =============================
+          SAVE ORDER
+    ============================= */
+    function saveOrder(order) {
+        try {
+            const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+            orders.push(order);
+            localStorage.setItem("orders", JSON.stringify(orders));
+        } catch (e) {
+            console.error("Error saving order", e);
+            alert("Gagal menyimpan pesanan. Coba lagi nanti.");
+        }
+    }
 
-      saveOrder(order);
-      sendToAdmin(order);
+    /* =============================
+        SEND WA TO ADMIN
+    ============================= */
+    function sendToAdmin(order) {
+        let msg = `*ORDER BARU MASUK*\n• Invoice: ${order.invoice}\n• Nama: ${order.nama}\n• WA: ${order.wa}\n• Jenis: ${order.jenis}\n• Isi: ${order.isi} pcs\n• Mode: ${order.mode}\n• Jumlah Box: ${order.jumlah}\n• Total: ${formatRupiah(order.total)}`;
 
-      // reset UI
-      $("#formUltra").reset();
-      selectedSingle = [];
-      selectedTaburan = [];
-      renderToppingButtons();
-      updateToppingUI();
-      calcPrice();
+        if (order.mode === "single") {
+            msg += `\n• Topping: ${order.single.join(", ") || "-"}`;
+        } else if (order.mode === "double") {
+            msg += `\n• Topping Single: ${order.single.join(", ") || "-"}`;
+            msg += `\n• Taburan: ${order.taburan.join(", ") || "-"}`;
+        }
 
-      alert("Pesanan berhasil + WA dikirim ke admin!");
-    });
+        msg += `\n*Catatan:* ${order.note || "-"}\n\nSilakan diproses admin 🙏`;
 
-    updateToppingUI();
-    calcPrice();
-  }
+        const url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
+        window.open(url, "_blank");
+    }
 
-  document.addEventListener("DOMContentLoaded", init);
+    /* =============================
+          HANDLE SUBMIT
+    ============================= */
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        if (!validateForm()) return;
+
+        const jenis = $$("input[name='ultraJenis']:checked")[0].value;
+        const isi = Number(el.isi.value);
+        const mode = $$("input[name='ultraToppingMode']:checked")[0].value;
+        const jml = Math.max(1, Number(el.jml.value) || 1);
+
+        const {
+            total
+        } = calcPrice();
+
+        const order = {
+            id: genId(),
+            invoice: genInvoice(),
+            nama: el.nama.value.trim(),
+            wa: el.wa.value.trim(),
+            jenis,
+            isi,
+            mode,
+            jumlah: jml,
+            note: el.note.value.trim(),
+            total,
+            tanggal: new Date().toLocaleString("id-ID"),
+            status: "pending"
+        };
+
+        if (mode === "single") {
+            order.single = selectedSingle.slice(0, MAX_TOPPINGS);
+        } else if (mode === "double") {
+            order.single = selectedSingle.slice(0, MAX_TOPPINGS);
+            order.taburan = selectedTaburan.slice(0, MAX_TOPPINGS);
+        }
+
+        saveOrder(order);
+        sendToAdmin(order);
+
+        // Reset UI
+        el.form.reset();
+        selectedSingle = [];
+        selectedTaburan = [];
+        renderToppingButtons();
+        updateToppingUI();
+        calcPrice();
+
+        alert("Pesanan berhasil + WA dikirim ke admin!");
+    }
+
+    /* =============================
+          INIT
+    ============================= */
+    function init() {
+        renderToppingButtons();
+        updateToppingUI();
+        calcPrice();
+
+        el.toppingMode.forEach(r => r.addEventListener("change", updateToppingUI));
+        el.jenis.forEach(r => r.addEventListener("change", calcPrice));
+        el.isi.addEventListener("change", calcPrice);
+        el.jml.addEventListener("input", calcPrice);
+
+        el.form.addEventListener("submit", handleSubmit);
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+
 })();
