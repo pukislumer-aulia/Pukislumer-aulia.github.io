@@ -1,34 +1,38 @@
+/* =====================================================
+   assets/js/login.js
+   LOGIN ADMIN — SHA-256 HASH + sessionStorage
+   ===================================================== */
+
 (async function(){
-  const FORM = document.getElementById("loginForm");
-  const ERR = document.getElementById("loginError");
+  'use strict';
 
-  // Kredensial admin
-  const ADMIN_USER = "pukislumer";
-  const ADMIN_PASS_HASH = "fb24e79e927651c01fb9b31c7648206dfa81857232ece2b2043614d00f90e1a5";
+  const VALID_USER = "pukislumer";
+  const VALID_PASS_HASH = "cb969b5cb364a7e06e5e853ee1bc74d2c4aa1bea1261d6ae2bc1d1bff0f90f95";
+  // Hash di atas = SHA-256("Aulia1234")
 
-  async function sha256(text){
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(hashBuffer))
-      .map(b => b.toString(16).padStart(2,"0"))
-      .join("");
+  const $ = s => document.querySelector(s);
+
+  async function sha256(str){
+    const buf = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest('SHA-256', buf);
+    return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2,'0')).join('');
   }
 
-  FORM.addEventListener("submit", async (e)=>{
+  $('#loginForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
-    ERR.style.display = "none";
 
-    const user = document.getElementById("username").value.trim();
-    const pass = document.getElementById("password").value.trim();
+    const user = $('#username').value.trim();
+    const pass = $('#password').value;
+
     const passHash = await sha256(pass);
 
-    if(user === ADMIN_USER && passHash === ADMIN_PASS_HASH){
-      sessionStorage.setItem("adminLogin","active");
+    if (user === VALID_USER && passHash === VALID_PASS_HASH) {
+      sessionStorage.setItem('adminLogin', 'active');
       window.location.href = "admin.html";
-    } else {
-      ERR.style.display = "block";
+      return;
     }
+
+    $('#errorMsg').textContent = "Username atau password salah";
   });
 
 })();
