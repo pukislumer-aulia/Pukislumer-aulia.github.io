@@ -85,59 +85,63 @@
             </div>
         </section>
 
-        <!-- ORDER FORM -->
-        <section id="form-ultra" class="order-section">
+        <!-- ================== FORMULIR PEMESANAN ================== -->
+        <section id="form-pemesanan">
             <h2>Pemesanan Pukis Lumer Aulia</h2>
+            <form id="formPukis">
+                <!-- Nama Pemesan -->
+                <label>Nama Pemesan:
+                    <input type="text" id="namaPemesan" placeholder="Nama Anda" required>
+                </label>
 
-            <form id="formUltra">
-
-                <label>Nama Pemesan:</label>
-                <input type="text" id="ultraNama" required placeholder="Nama lengkap">
-
-                <label>Nomor WhatsApp:</label>
-                <input type="tel" id="ultraWA" required placeholder="0812...">
-
+                <!-- Jenis Pukis -->
                 <label>Jenis Pukis:</label>
-                <div class="opt-group">
-                    <label><input type="radio" name="ultraJenis" value="original" checked> Original</label>
-                    <label><input type="radio" name="ultraJenis" value="pandan"> Pandan</label>
-                </div>
+                <label><input type="radio" name="jenis" value="original" checked> Original</label>
+                <label><input type="radio" name="jenis" value="pandan"> Pandan</label>
 
-                <label>Isi per Box:</label>
-                <select id="ultraIsi">
-                    <option value="5">5 pcs</option>
-                    <option value="10">10 pcs</option>
-                </select>
-
-                <label>Pilih Mode Topping:</label>
-                <div class="opt-group">
-                    <label><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
-                    <label><input type="radio" name="ultraToppingMode" value="single"> Single</label>
-                    <label><input type="radio" name="ultraToppingMode" value="double"> Double</label>
-                </div>
+                <!-- Topping -->
+                <label>Topping:</label>
+                <label><input type="radio" name="topping" value="non" checked> Non Topping</label>
+                <label><input type="radio" name="topping" value="single"> Single Topping</label>
+                <label><input type="radio" name="topping" value="double"> Double Topping</label>
 
                 <!-- Single Topping -->
-                <div id="ultraSingleGroup" class="topping-wrap" style="display:none;"></div>
-
-                <!-- Double Topping -->
-                <div id="ultraDoubleGroup" class="topping-wrap" style="display:none;"></div>
-
-                <label>Catatan Khusus:</label>
-                <textarea id="ultraNote" placeholder="Contoh: Tanpa kacang / Ambil jam 19.00"></textarea>
-
-                <label>Jumlah Box:</label>
-                <input type="number" id="ultraJumlah" min="1" value="1">
-
-                <div class="price-summary">
-                    <div><span>Harga per Box:</span><span id="ultraPricePerBox">Rp0</span></div>
-                    <div><span>Subtotal:</span><span id="ultraSubtotal">Rp0</span></div>
-                    <div><span>Diskon:</span><span id="ultraDiscount">-</span></div>
-                    <div class="grand"><span>Total Bayar:</span><span id="ultraGrandTotal">Rp0</span></div>
+                <div id="singleToppingGroup" style="display:none;">
+                    <label>Pilih Rasa (Single):</label>
+                    <label><input type="checkbox" class="singleTopping" value="Coklat"> Coklat</label>
+                    <label><input type="checkbox" class="singleTopping" value="Tiramisu"> Tiramisu</label>
+                    <label><input type="checkbox" class="singleTopping" value="Stroberi"> Stroberi</label>
+                    <label><input type="checkbox" class="singleTopping" value="Cappucino"> Cappucino</label>
+                    <label><input type="checkbox" class="singleTopping" value="Vanilla"> Vanilla</label>
+                    <label><input type="checkbox" class="singleTopping" value="Matcha"> Matcha</label>
                 </div>
 
-                <button type="submit" id="ultraSubmit" class="btn-primary">Buat Nota</button>
-                <button type="button" id="ultraSendAdmin" class="btn-wa">Kirim WA Admin</button>
+                <!-- Double Topping -->
+                <div id="doubleToppingGroup" style="display:none;">
+                    <label>Pilih Taburan (Double):</label>
+                    <label><input type="checkbox" class="doubleTopping" value="Meses"> Meses</label>
+                    <label><input type="checkbox" class="doubleTopping" value="Keju"> Keju</label>
+                    <label><input type="checkbox" class="doubleTopping" value="Kacang"> Kacang</label>
+                    <label><input type="checkbox" class="doubleTopping" value="Choco Chip"> Choco Chip</label>
+                    <label><input type="checkbox" class="doubleTopping" value="Oreo"> Oreo</label>
+                </div>
 
+                <!-- Isi Box & Jumlah -->
+                <label>Isi per Box:
+                    <select id="isiBox">
+                        <option value="5">5 pcs</option>
+                        <option value="10">10 pcs</option>
+                    </select>
+                </label>
+                <label>Jumlah Box:
+                    <input type="number" id="jumlahBox" value="1" min="1">
+                </label>
+
+                <!-- Total Harga -->
+                <p>Total Harga: <span id="totalHarga">Rp0</span></p>
+
+                <!-- Submit -->
+                <button type="submit">Kirim Pesanan via WhatsApp</button>
             </form>
         </section>
 
@@ -227,7 +231,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
     <!-- MAIN ORDER SYSTEM -->
-    <script src="assets/js/order.js" type="module"></script>
+    <script src="assets/js/order.js"></script>
 
 </body>
 
