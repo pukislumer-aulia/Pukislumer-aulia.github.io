@@ -1,58 +1,73 @@
+/* =============================================
+   Admin Login — Pukis Lumer Aulia
+   ============================================= */
+
 body {
   margin: 0;
-  background: #0f1115;
+  padding: 0;
   font-family: Poppins, sans-serif;
+  background: #0f1115;
+  color: #e2e8f0;
   display: flex;
-  height: 100vh;
   justify-content: center;
   align-items: center;
-  color: white;
+  height: 100vh;
 }
 
 .login-box {
-  background: #161a25;
+  background: #151822;
   padding: 28px;
+  width: 92%;
+  max-width: 360px;
   border-radius: 14px;
-  width: 320px;
-  box-shadow: 0 0 12px rgba(255,255,255,0.05);
+  box-shadow: 0 0 12px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 h2 {
+  margin-top: 0;
   text-align: center;
-  color: #ff89b5;
+  color: #ff8fbf;
+  font-weight: 700;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  color: #bfc7d5;
 }
 
 input {
   width: 100%;
+  margin-top: 6px;
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #333;
-  margin-bottom: 12px;
-  background: #0f1115;
-  color: white;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: #0c0e12;
+  color: #fff;
+  font-size: 15px;
 }
 
-button {
+.btn-login {
   width: 100%;
-  padding: 12px;
-  border: 0;
-  background: #ff89b5;
-  border-radius: 10px;
-  color: #000;
-  font-weight: bold;
+  margin-top: 18px;
+  padding: 11px;
+  background: #ff5e7e;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.error-msg {
-  color: #ff6b6b;
-  text-align: center;
-  margin-top: 10px;
+.btn-login:hover {
+  background: #ff7592;
 }
-.logout-button {
-  background:#dd6b20;
-  padding:8px 12px;
-  border:0;
-  color:white;
-  border-radius:6px;
-  cursor:pointer;
+
+.error {
+  margin-top: 14px;
+  color: #ff6b6b;
+  font-size: 14px;
+  text-align: center;
 }
