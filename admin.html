@@ -1,87 +1,99 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Pukis Lumer Aulia</title>
-    <link rel="stylesheet" href="Admin.css">
-    <!-- Tambahkan link ke Font Awesome jika belum ada -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Panel — Pukis Lumer Aulia</title>
+
+  <link rel="stylesheet" href="assets/css/admin-pro.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* Mobile padding */
+    .admin-container { padding: 16px; }
+  </style>
 </head>
 
 <body>
-    <div class="admin-wrapper">
-        <div class="admin-header">
-            <h1>Admin Dashboard</h1>
-            <div>
-                <button class="btn-logout" id="logoutBtn">Logout</button>
-            </div>
-        </div>
 
-        <div class="stat-section">
-            <div class="stat-card">
-                <div class="stat-number" id="totalOrders">0</div>
-                Total Orders
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="pendingOrders">0</div>
-                Pending Orders
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="completedOrders">0</div>
-                Completed Orders
-            </div>
-        </div>
+  <header class="admin-header">
+    <i class="fas fa-shield-halved"></i> ADMIN PANEL
+  </header>
 
-        <div class="order-section">
-            <h2>Order Management</h2>
-            <div class="action-buttons">
-                <button class="btn-primary" id="filterAll">Semua</button>
-                <button class="btn-secondary" id="filterPending">Pending</button>
-                <button class="btn-secondary" id="filterDone">Selesai</button>
-                <button class="btn-primary" id="printLastInvoice">Cetak Nota Terakhir</button>
-            </div>
+  <div class="admin-container">
 
-            <table id="orderTable">
-                <thead>
-                    <tr>
-                        <th>Invoice</th>
-                        <th>Nama</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data pesanan akan ditampilkan di sini -->
-                </tbody>
-            </table>
+    <!-- ==========================
+         STATISTIK (3 CARD)
+    =========================== -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon bg-blue"><i class="fa fa-file-invoice"></i></div>
+        <div>
+          <div style="font-size:14px;color:#aab2c5">Total Order</div>
+          <div id="totalOrders" style="font-size:20px;font-weight:700">0</div>
         </div>
+      </div>
 
-        <div class="analytics-section">
-            <h2>Analytics</h2>
-            <pre>
-                <!-- Kode analitik atau statistik lainnya bisa ditambahkan di sini -->
-                Statistik penjualan, tren produk, dll.
-            </pre>
+      <div class="stat-card">
+        <div class="stat-icon bg-orange"><i class="fa fa-clock"></i></div>
+        <div>
+          <div style="font-size:14px;color:#aab2c5">Belum Dicetak</div>
+          <div id="pendingOrders" style="font-size:20px;font-weight:700">0</div>
         </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon bg-green"><i class="fa fa-check"></i></div>
+        <div>
+          <div style="font-size:14px;color:#aab2c5">Sudah Dicetak</div>
+          <div id="doneOrders" style="font-size:20px;font-weight:700">0</div>
+        </div>
+      </div>
     </div>
 
-    <!-- Modal Logout (opsional) -->
-    <div class="modal" id="logoutModal">
-        <div class="modal-box">
-            <h3>Yakin ingin logout?</h3>
-            <button class="btn-logout" id="logoutBtn2">Logout</button>
-            <button class="btn-secondary" onclick="document.getElementById('logoutModal').style.display='none'">Batal</button>
-        </div>
+    <!-- ==========================
+         ADMIN TOOLS
+    =========================== -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;margin-bottom:16px;">
+      <button id="printLastInvoice" class="btn-small btn-green" style="flex:1">Cetak Nota Terbaru</button>
+      <button id="filterAll" class="btn-small btn-gray">Semua</button>
+      <button id="filterPending" class="btn-small btn-orange">Belum</button>
+      <button id="filterDone" class="btn-small btn-green">Selesai</button>
+      <button id="logoutBtn" class="btn-small btn-blue" style="margin-left:auto">Logout</button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <script src="Admin.js"></script>
+    <!-- ==========================
+         TABEL ORDER
+    =========================== -->
+    <table class="order-table" id="orderTable">
+      <thead>
+        <tr>
+          <th>Invoice</th>
+          <th>Nama</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div style="text-align:center;margin-top:20px;">
+      <button id="logoutBtn2" class="btn-small btn-blue">Keluar Admin</button>
+    </div>
+
+  </div>
+
+  <!-- ==========================
+       JS LIBRARY
+  =========================== -->
+  <script src="assets/js/lib/jspdf.umd.min.js"></script>
+  <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- ==========================
+       ADMIN LOGIC
+  =========================== -->
+  <script src="assets/js/admin-pro.js"></script>
+
 </body>
-
 </html>
