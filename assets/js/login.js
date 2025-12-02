@@ -3,9 +3,8 @@
     'use strict';
 
     const VALID_USER = "pukislumer";
-    // SHA256("Aulia1234")
-    const VALID_PASS_HASH = "1afd7064e91e80a2415cd304ada5b3fbb82e25914d216c077236da002ad32e7c";
-
+// SHA256("Aulia1234")
+const VALID_PASS_HASH = "1afd7064e91e80a2415cd304ada5b3fbb82e25914d216c077236da002ad32e7c";
     const $ = s => document.querySelector(s);
 
     async function sha256(str) {
