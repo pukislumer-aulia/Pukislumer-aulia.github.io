@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -80,78 +81,12 @@
         <img loading="lazy" src="assets/images/pukis5.jpg" class="gallery-img" alt="Pukis 5">
       </div>
     </section>
-    <!-- ORDER FORM -->
-    <section id="form-ultra" class="order-section">
-      <h2>Pemesanan Pukis Lumer Aulia</h2>
 
-      <form id="formUltra">
+    <!-- ORDER FORM (akan dimuat oleh JS) -->
+    <div id="orderFormContainer"></div>
 
-        <label>Nama Pemesan:</label>
-        <input type="text" id="ultraNama" required placeholder="Nama lengkap">
-
-        <label>Nomor WhatsApp:</label>
-        <input type="tel" id="ultraWA" required placeholder="0812...">
-
-        <label>Jenis Pukis:</label>
-        <div class="opt-group">
-          <label><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
-          <label><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
-        </div>
-
-        <label>Isi per Box:</label>
-        <select id="ultraIsi">
-          <option value="5">5 pcs</option>
-          <option value="10">10 pcs</option>
-        </select>
-
-        <label>Pilih Mode Topping:</label>
-        <div class="opt-group">
-          <label><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
-          <label><input type="radio" name="ultraToppingMode" value="single"> Single</label>
-          <label><input type="radio" name="ultraToppingMode" value="double"> Double</label>
-        </div>
-
-        <!-- Single Topping -->
-        <div id="ultraSingleGroup" class="topping-wrap" style="display:none;"></div>
-
-        <!-- Double Topping -->
-        <div id="ultraDoubleGroup" class="topping-wrap" style="display:none;"></div>
-
-        <label>Catatan Khusus:</label>
-        <textarea id="ultraNote" placeholder="Contoh: Tanpa kacang / Ambil jam 19.00"></textarea>
-
-        <label>Jumlah Box:</label>
-        <input type="number" id="ultraJumlah" min="1" value="1">
-
-        <div class="price-summary">
-          <div><span>Harga per Box:</span><span id="ultraPricePerBox">Rp0</span></div>
-          <div><span>Subtotal:</span><span id="ultraSubtotal">Rp0</span></div>
-          <div><span>Diskon:</span><span id="ultraDiscount">-</span></div>
-          <div class="grand"><span>Total Bayar:</span><span id="ultraGrandTotal">Rp0</span></div>
-        </div>
-
-        <button type="submit" id="ultraSubmit" class="btn-primary">Buat Nota</button>
-        <button type="button" id="ultraSendAdmin" class="btn-wa">Kirim WA Admin</button>
-
-      </form>
-    </section>
-
-    <!-- NOTA POPUP -->
-    <div id="notaContainer" class="nota-overlay">
-      <div class="nota-card">
-        <div class="nota-header">
-          <h3>Nota Pemesanan</h3>
-          <button id="notaClose" class="btn-close">✕</button>
-        </div>
-
-        <div id="notaContent" class="nota-content"></div>
-
-        <div class="nota-footer">
-          <button id="notaPrint" class="btn-primary">Cetak / PDF</button>
-          <button id="notaWAAdmin" class="btn-wa">Konfirmasi ke Admin</button>
-        </div>
-      </div>
-    </div>
+    <!-- NOTA POPUP (akan dimuat oleh JS) -->
+    <div id="notaContainer"></div>
 
     <!-- TESTIMONI -->
     <section id="section-testimoni" class="testi-section">
@@ -185,7 +120,8 @@
   </a>
 
   <!-- FLOATING SHARE -->
-  <button id="toggleShareBtn" class="toggle-float-btn">+</button>
+  <button id="toggleShareBtn" class="toggle-float-btn">
+        </button>
 
   <div class="floating-icons-container" id="floatingIcons">
     <a href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
@@ -217,7 +153,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
   <!-- MAIN ORDER SYSTEM -->
-  <script src="assets/js/order.js"></script>
+  <script src="assets/js/order.js" type="module"></script>
 
 </body>
 </html>
