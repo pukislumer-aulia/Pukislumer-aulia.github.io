@@ -156,3 +156,33 @@ label.topping-check.checked,label.taburan-check.checked{background:#fff5fa;borde
   margin-bottom:5px;
   color:#fff;
 }
+/* Topping tag-style buttons */
+.topping-wrap { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+.topping-btn {
+  padding:8px 10px; border-radius:10px; border:1px solid rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.03); color: #fff; cursor:pointer; font-weight:700;
+  font-size:14px;
+}
+.topping-btn:hover { transform: translateY(-2px); }
+
+/* Single topping active style: pink muda bg, tulisan hitam tebal */
+.topping-btn.single.active {
+  background: #ffd6e6; /* pink muda */
+  color: #000;
+  font-weight:900;
+  border-color: #ffb0d0;
+}
+
+/* Taburan active style: hijau muda bg, tulisan merah tebal */
+.topping-btn.taburan.active {
+  background: #dff7e6; /* hijau muda */
+  color: #b91c1c; /* merah */
+  font-weight:900;
+  border-color: #bfe9c9;
+}
+
+/* Disabled (when limit reached) */
+.topping-btn.disabled { opacity:0.45; pointer-events:none; filter:grayscale(0.03); }
+
+/* Group labels for clarity */
+.topping-label { font-weight:800; margin-bottom:6px; color:#fff; }
