@@ -1,284 +1,273 @@
-/* =========================================================
-   STYLE.CSS — FINAL SYNCED VERSION (HTML + ORDER.JS MATCH)
-   - Diperbarui agar cocok 1:1 dengan HTML + order.js
-   - Perbaikan: taburan visuals, checked states, non-!important display rules,
-     nota visibility cleanup, responsive topping wrap, dan konsistensi ID.
-========================================================= */
+/* ==================================================
+   assets/css/style.css
+   Pukis Lumer Aulia — Main stylesheet (clean & ready)
+   ================================================== */
 
-/* RESET */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+/* ---------- RESET / BASE ---------- */
+:root{
+  --accent: #ff5e7e;
+  --accent-2: #ff89b5;
+  --muted: #6b7280;
+  --bg: #ffffff;
+  --card: #ffffff;
+  --success: #1abf4b;
+  --danger: #d9534f;
+  --glass: rgba(255,255,255,0.6);
+  --shadow: 0 6px 20px rgba(11,15,20,0.06);
+  --max-width: 980px;
+  --radius: 12px;
+  --text: #111;
 }
 
-/* BODY */
-body {
-  background: #f7f7f7;
-  color: #222;
-  padding-bottom: 70px;
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.45;
 }
 
-/* ============================
-   CONTAINER SECTION LIMIT
-============================ */
-section,
-.section-gallery,
-#form-ultra,
-#section-location,
-#section-testimoni,
-#section-add-testimoni,
-#section-why,
-#section-facts,
-#notaContainer .nota-card {
-  width: 100%;
-  max-width: 980px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
+/* ---------- LAYOUT CONTAINER ---------- */
+.container{
+  max-width: var(--max-width);
+  margin:18px auto;
+  padding:18px;
 }
 
-/* HERO */
-.hero-img {
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  display:block;
+/* ---------- SITE LOADER ---------- */
+.site-loader{
+  display:none; /* show with JS if needed */
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,0.95);
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+.site-loader img{display:block}
+.site-loader p{margin-top:10px;color:var(--muted)}
+
+/* ---------- HERO ---------- */
+#section-hero{padding:6px 0}
+.hero-img{
+  width:100%;
+  max-height:360px;
   object-fit:cover;
+  border-radius:var(--radius);
+  display:block;
+  box-shadow:var(--shadow);
+}
+.title-main{
+  margin:12px 0 6px;
+  color:var(--accent);
+  font-weight:800;
+  font-size:28px;
+}
+.hero-welcome{font-weight:600;margin:0 0 8px}
+.hero-strong{font-weight:700;margin:6px 0}
+.hero-green{color:#007a2f;font-weight:700}
+.hero-blue{color:#0067d6;font-weight:700}
+.hero-pink{color:#ff009e;font-weight:700}
+
+/* ---------- CARDS / SECTIONS ---------- */
+.card-light, .card-green, .gallery-section, .order-section,
+.section-testimoni, .testi-add{
+  margin-top:14px;
+  padding:14px;
+  border-radius:var(--radius);
+  box-shadow: var(--shadow);
+  background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.98));
 }
 
-#section-hero p {
-  max-width: 100%;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  text-align: left;
-  padding: 5px 0;
+.card-green{background:linear-gradient(180deg, #f4fff4, #effff0)}
+.card-light{background:linear-gradient(180deg,#fff8f8,#fffaf9)}
+
+/* ---------- GALLERY ---------- */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:8px;
+  margin-top:12px;
 }
-
-/* FORM */
-#form-ultra {
-  background: #1b2838;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-  color: #fff;
+.gallery-img{
+  width:100%;
+  height:120px;
+  object-fit:cover;
+  border-radius:8px;
+  display:block;
+  transition:transform .18s ease;
 }
+.gallery-img:hover{transform:scale(1.03)}
 
-#form-ultra label {
-  font-weight: 600;
-  margin-bottom: 6px;
-  display: block;
-  color: #fff;
+/* ---------- FORMS ---------- */
+form label{display:block;margin-bottom:6px;color:var(--muted);font-weight:600}
+input[type="text"], input[type="tel"], input[type="number"], select, textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #e6e6e6;
+  background:white;
+  font-size:15px;
+  color:var(--text);
+  outline:none;
 }
+textarea{min-height:88px;resize:vertical}
+input:focus, textarea:focus, select:focus{box-shadow:0 8px 18px rgba(0,0,0,0.04);border-color:var(--accent)}
 
-#form-ultra input,
-#form-ultra select,
-#form-ultra textarea {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.08);
-  margin-bottom: 12px;
-  background: transparent;
-  color: #fff;
+/* radio/checkbox groups */
+.opt-group{display:flex;gap:10px;flex-wrap:wrap}
+.opt-group label{display:flex;align-items:center;gap:6px;font-weight:600;color:var(--bg);background:transparent}
+
+/* topping lists (dynamic) */
+.topping-wrap{display:flex;flex-wrap:wrap;gap:8px}
+.topping-wrap label{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);cursor:pointer;background:#fff;color:var(--text)}
+.topping-wrap label.checked{background:linear-gradient(90deg,#fffafa,#fff);box-shadow:0 6px 18px rgba(0,0,0,0.04);border-color:var(--accent)}
+
+/* ---------- PRICE SUMMARY ---------- */
+.price-summary{
+  background:rgba(0,0,0,0.03);
+  padding:10px;border-radius:10px;margin:10px 0;
 }
+.price-summary div{display:flex;justify-content:space-between;padding:4px 0}
+.price-summary .grand{font-weight:800}
 
-#form-ultra textarea { min-height: 80px; }
-
-/* Buttons */
-.btn-basic, .btn-primary {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 10px;
-  background: #ff4971;
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.btn-basic:hover, .btn-primary:hover { opacity: 0.95; }
-
-/* ============================
-   TOPPING & TABURAN — FINAL
-============================ */
-
-/* Topping wrapper layout */
-#ultraSingleGroup,
-#ultraDoubleGroup,
-.topping-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: flex-start;
-  margin-bottom: 8px;
-  padding: 4px 2px;
-}
-
-/* Individual label */
-label.topping-check,
-label.taburan-check,
-#ultraSingleGroup label,
-#ultraDoubleGroup label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.02);
-  margin: 4px 0;
-  cursor: pointer;
-  user-select: none;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-  color: #fff;
-}
-
-/* TOPPING — MERAH */
-label.topping-check { color: #ffd0d8; border-color: rgba(255, 110, 160, 0.25); }
-
-/* TABURAN — UNGU */
-label.taburan-check,
-#ultraDoubleGroup label { color: #e9d6ff; }
-
-/* Checkbox visual */
-label.topping-check input,
-label.taburan-check input,
-#ultraSingleGroup label input,
-#ultraDoubleGroup label input {
-  transform: scale(1.15);
-  margin-right:6px;
+/* ---------- BUTTONS ---------- */
+button{font-family:inherit}
+.btn-primary{
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  border:0;
+  padding:11px 14px;
+  border-radius:10px;
   cursor:pointer;
+  font-weight:700;
+  box-shadow:0 8px 18px rgba(255,94,126,0.12);
+}
+.btn-primary:active{transform:translateY(1px)}
+.btn-wa{
+  display:inline-block;
+  background:#25D366;
+  color:#fff;
+  border:0;padding:11px 14px;border-radius:10px;cursor:pointer;font-weight:700;
+}
+.btn-gray{background:#444;color:#fff}
+.btn-green{background:var(--success);color:#fff}
+.btn-orange{background:#ff9800;color:#fff}
+
+/* small responsive */
+@media (max-width:520px){
+  .title-main{font-size:20px}
+  .gallery-img{height:100px}
 }
 
-/* Efek selected */
-label.topping-check.checked,
-label.taburan-check.checked,
-#ultraSingleGroup label.checked,
-#ultraDoubleGroup label.checked {
-  background: #fff5fa;
-  border-color: #ff6ea0;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
-  color:#6b0011;
+/* ---------- NOTA OVERLAY / POPUP ---------- */
+.nota-overlay,
+.nota-overlay.show{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.45);
+  padding:18px;
+}
+.nota-overlay.show{display:flex}
+.nota-card{
+  width:100%;
+  max-width:720px;
+  background:#fff;border-radius:12px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,0.3);
+}
+.nota-header{display:flex;justify-content:space-between;align-items:center}
+.nota-content{margin-top:10px;color:#111}
+.nota-footer{display:flex;gap:10px;margin-top:12px}
+.btn-close{background:#eee;border:0;padding:6px;border-radius:8px;cursor:pointer}
+
+/* ---------- TOAST / NOTIFICATION ---------- */
+.toast{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  background:var(--success);
+  color:#07210b;
+  padding:10px 14px;border-radius:10px;font-weight:700;z-index:200000;
+  box-shadow:0 10px 30px rgba(0,0,0,0.12);
 }
 
-@supports(selector(:has(*))) {
-  #ultraSingleGroup label:has(input:checked),
-  #ultraDoubleGroup label:has(input:checked) {
-    background: #fff5fa;
-    border-color: #ff6ea0;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
-    color:#6b0011;
-  }
+/* ---------- LIGHTBOX ---------- */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);align-items:center;justify-content:center;z-index:99999}
+.lightbox img{max-width:94%;max-height:88%;border-radius:8px}
+
+/* ---------- FLOATING ACTION / ADMIN BUTTON ---------- */
+.admin-float-btn{
+  position:fixed;
+  left:18px;
+  bottom:120px;
+  z-index:9999;
+  background:linear-gradient(180deg,var(--accent),var(--accent-2));
+  color:#fff;padding:12px;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,0.12);
+  text-decoration:none;display:flex;align-items:center;gap:8px;
+}
+.admin-float-btn i{font-size:18px}
+
+/* share floating */
+.toggle-float-btn{
+  position:fixed;right:18px;bottom:120px;z-index:9999;background:var(--accent);color:#fff;border-radius:50%;
+  width:48px;height:48px;border:0;font-size:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px rgba(0,0,0,0.15);
+}
+.floating-icons-container{position:fixed;right:18px;bottom:180px;display:flex;flex-direction:column;gap:8px;z-index:9999}
+.floating-icons-container a{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:8px;background:#fff;color:#111;text-decoration:none;box-shadow:var(--shadow)}
+.floating-icon i{font-size:18px}
+
+/* ---------- BOTTOM NAV ---------- */
+.bottom-nav{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:8px;background:rgba(255,255,255,0.98);
+  width:min(960px,98%);max-width:960px;border-radius:12px;padding:8px 12px;display:flex;gap:6px;justify-content:space-around;align-items:center;z-index:9999;box-shadow:0 12px 30px rgba(0,0,0,0.08)
+}
+.bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--text);font-size:12px}
+.bottom-nav i{font-size:18px}
+
+/* ---------- TESTIMONI ---------- */
+.testimonial-card{background:#fff;padding:12px;border-radius:10px;margin-bottom:8px;box-shadow:var(--shadow);color:#111}
+.testimonial-list{list-style:none;padding:0;margin:0}
+
+/* ---------- ADMIN / DASHBOARD (lightweight) ---------- */
+.admin-header{background:var(--accent);color:#fff;padding:14px;border-radius:10px;margin-bottom:12px}
+.admin-container{max-width:1200px;margin:0 auto;padding:18px}
+.admin-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.order-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden}
+.order-table th, .order-table td{padding:12px;border-bottom:1px solid #eee;text-align:left}
+.order-table th{background:#fafafa;font-weight:700}
+
+/* ---------- LOGIN PAGE (admin-login.css fallback) ---------- */
+.login-box{
+  max-width:360px;margin:80px auto;padding:22px;border-radius:12px;background:#fff;box-shadow:var(--shadow)
+}
+.login-box h2{margin:0 0 12px;color:var(--accent);text-align:center}
+.login-box input{width:100%;padding:12px;border-radius:8px;border:1px solid #e6e6e6;margin-bottom:10px}
+
+/* ---------- FOOTER ---------- */
+footer{margin-top:40px;padding:18px;text-align:center;color:var(--muted);font-size:13px}
+
+/* ---------- ACCESSIBILITY ---------- */
+button:focus, a:focus, input:focus, select:focus{outline:3px solid rgba(255,94,126,0.12);outline-offset:2px}
+
+/* ---------- SMALL / MOBILE ---------- */
+@media (max-width:640px){
+  .container{padding:12px;margin:12px auto}
+  .nota-card{margin:12px}
+  .floating-icons-container{right:12px}
+  .admin-float-btn{left:8px}
+  .toggle-float-btn{right:8px}
+  .bottom-nav{padding:6px}
 }
 
-/* Fallback visual for checkbox itself when checked (works everywhere) */
-#ultraSingleGroup label input:checked,
-#ultraDoubleGroup label input:checked {
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
-}
-
-/* Make topping responsive */
-label.topping-check { flex: 0 0 auto; min-width: 90px; max-width: 45%; }
-@media (max-width: 420px){ label.topping-check, #ultraDoubleGroup label, #ultraSingleGroup label { max-width: 100%; } }
-
-/* ============================
-   NOTA POPUP
-============================ */
-#notaContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.55);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  z-index: 99999;
-}
-
-#notaContainer.show, #notaContainer[style*="display:flex"] { display:flex; }
-
-.nota-card {
-  background: #fff;
-  width: 100%;
-  max-width: 520px;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  color:#222;
-}
-
-.nota-card h2, .nota-card h3 { text-align: center; margin-bottom: 12px; }
-
-.nota-card p { margin-bottom: 6px; line-height: 1.4em; }
-
-#notaClose { margin-top: 0; background:#eee; border:0; padding:6px; border-radius:8px; cursor:pointer; }
-
-/* ============================
-   TESTIMONI CARD
-============================ */
-.testimonial-card, .testi-card {
-  background: #fff;
-  padding: 16px;
-  margin-bottom: 12px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  color: #000;
-}
-
-/* ============================
-   GALLERY
-============================ */
-.section-gallery { padding: 10px 0; }
-.gallery-img { width: 100%; border-radius: 12px; margin-bottom: 14px; display:block; object-fit:cover; height:160px; }
-
-/* ============================
-   BUTTONS, FLOATS, NAV
-============================ */
-.btn-row { margin-top: 10px; display:flex; gap:12px; }
-.btn-pdf { flex:1; padding:12px; background:#008cff; color:#fff; border-radius:10px; font-weight:700; cursor:pointer;}
-.btn-wa { flex:1; padding:12px; background:#25D366; color:#fff; border-radius:10px; font-weight:700; cursor:pointer; }
-
-.admin-float-btn { position:fixed; left:18px; bottom:20px; background:#1f2937; color:#fff; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px; z-index:2000; }
-.toggle-float-btn { position:fixed; right:18px; bottom:18px; width:56px; height:56px; border-radius:50%; background:#ff5e7e; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; z-index:2100; }
-.floating-icons-container { position:fixed; right:18px; bottom:90px; display:flex; flex-direction:column; gap:10px; z-index:2000; opacity:0; visibility:hidden; transform:translateY(8px); transition:all .25s; }
-.floating-icons-container.show { opacity:1; visibility:visible; transform:none; }
-
-.bottom-nav { position:fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around; background:#121213; padding:8px 0; z-index:1500; color:#fff; }
-.bottom-nav a { color:#fff; text-decoration:none; display:flex; flex-direction:column; align-items:center; font-size:12px; }
-
-/* ============================
-   FORM GRID & RESPONSIVE
-============================ */
-.form-row { display:flex; gap:12px; }
-.form-row > div { flex:1; }
-@media (max-width:600px) { .form-row { flex-direction:column; } }
-
-/* ============================
-   MISC
-============================ */
-img, iframe, video { max-width:100%; height:auto; }
-html { scroll-behavior:smooth; }
-.price-summary > div { display:flex; justify-content:space-between; gap:8px; margin-bottom:6px; align-items:center; }
-
-/* Accessibility focus */
-:focus { outline: 3px solid rgba(255,105,180,0.18); outline-offset:2px; }
-
-/* Print */
-@media print {
-  .bottom-nav, .admin-float-btn, .toggle-float-btn, .floating-icons-container { display:none !important; }
-  #notaContainer { position: static !important; background: none !important; }
-}
-
-/* End of style.css */
+/* ---------- UTILITY ---------- */
+.text-muted{color:var(--muted)}
+.hidden{display:none}
