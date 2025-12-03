@@ -1,173 +1,206 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Edit Pesanan — Admin</title>
-
-<link rel="stylesheet" href="assets/css/admin-pro.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edit Pesanan — Pukis Lumer Admin</title>
+<link rel="stylesheet" href="assets/css/admin.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-<style>
-  .edit-container {
-    max-width: 500px;
-    margin: 20px auto;
-    background: #1b1f2b;
-    padding: 20px;
-    border-radius: 14px;
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.06);
-  }
-  .edit-container h2 {
-    margin-top: 0;
-    color: #ff89b5;
-    text-align: center;
-  }
-  input, select, textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    margin-bottom: 14px;
-    background: #161a25;
-    color: #fff;
-  }
-  button {
-    width: 100%;
-    padding: 12px;
-    border: 0;
-    border-radius: 10px;
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    margin-bottom: 10px;
-  }
-  .btn-save { background: #38a169; }
-  .btn-delete { background: #e53e3e; }
-  .btn-back { background: #4a5568; }
-</style>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
 
-<div class="admin-header">Edit Pesanan</div>
-
-<div class="edit-container">
-  <h2>Form Edit Pesanan</h2>
-
-  <label>Nama Pemesan:</label>
-  <input type="text" id="editNama">
-
-  <label>Nomor WA:</label>
-  <input type="text" id="editWA">
-
-  <label>Jenis Pukis:</label>
-  <select id="editJenis">
-    <option>Original</option>
-    <option>Pandan</option>
-  </select>
-
-  <label>Isi per Box:</label>
-  <select id="editIsi">
-    <option value="5">5 pcs</option>
-    <option value="10">10 pcs</option>
-  </select>
-
-  <label>Topping:</label>
-  <input type="text" id="editTopping" placeholder="Topping / Taburan">
-
-  <label>Jumlah Box:</label>
-  <input type="number" id="editJumlah" min="1">
-
-  <label>Total Harga:</label>
-  <input type="number" id="editTotal" min="0">
-
-  <button class="btn-save" id="saveBtn">Simpan Perubahan</button>
-  <button class="btn-delete" id="deleteBtn">Hapus Pesanan</button>
-  <button class="btn-back" id="backBtn">Kembali</button>
+<div class="admin-header">
+  <div class="admin-header-inner admin-container">
+    <div><strong>Edit Pesanan</strong></div>
+    <div class="admin-header-right">
+      <button id="backBtn" class="btn btn-primary">Kembali</button>
+    </div>
+  </div>
 </div>
 
+<main class="admin-container">
+  <form id="editOrderForm">
+    <label>Nama:</label>
+    <input type="text" id="editNama" required>
+    <label>WA:</label>
+    <input type="text" id="editWA" required>
+    <label>Jenis Pukis:</label>
+    <select id="editJenis">
+      <option value="Original">Original</option>
+      <option value="Pandan">Pandan</option>
+    </select>
+    <label>Ukuran Box:</label>
+    <select id="editUkuran">
+      <option value="kecil">Kecil</option>
+      <option value="besar">Besar</option>
+    </select>
+    <label>Mode Topping:</label>
+    <select id="editMode">
+      <option value="none">Non Topping</option>
+      <option value="single">Single (max 5)</option>
+      <option value="double">Double (max 10)</option>
+    </select>
 
- <!-- untuk admin edit: allow editing same topping UI -->
-<div class="topping-edit-block">
-  <div class="topping-label">Pilih Topping Single (maks 5)</div>
-  <div id="editSingleGroup" class="topping-wrap"></div>
+    <div class="topping-wrap" id="editToppingContainer"></div>
 
-  <div style="margin-top:8px" class="topping-label">Pilih Taburan (maks 5)</div>
-  <div id="editTaburanGroup" class="topping-wrap"></div>
-</div> 
+    <div class="price-summary">
+      <div><span>Total:</span> <span id="editTotalHarga">Rp 0</span></div>
+    </div>
+
+    <label>Status:</label>
+    <select id="editStatus">
+      <option value="pending">Belum</option>
+      <option value="done">Selesai</option>
+    </select>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Simpan</button>
+      <button type="button" id="printInvoice" class="btn btn-primary">Cetak PDF</button>
+      <button type="button" id="sendToCustomer" class="btn btn-wa">Kirim WA ke Pelanggan</button>
+    </div>
+  </form>
+</main>
+
 <script>
-  /* --- PROTECT PAGE --- */
-  if (!sessionStorage.getItem("adminLogged")) {
-      window.location.href = "admin-login.html";
+(function(){
+  'use strict';
+  if(!sessionStorage.getItem("adminLogged")){
+    window.location.href="admin-login.html";
   }
 
-  /* --- LOAD ORDER FROM STORAGE --- */
-  const id = sessionStorage.getItem("editOrderId");
+  const $ = s => document.querySelector(s);
   const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-  const order = orders.find(o => o.id === id);
+  const editId = sessionStorage.getItem("editOrderId");
+  if(!editId) window.location.href="admin.html";
 
-  if (!order) {
-      alert("Pesanan tidak ditemukan.");
-      window.location.href = "admin.html";
+  const order = orders.find(o=>o.id===editId);
+  if(!order) window.location.href="admin.html";
+
+  const nama = $("#editNama");
+  const wa = $("#editWA");
+  const jenis = $("#editJenis");
+  const ukuran = $("#editUkuran");
+  const mode = $("#editMode");
+  const toppingContainer = $("#editToppingContainer");
+  const totalHargaEl = $("#editTotalHarga");
+  const status = $("#editStatus");
+
+  nama.value = order.nama;
+  wa.value = order.wa;
+  jenis.value = order.jenis;
+  ukuran.value = order.ukuran;
+  mode.value = order.mode;
+  status.value = order.status;
+
+  let toppingList = order.single || [];
+  let taburanList = order.taburan || [];
+
+  const toppingOptions = ["Coklat","Keju","Srikaya","Milo","Kacang","Kismis","Oreo","Meses","Cornflakes","GreenTea"];
+
+  function renderToppings(){
+    toppingContainer.innerHTML = "";
+    const limit = mode.value==="single"?5: mode.value==="double"?10:0;
+    toppingOptions.forEach(t=>{
+      const btn = document.createElement("button");
+      btn.type="button";
+      btn.textContent=t;
+      btn.className="topping-btn "+(mode.value==="single"?"single":"taburan");
+      if(mode.value!=="none"){
+        const selected = mode.value==="single"? toppingList.includes(t) : toppingList.includes(t)||taburanList.includes(t);
+        if(selected) btn.classList.add("active");
+      }
+      btn.addEventListener("click",()=>{
+        if(btn.classList.contains("active")){
+          btn.classList.remove("active");
+          if(mode.value==="single") toppingList = toppingList.filter(x=>x!==t);
+          else taburanList = taburanList.filter(x=>x!==t);
+        } else {
+          if(mode.value==="single" && toppingList.length>=5) return;
+          if(mode.value==="double" && (toppingList.length+taburanList.length)>=10) return;
+          btn.classList.add("active");
+          if(mode.value==="single") toppingList.push(t);
+          else taburanList.push(t);
+        }
+        updateTotal();
+      });
+      toppingContainer.appendChild(btn);
+    });
   }
 
-  /* --- SET FORM DATA --- */
-  document.getElementById("editNama").value = order.nama;
-  document.getElementById("editWA").value = order.wa;
-  document.getElementById("editJenis").value = order.jenis;
-  document.getElementById("editIsi").value = order.isi;
-  document.getElementById("editTopping").value = order.topping || "";
-  document.getElementById("editJumlah").value = order.jumlah;
-  document.getElementById("editTotal").value = order.total;
+  function updateTotal(){
+    let price = 0;
+    const jenisVal = jenis.value;
+    const ukuranVal = ukuran.value;
+    const modeVal = mode.value;
 
-  /* --- SAVE CHANGES --- */
-  document.getElementById("saveBtn").addEventListener("click", () => {
-       // Validasi input
-      const jumlah = parseInt(document.getElementById("editJumlah").value);
-      const total = parseInt(document.getElementById("editTotal").value);
-
-      if (isNaN(jumlah) || jumlah < 1) {
-          alert("Jumlah Box harus berupa angka positif.");
-          return;
+    const hargaTable = {
+      "Original": {
+        "kecil":{"none":10000,"single":13000,"double":15000},
+        "besar":{"none":18000,"single":25000,"double":28000}
+      },
+      "Pandan":{
+        "kecil":{"none":13000,"single":15000,"double":18000},
+        "besar":{"none":25000,"single":28000,"double":32000}
       }
+    };
 
-      if (isNaN(total) || total < 0) {
-          alert("Total Harga harus berupa angka non-negatif.");
-          return;
-      }
-      order.nama = document.getElementById("editNama").value;
-      order.wa = document.getElementById("editWA").value;
-      order.jenis = document.getElementById("editJenis").value;
-      order.isi = parseInt(document.getElementById("editIsi").value);
-      order.topping = document.getElementById("editTopping").value;
-      order.jumlah = parseInt(document.getElementById("editJumlah").value);
-      order.total = parseInt(document.getElementById("editTotal").value);
+    price = hargaTable[jenisVal][ukuranVal][modeVal==="none"?"none":modeVal];
+    totalHargaEl.textContent = "Rp "+price.toLocaleString();
+  }
 
-      localStorage.setItem("orders", JSON.stringify(orders));
+  renderToppings();
+  updateTotal();
 
-      alert("Perubahan disimpan!");
-      window.location.href = "admin.html";
+  mode.addEventListener("change",()=>{toppingList=[]; taburanList=[]; renderToppings(); updateTotal();});
+  jenis.addEventListener("change",updateTotal);
+  ukuran.addEventListener("change",updateTotal);
+
+  $("#backBtn").addEventListener("click",()=>window.location.href="admin.html");
+
+  $("#editOrderForm").addEventListener("submit", e=>{
+    e.preventDefault();
+    order.nama = nama.value;
+    order.wa = wa.value;
+    order.jenis = jenis.value;
+    order.ukuran = ukuran.value;
+    order.mode = mode.value;
+    order.single = toppingList;
+    order.taburan = taburanList;
+    order.status = status.value;
+
+    localStorage.setItem("orders",JSON.stringify(orders));
+    alert("Data pesanan berhasil disimpan!");
+    window.location.href="admin.html";
   });
 
-  /* --- DELETE ORDER --- */
-  document.getElementById("deleteBtn").addEventListener("click", () => {
-      if (!confirm("Hapus pesanan ini?")) return;
-
-      const index = orders.indexOf(order);
-      orders.splice(index, 1);
-
-      localStorage.setItem("orders", JSON.stringify(orders));
-
-      alert("Pesanan telah dihapus.");
-      window.location.href = "admin.html";
-  });
-
-    /* --- NAV BACK --- */
-    document.getElementById("backBtn").addEventListener("click", () => {
-        window.location.href = "admin.html";
+  $("#printInvoice").addEventListener("click",()=>{
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("INVOICE PEMESANAN",14,18);
+    doc.setFontSize(12);
+    doc.text(`Invoice: ${order.invoice}`,14,32);
+    doc.text(`Nama: ${order.nama}`,14,38);
+    doc.text(`WA: ${order.wa}`,14,44);
+    doc.text(`Tanggal: ${order.tanggal}`,14,50);
+    let toppingText="-";
+    if(order.mode==="single") toppingText = (order.single||[]).join(", ");
+    if(order.mode==="double") toppingText = `Single: ${(order.single||[]).join(", ")} | Taburan: ${(order.taburan||[]).join(", ")}`;
+    doc.autoTable({
+      startY:60,
+      head:[["Jenis","Isi","Mode","Topping","Jumlah","Total"]],
+      body:[[order.jenis, order.isi+" pcs", order.mode, toppingText, order.jumlah, "Rp "+order.total.toLocaleString()]]
     });
+    doc.save(`${order.invoice}.pdf`);
+  });
 
+  $("#sendToCustomer").addEventListener("click",()=>{
+    const msg = `Halo *${order.nama}*, pesanan kamu *${order.invoice}*:\n\nTotal: Rp ${order.total.toLocaleString()}\nStatus: ${order.status==="done"?"Selesai":"Belum diproses"}\n\nTerima kasih 🙏`;
+    const url = `https://wa.me/${order.wa}?text=${encodeURIComponent(msg)}`;
+    window.open(url,"_blank");
+  });
+})();
 </script>
 
 </body>
