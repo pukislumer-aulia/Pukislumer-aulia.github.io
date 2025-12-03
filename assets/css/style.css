@@ -1,3 +1,6 @@
+/* =========================
+   Base layout (from your provided snippet)
+   ========================= */
 body{font-family:Inter, system-ui, Arial, sans-serif;margin:0;background:#fafafa;color:#111}
 .container{max-width:980px;margin:18px auto;padding:18px}
 .order-section{background:#fff;padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
@@ -23,3 +26,151 @@ input,select,textarea{display:block;width:100%;padding:8px;margin:6px 0 12px;bor
 .order-row .row-left{flex:1}
 .order-row .row-right{display:flex;gap:8px;align-items:center}
 .empty{padding:12px;background:#fff;border-radius:8px;border:1px solid #eee}
+
+/* =========================
+   Custom styles added
+   ========================= */
+
+/* Hero & header image inline */
+.header-inline {
+  display:flex;
+  align-items:flex-start;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.responsive-img {
+  width:140px;
+  height:auto;
+  border-radius:12px;
+  object-fit:cover;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* Hero text color classes */
+.text-green-bold { color:#008000; font-weight:700; }
+.text-black-bold { color:#000; font-weight:700; }
+.text-blue-dark-bold { color:#003366; font-weight:700; }
+.text-purple-dark-bold { color:#4B0082; font-weight:700; }
+.text-maroon-bold { color:#800000; font-weight:700; }
+.text-green-dark-big { color:#006400; font-weight:700; font-size:1.25rem; }
+.text-brown-dark-bold { color:#5C4033; font-weight:700; }
+.text-pink-bold { color:#FF1493; font-weight:700; }
+.text-brown-bold { color:#8B4513; font-weight:700; }
+.text-blue-bold { color:#0047FF; font-weight:700; }
+.text-black { color:#000; }
+
+/* Section titles */
+.section-title { font-size:1.25rem; font-weight:800; margin-bottom:8px; color:#222; }
+
+/* Facts list */
+.facts-list { color:#2E8B57; font-weight:600; list-style:disc; margin-left:18px; }
+
+/* Gallery */
+.gallery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.gallery-img { width:100%; border-radius:10px; object-fit:cover; }
+
+/* Testimonials */
+.testimonials-list { list-style:none; padding:0; margin:0; }
+.testimonial-card { background:#fff; color:#111; padding:12px; border-radius:8px; margin-bottom:8px; box-shadow:0 6px 18px rgba(0,0,0,0.03); }
+
+/* Form/order box (biru tua) */
+.order-box {
+  background:#002855; /* biru tua */
+  padding:18px;
+  border-radius:12px;
+  margin-top:25px;
+  color:#fff;
+  border:2px solid #001A3A;
+}
+
+/* Table inside order */
+.order-table { width:100%; border-collapse:collapse; color:#fff; }
+.order-table td { padding:8px; vertical-align:middle; }
+
+/* Input white inside order */
+.order-input { background:#fff !important; color:#000 !important; border:1px solid #ccc; padding:10px; border-radius:8px; width:100%; font-size:1rem; }
+
+/* label white text for left column */
+.label-white { color:#fff; font-weight:600; }
+
+/* Inline labels */
+.label-inline { display:inline-flex; align-items:center; gap:6px; margin-right:8px; color:#fff; }
+
+/* Topping mode labels (small pill) */
+.topping-mode-container .mode-label {
+  display:inline-block;
+  background:#fff;
+  color:#222;
+  padding:6px 10px;
+  border-radius:8px;
+  margin-right:6px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* Topping checkboxes groups style (container) */
+#ultraSingleGroup, #ultraDoubleGroup { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+
+/* Single topping style (pink tua) */
+.topping-check.single {
+  background:#C2185B; /* pink tua */
+  color:#fff;
+  font-weight:700;
+  padding:8px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,0.12);
+}
+.topping-check.single input[type="checkbox"] {
+  accent-color:#FF80AB;
+}
+
+/* Double topping (taburan) style (ungu tua) */
+.topping-check.double {
+  background:#4A148C; /* ungu tua */
+  color:#fff;
+  font-weight:600;
+  padding:8px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,0.12);
+}
+.topping-check.double input[type="checkbox"] {
+  accent-color:#CE93D8;
+}
+
+/* Price summary inside order (white-ish) */
+.price-summary { background:rgba(255,255,255,0.06); padding:12px; border-radius:8px; color:#fff; }
+
+/* Nota popup styles */
+.nota-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); align-items:center; justify-content:center; z-index:9999; }
+.nota-overlay.show { display:flex; }
+.nota-card { background:#fff; padding:16px; border-radius:12px; width:95%; max-width:540px; }
+.nota-header { display:flex; justify-content:space-between; align-items:center; }
+
+/* Floating icons & admin float */
+.admin-float-btn { position:fixed; left:18px; bottom:18px; background:#fff; border-radius:50%; width:48px; height:48px; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,0.12); z-index:999; text-decoration:none; color:#222; }
+.floating-icons-container { position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column; gap:10px; z-index:999; }
+.floating-icon { display:flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:50%; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.12); color:#222; text-decoration:none; }
+
+/* Bottom nav */
+.bottom-nav { position:fixed; left:0; right:0; bottom:0; background:#fff; display:flex; justify-content:space-around; padding:8px 12px; border-top:1px solid #eee; z-index:999; }
+.bottom-nav a { color:#222; text-decoration:none; display:flex; flex-direction:column; align-items:center; font-size:12px; }
+
+/* Footer */
+.site-footer { text-align:center; padding:18px; margin-top:48px; color:#666; font-size:14px; }
+
+/* Responsive tweaks */
+@media (max-width:720px){
+  .gallery-grid { grid-template-columns:repeat(2,1fr); }
+  .header-inline { align-items:flex-start; }
+  .responsive-img { width:110px; }
+  .order-row-inline { flex-direction:column; }
+  .order-table td { display:block; width:100%; }
+}
