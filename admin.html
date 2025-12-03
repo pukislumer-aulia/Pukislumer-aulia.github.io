@@ -1,229 +1,98 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Admin — Pukis Lumer Aulia</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Pukis Lumer Aulia</title>
 
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <style>
-    body{font-family:Inter,Arial,sans-serif;margin:0;padding:0;background:#f3f4f6}
-    header{background:#0b5ba8;color:#fff;padding:16px;text-align:center;font-size:20px;font-weight:700}
-    .container{max-width:960px;margin:18px auto;padding:18px}
-
-    .admin-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-    input,select{padding:8px;border-radius:8px;border:1px solid #ddd}
-
-    .order-row{background:#fff;padding:16px;border-radius:12px;margin-bottom:12px;
-      display:flex;justify-content:space-between;align-items:center;border:1px solid #eee}
-    .row-left{flex:1}
-    .row-right{display:flex;align-items:center;gap:8px}
-    .btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-    .btn-view{background:#0b5ba8;color:#fff}
-    .btn-wa{background:#25D366;color:#fff}
-    .btn-status{background:#ff8a00;color:#fff}
-    .btn-print{background:#e11d48;color:#fff}
-
-    /* POPUP */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;
-      align-items:center;justify-content:center;z-index:9999}
-    .overlay.show{display:flex}
-    .popup{background:#fff;padding:20px;border-radius:12px;width:95%;max-width:500px}
-
-    .popup h2{margin-top:0}
-    .popup .close{float:right;cursor:pointer;background:#eee;padding:4px 10px;border-radius:8px}
-  </style>
+    <link rel="stylesheet" href="assets/css/Admin.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
+
 <body>
 
-<header>ADMIN PANEL — Pukis Lumer Aulia</header>
-
-<div class="container">
-
-  <!-- FILTER -->
-  <div class="admin-controls">
-    <input id="fInvoice" placeholder="Cari Invoice">
-    <input id="fNama" placeholder="Nama Pelanggan">
-    <select id="fStatus">
-      <option value="">Semua Status</option>
-      <option value="baru">Baru</option>
-      <option value="diproses">Diproses</option>
-      <option value="selesai">Selesai</option>
-    </select>
-    <button class="btn btn-status" id="btnFilter">Filter</button>
-  </div>
-
-  <div id="ordersList"></div>
-</div>
-
-<!-- POPUP DETAIL PESANAN -->
-<div class="overlay" id="detailOverlay" aria-hidden="true">
-  <div class="popup">
-    <span class="close" onclick="hideDetail()">X</span>
-    <h2>Detail Pesanan</h2>
-
-    <div id="detailContent">Memuat...</div>
-
-    <hr>
-
-    <button id="btnPrint" class="btn btn-print"><i class="fa fa-print"></i> Cetak Resi</button>
-  </div>
-</div>
-
-<script>
-const API = '/api/orders';
-const PRINT_API = '/api/receipt/'; 
-
-let allOrders = [];
-let currentOrder = null;
-
-// ============= FETCH ALL ORDERS =============
-async function loadOrders(){
-  const res = await fetch(API);
-  allOrders = await res.json();
-  renderOrders(allOrders);
-}
-
-// ============= RENDER LIST =============
-function renderOrders(data){
-  const box = document.getElementById('ordersList');
-  if(!data.length){
-    box.innerHTML = '<div class="order-row">Tidak ada pesanan ditemukan.</div>';
-    return;
-  }
-
-  box.innerHTML = data.map(o => `
-    <div class="order-row">
-      <div class="row-left">
-        <strong>${o.invoice}</strong><br>
-        ${o.nama} — ${o.jenis} (${o.isi} pcs)<br>
-        <span style="color:#555">Status: ${o.status || 'baru'}</span>
-      </div>
-
-      <div class="row-right">
-        <button class="btn btn-view" onclick='openDetail(${JSON.stringify(o)})'>
-          <i class="fa fa-eye"></i>
-        </button>
-
-        <button class="btn btn-wa"
-         onclick="sendWA('${o.wa}','${o.invoice}',${o.total})">
-          <i class="fa fa-whatsapp"></i>
-        </button>
-
-        <button class="btn btn-status"
-         onclick="updateStatus('${o.invoice}')">Status</button>
-      </div>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="login-wrapper">
+        <div class="login-box">
+            <h2>Login Admin</h2>
+            <input type="password" id="pinInput" placeholder="Masukkan PIN Admin">
+            <button id="loginBtn" class="btn-primary">Login</button>
+        </div>
     </div>
-  `).join('');
-}
 
-// ============= FILTER =============
-document.getElementById('btnFilter').onclick = function(){
-  const inv = fInvoice.value.trim().toLowerCase();
-  const nama = fNama.value.trim().toLowerCase();
-  const stat = fStatus.value;
+    <!-- ADMIN WRAPPER -->
+    <div class="admin-wrapper" id="adminPanel" style="display:none;">
 
-  const filter = allOrders.filter(o =>
-    (inv? o.invoice.toLowerCase().includes(inv) : true) &&
-    (nama? o.nama.toLowerCase().includes(nama) : true) &&
-    (stat? o.status === stat : true)
-  );
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <div>
+                <button class="btn-logout" id="logoutBtn">Logout</button>
+            </div>
+        </div>
 
-  renderOrders(filter);
-};
+        <div class="stat-section">
+            <div class="stat-card">
+                <div class="stat-number" id="totalOrders">0</div>
+                Total Orders
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingOrders">0</div>
+                Pending Orders
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedOrders">0</div>
+                Completed Orders
+            </div>
+        </div>
 
-// ============= DETAIL POPUP =============
-function openDetail(o){
-  currentOrder = o;
+        <div class="order-section">
+            <h2>Order Management</h2>
 
-  const el = document.getElementById('detailContent');
-  el.innerHTML = `
-    <strong>Invoice:</strong> ${o.invoice}<br>
-    <strong>Nama:</strong> ${o.nama}<br>
-    <strong>WA:</strong> ${o.wa}<br>
-    <strong>Jenis:</strong> ${o.jenis}<br>
-    <strong>Isi:</strong> ${o.isi} pcs<br>
-    <strong>Mode:</strong> ${o.mode}<br>
-    <strong>Topping:</strong> ${o.topping.join(', ') || '-'}<br>
-    <strong>Taburan:</strong> ${o.taburan.join(', ') || '-'}<br>
-    <strong>Jumlah:</strong> ${o.jumlah} box<br>
-    <strong>Total:</strong> Rp ${o.total.toLocaleString('id-ID')}<br>
-    <strong>Catatan:</strong> ${o.note || '-'}<br>
-  `;
+            <div class="action-buttons">
+                <button class="btn-primary" id="filterAll">Semua</button>
+                <button class="btn-secondary" id="filterPending">Pending</button>
+                <button class="btn-secondary" id="filterDone">Selesai</button>
+                <button class="btn-primary" id="printLastInvoice">Cetak Nota Terakhir</button>
+            </div>
 
-  document.getElementById('detailOverlay').classList.add('show');
-}
-function hideDetail(){
-  document.getElementById('detailOverlay').classList.remove('show');
-}
+            <table id="orderTable">
+                <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Nama</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Order List Render Here -->
+                </tbody>
+            </table>
+        </div>
 
-// ============= CETAK RESI (SERVER-SIDE) =============
-document.getElementById('btnPrint').onclick = async function(){
-  if(!currentOrder) return;
+        <div class="analytics-section">
+            <h2>Analytics</h2>
+            <pre>
+Statistik penjualan & tren akan ditempatkan di sini.
+            </pre>
+        </div>
 
-  try{
-    const url = PRINT_API + currentOrder.invoice;
-    const res = await fetch(url);
+    </div>
 
-    if(res.ok){
-      const blob = await res.blob();
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = currentOrder.invoice + '.pdf';
-      link.click();
-    }else{
-      alert("Gagal cetak via server, gunakan mode PDF Fallback.");
-      pdfFallback(currentOrder);
-    }
-  }catch(err){
-    console.error(err);
-    pdfFallback(currentOrder);
-  }
-};
+    <!-- CETAK NOTA POPUP -->
+    <div class="modal" id="notaModal">
+        <div class="modal-box">
+            <h3>Cetak Nota</h3>
+            <div id="notaContent">Memuat...</div>
+            <br>
+            <button id="modalPrintBtn" class="btn-primary">Cetak Nota</button>
+            <button class="btn-secondary" onclick="document.getElementById('notaModal').style.display='none'">Tutup</button>
+        </div>
+    </div>
 
-// ============= FALLBACK PRINT (jsPDF) =============
-function pdfFallback(o){
-  const w = window.open('', '_blank');
-  w.document.write(`
-    <h2>NOTA PEMBELIAN</h2>
-    <p>Invoice: ${o.invoice}</p>
-    <p>Nama: ${o.nama}</p>
-    <p>WA: ${o.wa}</p>
-    <p>Jenis: ${o.jenis} - ${o.isi} pcs</p>
-    <p>Mode: ${o.mode}</p>
-    <p>Topping: ${o.topping.join(', ')||'-'}</p>
-    <p>Taburan: ${o.taburan.join(', ')||'-'}</p>
-    <p>Jumlah: ${o.jumlah} box</p>
-    <p>Total: Rp ${o.total.toLocaleString('id-ID')}</p>
-    <p>Catatan: ${o.note || '-'}</p>
-  `);
-  w.print();
-}
-
-// ============= WA KE PELANGGAN =============
-function sendWA(wa, inv, total){
-  const msg = `Halo, ini admin Pukis Lumer Aulia.%0AInvoice: ${inv}%0ATotal: Rp ${total.toLocaleString('id-ID')}`;
-  window.open(`https://wa.me/${wa}?text=${msg}`, '_blank');
-}
-
-// ============= UPDATE STATUS =============
-async function updateStatus(invoice){
-  const newStatus = prompt("Status baru (baru/diproses/selesai):");
-  if(!newStatus) return;
-
-  await fetch(API + '/' + invoice, {
-    method:'PUT',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({status:newStatus})
-  });
-
-  loadOrders();
-}
-
-// Start
-loadOrders();
-</script>
-
+    <script src="assets/js/Admin.js"></script>
 </body>
 </html>
