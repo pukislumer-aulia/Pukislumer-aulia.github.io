@@ -1,91 +1,169 @@
-// public/assets/js/admin.js
-(() => {
-  const API = '/api';
-  const $ = s => document.querySelector(s);
-  const $$ = s => Array.from(document.querySelectorAll(s));
+// PIN LOGIN
+const ADMIN_PIN = "13579";
 
-  function createRow(order){
-    const tpl = document.querySelector('#orderRowTpl');
-    const node = tpl.content.firstElementChild.cloneNode(true);
-    node.querySelector('.invoice').textContent = order.invoice;
-    node.querySelector('.nama').textContent = order.nama;
-    node.querySelector('.meta').textContent = `${order.jenis} • ${order.isi} pcs • ${order.jumlah} box • ${order.total ? 'Rp ' + Number(order.total).toLocaleString('id-ID') : '-'}`;
-    const statusSel = node.querySelector('.statusSelect');
-    statusSel.value = order.status || 'Pending';
-    statusSel.addEventListener('change', async (e) => {
-      const newStatus = e.target.value;
-      await fetch(`${API}/orders/${encodeURIComponent(order.invoice)}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ status: newStatus })});
-      alert('Status diperbarui');
-      loadOrders();
-    });
-    node.querySelector('.btn-send-cust').addEventListener('click', (e) => {
-      // prefill wa to customer
-      const lines = [
-        `Halo ${order.nama}, ini admin Pukis Lumer Aulia.`,
-        `Invoice: ${order.invoice}`,
-        `Total Bayar: Rp ${Number(order.total).toLocaleString('id-ID')}`,
-        `Status pesanan: ${order.status || 'Pending'}`
-      ];
-      window.open(`https://wa.me/${order.wa.replace(/\D/g,'')}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
-    });
-    node.querySelector('.btn-pdf').addEventListener('click', async () => {
-      window.open(`${API}/orders/${encodeURIComponent(order.invoice)}/pdf`, '_blank');
-    });
-    node.querySelector('.btn-edit').addEventListener('click', () => openEditModal(order));
-    return node;
-  }
+const loginScreen = document.getElementById("loginScreen");
+const adminPanel = document.getElementById("adminPanel");
+const loginBtn = document.getElementById("loginBtn");
+const pinInput = document.getElementById("pinInput");
 
-  async function loadOrders(q = {}){
-    const qs = new URLSearchParams(q).toString();
-    const res = await fetch(`${API}/orders?${qs}`);
-    const json = await res.json();
-    const arr = json.orders || [];
-    const container = $('#ordersList'); container.innerHTML = '';
-    if (!arr.length) { container.innerHTML = '<div class="empty">Tidak ada order</div>'; return; }
-    arr.forEach(o => container.appendChild(createRow(o)));
-  }
+loginBtn.onclick = () => {
+    if (pinInput.value === ADMIN_PIN) {
+        localStorage.setItem("adminLogged", "yes");
+        loginScreen.style.display = "none";
+        adminPanel.style.display = "block";
+        loadOrders();
+    } else {
+        alert("PIN salah!");
+    }
+};
 
-  function openEditModal(order){
-    const modal = $('#editModal'); modal.setAttribute('aria-hidden','false'); modal.classList.add('show');
-    const c = $('#editContent'); c.innerHTML = `
-      <label>Nama</label><input id="e_nama" value="${order.nama}">
-      <label>WA</label><input id="e_wa" value="${order.wa}">
-      <label>Catatan</label><textarea id="e_note">${order.note||''}</textarea>
-      <label>Status</label>
-      <select id="e_status">
-        <option${order.status==='Pending'?' selected':''}>Pending</option>
-        <option${order.status==='Confirmed'?' selected':''}>Confirmed</option>
-        <option${order.status==='Delivered'?' selected':''}>Delivered</option>
-        <option${order.status==='Canceled'?' selected':''}>Canceled</option>
-      </select>
+// Auto login
+if (localStorage.getItem("adminLogged") === "yes") {
+    loginScreen.style.display = "none";
+    adminPanel.style.display = "block";
+}
+
+// Logout
+document.getElementById("logoutBtn").onclick = () => {
+    localStorage.removeItem("adminLogged");
+    location.reload();
+};
+
+// API
+const API = "/api/orders";
+const PRINT_API = "/api/receipt/";
+let orders = [];
+let lastInvoicePrinted = null;
+
+// Load Orders
+async function loadOrders() {
+    const res = await fetch(API);
+    orders = await res.json();
+    renderStats();
+    renderTable(orders);
+}
+
+function renderStats() {
+    const total = orders.length;
+    const pending = orders.filter(o => o.status === "pending" || !o.status).length;
+    const done = orders.filter(o => o.status === "selesai").length;
+
+    document.getElementById("totalOrders").textContent = total;
+    document.getElementById("pendingOrders").textContent = pending;
+    document.getElementById("completedOrders").textContent = done;
+}
+
+// Render Table
+function renderTable(list) {
+    const tbody = document.querySelector("#orderTable tbody");
+    tbody.innerHTML = "";
+
+    list.forEach(o => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${o.invoice}</td>
+            <td>${o.nama}</td>
+            <td>Rp ${o.total.toLocaleString('id-ID')}</td>
+            <td>${o.status || "pending"}</td>
+            <td>
+                <button class="btn-small btn-view" onclick='viewOrder(${JSON.stringify(o)})'>View</button>
+                <button class="btn-small btn-wa" onclick='sendWA(${JSON.stringify(o)})'>WA</button>
+                <button class="btn-small btn-status" onclick="changeStatus('${o.invoice}')">Set</button>
+                <button class="btn-small btn-print" onclick="printInvoice('${o.invoice}')">Print</button>
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+// View Detail
+function viewOrder(o) {
+    const box = document.getElementById("notaContent");
+
+    box.innerHTML = `
+        <strong>Invoice:</strong> ${o.invoice}<br>
+        <strong>Nama:</strong> ${o.nama}<br>
+        <strong>WA:</strong> ${o.wa}<br>
+        <strong>Jenis:</strong> ${o.jenis}<br>
+        <strong>Isi:</strong> ${o.isi}<br>
+        <strong>Mode:</strong> ${o.mode}<br>
+        <strong>Topping:</strong> ${o.topping.join(", ") || "-"}<br>
+        <strong>Taburan:</strong> ${o.taburan.join(", ") || "-"}<br>
+        <strong>Jumlah:</strong> ${o.jumlah}<br>
+        <strong>Total:</strong> Rp ${o.total.toLocaleString("id-ID")}<br>
+        <strong>Catatan:</strong> ${o.note || "-"}
     `;
-    $('#editClose').onclick = () => { modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); };
-    $('#saveEdit').onclick = async () => {
-      const payload = {
-        nama: $('#e_nama').value,
-        wa: $('#e_wa').value,
-        note: $('#e_note').value,
-        status: $('#e_status').value
-      };
-      await fetch(`${API}/orders/${encodeURIComponent(order.invoice)}`, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-      alert('Tersimpan');
-      modal.classList.remove('show'); modal.setAttribute('aria-hidden','true');
-      loadOrders();
-    };
-  }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    loadOrders();
-    $('#btnFilter').addEventListener('click', () => {
-      const invoice = $('#filterInvoice').value.trim();
-      const nama = $('#filterNama').value.trim();
-      const status = $('#filterStatus').value;
-      const q = {};
-      if (invoice) q.invoice = invoice;
-      if (nama) q.nama = nama;
-      if (status) q.status = status;
-      loadOrders(q);
+    document.getElementById("notaModal").style.display = "flex";
+}
+
+// Print Invoice
+async function printInvoice(invoice) {
+    lastInvoicePrinted = invoice;
+
+    try {
+        const res = await fetch(PRINT_API + invoice);
+        if (res.ok) {
+            const blob = await res.blob();
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = invoice + ".pdf";
+            link.click();
+        } else {
+            alert("Server gagal mencetak, fallback PDF.");
+            pdfFallback(invoice);
+        }
+    } catch (e) {
+        pdfFallback(invoice);
+    }
+}
+
+// fallback PDF
+function pdfFallback(inv) {
+    const o = orders.find(x => x.invoice === inv);
+    if (!o) return;
+
+    const w = window.open("", "_blank");
+    w.document.write(`
+        <h2>NOTA PEMBELIAN</h2>
+        Invoice: ${o.invoice}<br>
+        Nama: ${o.nama}<br>
+        Total: Rp ${o.total.toLocaleString('id-ID')}<br>
+    `);
+    w.print();
+}
+
+// Print last invoice
+document.getElementById("printLastInvoice").onclick = () => {
+    if (!lastInvoicePrinted) return alert("Belum ada cetakan terakhir.");
+    printInvoice(lastInvoicePrinted);
+};
+
+// Change status
+async function changeStatus(invoice) {
+    const newStatus = prompt("Masukkan status baru (pending / diproses / selesai):");
+    if (!newStatus) return;
+
+    await fetch(API + "/" + invoice, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus })
     });
-    $('#btnReload').addEventListener('click', () => loadOrders());
-  });
-})();
+
+    loadOrders();
+}
+
+// Send WA
+function sendWA(o) {
+    const msg = `Halo ${o.nama}, pesanan Anda:\nInvoice: ${o.invoice}\nTotal: Rp ${o.total.toLocaleString('id-ID')}`;
+    window.open(`https://wa.me/${o.wa}?text=${encodeURIComponent(msg)}`, "_blank");
+}
+
+// Filters
+document.getElementById("filterAll").onclick = () => renderTable(orders);
+document.getElementById("filterPending").onclick = () =>
+    renderTable(orders.filter(o => !o.status || o.status === "pending"));
+document.getElementById("filterDone").onclick = () =>
+    renderTable(orders.filter(o => o.status === "selesai"));
