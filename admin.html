@@ -1,60 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin — Pukis Lumer Aulia</title>
-
-  <link rel="stylesheet" href="assets/css/admin.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <!-- jsPDF dan autotable -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <div class="admin-header">
-    <div class="admin-header-inner admin-container">
-      <div><strong>Pukis Lumer Admin</strong></div>
-      <div class="admin-header-right">
-        <div class="muted">Dashboard</div>
-        <button id="logoutBtn" class="btn btn-logout">Logout</button>
+  <div class="container admin">
+    <h1>Admin Panel — Pukis Lumer Aulia</h1>
+    <div class="admin-controls">
+      <input id="filterInvoice" placeholder="Filter by invoice">
+      <input id="filterNama" placeholder="Filter by nama">
+      <select id="filterStatus">
+        <option value="">Semua status</option>
+        <option value="Pending">Pending</option>
+        <option value="Confirmed">Confirmed</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Canceled">Canceled</option>
+      </select>
+      <button id="btnFilter">Filter</button>
+      <button id="btnReload">Reload</button>
+    </div>
+
+    <div id="ordersList"></div>
+
+    <template id="orderRowTpl">
+      <div class="order-row">
+        <div class="row-left">
+          <div><strong class="invoice"></strong> — <span class="nama"></span></div>
+          <div class="meta"></div>
+        </div>
+        <div class="row-right">
+          <select class="statusSelect">
+            <option>Pending</option><option>Confirmed</option><option>Delivered</option><option>Canceled</option>
+          </select>
+          <button class="btn-send-cust">Kirim WA ke Pembeli</button>
+          <button class="btn-pdf">Cetak PDF</button>
+          <button class="btn-edit">Edit</button>
+        </div>
+      </div>
+    </template>
+
+    <div id="editModal" class="nota-overlay" aria-hidden="true">
+      <div class="nota-card">
+        <div style="display:flex;justify-content:space-between;align-items:center"><h3>Edit Order</h3><button id="editClose">✕</button></div>
+        <div id="editContent"></div>
+        <div style="margin-top:8px"><button id="saveEdit" class="btn-confirm">Simpan</button></div>
       </div>
     </div>
   </div>
 
-  <main class="admin-container">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon bg-blue"><i class="fa-solid fa-list"></i></div>
-        <div><div class="stat-label">Total Pesanan</div><div class="stat-value" id="totalOrders">0</div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon bg-orange"><i class="fa-solid fa-clock"></i></div>
-        <div><div class="stat-label">Pending</div><div class="stat-value" id="pendingOrders">0</div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon bg-green"><i class="fa-solid fa-check"></i></div>
-        <div><div class="stat-label">Selesai</div><div class="stat-value" id="doneOrders">0</div></div>
-      </div>
-    </div>
-
-    <div class="filter-row" style="margin-top:12px;">
-      <button id="filterAll" class="active">Semua</button>
-      <button id="filterPending">Pending</button>
-      <button id="filterDone">Selesai</button>
-    </div>
-
-    <div class="table-wrap">
-      <table class="order-table" id="orderTable">
-        <thead>
-          <tr><th>Invoice</th><th>Nama</th><th>Total</th><th>Status</th><th>Aksi</th></tr>
-        </thead>
-        <tbody id="orderTableBody"></tbody>
-      </table>
-    </div>
-  </main>
-
-  <script src="assets/js/admin-final.js"></script>
+  <script src="assets/js/admin.js"></script>
 </body>
 </html>
