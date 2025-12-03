@@ -3,101 +3,77 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pukis Lumer Aulia — Best Seller Padang Panjang</title>
-  <meta name="description" content="Pukis Lumer topping melimpah — nomor #1 di Padang Panjang">
+  <title>Pukis Lumer Aulia — Pesan Online</title>
   <link rel="stylesheet" href="assets/css/style.css">
-  <style>
-    :root{--accent:#ff5e7e;--muted:#6b7280}
-    body{font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial; margin:0;background:#fff;color:#111}
-    .container{max-width:980px;margin:18px auto;padding:18px}
-    .topping-wrap{display:none;gap:8px;flex-wrap:wrap}
-    .topping-check{display:inline-flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid #eee;cursor:pointer}
-    .topping-check.checked{background:linear-gradient(90deg,#fff9f9,#fff);border-color:#ffb3c7;box-shadow:0 4px 10px rgba(0,0,0,0.06)}
-    .nota-overlay{display:none;align-items:center;justify-content:center;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999}
-    .nota-overlay.show{display:flex}
-    .nota-card{background:#fff;padding:16px;border-radius:12px;width:95%;max-width:540px}
-    .price-summary{background:rgba(0,0,0,0.03);padding:10px;border-radius:8px}
-    button.btn-primary{background:var(--accent);color:#fff;border:0;padding:12px;border-radius:10px}
-    button.btn-wa{background:#25D366;color:#fff;border:0;padding:12px;border-radius:10px}
-  </style>
 </head>
 <body>
   <div class="container">
-    <!-- ... (konten hero, gallery, dll sama seperti sebelumnya) ... -->
-
-    <!-- ORDER FORM -->
-    <section id="form-ultra" style="margin-top:18px;padding:18px;border-radius:12px;background:#1b2838;color:#fff;">
-      <h2 style="color:#fff">Pemesanan Pukis Lumer Aulia</h2>
+    <h1>Pukis Lumer Aulia</h1>
+    <section class="order-section">
       <form id="formUltra">
-        <label style="color:#fff">Nama Pemesan:</label>
-        <input type="text" id="ultraNama" required placeholder="Nama lengkap">
+        <label>Nama Pemesan</label>
+        <input id="ultraNama" type="text" required placeholder="Nama lengkap">
 
-        <label style="color:#fff">Nomor WhatsApp:</label>
-        <input type="tel" id="ultraWA" required placeholder="0812...">
+        <label>Nomor WhatsApp</label>
+        <input id="ultraWA" type="tel" required placeholder="0812...">
 
-        <label style="color:#fff">Jenis Pukis:</label>
-        <div class="opt-group" style="display:flex;gap:8px;margin-bottom:8px;color:#fff;">
+        <label>Jenis</label>
+        <div>
           <label><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
           <label><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
         </div>
 
-        <label style="color:#fff">Isi per Box:</label>
-        <select id="ultraIsi" style="padding:8px;border-radius:8px;margin-bottom:8px;">
+        <label>Isi per Box</label>
+        <select id="ultraIsi">
           <option value="5">5 pcs</option>
           <option value="10">10 pcs</option>
         </select>
 
-        <label style="color:#fff">Pilih Mode Topping:</label>
-        <div class="opt-group" style="display:flex;gap:8px;margin-bottom:8px;color:#fff;">
+        <label>Mode Topping</label>
+        <div>
           <label><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
           <label><input type="radio" name="ultraToppingMode" value="single"> Single</label>
           <label><input type="radio" name="ultraToppingMode" value="double"> Double</label>
         </div>
 
-        <!-- Single Topping -->
-        <div id="ultraSingleGroup" class="topping-wrap" style="margin-bottom:8px;display:none;"></div>
+        <div id="ultraSingleGroup" class="topping-wrap"></div>
+        <div id="ultraDoubleGroup" class="topping-wrap"></div>
 
-        <!-- Double Topping + Taburan -->
-        <div id="ultraDoubleGroup" class="topping-wrap" style="margin-bottom:8px;display:none;"></div>
+        <label>Catatan</label>
+        <textarea id="ultraNote" placeholder="Catatan..."></textarea>
 
-        <label style="color:#fff">Catatan Khusus:</label>
-        <textarea id="ultraNote" placeholder="Contoh: Tanpa kacang / Ambil jam 19.00" style="width:100%;padding:8px;border-radius:8px;margin-bottom:8px;"></textarea>
+        <label>Jumlah Box</label>
+        <input type="number" id="ultraJumlah" value="1" min="1">
 
-        <label style="color:#fff">Jumlah Box:</label>
-        <input type="number" id="ultraJumlah" min="1" value="1" style="padding:8px;border-radius:8px;margin-bottom:12px;">
-
-        <div class="price-summary" style="background:rgba(255,255,255,0.06);padding:10px;border-radius:8px;margin-bottom:12px;color:#fff;">
-          <div style="display:flex;justify-content:space-between;"><span>Harga per Box:</span><span id="ultraPricePerBox">Rp0</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>Subtotal:</span><span id="ultraSubtotal">Rp0</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>Diskon:</span><span id="ultraDiscount">-</span></div>
-          <div style="display:flex;justify-content:space-between;font-weight:700;"><span>Total Bayar:</span><span id="ultraGrandTotal">Rp0</span></div>
+        <div class="price-summary">
+          <div>Harga per Box: <span id="ultraPricePerBox">Rp0</span></div>
+          <div>Subtotal: <span id="ultraSubtotal">Rp0</span></div>
+          <div>Diskon: <span id="ultraDiscount">-</span></div>
+          <div>Total Bayar: <strong id="ultraGrandTotal">Rp0</strong></div>
         </div>
 
-        <!-- tombol mengecek pesanan -->
-        <button type="submit" id="ultraSubmit" class="btn-primary" style="width:100%;padding:12px;border-radius:10px;border:0;margin-bottom:8px;">Cek pesanan</button>
-        <button type="button" id="ultraSendAdmin" class="btn-wa" style="width:100%;padding:12px;border-radius:10px;border:0;">Kirim WA Admin</button>
+        <button id="ultraSubmit" class="btn-primary">Cek pesanan</button>
+        <button id="ultraSendAdmin" type="button" class="btn-wa">Kirim WA Admin</button>
       </form>
     </section>
 
-    <!-- NOTA POPUP -->
+    <!-- Nota popup -->
     <div id="notaContainer" class="nota-overlay" aria-hidden="true">
       <div class="nota-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <h3 style="margin:0">Nota Pemesanan</h3>
-          <button id="notaClose" style="background:#eee;border:0;padding:6px;border-radius:8px;cursor:pointer">✕</button>
+        <div class="nota-header">
+          <h3>Nota Pemesanan</h3>
+          <button id="notaClose" class="btn-close">✕</button>
         </div>
-        <div id="notaContent" style="margin-top:12px"></div>
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <button id="notaConfirm" style="flex:1;padding:10px;border-radius:8px;border:0;background:#0b8f3b;color:#fff">Buat Pesanan</button>
-          <button id="notaPrint" style="flex:1;padding:10px;border-radius:8px;border:0;background:var(--accent);color:#fff">Cetak / PDF</button>
+        <div id="notaContent"></div>
+        <div class="nota-actions">
+          <button id="notaConfirm" class="btn-confirm">Buat Pesanan</button>
+          <button id="notaPrint" class="btn-print">Cetak / PDF</button>
         </div>
       </div>
     </div>
 
-  </div> <!-- END container -->
+  </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <script src="assets/js/order.js"></script>
 </body>
 </html>
