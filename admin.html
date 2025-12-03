@@ -1,56 +1,229 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
   <title>Admin — Pukis Lumer Aulia</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body{font-family:Inter,Arial,sans-serif;margin:0;padding:0;background:#f3f4f6}
+    header{background:#0b5ba8;color:#fff;padding:16px;text-align:center;font-size:20px;font-weight:700}
+    .container{max-width:960px;margin:18px auto;padding:18px}
+
+    .admin-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    input,select{padding:8px;border-radius:8px;border:1px solid #ddd}
+
+    .order-row{background:#fff;padding:16px;border-radius:12px;margin-bottom:12px;
+      display:flex;justify-content:space-between;align-items:center;border:1px solid #eee}
+    .row-left{flex:1}
+    .row-right{display:flex;align-items:center;gap:8px}
+    .btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+    .btn-view{background:#0b5ba8;color:#fff}
+    .btn-wa{background:#25D366;color:#fff}
+    .btn-status{background:#ff8a00;color:#fff}
+    .btn-print{background:#e11d48;color:#fff}
+
+    /* POPUP */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;
+      align-items:center;justify-content:center;z-index:9999}
+    .overlay.show{display:flex}
+    .popup{background:#fff;padding:20px;border-radius:12px;width:95%;max-width:500px}
+
+    .popup h2{margin-top:0}
+    .popup .close{float:right;cursor:pointer;background:#eee;padding:4px 10px;border-radius:8px}
+  </style>
 </head>
 <body>
-  <div class="container admin">
-    <h1>Admin Panel — Pukis Lumer Aulia</h1>
-    <div class="admin-controls">
-      <input id="filterInvoice" placeholder="Filter by invoice">
-      <input id="filterNama" placeholder="Filter by nama">
-      <select id="filterStatus">
-        <option value="">Semua status</option>
-        <option value="Pending">Pending</option>
-        <option value="Confirmed">Confirmed</option>
-        <option value="Delivered">Delivered</option>
-        <option value="Canceled">Canceled</option>
-      </select>
-      <button id="btnFilter">Filter</button>
-      <button id="btnReload">Reload</button>
-    </div>
 
-    <div id="ordersList"></div>
+<header>ADMIN PANEL — Pukis Lumer Aulia</header>
 
-    <template id="orderRowTpl">
-      <div class="order-row">
-        <div class="row-left">
-          <div><strong class="invoice"></strong> — <span class="nama"></span></div>
-          <div class="meta"></div>
-        </div>
-        <div class="row-right">
-          <select class="statusSelect">
-            <option>Pending</option><option>Confirmed</option><option>Delivered</option><option>Canceled</option>
-          </select>
-          <button class="btn-send-cust">Kirim WA ke Pembeli</button>
-          <button class="btn-pdf">Cetak PDF</button>
-          <button class="btn-edit">Edit</button>
-        </div>
-      </div>
-    </template>
+<div class="container">
 
-    <div id="editModal" class="nota-overlay" aria-hidden="true">
-      <div class="nota-card">
-        <div style="display:flex;justify-content:space-between;align-items:center"><h3>Edit Order</h3><button id="editClose">✕</button></div>
-        <div id="editContent"></div>
-        <div style="margin-top:8px"><button id="saveEdit" class="btn-confirm">Simpan</button></div>
-      </div>
-    </div>
+  <!-- FILTER -->
+  <div class="admin-controls">
+    <input id="fInvoice" placeholder="Cari Invoice">
+    <input id="fNama" placeholder="Nama Pelanggan">
+    <select id="fStatus">
+      <option value="">Semua Status</option>
+      <option value="baru">Baru</option>
+      <option value="diproses">Diproses</option>
+      <option value="selesai">Selesai</option>
+    </select>
+    <button class="btn btn-status" id="btnFilter">Filter</button>
   </div>
 
-  <script src="assets/js/admin.js"></script>
+  <div id="ordersList"></div>
+</div>
+
+<!-- POPUP DETAIL PESANAN -->
+<div class="overlay" id="detailOverlay" aria-hidden="true">
+  <div class="popup">
+    <span class="close" onclick="hideDetail()">X</span>
+    <h2>Detail Pesanan</h2>
+
+    <div id="detailContent">Memuat...</div>
+
+    <hr>
+
+    <button id="btnPrint" class="btn btn-print"><i class="fa fa-print"></i> Cetak Resi</button>
+  </div>
+</div>
+
+<script>
+const API = '/api/orders';
+const PRINT_API = '/api/receipt/'; 
+
+let allOrders = [];
+let currentOrder = null;
+
+// ============= FETCH ALL ORDERS =============
+async function loadOrders(){
+  const res = await fetch(API);
+  allOrders = await res.json();
+  renderOrders(allOrders);
+}
+
+// ============= RENDER LIST =============
+function renderOrders(data){
+  const box = document.getElementById('ordersList');
+  if(!data.length){
+    box.innerHTML = '<div class="order-row">Tidak ada pesanan ditemukan.</div>';
+    return;
+  }
+
+  box.innerHTML = data.map(o => `
+    <div class="order-row">
+      <div class="row-left">
+        <strong>${o.invoice}</strong><br>
+        ${o.nama} — ${o.jenis} (${o.isi} pcs)<br>
+        <span style="color:#555">Status: ${o.status || 'baru'}</span>
+      </div>
+
+      <div class="row-right">
+        <button class="btn btn-view" onclick='openDetail(${JSON.stringify(o)})'>
+          <i class="fa fa-eye"></i>
+        </button>
+
+        <button class="btn btn-wa"
+         onclick="sendWA('${o.wa}','${o.invoice}',${o.total})">
+          <i class="fa fa-whatsapp"></i>
+        </button>
+
+        <button class="btn btn-status"
+         onclick="updateStatus('${o.invoice}')">Status</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============= FILTER =============
+document.getElementById('btnFilter').onclick = function(){
+  const inv = fInvoice.value.trim().toLowerCase();
+  const nama = fNama.value.trim().toLowerCase();
+  const stat = fStatus.value;
+
+  const filter = allOrders.filter(o =>
+    (inv? o.invoice.toLowerCase().includes(inv) : true) &&
+    (nama? o.nama.toLowerCase().includes(nama) : true) &&
+    (stat? o.status === stat : true)
+  );
+
+  renderOrders(filter);
+};
+
+// ============= DETAIL POPUP =============
+function openDetail(o){
+  currentOrder = o;
+
+  const el = document.getElementById('detailContent');
+  el.innerHTML = `
+    <strong>Invoice:</strong> ${o.invoice}<br>
+    <strong>Nama:</strong> ${o.nama}<br>
+    <strong>WA:</strong> ${o.wa}<br>
+    <strong>Jenis:</strong> ${o.jenis}<br>
+    <strong>Isi:</strong> ${o.isi} pcs<br>
+    <strong>Mode:</strong> ${o.mode}<br>
+    <strong>Topping:</strong> ${o.topping.join(', ') || '-'}<br>
+    <strong>Taburan:</strong> ${o.taburan.join(', ') || '-'}<br>
+    <strong>Jumlah:</strong> ${o.jumlah} box<br>
+    <strong>Total:</strong> Rp ${o.total.toLocaleString('id-ID')}<br>
+    <strong>Catatan:</strong> ${o.note || '-'}<br>
+  `;
+
+  document.getElementById('detailOverlay').classList.add('show');
+}
+function hideDetail(){
+  document.getElementById('detailOverlay').classList.remove('show');
+}
+
+// ============= CETAK RESI (SERVER-SIDE) =============
+document.getElementById('btnPrint').onclick = async function(){
+  if(!currentOrder) return;
+
+  try{
+    const url = PRINT_API + currentOrder.invoice;
+    const res = await fetch(url);
+
+    if(res.ok){
+      const blob = await res.blob();
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = currentOrder.invoice + '.pdf';
+      link.click();
+    }else{
+      alert("Gagal cetak via server, gunakan mode PDF Fallback.");
+      pdfFallback(currentOrder);
+    }
+  }catch(err){
+    console.error(err);
+    pdfFallback(currentOrder);
+  }
+};
+
+// ============= FALLBACK PRINT (jsPDF) =============
+function pdfFallback(o){
+  const w = window.open('', '_blank');
+  w.document.write(`
+    <h2>NOTA PEMBELIAN</h2>
+    <p>Invoice: ${o.invoice}</p>
+    <p>Nama: ${o.nama}</p>
+    <p>WA: ${o.wa}</p>
+    <p>Jenis: ${o.jenis} - ${o.isi} pcs</p>
+    <p>Mode: ${o.mode}</p>
+    <p>Topping: ${o.topping.join(', ')||'-'}</p>
+    <p>Taburan: ${o.taburan.join(', ')||'-'}</p>
+    <p>Jumlah: ${o.jumlah} box</p>
+    <p>Total: Rp ${o.total.toLocaleString('id-ID')}</p>
+    <p>Catatan: ${o.note || '-'}</p>
+  `);
+  w.print();
+}
+
+// ============= WA KE PELANGGAN =============
+function sendWA(wa, inv, total){
+  const msg = `Halo, ini admin Pukis Lumer Aulia.%0AInvoice: ${inv}%0ATotal: Rp ${total.toLocaleString('id-ID')}`;
+  window.open(`https://wa.me/${wa}?text=${msg}`, '_blank');
+}
+
+// ============= UPDATE STATUS =============
+async function updateStatus(invoice){
+  const newStatus = prompt("Status baru (baru/diproses/selesai):");
+  if(!newStatus) return;
+
+  await fetch(API + '/' + invoice, {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({status:newStatus})
+  });
+
+  loadOrders();
+}
+
+// Start
+loadOrders();
+</script>
+
 </body>
 </html>
