@@ -1,5 +1,6 @@
 // public/assets/js/order.js
 (function(){
+  'use strict';
   const ADMIN_WA = '6281296668670';
   const API_BASE = '/api';
   const SINGLE_TOPPINGS = ['Coklat','Tiramisu','Vanilla','Stroberi','Cappucino'];
@@ -13,7 +14,7 @@
   // helpers
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
-  function formatRp(n){ if (!n) return 'Rp0'; return 'Rp ' + Number(n).toLocaleString('id-ID'); }
+  function formatRp(n){ if (!n && n !== 0) return 'Rp0'; return 'Rp ' + Number(n||0).toLocaleString('id-ID'); }
   function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function genInvoiceClient(){ const d = new Date(); const y=d.getFullYear(), mm=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0'); const rand = Math.random().toString(36).substring(2,6).toUpperCase(); return `INV-${y}${mm}${dd}-${rand}`; }
 
@@ -21,21 +22,34 @@
   function buildToppings(){
     const singleWrap = $('#ultraSingleGroup');
     const doubleWrap = $('#ultraDoubleGroup');
+    if (!singleWrap || !doubleWrap) return;
     singleWrap.innerHTML = ''; doubleWrap.innerHTML = '';
     SINGLE_TOPPINGS.forEach(t => {
-      const id = 't_single_' + t.replace(/\s+/g,'_');
-      const label = document.createElement('label'); label.className='topping-check';
+      const id = 't_single_' + t.replace(/\s+/g,'_').toLowerCase();
+      const label = document.createElement('label');
+      // set class for styling (single)
+      label.className = 'topping-check single';
+      label.setAttribute('for', id);
       const input = document.createElement('input'); input.type='checkbox'; input.name='topping'; input.value=t; input.id=id;
-      label.appendChild(input); label.appendChild(document.createTextNode(' ' + t));
+      label.appendChild(input);
+      const span = document.createElement('span'); span.textContent = ' ' + t;
+      label.appendChild(span);
       singleWrap.appendChild(label);
     });
     DOUBLE_TABURAN.forEach(t => {
-      const id = 't_tab_' + t.replace(/\s+/g,'_');
-      const label = document.createElement('label'); label.className='topping-check';
+      const id = 't_tab_' + t.replace(/\s+/g,'_').toLowerCase();
+      const label = document.createElement('label');
+      // set class for styling (double)
+      label.className = 'topping-check double';
+      label.setAttribute('for', id);
       const input = document.createElement('input'); input.type='checkbox'; input.name='taburan'; input.value=t; input.id=id;
-      label.appendChild(input); label.appendChild(document.createTextNode(' ' + t));
+      label.appendChild(input);
+      const span = document.createElement('span'); span.textContent = ' ' + t;
+      label.appendChild(span);
       doubleWrap.appendChild(label);
     });
+
+    // Add change listeners to newly created checkboxes handled globally elsewhere
   }
 
   function getSelected(name){ return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(i=>i.value); }
@@ -61,10 +75,10 @@
     const subtotal = pricePerBox * jumlah;
     const discount = calcDiscount(jumlah, subtotal);
     const total = subtotal - discount;
-    $('#ultraPricePerBox').textContent = formatRp(pricePerBox);
-    $('#ultraSubtotal').textContent = formatRp(subtotal);
-    $('#ultraDiscount').textContent = discount ? '-' + formatRp(discount) : '-';
-    $('#ultraGrandTotal').textContent = formatRp(total);
+    const elPrice = $('#ultraPricePerBox'); if (elPrice) elPrice.textContent = formatRp(pricePerBox);
+    const elSub = $('#ultraSubtotal'); if (elSub) elSub.textContent = formatRp(subtotal);
+    const elDisc = $('#ultraDiscount'); if (elDisc) elDisc.textContent = discount ? '-' + formatRp(discount) : '-';
+    const elTotal = $('#ultraGrandTotal'); if (elTotal) elTotal.textContent = formatRp(total);
     return { pricePerBox, subtotal, discount, total };
   }
 
@@ -162,21 +176,34 @@
   function renderNota(order){
     const c = $('#notaContent');
     if (!c) return;
+    const toppingText = (order.topping && order.topping.length) ? order.topping.join(', ') : '-';
+    const taburanText = (order.taburan && order.taburan.length) ? order.taburan.join(', ') : '-';
     c.innerHTML = `
-      <div><strong>Invoice:</strong> ${escapeHtml(order.invoice)}</div>
-      <div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>
-      <div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>
-      <div><strong>Jenis:</strong> ${escapeHtml(order.jenis)} — ${escapeHtml(order.isi)} pcs</div>
-      <div><strong>Mode:</strong> ${escapeHtml(order.mode)}</div>
-      <div><strong>Topping:</strong> ${escapeHtml(order.topping.join(', ') || '-')}</div>
-      <div><strong>Taburan:</strong> ${escapeHtml(order.taburan.join(', ') || '-')}</div>
-      <div><strong>Jumlah:</strong> ${order.jumlah} box</div>
-      <div><strong>Total:</strong> ${formatRp(order.total)}</div>
-      <div><strong>Catatan:</strong> ${escapeHtml(order.note || '-')}</div>
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <div style="font-weight:800;color:#5f0000;font-size:14px;margin-bottom:6px;">INVOICE PEMESANAN</div>
+          <div><strong>Invoice:</strong> ${escapeHtml(order.invoice)}</div>
+          <div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>
+          <div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>
+          <div><strong>Tanggal:</strong> ${escapeHtml(new Date().toLocaleString('id-ID'))}</div>
+        </div>
+      </div>
+      <hr style="margin:8px 0">
+      <div>
+        <div><strong>Jenis:</strong> ${escapeHtml(order.jenis)} — ${escapeHtml(String(order.isi))} pcs</div>
+        <div><strong>Mode:</strong> ${escapeHtml(order.mode)}</div>
+        <div><strong>Topping:</strong> ${escapeHtml(toppingText)}</div>
+        <div><strong>Taburan:</strong> ${escapeHtml(taburanText)}</div>
+        <div><strong>Jumlah:</strong> ${escapeHtml(String(order.jumlah))} box</div>
+        <div><strong>Harga Satuan:</strong> ${formatRp(order.pricePerBox)}</div>
+        <div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>
+        <div><strong>Diskon:</strong> ${order.discount>0 ? '-' + formatRp(order.discount) : '-'}</div>
+        <div style="font-weight:800;margin-top:6px;"><strong>Total Bayar:</strong> ${formatRp(order.total)}</div>
+        <p style="margin-top:10px;font-style:italic">Terima kasih telah berbelanja di Pukis Lumer Aulia.</p>
+      </div>
     `;
     const overlay = $('#notaContainer');
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
+    if (overlay){ overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false'); }
     window._pendingOrder = order;
   }
 
@@ -194,16 +221,13 @@
     e.preventDefault();
     const pending = window._pendingOrder;
     if (!pending) return alert('Tidak ada pesanan tertunda.');
-    // try server
     try{
       const serverOrder = await sendToServer(pending);
-      // success -> open admin WA + open admin page
       sendWAtoAdmin(serverOrder);
       window.open('/admin.html?invoice=' + encodeURIComponent(serverOrder.invoice), '_blank');
       alert('Pesanan berhasil dikirim ke server dan WA admin dibuka.');
       hideNota();
     }catch(err){
-      // fallback: save local and open WA
       saveFallback(pending);
       sendWAtoAdmin(pending);
       window.open('/admin.html?invoice=' + encodeURIComponent(pending.invoice), '_blank');
@@ -233,22 +257,27 @@
   function attach(){
     buildToppings();
     updatePriceUI();
+
+    // topping mode handlers
     $$('input[name="ultraToppingMode"]').forEach(i => i.addEventListener('change', ()=>{
       const mode = getRadioValue('ultraToppingMode');
-      if (mode === 'non'){ $('#ultraSingleGroup').style.display='none'; $('#ultraDoubleGroup').style.display='none'; $$('input[name="topping"]').forEach(c=>c.checked=false); $$('input[name="taburan"]').forEach(c=>c.checked=false); }
-      else if (mode === 'single'){ $('#ultraSingleGroup').style.display='flex'; $('#ultraDoubleGroup').style.display='none'; }
-      else { $('#ultraSingleGroup').style.display='flex'; $('#ultraDoubleGroup').style.display='flex'; }
+      if (mode === 'non'){ $('#ultraSingleGroup') && ($('#ultraSingleGroup').style.display='none'); $('#ultraDoubleGroup') && ($('#ultraDoubleGroup').style.display='none'); $$('input[name="topping"]').forEach(c=>{ c.checked=false; c.closest('label')?.classList.remove('checked'); }); $$('input[name="taburan"]').forEach(c=>{ c.checked=false; c.closest('label')?.classList.remove('checked'); }); }
+      else if (mode === 'single'){ $('#ultraSingleGroup') && ($('#ultraSingleGroup').style.display='flex'); $('#ultraDoubleGroup') && ($('#ultraDoubleGroup').style.display='none'); }
+      else { $('#ultraSingleGroup') && ($('#ultraSingleGroup').style.display='flex'); $('#ultraDoubleGroup') && ($('#ultraDoubleGroup').style.display='flex'); }
       updatePriceUI();
     }));
-    $$('input[name="ultraJenis"]').forEach(i => i.addEventListener('change', updatePriceUI));
-    $('#ultraIsi').addEventListener('change', updatePriceUI);
-    $('#ultraJumlah').addEventListener('input', updatePriceUI);
-    $('#formUltra').addEventListener('submit', onFormSubmit);
-    $('#notaConfirm').addEventListener('click', onNotaConfirm);
-    $('#notaClose').addEventListener('click', hideNota);
-    $('#ultraSendAdmin').addEventListener('click', onSendAdminShortcut);
 
-    // top/bottom checkbox constraints
+    $$('input[name="ultraJenis"]').forEach(i => i.addEventListener('change', updatePriceUI));
+    $('#ultraIsi') && $('#ultraIsi').addEventListener('change', updatePriceUI);
+    $('#ultraJumlah') && $('#ultraJumlah').addEventListener('input', updatePriceUI);
+
+    const form = $('#formUltra');
+    if (form) form.addEventListener('submit', onFormSubmit);
+    const notaConfirm = $('#notaConfirm'); if (notaConfirm) notaConfirm.addEventListener('click', onNotaConfirm);
+    const notaClose = $('#notaClose'); if (notaClose) notaClose.addEventListener('click', hideNota);
+    const sendBtn = $('#ultraSendAdmin'); if (sendBtn) sendBtn.addEventListener('click', onSendAdminShortcut);
+
+    // checkbox constraints (delegated)
     document.addEventListener('change', function(e){
       if (!e.target) return;
       if (e.target.name === 'topping'){
@@ -268,5 +297,5 @@
   // expose for tests
   window._PL = { genInvoiceClient, updatePriceUI, buildOrderObject };
 
-  document.addEventListener('DOMContentLoaded', attach);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attach); else attach();
 })();
