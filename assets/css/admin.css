@@ -1,0 +1,146 @@
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #f4f4f4;
+}
+
+/* LOGIN */
+.login-wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #00000080;
+}
+.login-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+.btn-primary {
+  background: #0b5ba8;
+  color: #fff;
+  border: 0;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 12px;
+}
+.btn-secondary {
+  background: #555;
+  color: #fff;
+  border: 0;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn-logout {
+  background: #d00000;
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ADMIN */
+.admin-wrapper {
+  max-width: 1100px;
+  margin: auto;
+  padding: 18px;
+}
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.stat-section {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+}
+.stat-card {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+.stat-number {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.order-section {
+  margin-top: 28px;
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+}
+.action-buttons {
+  margin-bottom: 14px;
+  display: flex;
+  gap: 10px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+td .btn-small {
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+.btn-view {
+  background: #0b5ba8;
+  color: white;
+}
+.btn-wa {
+  background: #25D366;
+  color: white;
+}
+.btn-print {
+  background: #e11d48;
+  color: white;
+}
+.btn-status {
+  background: #ff8a00;
+  color: white;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: #00000070;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 95%;
+  max-width: 450px;
+}
