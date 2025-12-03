@@ -1,56 +1,25 @@
-/* =====================================================
-   TOPPING BUILDER BUTTONS — PUKIS LUMER AULIA
-===================================================== */
+body{font-family:Inter, system-ui, Arial, sans-serif;margin:0;background:#fafafa;color:#111}
+.container{max-width:980px;margin:18px auto;padding:18px}
+.order-section{background:#fff;padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+input,select,textarea{display:block;width:100%;padding:8px;margin:6px 0 12px;border:1px solid #e6e6e6;border-radius:8px}
+.btn-primary{background:#ff5e7e;color:#fff;border:0;padding:12px;border-radius:10px;cursor:pointer}
+.btn-wa{background:#25D366;color:#fff;border:0;padding:12px;border-radius:10px;cursor:pointer;margin-top:8px}
+.topping-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.topping-check{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border-radius:8px;border:1px solid #eee;cursor:pointer}
+.price-summary{background:#fff;padding:10px;border-radius:8px;margin:8px 0;border:1px solid #f1f1f1}
 
-.topping-wrap {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin:10px 0;
-}
+.nota-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;z-index:9999}
+.nota-overlay.show{display:flex}
+.nota-card{background:#fff;padding:16px;border-radius:12px;width:95%;max-width:540px}
+.nota-header{display:flex;justify-content:space-between;align-items:center}
+.btn-close{background:#eee;border:0;padding:6px;border-radius:8px}
+.nota-actions{display:flex;gap:8px;margin-top:12px}
+.btn-confirm{background:#0b8f3b;color:#fff;border:0;padding:10px;border-radius:8px;cursor:pointer}
+.btn-print{background:#ff5e7e;color:#fff;border:0;padding:10px;border-radius:8px;cursor:pointer}
 
-.topping-btn {
-  padding:8px 12px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.15);
-  background:rgba(255,255,255,0.08);
-  color:#fff;
-  font-size:14px;
-  font-weight:700;
-  cursor:pointer;
-  transition:0.15s ease;
-}
-
-.topping-btn:hover {
-  transform:translateY(-2px);
-}
-
-/* ACTIVE — SINGLE TOPPING (pink muda + hitam tebal) */
-.topping-btn.single.active {
-  background:#ffd6e6;       /* pink muda */
-  color:#000;               /* hitam */
-  font-weight:900;
-  border-color:#ffb0d0;
-}
-
-/* ACTIVE — TABURAN (hijau muda + merah tebal) */
-.topping-btn.taburan.active {
-  background:#dff7e6;       /* hijau muda */
-  color:#b91c1c;            /* merah */
-  font-weight:900;
-  border-color:#bfe9c9;
-}
-
-/* Disabled state when limit reached */
-.topping-btn.disabled {
-  opacity:0.45;
-  pointer-events:none;
-  filter:grayscale(0.3);
-}
-
-/* Label */
-.topping-label {
-  font-weight:800;
-  margin-bottom:5px;
-  color:#fff;
-}
+/* admin */
+.admin-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.order-row{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:8px;background:#fff;margin-bottom:8px;border:1px solid #eee}
+.order-row .row-left{flex:1}
+.order-row .row-right{display:flex;gap:8px;align-items:center}
+.empty{padding:12px;background:#fff;border-radius:8px;border:1px solid #eee}
