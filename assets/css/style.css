@@ -1,176 +1,668 @@
-/* =========================
-   Base layout (from your provided snippet)
-   ========================= */
-body{font-family:Inter, system-ui, Arial, sans-serif;margin:0;background:#fafafa;color:#111}
-.container{max-width:980px;margin:18px auto;padding:18px}
-.order-section{background:#fff;padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
-input,select,textarea{display:block;width:100%;padding:8px;margin:6px 0 12px;border:1px solid #e6e6e6;border-radius:8px}
-.btn-primary{background:#ff5e7e;color:#fff;border:0;padding:12px;border-radius:10px;cursor:pointer}
-.btn-wa{background:#25D366;color:#fff;border:0;padding:12px;border-radius:10px;cursor:pointer;margin-top:8px}
-.topping-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-.topping-check{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border-radius:8px;border:1px solid #eee;cursor:pointer}
-.price-summary{background:#fff;padding:10px;border-radius:8px;margin:8px 0;border:1px solid #f1f1f1}
+/* =====================================
+   RESET & BASE
+===================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-.nota-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;z-index:9999}
-.nota-overlay.show{display:flex}
-.nota-card{background:#fff;padding:16px;border-radius:12px;width:95%;max-width:540px}
-.nota-header{display:flex;justify-content:space-between;align-items:center}
-.btn-close{background:#eee;border:0;padding:6px;border-radius:8px}
-.nota-actions{display:flex;gap:8px;margin-top:12px}
-.btn-confirm{background:#0b8f3b;color:#fff;border:0;padding:10px;border-radius:8px;cursor:pointer}
-.btn-print{background:#ff5e7e;color:#fff;border:0;padding:10px;border-radius:8px;cursor:pointer}
+html, body {
+    font-family: 'Poppins', sans-serif;
+    background: #111;
+    color: #eee;
+    line-height: 1.5;
+    width: 100%;
+    overflow-x: hidden;
+}
 
-/* admin */
-.admin-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.order-row{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:8px;background:#fff;margin-bottom:8px;border:1px solid #eee}
-.order-row .row-left{flex:1}
-.order-row .row-right{display:flex;gap:8px;align-items:center}
-.empty{padding:12px;background:#fff;border-radius:8px;border:1px solid #eee}
+img {
+    max-width: 100%;
+    display: block;
+}
 
-/* =========================
-   Custom styles added
-   ========================= */
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-/* Hero & header image inline */
+/* =====================================
+   LOADER
+===================================== */
+.site-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    color: #fff;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    letter-spacing: 0.4px;
+}
+
+/* =====================================
+   CONTAINER
+===================================== */
+.container {
+    max-width: 960px;
+    margin: auto;
+    padding: 15px;
+}
+
+/* =====================================
+   HERO SECTION
+===================================== */
+.hero-section {
+    margin-bottom: 35px;
+}
+
 .header-inline {
-  display:flex;
-  align-items:flex-start;
-  gap:18px;
-  flex-wrap:wrap;
-}
-.responsive-img {
-  width:140px;
-  height:auto;
-  border-radius:12px;
-  object-fit:cover;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-/* Hero text color classes */
-.text-green-bold { color:#008000; font-weight:700; }
-.text-black-bold { color:#000; font-weight:700; }
-.text-blue-dark-bold { color:#003366; font-weight:700; }
-.text-purple-dark-bold { color:#4B0082; font-weight:700; }
-.text-maroon-bold { color:#800000; font-weight:700; }
-.text-green-dark-big { color:#006400; font-weight:700; font-size:1.25rem; }
-.text-brown-dark-bold { color:#5C4033; font-weight:700; }
-.text-pink-bold { color:#FF1493; font-weight:700; }
-.text-brown-bold { color:#8B4513; font-weight:700; }
-.text-blue-bold { color:#0047FF; font-weight:700; }
-.text-black { color:#000; }
+.hero-text p {
+    margin-bottom: 6px;
+    font-size: 14.5px;
+}
 
-/* Section titles */
-.section-title { font-size:1.25rem; font-weight:800; margin-bottom:8px; color:#222; }
+/* Warna teks */
+.text-green-bold { color: #00ff91; font-weight: 700; }
+.text-black-bold { color: #f2f2f2; font-weight: 700; }
+.text-blue-dark-bold { color: #80c3ff; font-weight: 700; }
+.text-purple-dark-bold { color: #d09bff; font-weight: 700; }
+.text-maroon-bold { color: #ff7b7b; font-weight: 700; }
+.text-green-dark-big { color: #00ffa7; font-size: 20px; font-weight: 900; }
+.text-brown-dark-bold { color: #ffcf95; font-weight: 700; }
+.text-pink-bold { color: #ff9bd4; font-weight: 700; }
+.text-blue-bold { color: #92baff; font-weight: 700; }
+.text-black { color: #f1f1f1; }
+.text-pink { color: #ffafd9; }
 
-/* Facts list */
-.facts-list { color:#2E8B57; font-weight:600; list-style:disc; margin-left:18px; }
+/* =====================================
+   SECTION TITLE
+===================================== */
+.section {
+    margin-bottom: 40px;
+}
 
-/* Gallery */
-.gallery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-.gallery-img { width:100%; border-radius:10px; object-fit:cover; }
+.section-title {
+    font-size: 22px;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-shadow: 0 0 6px rgba(255,255,255,0.3);
+}
 
-/* Testimonials */
-.testimonials-list { list-style:none; padding:0; margin:0; }
-.testimonial-card { background:#fff; color:#111; padding:12px; border-radius:8px; margin-bottom:8px; box-shadow:0 6px 18px rgba(0,0,0,0.03); }
+/* =====================================
+   FACTS LIST
+===================================== */
+.facts-list {
+    padding-left: 18px;
+    color: #ddd;
+    margin-top: 6px;
+}
 
-/* Form/order box (biru tua) */
+.facts-list li {
+    margin-bottom: 5px;
+}
+
+/* =====================================
+   GALLERY
+===================================== */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.gallery-img {
+    border-radius: 8px;
+}
+
+/* =====================================
+   TESTIMONI
+===================================== */
+.testimonials-list {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.testimonials-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    color: #ccc;
+}
+
+/* =====================================
+   TESTIMONI FORM
+===================================== */
+.testimonial-form .input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: none;
+    background: #222;
+    color: #fff;
+}
+
+.btn-primary {
+    background: #ff5e9c;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 600;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    opacity: .85;
+}
+
+/* =====================================
+   ORDER BOX
+===================================== */
 .order-box {
-  background:#002855; /* biru tua */
-  padding:18px;
-  border-radius:12px;
-  margin-top:25px;
-  color:#fff;
-  border:2px solid #001A3A;
+    background: #102033;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 40px;
 }
 
-/* Table inside order */
-.order-table { width:100%; border-collapse:collapse; color:#fff; }
-.order-table td { padding:8px; vertical-align:middle; }
-
-/* Input white inside order */
-.order-input { background:#fff !important; color:#000 !important; border:1px solid #ccc; padding:10px; border-radius:8px; width:100%; font-size:1rem; }
-
-/* label white text for left column */
-.label-white { color:#fff; font-weight:600; }
-
-/* Inline labels */
-.label-inline { display:inline-flex; align-items:center; gap:6px; margin-right:8px; color:#fff; }
-
-/* Topping mode labels (small pill) */
-.topping-mode-container .mode-label {
-  display:inline-block;
-  background:#fff;
-  color:#222;
-  padding:6px 10px;
-  border-radius:8px;
-  margin-right:6px;
-  cursor:pointer;
-  font-weight:600;
+.order-table label {
+    color: #fff;
+    font-size: 14px;
 }
 
-/* Topping checkboxes groups style (container) */
-#ultraSingleGroup, #ultraDoubleGroup { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-
-/* Single topping style (pink tua) */
-.topping-check.single {
-  background:#C2185B; /* pink tua */
-  color:#fff;
-  font-weight:700;
-  padding:8px 10px;
-  border-radius:8px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
-  border:1px solid rgba(255,255,255,0.12);
-}
-.topping-check.single input[type="checkbox"] {
-  accent-color:#FF80AB;
+.order-input {
+    width: 100%;
+    background: #1e324b;
+    color: #fff;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #294766;
 }
 
-/* Double topping (taburan) style (ungu tua) */
-.topping-check.double {
-  background:#4A148C; /* ungu tua */
-  color:#fff;
-  font-weight:600;
-  padding:8px 10px;
-  border-radius:8px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
-  border:1px solid rgba(255,255,255,0.12);
-}
-.topping-check.double input[type="checkbox"] {
-  accent-color:#CE93D8;
+.label-inline {
+    color: #fff;
+    margin-right: 10px;
 }
 
-/* Price summary inside order (white-ish) */
-.price-summary { background:rgba(255,255,255,0.06); padding:12px; border-radius:8px; color:#fff; }
-
-/* Nota popup styles */
-.nota-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); align-items:center; justify-content:center; z-index:9999; }
-.nota-overlay.show { display:flex; }
-.nota-card { background:#fff; padding:16px; border-radius:12px; width:95%; max-width:540px; }
-.nota-header { display:flex; justify-content:space-between; align-items:center; }
-
-/* Floating icons & admin float */
-.admin-float-btn { position:fixed; left:18px; bottom:18px; background:#fff; border-radius:50%; width:48px; height:48px; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,0.12); z-index:999; text-decoration:none; color:#222; }
-.floating-icons-container { position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column; gap:10px; z-index:999; }
-.floating-icon { display:flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:50%; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.12); color:#222; text-decoration:none; }
-
-/* Bottom nav */
-.bottom-nav { position:fixed; left:0; right:0; bottom:0; background:#fff; display:flex; justify-content:space-around; padding:8px 12px; border-top:1px solid #eee; z-index:999; }
-.bottom-nav a { color:#222; text-decoration:none; display:flex; flex-direction:column; align-items:center; font-size:12px; }
-
-/* Footer */
-.site-footer { text-align:center; padding:18px; margin-top:48px; color:#666; font-size:14px; }
-
-/* Responsive tweaks */
-@media (max-width:720px){
-  .gallery-grid { grid-template-columns:repeat(2,1fr); }
-  .header-inline { align-items:flex-start; }
-  .responsive-img { width:110px; }
-  .order-row-inline { flex-direction:column; }
-  .order-table td { display:block; width:100%; }
+.topping-wrap {
+    display: none;
 }
+
+/* =====================================
+   PRICE SUMMARY
+===================================== */
+.price-summary {
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+/* =====================================
+   NOTA POPUP
+===================================== */
+.nota-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.78);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.nota-card {
+    background: #fff;
+    width: 92%;
+    max-width: 380px;
+    border-radius: 10px;
+    padding: 15px;
+    color: #333;
+}
+
+.nota-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.btn-confirm {
+    background: #28c76f;
+    padding: 10px;
+    width: 100%;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.btn-print {
+    background: #7367f0;
+    padding: 10px;
+    width: 100%;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+/* =====================================
+   FLOATING SHARE BUTTONS
+===================================== */
+.toggle-float-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff5e9c;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 99990;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.floating-icons-container {
+    position: fixed;
+    bottom: 85px;
+    right: 20px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 99980;
+}
+
+.floating-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 22px;
+}
+
+/* warna floating buttons */
+.floating-icon.whatsapp { background: #25D366; }
+.floating-icon.shopee { background: #EE4D2D; }
+.floating-icon.gofood { background: #D50000; }
+.floating-icon.grab { background: #00B14F; }
+.floating-icon.maxim { background: #FFCC00; color: #000; }
+.floating-icon.kombi { background: #00B14F; }
+
+/* =====================================
+   ADMIN FLOATING BUTTON
+===================================== */
+.admin-float-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #ff5e9c;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    z-index: 99990;
+}
+/* =====================================
+   ANIMATION (SMOOTH TOGGLE)
+===================================== */
+.floating-icons-container.show {
+    display: flex !important;
+    animation: floatFade .25s ease-in-out;
+}
+
+@keyframes floatFade {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =====================================
+   BUTTON STATE FIX
+===================================== */
+button:active {
+    transform: scale(0.96);
+}
+
+/* =====================================
+   RESPONSIVE ADJUSTMENTS
+===================================== */
+@media (min-width: 600px) {
+    .header-inline {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .hero-text p {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 420px) {
+    .toggle-float-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 26px;
+    }
+
+    .floating-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+
+    .admin-float-btn {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* =====================================
+   FORM ORDER — STRUCTURE FIX
+===================================== */
+.order-table {
+    width: 100%;
+}
+
+.order-table td {
+    padding: 6px 0;
+}
+
+.order-row-inline {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.mode-label {
+    margin-right: 10px;
+    color: #fff;
+}
+
+/* =====================================
+   TOPPING & TABURAN — DYNAMIC BOX
+===================================== */
+.topping-wrap select,
+.topping-wrap .order-input {
+    margin-bottom: 8px;
+    background: #1b314c;
+    border: 1px solid #2a4a6b;
+    padding: 8px;
+    color: #fff;
+}
+
+.topping-wrap label {
+    color: #fff;
+}
+
+/* ditampilkan lewat JS */
+.topping-wrap.active {
+    display: block;
+}
+
+/* =====================================
+   POPUP FIX — CROSS BROWSER
+===================================== */
+.nota-overlay.show {
+    display: flex !important;
+}
+
+.nota-card {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+/* Tombol di dalam nota */
+.nota-actions button {
+    margin-top: 10px;
+}
+
+/* =====================================
+   REMOVE OLD BOTTOM NAV (DIHAPUS)
+===================================== */
+/* seluruh bottom-nav dihapus agar tidak bentrok dengan floating icons */
+.bottom-nav { display: none !important; visibility: hidden !important; }
+
+/* =====================================
+   CROSS-BROWSER FIXES
+===================================== */
+
+/* Smooth scroll fix for old browsers */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Fix flex for older browsers */
+.floating-icons-container,
+.header-inline,
+.order-row-inline {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+/* Support for older browsers */
+img {
+    -ms-interpolation-mode: bicubic;
+}
+
+/* =====================================
+   GENERAL UTILITY CLASSES
+===================================== */
+.text-center { text-align: center; }
+.mb-10 { margin-bottom: 10px; }
+.mb-15 { margin-bottom: 15px; }
+.mb-20 { margin-bottom: 20px; }
+
+/* =====================================
+   ADMIN PAGE SPECIAL CSS (Future Safe)
+===================================== */
+.admin-container {
+    max-width: 480px;
+    margin: auto;
+    background: #111927;
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.admin-input {
+    width: 100%;
+    padding: 10px;
+    background: #1c2b3e;
+    border: 1px solid #324b69;
+    border-radius: 6px;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.admin-btn {
+    width: 100%;
+    padding: 10px;
+    background: #ff5e9c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.admin-btn:hover {
+    opacity: .85;
+}
+
+/* =====================================
+   IE11 POLYFILL SAFE CLASSES
+===================================== */
+.ie11-flex {
+    display: -ms-flexbox !important;
+    display: flex !important;
+}
+
+.ie11-hide {
+    display: none !important;
+}
+
+/* =====================================
+   FINAL SPACING FIXES
+===================================== */
+footer.site-footer {
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+/* =====================================
+   SAFE AREA (iPhone Modern)
+===================================== */
+:root {
+    --safe-top: env(safe-area-inset-top);
+    --safe-bottom: env(safe-area-inset-bottom);
+    --safe-left: env(safe-area-inset-left);
+    --safe-right: env(safe-area-inset-right);
+}
+
+body {
+    padding-bottom: var(--safe-bottom);
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+}
+
+/* =====================================
+   COLOR SCHEME FIX (Prevent Safari/Chrome Auto Darken)
+===================================== */
+:root {
+    color-scheme: only light;
+}
+
+/* =====================================
+   TEXT GLOW UTILITY
+===================================== */
+.glow {
+    text-shadow: 0 0 6px rgba(255,255,255,0.25);
+}
+
+/* =====================================
+   SHADOW & BORDER UTILITIES
+===================================== */
+.shadow-md {
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+}
+
+.shadow-lg {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+.rounded-6 { border-radius: 6px; }
+.rounded-8 { border-radius: 8px; }
+.rounded-10 { border-radius: 10px; }
+
+/* =====================================
+   FLOATING BUTTON SAFE SPACING
+===================================== */
+.toggle-float-btn {
+    margin-bottom: var(--safe-bottom);
+}
+
+.floating-icons-container {
+    margin-bottom: calc(var(--safe-bottom) + 20px);
+}
+
+/* =====================================
+   SUPPORT FOR VERY OLD BROWSERS
+   (IE11 / Opera Mini / KaiOS)
+===================================== */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /* IE11 Fix: force block layout */
+    .header-inline,
+    .order-row-inline,
+    .floating-icons-container {
+        display: block;
+    }
+
+    .floating-icons-container {
+        position: fixed;
+        right: 15px;
+    }
+}
+
+/* =====================================
+   HIDDEN CLASS (Reusable)
+===================================== */
+.hidden {
+    display: none !important;
+}
+
+/* =====================================
+   DISABLE TEXT SELECTION (UX)
+===================================== */
+.no-select {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* =====================================
+   LINK HOVER (small animation)
+===================================== */
+a:hover {
+    opacity: 0.85;
+}
+
+/* =====================================
+   LAST CHECK — FORM INPUT FOCUS
+===================================== */
+.order-input:focus,
+.admin-input:focus,
+.testimonial-form .input:focus {
+    outline: none;
+    border: 1px solid #5ab0ff;
+    background: #253d59;
+}
+
+/* =====================================
+   FINAL FOOTER FIX
+===================================== */
+footer.site-footer {
+    padding-bottom: calc(20px + var(--safe-bottom));
+    opacity: 0.75;
+}
+
+/* =====================================
+   END OF STYLE.CSS
+   (No more code under this line)
+===================================== */
