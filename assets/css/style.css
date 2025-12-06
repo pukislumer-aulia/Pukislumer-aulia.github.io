@@ -200,8 +200,82 @@ a {
     margin-right: 10px;
 }
 
+.order-row-inline {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.mode-label {
+    margin-right: 10px;
+    color: #fff;
+}
+
+/* =====================================
+   TOPPING & TABURAN — FIXED VERSION
+===================================== */
+
+/* Default tampil */
 .topping-wrap {
-    display: none;
+    display: block;
+    margin-top: 8px;
+    padding: 10px;
+    background: #102033;
+    border-radius: 8px;
+}
+
+/* Disembunyikan oleh JS */
+.topping-wrap.hidden {
+    display: none !important;
+}
+
+/* Ditampilkan oleh JS */
+.topping-wrap.active {
+    display: block !important;
+}
+
+/* Input & Select */
+.topping-wrap select,
+.topping-wrap .order-input {
+    margin-bottom: 8px;
+    background: #1b314c;
+    border: 1px solid #2a4a6b;
+    padding: 8px;
+    color: #fff;
+    width: 100%;
+    border-radius: 6px;
+}
+
+/* Label */
+.topping-wrap label {
+    color: #fff;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Flexible container */
+.topping-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.topping-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.topping-option input[type="checkbox"] {
+    transform: scale(1.1);
+}
+
+/* Subtitle */
+.topping-wrap .subtitle {
+    margin-top: 6px;
+    font-weight: 600;
+    color: #aad4ff;
 }
 
 /* =====================================
@@ -229,6 +303,10 @@ a {
     z-index: 999999;
 }
 
+.nota-overlay.show {
+    display: flex !important;
+}
+
 .nota-card {
     background: #fff;
     width: 92%;
@@ -236,6 +314,7 @@ a {
     border-radius: 10px;
     padding: 15px;
     color: #333;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
 .nota-header {
@@ -313,7 +392,6 @@ a {
     font-size: 22px;
 }
 
-/* warna floating buttons */
 .floating-icon.whatsapp { background: #25D366; }
 .floating-icon.shopee { background: #EE4D2D; }
 .floating-icon.gofood { background: #D50000; }
@@ -338,28 +416,9 @@ a {
     color: #fff;
     z-index: 99990;
 }
-/* =====================================
-   ANIMATION (SMOOTH TOGGLE)
-===================================== */
-.floating-icons-container.show {
-    display: flex !important;
-    animation: floatFade .25s ease-in-out;
-}
-
-@keyframes floatFade {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
 
 /* =====================================
-   BUTTON STATE FIX
-===================================== */
-button:active {
-    transform: scale(0.96);
-}
-
-/* =====================================
-   RESPONSIVE ADJUSTMENTS
+   RESPONSIVE
 ===================================== */
 @media (min-width: 600px) {
     .header-inline {
@@ -392,80 +451,14 @@ button:active {
 }
 
 /* =====================================
-   FORM ORDER — STRUCTURE FIX
+   MISC FIXES (SAMA SEPERTI VERSI ASLI)
 ===================================== */
-.order-table {
-    width: 100%;
-}
+button:active { transform: scale(0.96); }
 
-.order-table td {
-    padding: 6px 0;
-}
-
-.order-row-inline {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.mode-label {
-    margin-right: 10px;
-    color: #fff;
-}
-
-/* =====================================
-   TOPPING & TABURAN — DYNAMIC BOX
-===================================== */
-.topping-wrap select,
-.topping-wrap .order-input {
-    margin-bottom: 8px;
-    background: #1b314c;
-    border: 1px solid #2a4a6b;
-    padding: 8px;
-    color: #fff;
-}
-
-.topping-wrap label {
-    color: #fff;
-}
-
-/* ditampilkan lewat JS */
-.topping-wrap.active {
-    display: block;
-}
-
-/* =====================================
-   POPUP FIX — CROSS BROWSER
-===================================== */
-.nota-overlay.show {
-    display: flex !important;
-}
-
-.nota-card {
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-}
-
-/* Tombol di dalam nota */
-.nota-actions button {
-    margin-top: 10px;
-}
-
-/* =====================================
-   REMOVE OLD BOTTOM NAV (DIHAPUS)
-===================================== */
-/* seluruh bottom-nav dihapus agar tidak bentrok dengan floating icons */
 .bottom-nav { display: none !important; visibility: hidden !important; }
 
-/* =====================================
-   CROSS-BROWSER FIXES
-===================================== */
+html { scroll-behavior: smooth; }
 
-/* Smooth scroll fix for old browsers */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Fix flex for older browsers */
 .floating-icons-container,
 .header-inline,
 .order-row-inline {
@@ -474,22 +467,13 @@ html {
     display: flex;
 }
 
-/* Support for older browsers */
-img {
-    -ms-interpolation-mode: bicubic;
-}
+img { -ms-interpolation-mode: bicubic; }
 
-/* =====================================
-   GENERAL UTILITY CLASSES
-===================================== */
 .text-center { text-align: center; }
 .mb-10 { margin-bottom: 10px; }
 .mb-15 { margin-bottom: 15px; }
 .mb-20 { margin-bottom: 20px; }
 
-/* =====================================
-   ADMIN PAGE SPECIAL CSS (Future Safe)
-===================================== */
 .admin-container {
     max-width: 480px;
     margin: auto;
@@ -524,9 +508,6 @@ img {
     opacity: .85;
 }
 
-/* =====================================
-   IE11 POLYFILL SAFE CLASSES
-===================================== */
 .ie11-flex {
     display: -ms-flexbox !important;
     display: flex !important;
@@ -536,24 +517,23 @@ img {
     display: none !important;
 }
 
-/* =====================================
-   FINAL SPACING FIXES
-===================================== */
 footer.site-footer {
     text-align: center;
     color: #777;
     font-size: 13px;
     margin-top: 50px;
     margin-bottom: 20px;
+    padding-bottom: calc(20px + var(--safe-bottom));
+    opacity: 0.75;
 }
-/* =====================================
-   SAFE AREA (iPhone Modern)
-===================================== */
+
+/* Safe Areas */
 :root {
     --safe-top: env(safe-area-inset-top);
     --safe-bottom: env(safe-area-inset-bottom);
     --safe-left: env(safe-area-inset-left);
     --safe-right: env(safe-area-inset-right);
+    color-scheme: only light;
 }
 
 body {
@@ -562,90 +542,16 @@ body {
     padding-right: var(--safe-right);
 }
 
-/* =====================================
-   COLOR SCHEME FIX (Prevent Safari/Chrome Auto Darken)
-===================================== */
-:root {
-    color-scheme: only light;
-}
+.hidden { display: none !important; }
 
-/* =====================================
-   TEXT GLOW UTILITY
-===================================== */
-.glow {
-    text-shadow: 0 0 6px rgba(255,255,255,0.25);
-}
-
-/* =====================================
-   SHADOW & BORDER UTILITIES
-===================================== */
-.shadow-md {
-    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
-}
-
-.shadow-lg {
-    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-}
-
-.rounded-6 { border-radius: 6px; }
-.rounded-8 { border-radius: 8px; }
-.rounded-10 { border-radius: 10px; }
-
-/* =====================================
-   FLOATING BUTTON SAFE SPACING
-===================================== */
-.toggle-float-btn {
-    margin-bottom: var(--safe-bottom);
-}
-
-.floating-icons-container {
-    margin-bottom: calc(var(--safe-bottom) + 20px);
-}
-
-/* =====================================
-   SUPPORT FOR VERY OLD BROWSERS
-   (IE11 / Opera Mini / KaiOS)
-===================================== */
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    /* IE11 Fix: force block layout */
-    .header-inline,
-    .order-row-inline,
-    .floating-icons-container {
-        display: block;
-    }
-
-    .floating-icons-container {
-        position: fixed;
-        right: 15px;
-    }
-}
-
-/* =====================================
-   HIDDEN CLASS (Reusable)
-===================================== */
-.hidden {
-    display: none !important;
-}
-
-/* =====================================
-   DISABLE TEXT SELECTION (UX)
-===================================== */
 .no-select {
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
 }
 
-/* =====================================
-   LINK HOVER (small animation)
-===================================== */
-a:hover {
-    opacity: 0.85;
-}
+a:hover { opacity: 0.85; }
 
-/* =====================================
-   LAST CHECK — FORM INPUT FOCUS
-===================================== */
 .order-input:focus,
 .admin-input:focus,
 .testimonial-form .input:focus {
@@ -654,15 +560,4 @@ a:hover {
     background: #253d59;
 }
 
-/* =====================================
-   FINAL FOOTER FIX
-===================================== */
-footer.site-footer {
-    padding-bottom: calc(20px + var(--safe-bottom));
-    opacity: 0.75;
-}
-
-/* =====================================
-   END OF STYLE.CSS
-   (No more code under this line)
-===================================== */
+/* END FILE */
