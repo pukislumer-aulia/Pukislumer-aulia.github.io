@@ -336,35 +336,66 @@
     };
   }
 
-  // ----------------------------
-  // Render nota HTML
-  // ----------------------------
-  function renderNota(order) {
-    if (!order) return '<div>Error membuat nota.</div>';
-    const html = [];
-    html.push(`<div><strong>Invoice:</strong> ${escapeHtml(order.invoice)}</div>`);
-    html.push(`<div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>`);
-    html.push(`<div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>`);
-    html.push(`<div><strong>Jenis:</strong> ${escapeHtml(order.jenis)}</div>`);
-    html.push(`<div><strong>Isi per box:</strong> ${escapeHtml(order.isi)}</div>`);
-    html.push(`<div><strong>Jumlah Box:</strong> ${order.jumlah} box</div>`);
-    html.push('<hr>');
-    if (order.mode === 'single') {
-      html.push(`<div><strong>Topping:</strong> ${escapeHtml(order.single.join(', ') || '-')}</div>`);
-    } else if (order.mode === 'double') {
-      html.push(`<div><strong>Topping Double:</strong> ${escapeHtml((order.double.length? order.double.join(' + ') : order.single.join(', ')) || '-')}</div>`);
-    } else {
-      html.push(`<div><strong>Topping:</strong> Non</div>`);
-    }
-    html.push(`<div><strong>Taburan:</strong> ${escapeHtml(order.taburan.join(', ') || '-')}</div>`);
-    html.push('<hr>');
-    html.push(`<div><strong>Harga / Box:</strong> ${formatRp(order.pricePerBox)}</div>`);
-    html.push(`<div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>`);
-    html.push(`<div><strong>Diskon:</strong> ${order.discount ? formatRp(order.discount) : '-'}</div>`);
-    html.push(`<div style="font-weight:800;margin-top:6px;"><strong>Total Bayar:</strong> ${formatRp(order.total)}</div>`);
-    if (order.note) html.push(`<hr><div><strong>Catatan:</strong> ${escapeHtml(order.note)}</div>`);
-    return html.join('');
+// ----------------------------
+// Render nota HTML (versi sesuai contoh)
+// ----------------------------
+function renderNota(order) {
+  if (!order) return '<div>Error membuat nota.</div>';
+  
+  const html = [];
+
+  // Header data umum
+  html.push(`<div><strong>INVOICE:</strong> ${escapeHtml(order.invoice)}</div>`);
+  html.push(`<div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>`);
+  html.push(`<div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>`);
+  html.push(`<div><strong>Jenis:</strong> ${escapeHtml(order.jenis)}</div>`);
+  html.push(`<div><strong>Isi per box:</strong> ${escapeHtml(order.isi)}</div>`);
+  html.push(`<div><strong>Jumlah box:</strong> ${order.jumlah}</div>`);
+  html.push('<hr>');
+
+  // ==========================
+  // MODE TOPPING
+  // ==========================
+  if (order.mode === 'non') {
+    html.push(`<div><strong>Mode Topping:</strong> Non Topping</div>`);
+    html.push(`<div><strong>Non Topping:</strong> Polosan</div>`);
   }
+
+  else if (order.mode === 'single') {
+    html.push(`<div><strong>Mode Topping:</strong> Single Topping</div>`);
+    html.push(`<div><strong>Topping:</strong> ${escapeHtml(order.single.join(', ') || '-')}</div>`);
+  }
+
+  else if (order.mode === 'double') {
+    html.push(`<div><strong>Mode Topping:</strong> Double Topping</div>`);
+
+    // Topping double (yang di bagian atas)
+    html.push(`<div><strong>Topping:</strong> ${escapeHtml(order.double.join(', ') || '-')}</div>`);
+
+    // Taburan khusus double mode
+    html.push(`<div><strong>Taburan:</strong> ${escapeHtml(order.taburan.join(', ') || '-')}</div>`);
+  }
+
+  html.push('<hr>');
+
+  // ==========================
+  // HARGA
+  // ==========================
+  html.push(`<div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>`);
+  html.push(`<div><strong>Diskon:</strong> ${order.discount ? formatRp(order.discount) : '-'}</div>`);
+  html.push(`<div style="font-weight:800;margin-top:6px;">
+<strong>Total:</strong> ${formatRp(order.total)}
+</div>`);
+
+  html.push('<hr>');
+
+  // ==========================
+  // CATATAN AKHIR (WAJIB ADA)
+  // ==========================
+  html.push(`<div>Mohon validasi nomor invoice dan total. Terima kasih.</div>`);
+
+  return html.join('');
+}
 
   // ----------------------------
   // Save to localStorage
