@@ -187,23 +187,42 @@
     }
   }
 
-  // ----------------------------
-  // Show/hide topping areas based on mode
-  // ----------------------------
-  function updateToppingVisibility() {
-    const mode = getRadioValue('ultraToppingMode') ||
-      (document.querySelector('input[name="ultraToppingMode"]:checked') &&
-        document.querySelector('input[name="ultraToppingMode"]:checked').value) || 'non';
+// ==========================
+// SHOW / HIDE TOPPING
+// ==========================
+document.querySelectorAll("input[name='modeTopping']").forEach(el => {
+    el.addEventListener("change", updateToppingVisibility);
+});
 
-    if (elSingleGroup) elSingleGroup.classList.add('hidden');
-    if (elDoubleGroup) elDoubleGroup.classList.add('hidden');
+function updateToppingVisibility() {
+    const mode = document.querySelector("input[name='modeTopping']:checked").value;
 
-    if (mode === 'single') {
-      if (elSingleGroup) elSingleGroup.classList.remove('hidden');
-    } else if (mode === 'double') {
-      if (elDoubleGroup) elDoubleGroup.classList.remove('hidden');
+    const wrap = document.getElementById("toppingWrapper");
+    const single = document.getElementById("toppingSingle");
+    const double = document.getElementById("toppingDouble");
+
+    // Reset
+    wrap.classList.add("hidden");
+    single.classList.add("hidden");
+    double.classList.add("hidden");
+
+    // Mode NON
+    if (mode === "non") {
+        return;
     }
-  }
+
+    // Mode SINGLE
+    if (mode === "single") {
+        wrap.classList.remove("hidden");
+        single.classList.remove("hidden");
+    }
+
+    // Mode DOUBLE
+    if (mode === "double") {
+        wrap.classList.remove("hidden");
+        double.classList.remove("hidden");
+    }
+}
    // ----------------------------
   // Perhitungan harga per box (menggunakan BASE_PRICE — tidak mengubah rumus)
   // ----------------------------
