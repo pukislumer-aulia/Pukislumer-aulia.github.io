@@ -2,7 +2,7 @@
 // ORDER.JS — Final Clean Version (matched with index.html / style.css / script.js)
 // - Hanya 1 tombol CEK PESANAN (id="ultraSubmit")
 // - Logika harga TIDAK DIUBAH (BASE_PRICE digunakan seperti versi awal)
-// - Topping/taburan logic utuh
+// - Topping/taburan logic uh
 // - Nota popup & simpan ke localStorage (key: pukis_orders)
 // - WA admin otomatis (6281296668670)
 
