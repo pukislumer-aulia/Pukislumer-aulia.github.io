@@ -186,41 +186,23 @@
         </div>
 
         <!-- Mode Topping -->
-        <div style="margin-top:12px;color:#fff" class="topping-mode-container">
-          <span style="font-weight:700;display:block;margin-bottom:6px">Mode Topping</span>
-          <label class="mode-label"><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
-          <label class="mode-label"><input type="radio" name="ultraToppingMode" value="single"> Single</label>
-          <label class="mode-label"><input type="radio" name="ultraToppingMode" value="double"> Double</label>
-        </div>
-
-        <!-- SINGLE TOPPING -->
-<div id="ultraSingleGroup" class="topping-wrap hidden" style="margin-top:10px;">
-
-  <label><input type="checkbox" name="toppingSingle" value="coklat"> Coklat</label>
-  <label><input type="checkbox" name="toppingSingle" value="tiramisu"> Tiramisu</label>
-  <label><input type="checkbox" name="toppingSingle" value="vanilla"> Vanilla</label>
-  <label><input type="checkbox" name="toppingSingle" value="stroberi"> Stroberi</label>
-  <label><input type="checkbox" name="toppingSingle" value="cappucino"> Cappucino</label>
-
+<div style="margin-top:12px;color:#fff" class="topping-mode-container">
+  <span style="font-weight:700;display:block;margin-bottom:6px">Mode Topping</span>
+  <label class="mode-label"><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
+  <label class="mode-label"><input type="radio" name="ultraToppingMode" value="single"> Single</label>
+  <label class="mode-label"><input type="radio" name="ultraToppingMode" value="double"> Double</label>
 </div>
 
-<!-- DOUBLE TOPPING -->
+<!-- SINGLE TOPPING (kosong – akan diisi oleh JavaScript) -->
+<div id="ultraSingleGroup" class="topping-wrap hidden" style="margin-top:10px;">
+</div>
+
+<!-- DOUBLE TOPPING (kosong – akan diisi oleh JavaScript) -->
 <div id="ultraDoubleGroup" class="topping-wrap hidden" style="margin-top:6px;">
+</div>
 
-  <!-- Topping single tetap muncul juga -->
-  <label><input type="checkbox" name="toppingDouble" value="coklat"> Coklat</label>
-  <label><input type="checkbox" name="toppingDouble" value="tiramisu"> Tiramisu</label>
-  <label><input type="checkbox" name="toppingDouble" value="vanilla"> Vanilla</label>
-  <label><input type="checkbox" name="toppingDouble" value="stroberi"> Stroberi</label>
-  <label><input type="checkbox" name="toppingDouble" value="cappucino"> Cappucino</label>
-
-  <!-- Tambahan untuk mode DOUBLE (TABURAN) -->
-  <label><input type="checkbox" name="taburan" value="meses"> Meses</label>
-  <label><input type="checkbox" name="taburan" value="keju"> Keju</label>
-  <label><input type="checkbox" name="taburan" value="kacang"> Kacang</label>
-  <label><input type="checkbox" name="taburan" value="choco chip"> Choco Chip</label>
-  <label><input type="checkbox" name="taburan" value="oreo"> Oreo</label>
-
+<!-- TABURAN (dipisah – akan diisi otomatis oleh JS) -->
+<div id="ultraTaburanGroup" class="topping-wrap hidden" style="margin-top:6px;">
 </div>
         <!-- Price summary -->
         <div class="price-summary" style="margin-top:12px;background:rgba(255,255,255,0.06);color:#fff">
