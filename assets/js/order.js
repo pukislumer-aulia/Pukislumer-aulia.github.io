@@ -1,9 +1,10 @@
 /* ===========================================================
    assets/js/order.js
-   ORDER.JS — Final Revisi (Part 1)
-   - Matches index.html & style.css as provided
-   - Hanya mengubah/menambahkan logic topping & taburan UI
-   - Logika harga / nota / localStorage / WA admin tetap utuh
+   ORDER.JS — Final Revisi FULL CLEAN
+   - Mengikuti seluruh instruksi Asnidar Laila
+   - Tidak ada duplikasi fungsi
+   - Tidak ada nested function salah tempat
+   - Tidak ada potongan tersisa dari file lama
 =========================================================== */
 
 (function () {
@@ -17,11 +18,24 @@
 
   const SINGLE_TOPPINGS = ['Coklat', 'Tiramisu', 'Vanilla', 'Stroberi', 'Cappucino'];
   const DOUBLE_ONLY_TOPPINGS = ['Meses', 'Keju', 'Kacang', 'Choco Chip', 'Oreo'];
-  // NOTE: taburan uses same labels as DOUBLE_ONLY_TOPPINGS per your instruction
+
+  const SINGLE_TOPPING_MASTER = [
+    'Coklat','coklat',
+    'Tiramisu','tiramisu',
+    'Vanilla','vanilla',
+    'Stroberi','stroberi',
+    'Cappucino','cappucino'
+  ];
 
   const BASE_PRICE = {
-    Original: { '5': { non: 10000, single: 13000, double: 15000 }, '10': { non: 18000, single: 25000, double: 28000 } },
-    Pandan:   { '5': { non: 12000, single: 15000, double: 17000 }, '10': { non: 21000, single: 28000, double: 32000 } }
+    Original: {
+      '5': { non: 10000, single: 13000, double: 15000 },
+      '10': { non: 18000, single: 25000, double: 28000 }
+    },
+    Pandan: {
+      '5': { non: 12000, single: 15000, double: 17000 },
+      '10': { non: 21000, single: 28000, double: 32000 }
+    }
   };
 
   // ----------------------------
@@ -36,9 +50,9 @@
   const elNote = $('#ultraNote');
   const btnCek = $('#ultraSubmit');
 
-  const elSingleGroup = $('#ultraSingleGroup'); // container single
-  const elDoubleGroup = $('#ultraDoubleGroup'); // container double (includes single + double-only)
-  const elTaburanGroup = $('#ultraTaburanGroup'); // explicit taburan wrapper (we used this in your HTML)
+  const elSingleGroup = $('#ultraSingleGroup');
+  const elDoubleGroup = $('#ultraDoubleGroup');
+  const elTaburanGroup = $('#ultraTaburanGroup');
 
   const elPricePerBox = $('#ultraPricePerBox');
   const elSubtotal = $('#ultraSubtotal');
@@ -50,12 +64,6 @@
   const notaClose = $('#notaClose');
   const notaConfirm = $('#notaConfirm');
 
-  // Defensive
-  if (!elNama || !elWA || !elJumlah || !btnCek) {
-    console.error('order.js init: required DOM elements missing. Check index.html IDs.');
-    // We don't abort here entirely to allow partial usage in dev env
-  }
-
   // ----------------------------
   // Helpers
   // ----------------------------
@@ -65,7 +73,13 @@
   }
 
   function escapeHtml(s) {
-    return String(s || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+    return String(s || '').replace(/[&<>"']/g, m => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[m]));
   }
 
   function genInvoice() {
@@ -82,168 +96,84 @@
     return el ? el.value : '';
   }
 
+  // Helper robust
   function getCheckedValuesByName(name) {
-    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(i => i.value);
+    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+      .map(i => i.value);
+  }
+
+  function getCheckedValuesByAny(namesArray) {
+    const set = new Set();
+    namesArray.forEach(n => {
+      getCheckedValuesByName(n).forEach(v => set.add(v));
+    });
+    return Array.from(set);
   }
 
   // ----------------------------
-  // Build Topping UI into the containers present in HTML
-  // This uses checkboxes for single/double modes as requested
+  // Build Topping UI
   // ----------------------------
   function buildToppingsUI() {
-    // SINGLE group (the HTML we provided earlier uses checkboxes).
+    // SINGLE GROUP
     if (elSingleGroup) {
-      // Clear then build five single toppings (checkbox)
       elSingleGroup.innerHTML = '';
-      const wrap = document.createElement('div');
-      wrap.className = 'toppings-grid';
       SINGLE_TOPPINGS.forEach(t => {
-        const lbl = document.createElement('label');
-        lbl.className = 'topping-checkbox';
-        const inp = document.createElement('input');
-        inp.type = 'checkbox';
-        inp.name = 'single_topping';
-        inp.value = t;
-        inp.className = 'toppingSingle';
-        lbl.appendChild(inp);
-        lbl.appendChild(document.createTextNode(' ' + t));
-        wrap.appendChild(lbl);
+        elSingleGroup.insertAdjacentHTML('beforeend',
+          `<label><input type="checkbox" name="single_topping" value="${t}"> ${t}</label>`);
       });
-      elSingleGroup.appendChild(wrap);
     }
 
-    // DOUBLE group: include single toppings + double-only toppings and taburan
+    // DOUBLE GROUP
     if (elDoubleGroup) {
       elDoubleGroup.innerHTML = '';
-      const container = document.createElement('div');
-      container.className = 'double-toppings-wrapper';
 
-      // single list (again) so double mode shows all single toppings
-      const singleWrap = document.createElement('div');
-      singleWrap.className = 'double-single-list';
-      const titleS = document.createElement('strong');
-      titleS.style.color = '#fff';
-      titleS.style.display = 'block';
-      titleS.style.marginBottom = '6px';
-      titleS.textContent = 'Topping (Single)';
-      singleWrap.appendChild(titleS);
+      // Single toppings (repeated again inside double mode)
       SINGLE_TOPPINGS.forEach(t => {
-        const lbl = document.createElement('label');
-        lbl.className = 'topping-checkbox';
-        const inp = document.createElement('input');
-        inp.type = 'checkbox';
-        inp.name = 'single_topping';
-        inp.value = t;
-        inp.className = 'toppingSingle';
-        lbl.appendChild(inp);
-        lbl.appendChild(document.createTextNode(' ' + t));
-        singleWrap.appendChild(lbl);
+        elDoubleGroup.insertAdjacentHTML('beforeend',
+          `<label><input type="checkbox" name="single_topping" value="${t}"> ${t}</label>`);
       });
-      container.appendChild(singleWrap);
 
-      // double-only list
-      const doubleWrap = document.createElement('div');
-      doubleWrap.className = 'double-only-list';
-      const titleD = document.createElement('strong');
-      titleD.style.color = '#fff';
-      titleD.style.display = 'block';
-      titleD.style.marginBottom = '6px';
-      titleD.textContent = 'Topping Tambahan (Taburan)';
-      doubleWrap.appendChild(titleD);
+      // Double-only toppings
       DOUBLE_ONLY_TOPPINGS.forEach(t => {
-        const lbl = document.createElement('label');
-        lbl.className = 'topping-checkbox';
-        const inp = document.createElement('input');
-        inp.type = 'checkbox';
-        inp.name = 'double_topping';
-        inp.value = t;
-        inp.className = 'toppingDouble';
-        lbl.appendChild(inp);
-        lbl.appendChild(document.createTextNode(' ' + t));
-        doubleWrap.appendChild(lbl);
+        elDoubleGroup.insertAdjacentHTML('beforeend',
+          `<label><input type="checkbox" name="double_topping" value="${t}"> ${t}</label>`);
       });
-      container.appendChild(doubleWrap);
-
-      // Append to main double group
-      elDoubleGroup.appendChild(container);
     }
 
-    // Taburan wrapper (explicit). We support displaying it in both single & double modes.
+    // TABURAN (opsional)
     if (elTaburanGroup) {
-      // If HTML already has children (user already added) we don't rebuild; else create default taburan checkboxes
-      if (elTaburanGroup.innerHTML.trim() === '') {
-        const title = document.createElement('strong');
-        title.style.color = '#fff';
-        title.style.display = 'block';
-        title.style.marginBottom = '6px';
-        title.textContent = 'Taburan (opsional)';
-        elTaburanGroup.appendChild(title);
-        DOUBLE_ONLY_TOPPINGS.forEach(t => {
-          const lbl = document.createElement('label');
-          lbl.className = 'taburan-checkbox';
-          const inp = document.createElement('input');
-          inp.type = 'checkbox';
-          inp.name = 'taburan';
-          inp.value = t;
-          inp.className = 'taburan';
-          lbl.appendChild(inp);
-          lbl.appendChild(document.createTextNode(' ' + t));
-          elTaburanGroup.appendChild(lbl);
-        });
-      }
+      elTaburanGroup.innerHTML = '';
+      DOUBLE_ONLY_TOPPINGS.forEach(t => {
+        elTaburanGroup.insertAdjacentHTML('beforeend',
+          `<label><input type="checkbox" name="taburan" value="${t}"> ${t}</label>`);
+      });
     }
   }
-
-  // ----------------------------
-  // Show/hide topping areas based on mode
+   // ----------------------------
+  // Update Visibility Sesuai Mode
   // ----------------------------
   function updateToppingVisibility() {
-    const mode = getRadioValue('ultraToppingMode') || 'non';
+    const mode = getRadioValue('ultraToppingMode');
 
-    // hide all first
-    if (elSingleGroup) elSingleGroup.classList.add('hidden');
-    if (elDoubleGroup) elDoubleGroup.classList.add('hidden');
-    if (elTaburanGroup) elTaburanGroup.classList.add('hidden');
-
-    if (mode === 'single') {
-      if (elSingleGroup) elSingleGroup.classList.remove('hidden');
-      if (elTaburanGroup) elTaburanGroup.classList.remove('hidden');
-    } else if (mode === 'double') {
-      if (elDoubleGroup) elDoubleGroup.classList.remove('hidden');
-      if (elTaburanGroup) elTaburanGroup.classList.remove('hidden');
-    } else {
-      // non: nothing shown (per your rule)
-    }
+    if (elSingleGroup) elSingleGroup.style.display = (mode === 'single') ? 'block' : 'none';
+    if (elDoubleGroup) elDoubleGroup.style.display = (mode === 'double') ? 'block' : 'none';
+    if (elTaburanGroup) elTaburanGroup.style.display = (mode === 'double') ? 'block' : 'none';
   }
 
   // ----------------------------
-  // Price logic (UNCHANGED)
+  // Harga
   // ----------------------------
   function getPricePerBox() {
-    const jenisRaw = getRadioValue('ultraJenis') || 'Original';
-    const jenisKey = (String(jenisRaw).toLowerCase() === 'pandan') ? 'Pandan' : 'Original';
-    const isiVal = ($('#ultraIsi') ? $('#ultraIsi').value : '5') || '5';
-    const modeRaw = getRadioValue('ultraToppingMode') || 'non';
-    const modeKey = (modeRaw === 'single') ? 'single' : (modeRaw === 'double' ? 'double' : 'non');
+    const jenis = getRadioValue('ultraJenis') || 'Original';
+    const isi = $('#ultraIsi') ? $('#ultraIsi').value : '5';
+    const mode = getRadioValue('ultraToppingMode') || 'non';
 
-     // Ambil semua nilai checkbox untuk sebuah nama
-function getCheckedValuesByName(name) {
-  return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(i => i.value);
-}
+    const jenisKey = jenis;
+    const isiVal = isi;
+    const modeKey = mode;
 
-// Ambil union dari beberapa nama kandidat (robust jika HTML menggunakan nama yang berbeda)
-function getCheckedValuesByAny(namesArray) {
-  const set = new Set();
-  namesArray.forEach(n => {
-    getCheckedValuesByName(n).forEach(v => set.add(v));
-  });
-  return Array.from(set);
-}
-
-// Daftar 5 topping single (untuk membedakan taburan)
-const SINGLE_TOPPING_MASTER = ['Coklat','coklat','Tiramisu','tiramisu','Vanilla','vanilla','Stroberi','stroberi','Cappucino','cappucino'];
-     
     if (!BASE_PRICE[jenisKey] || !BASE_PRICE[jenisKey][isiVal]) return 0;
+
     const priceObj = BASE_PRICE[jenisKey][isiVal];
     return priceObj[modeKey] || priceObj['non'] || 0;
   }
@@ -257,6 +187,7 @@ const SINGLE_TOPPING_MASTER = ['Coklat','coklat','Tiramisu','tiramisu','Vanilla'
   function updatePriceUI() {
     const pricePerBox = getPricePerBox();
     const jumlah = Number(elJumlah && elJumlah.value ? elJumlah.value : 1);
+
     const subtotal = pricePerBox * jumlah;
     const discount = calcDiscount(jumlah, subtotal);
     const total = subtotal - discount;
@@ -270,51 +201,49 @@ const SINGLE_TOPPING_MASTER = ['Coklat','coklat','Tiramisu','tiramisu','Vanilla'
   }
 
   // ----------------------------
-  // Validation (matches your HTML names)
+  // Validation
   // ----------------------------
   function validateOrder() {
-    if (!elNama || !elWA || !elJumlah) return false;
-
-    if (elNama.value.trim() === '') { alert('Nama harus diisi'); elNama.focus(); return false; }
-    if (elWA.value.trim() === '') { alert('Nomor WA harus diisi'); elWA.focus(); return false; }
+    if (!elNama.value.trim()) { alert('Nama harus diisi'); elNama.focus(); return false; }
+    if (!elWA.value.trim()) { alert('Nomor WA harus diisi'); elWA.focus(); return false; }
 
     const jumlah = Number(elJumlah.value || 0);
-    if (isNaN(jumlah) || jumlah < 1) { alert('Jumlah box minimal 1'); elJumlah.focus(); return false; }
+    if (jumlah < 1) { alert('Jumlah box minimal 1'); elJumlah.focus(); return false; }
 
-    const jenis = getRadioValue('ultraJenis');
-    if (!jenis) { alert('Pilih jenis pukis'); return false; }
-
-    const isi = ($('#ultraIsi') ? $('#ultraIsi').value : '') || '';
-    if (!isi) { alert('Pilih isi per box'); return false; }
+    if (!getRadioValue('ultraJenis')) { alert('Pilih jenis pukis'); return false; }
+    if (!$('#ultraIsi').value) { alert('Pilih isi per box'); return false; }
 
     const mode = getRadioValue('ultraToppingMode');
     if (!mode) { alert('Pilih mode topping'); return false; }
 
     if (mode === 'single') {
-      // For single we require at least one single_topping (per your last instruction you wanted checkboxes and allow multiple)
-      const selected = getCheckedValuesByName('single_topping');
-      if (!selected || selected.length === 0) { alert('Pilih minimal 1 topping (single)'); return false; }
+      const s = getCheckedValuesByAny(['single_topping', 'topping_single']);
+      if (!s.length) { alert('Pilih minimal 1 topping (single)'); return false; }
     }
 
     if (mode === 'double') {
-      // For double, your HTML uses checkboxes: require at least one selection among single_topping or double_topping.
-      const s = getCheckedValuesByName('single_topping');
-      const d = getCheckedValuesByName('double_topping');
-      if ((!s || s.length === 0) && (!d || d.length === 0)) { alert('Pilih minimal 1 topping untuk double'); return false; }
+      const s = getCheckedValuesByAny(['single_topping']);
+      const d = getCheckedValuesByAny(['double_topping']);
+      if (!s.length && !d.length) {
+        alert('Pilih minimal 1 topping untuk double');
+        return false;
+      }
     }
 
     return true;
   }
 
   // ----------------------------
-  // Build order object
+  // Build Order (Versi robust sesuai perintahmu)
   // ----------------------------
   function buildOrderObject() {
     if (!validateOrder()) return null;
 
     const namaVal = elNama.value.trim();
     const waRaw = elWA.value.trim().replace(/\s+/g, '').replace('+', '');
-    const wa = waRaw.startsWith('0') ? '62' + waRaw.slice(1) : (waRaw.startsWith('62') ? waRaw : waRaw);
+    const wa = waRaw.startsWith('0') ? '62' + waRaw.slice(1) :
+              (waRaw.startsWith('62') ? waRaw : waRaw);
+
     const jumlah = Number(elJumlah.value || 1);
     const note = elNote ? elNote.value.trim() : '';
 
@@ -322,14 +251,15 @@ const SINGLE_TOPPING_MASTER = ['Coklat','coklat','Tiramisu','tiramisu','Vanilla'
     const isi = $('#ultraIsi') ? $('#ultraIsi').value : '5';
     const mode = getRadioValue('ultraToppingMode') || 'non';
 
-    const singleChosen = getCheckedValuesByName('single_topping') || [];
-    const doubleChosen = getCheckedValuesByName('double_topping') || [];
-    const taburanChosen = getCheckedValuesByName('taburan') || [];
+    const singleChosen = getCheckedValuesByAny(['toppingSingle','single_topping','topping','topping_single']);
+    const doubleChosen = getCheckedValuesByAny(['toppingDouble','double_topping','toppingDoubleList','topping_double_1','topping_double_2']);
+    const taburanChosen = getCheckedValuesByAny(['taburan','topping_taburan','topping_tab']);
 
     const pricePerBox = getPricePerBox();
     const subtotal = pricePerBox * jumlah;
     const discount = calcDiscount(jumlah, subtotal);
     const total = subtotal - discount;
+
     const invoice = genInvoice();
 
     return {
@@ -353,69 +283,69 @@ const SINGLE_TOPPING_MASTER = ['Coklat','coklat','Tiramisu','tiramisu','Vanilla'
     };
   }
 
-// ----------------------------
-// Render nota HTML (versi sesuai contoh)
-// ----------------------------
-function renderNota(order) {
-  if (!order) return '<div>Error membuat nota.</div>';
-  const lines = [];
-
-  lines.push(`<div><strong>INVOICE:</strong> ${escapeHtml(order.invoice)}</div>`);
-  lines.push(`<div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>`);
-  lines.push(`<div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>`);
-  lines.push(`<div><strong>Jenis:</strong> ${escapeHtml(order.jenis)}</div>`);
-  lines.push(`<div><strong>Isi per box:</strong> ${escapeHtml(order.isi)}</div>`);
-  lines.push(`<div><strong>Jumlah box:</strong> ${order.jumlah}</div>`);
-  lines.push('<hr>');
-
-  if (order.mode === 'non') {
-    lines.push(`<div><strong>Mode Topping:</strong> Non Topping</div>`);
-    lines.push(`<div><strong>Non Topping:</strong> Polosan</div>`);
-    lines.push(`<div><strong>Taburan:</strong> -</div>`);
-  }
-
-  else if (order.mode === 'single') {
-    lines.push(`<div><strong>Mode Topping:</strong> Single Topping</div>`);
-    const toppingText = (order.single && order.single.length) ? escapeHtml(order.single.join(', ')) : '-';
-    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
-    const tabText = (order.taburan && order.taburan.length) ? escapeHtml(order.taburan.join(', ')) : '-';
-    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
-  }
-
-  else if (order.mode === 'double') {
-    lines.push(`<div><strong>Mode Topping:</strong> Double Topping</div>`);
-
-    let toppingsForDisplay = [];
-    if (order.single && order.single.length) {
-      toppingsForDisplay = order.single;
-    } else if (order.double && order.double.length) {
-      toppingsForDisplay = order.double.filter(v => SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === String(v).toLowerCase()));
-    }
-    const toppingText = toppingsForDisplay.length ? escapeHtml(toppingsForDisplay.join(', ')) : '-';
-    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
-
-    let tabForDisplay = [];
-    if (order.taburan && order.taburan.length) {
-      tabForDisplay = order.taburan;
-    } else if (order.double && order.double.length) {
-      tabForDisplay = order.double.filter(v => !SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === String(v).toLowerCase()));
-    }
-    const tabText = tabForDisplay.length ? escapeHtml(tabForDisplay.join(', ')) : '-';
-    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
-  }
-
-  lines.push('<hr>');
-  lines.push(`<div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>`);
-  lines.push(`<div><strong>Diskon:</strong> ${order.discount ? formatRp(order.discount) : '-'}</div>`);
-  lines.push(`<div style="font-weight:800;margin-top:6px;"><strong>TOTAL:</strong> ${formatRp(order.total)}</div>`);
-  lines.push('<br>');
-  lines.push('<div>Mohon validasi nomor invoice dan total. Terima kasih.</div>');
-
-  if (order.note) lines.push(`<hr><div><strong>Catatan:</strong> ${escapeHtml(order.note)}</div>`);
-  return lines.join('');
-}
-
   // ----------------------------
+  // Render Nota (Sesuai format contohmu)
+  // ----------------------------
+  function renderNota(order) {
+    if (!order) return '<div>Error membuat nota.</div>';
+    const lines = [];
+
+    lines.push(`<div><strong>INVOICE:</strong> ${escapeHtml(order.invoice)}</div>`);
+    lines.push(`<div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>`);
+    lines.push(`<div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>`);
+    lines.push(`<div><strong>Jenis:</strong> ${escapeHtml(order.jenis)}</div>`);
+    lines.push(`<div><strong>Isi per box:</strong> ${escapeHtml(order.isi)}</div>`);
+    lines.push(`<div><strong>Jumlah box:</strong> ${order.jumlah}</div>`);
+    lines.push('<hr>');
+
+    if (order.mode === 'non') {
+      lines.push(`<div><strong>Mode Topping:</strong> Non Topping</div>`);
+      lines.push(`<div><strong>Non Topping:</strong> Polosan</div>`);
+      lines.push(`<div><strong>Taburan:</strong> -</div>`);
+    }
+
+    else if (order.mode === 'single') {
+      lines.push(`<div><strong>Mode Topping:</strong> Single Topping</div>`);
+      const t = order.single.length ? escapeHtml(order.single.join(', ')) : '-';
+      lines.push(`<div><strong>Topping:</strong> ${t}</div>`);
+      const tab = order.taburan.length ? escapeHtml(order.taburan.join(', ')) : '-';
+      lines.push(`<div><strong>Taburan:</strong> ${tab}</div>`);
+    }
+
+    else if (order.mode === 'double') {
+      lines.push(`<div><strong>Mode Topping:</strong> Double Topping</div>`);
+
+      let tops = [];
+      if (order.single.length) tops = order.single;
+      else tops = order.double.filter(v =>
+        SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === v.toLowerCase())
+      );
+
+      let tabs = [];
+      if (order.taburan.length) tabs = order.taburan;
+      else tabs = order.double.filter(v =>
+        !SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === v.toLowerCase())
+      );
+
+      lines.push(`<div><strong>Topping:</strong> ${tops.length ? escapeHtml(tops.join(', ')) : '-'}</div>`);
+      lines.push(`<div><strong>Taburan:</strong> ${tabs.length ? escapeHtml(tabs.join(', ')) : '-'}</div>`);
+    }
+
+    lines.push('<hr>');
+    lines.push(`<div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>`);
+    lines.push(`<div><strong>Diskon:</strong> ${order.discount ? formatRp(order.discount) : '-'}</div>`);
+    lines.push(`<div style="font-weight:800;margin-top:6px;"><strong>TOTAL:</strong> ${formatRp(order.total)}</div>`);
+    lines.push('<br>');
+    lines.push('<div>Mohon validasi nomor invoice dan total. Terima kasih.</div>');
+
+    if (order.note) {
+      lines.push('<hr>');
+      lines.push(`<div><strong>Catatan:</strong> ${escapeHtml(order.note)}</div>`);
+    }
+
+    return lines.join('');
+  }
+   // ----------------------------
   // Save to localStorage
   // ----------------------------
   function saveOrderLocal(order) {
@@ -431,7 +361,7 @@ function renderNota(order) {
   }
 
   // ----------------------------
-  // Open WA Admin for validation
+  // Kirim ke WA Admin
   // ----------------------------
   function openWaAdmin(order) {
     const lines = [];
@@ -441,10 +371,13 @@ function renderNota(order) {
     lines.push(`Jenis: ${order.jenis}`);
     lines.push(`Isi per box: ${order.isi}`);
     lines.push(`Jumlah box: ${order.jumlah}`);
-    if (order.mode === 'single' && order.single.length) lines.push(`Single: ${order.single.join(', ')}`);
-    if (order.mode === 'double' && order.double.length) lines.push(`Double: ${order.double.join(' + ')}`);
-    if (order.taburan && order.taburan.length) lines.push(`Taburan: ${order.taburan.join(', ')}`);
+
+    if (order.single.length) lines.push(`Single: ${order.single.join(', ')}`);
+    if (order.double.length) lines.push(`Double: ${order.double.join(', ')}`);
+    if (order.taburan.length) lines.push(`Taburan: ${order.taburan.join(', ')}`);
+
     if (order.note) lines.push(`Catatan: ${order.note}`);
+
     lines.push(`Subtotal: ${formatRp(order.subtotal)}`);
     lines.push(`Diskon: ${order.discount ? formatRp(order.discount) : '-'}`);
     lines.push(`TOTAL: ${formatRp(order.total)}`);
@@ -452,15 +385,13 @@ function renderNota(order) {
     lines.push('Mohon validasi nomor invoice dan total. Terima kasih.');
 
     const text = encodeURIComponent(lines.join('\n'));
-    const url = `https://wa.me/${ADMIN_WA}?text=${text}`;
-    window.open(url, '_blank');
+    window.open(`https://wa.me/${ADMIN_WA}?text=${text}`, '_blank');
   }
 
   // ----------------------------
-  // Nota overlay show/hide
+  // Nota Overlay
   // ----------------------------
   function showNota(html) {
-    if (!notaContainer || !notaContent) return;
     notaContent.innerHTML = html;
     notaContainer.style.display = 'flex';
     notaContainer.setAttribute('aria-hidden', 'false');
@@ -468,7 +399,6 @@ function renderNota(order) {
   }
 
   function hideNota() {
-    if (!notaContainer) return;
     notaContainer.style.display = 'none';
     notaContainer.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
@@ -476,165 +406,45 @@ function renderNota(order) {
 
   if (notaClose) notaClose.addEventListener('click', hideNota);
   if (notaContainer) {
-    notaContainer.addEventListener('click', function(e) {
+    notaContainer.addEventListener('click', e => {
       if (e.target === notaContainer) hideNota();
     });
   }
 
   // ----------------------------
-  // Event: Cek Pesanan -> show nota (preview)
+  // Event: Cek Pesanan → Show Nota
   // ----------------------------
   if (btnCek) {
-    btnCek.addEventListener('click', function(ev) {
+    btnCek.addEventListener('click', function (ev) {
       ev.preventDefault();
       const order = buildOrderObject();
       if (!order) return;
-      function renderNota(order) {
-  if (!order) return '<div>Error membuat nota.</div>';
-  const lines = [];
 
-  lines.push(`<div><strong>INVOICE:</strong> ${escapeHtml(order.invoice)}</div>`);
-  lines.push(`<div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>`);
-  lines.push(`<div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>`);
-  lines.push(`<div><strong>Jenis:</strong> ${escapeHtml(order.jenis)}</div>`);
-  lines.push(`<div><strong>Isi per box:</strong> ${escapeHtml(order.isi)}</div>`);
-  lines.push(`<div><strong>Jumlah box:</strong> ${order.jumlah}</div>`);
-  lines.push('<hr>');
+      showNota(renderNota(order));
 
-  // Mode label & content
-  if (order.mode === 'non' || order.mode === 'Non' || order.mode === '') {
-    lines.push(`<div><strong>Mode Topping:</strong> Non Topping</div>`);
-    lines.push(`<div><strong>Non Topping:</strong> Polosan</div>`);
-    // Taburan none
-    lines.push(`<div><strong>Taburan:</strong> -</div>`);
-  } else if (order.mode === 'single') {
-    lines.push(`<div><strong>Mode Topping:</strong> Single Topping</div>`);
-    const toppingText = (order.single && order.single.length) ? escapeHtml(order.single.join(', ')) : '-';
-    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
-    const tabText = (order.taburan && order.taburan.length) ? escapeHtml(order.taburan.join(', ')) : '-';
-    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
-  } else if (order.mode === 'double') {
-    lines.push(`<div><strong>Mode Topping:</strong> Double Topping</div>`);
-
-    // Show toppings (prefer single list if user selected them; otherwise try to extract from double list)
-    let toppingsForDisplay = [];
-    if (order.single && order.single.length) {
-      toppingsForDisplay = order.single;
-    } else if (order.double && order.double.length) {
-      // pick items from double list that match single master names (case-insensitive)
-      toppingsForDisplay = order.double.filter(v => SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === String(v).toLowerCase()));
-    }
-    const toppingText = (toppingsForDisplay.length) ? escapeHtml(toppingsForDisplay.join(', ')) : '-';
-    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
-
-    // Taburan: prefer explicit taburan array; if empty, try to extract remaining items from double list
-    let tabForDisplay = [];
-    if (order.taburan && order.taburan.length) {
-      tabForDisplay = order.taburan;
-    } else if (order.double && order.double.length) {
-      tabForDisplay = order.double.filter(v => !SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === String(v).toLowerCase()));
-    }
-    const tabText = (tabForDisplay.length) ? escapeHtml(tabForDisplay.join(', ')) : '-';
-    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
-  } else {
-    // fallback
-    const toppingText = (order.single && order.single.length) ? escapeHtml(order.single.join(', ')) : '-';
-    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
-    const tabText = (order.taburan && order.taburan.length) ? escapeHtml(order.taburan.join(', ')) : '-';
-    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
-  }
-
-  lines.push('<hr>');
-  lines.push(`<div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>`);
-  lines.push(`<div><strong>Diskon:</strong> ${order.discount ? formatRp(order.discount) : '-'}</div>`);
-  lines.push(`<div style="font-weight:800;margin-top:6px;"><strong>TOTAL:</strong> ${formatRp(order.total)}</div>`);
-  lines.push('<br>');
-  lines.push('<div>Mohon validasi nomor invoice dan total. Terima kasih.</div>');
-
-  if (order.note) lines.push(`<hr><div><strong>Catatan:</strong> ${escapeHtml(order.note)}</div>`);
-  return lines.join('');
-}
+      // simpan order global sementara untuk konfirmasi
+      window._orderPreview = order;
     });
   }
 
-/* --- END PART 1 --- */
-/* ===========================================================
-   assets/js/order.js
-   ORDER.JS — Final Revisi (Part 2)
-   (Continuation & final handlers)
-=========================================================== */
-
   // ----------------------------
-  // Event: Konfirmasi "Buat Pesanan" pada nota
+  // Event: Konfirmasi Pesanan
   // ----------------------------
   if (notaConfirm) {
-    notaConfirm.addEventListener('click', function() {
-      function buildOrderObject() {
-  if (!validateOrder()) return null;
-
-  const namaVal = elNama.value.trim();
-  const waRaw = elWA.value.trim().replace(/\s+/g, '').replace('+', '');
-  const wa = waRaw.startsWith('0') ? '62' + waRaw.slice(1) : (waRaw.startsWith('62') ? waRaw : waRaw);
-  const jumlah = Number(elJumlah.value || 1);
-  const note = elNote ? elNote.value.trim() : '';
-
-  const jenis = getRadioValue('ultraJenis') || 'Original';
-  const isi = $('#ultraIsi') ? $('#ultraIsi').value : '5';
-  const mode = getRadioValue('ultraToppingMode') || 'non';
-
-  // Ambil pilihan single — coba beberapa nama yang mungkin dipakai di HTML
-  const singleChosen = getCheckedValuesByAny(['toppingSingle','single_topping','topping','topping_single']);
-  // Ambil pilihan double (could include single names if HTML duplicated them inside double group)
-  const doubleChosen = getCheckedValuesByAny(['toppingDouble','double_topping','toppingDoubleList','topping_double_1','topping_double_2']);
-  // Ambil taburan (checkboxes)
-  const taburanChosen = getCheckedValuesByAny(['taburan','topping_taburan','topping_tab']);
-
-  // Normalize capitalization: gunakan setiap nilai apa adanya, tapi saat grouping test gunakan insensitive compare
-  // Untuk tampilan, gunakan nilai asli yang dipilih.
-
-  // Compute price & totals (existing logic)
-  const pricePerBox = getPricePerBox();
-  const subtotal = pricePerBox * jumlah;
-  const discount = calcDiscount(jumlah, subtotal);
-  const total = subtotal - discount;
-  const invoice = genInvoice();
-
-  return {
-    invoice,
-    nama: namaVal,
-    wa,
-    jenis,
-    isi,
-    jumlah,
-    mode,
-    single: singleChosen,   // array
-    double: doubleChosen,   // array (may contain extra toppings)
-    taburan: taburanChosen, // array
-    note,
-    pricePerBox,
-    subtotal,
-    discount,
-    total,
-    status: 'pending',
-    createdAt: new Date().toISOString()
-  };
-}
+    notaConfirm.addEventListener('click', function () {
+      const order = window._orderPreview;
+      if (!order) return;
 
       const ok = saveOrderLocal(order);
-      if (!ok) { alert('Gagal menyimpan pesanan, coba lagi.'); return; }
+      if (!ok) { alert('Gagal menyimpan pesanan.'); return; }
 
-      // Open WA admin
       openWaAdmin(order);
-
-      // Close overlay & notify buyer (generic)
       hideNota();
-      alert('Terima kasih! Pesananmu telah dikirim untuk validasi. Admin akan menghubungi via WA.');
+      alert('Terima kasih! Pesananmu telah dikirim.');
 
-      // Reset form lightly
       const form = $('#formUltra');
       if (form) form.reset();
 
-      // rebuild toppings & update visibility + price
       buildToppingsUI();
       updateToppingVisibility();
       updatePriceUI();
@@ -642,49 +452,20 @@ function renderNota(order) {
   }
 
   // ----------------------------
-  // Init: build & bind
+  // Init
   // ----------------------------
   buildToppingsUI();
   updateToppingVisibility();
   updatePriceUI();
 
-  // Attach change listeners for price & visibility
-  function attachListeners() {
-    // jenis radios
-    const jenisEls = document.querySelectorAll('input[name="ultraJenis"]');
-    jenisEls.forEach(i => i.addEventListener('change', updatePriceUI));
+  document.addEventListener('change', function (e) {
+    const n = e.target.name;
+    if (['single_topping','double_topping','taburan'].includes(n)) {
+      updatePriceUI();
+    }
+  });
 
-    // isi select
-    const isiEl = $('#ultraIsi');
-    if (isiEl) isiEl.addEventListener('change', updatePriceUI);
-
-    // topping mode radios
-    const modeEls = document.querySelectorAll('input[name="ultraToppingMode"]');
-    modeEls.forEach(i => {
-      i.addEventListener('change', function() {
-        updateToppingVisibility();
-        updatePriceUI();
-      });
-    });
-
-    // jumlah change
-    if (elJumlah) elJumlah.addEventListener('input', updatePriceUI);
-
-    // Delegate change events for dynamic checkboxes
-    document.addEventListener('change', function(e) {
-      if (!e || !e.target) return;
-      const n = e.target.name;
-      if (n === 'single_topping' || n === 'double_topping' || n === 'taburan' || n === 'topping') {
-        // checkboxes don't alter price except taburan might be counted if you had logic for that;
-        // Per instruction topping checkboxes do not change price; only mode does.
-        updatePriceUI();
-      }
-    });
-  }
-
-  attachListeners();
-
-  // Expose debug helpers
+  // Expose debug
   window._pukis = {
     buildToppingsUI,
     updateToppingVisibility,
@@ -694,6 +475,4 @@ function renderNota(order) {
     getPricePerBox
   };
 
-})(); // end IIFE
-
-/* --- END FILE --- */
+})();
