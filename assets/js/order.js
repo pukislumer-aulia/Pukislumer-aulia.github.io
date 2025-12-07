@@ -358,60 +358,61 @@ const SINGLE_TOPPING_MASTER = ['Coklat','coklat','Tiramisu','tiramisu','Vanilla'
 // ----------------------------
 function renderNota(order) {
   if (!order) return '<div>Error membuat nota.</div>';
-  
-  const html = [];
+  const lines = [];
 
-  // Header data umum
-  html.push(`<div><strong>INVOICE:</strong> ${escapeHtml(order.invoice)}</div>`);
-  html.push(`<div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>`);
-  html.push(`<div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>`);
-  html.push(`<div><strong>Jenis:</strong> ${escapeHtml(order.jenis)}</div>`);
-  html.push(`<div><strong>Isi per box:</strong> ${escapeHtml(order.isi)}</div>`);
-  html.push(`<div><strong>Jumlah box:</strong> ${order.jumlah}</div>`);
-  html.push('<hr>');
+  lines.push(`<div><strong>INVOICE:</strong> ${escapeHtml(order.invoice)}</div>`);
+  lines.push(`<div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>`);
+  lines.push(`<div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>`);
+  lines.push(`<div><strong>Jenis:</strong> ${escapeHtml(order.jenis)}</div>`);
+  lines.push(`<div><strong>Isi per box:</strong> ${escapeHtml(order.isi)}</div>`);
+  lines.push(`<div><strong>Jumlah box:</strong> ${order.jumlah}</div>`);
+  lines.push('<hr>');
 
-  // ==========================
-  // MODE TOPPING
-  // ==========================
   if (order.mode === 'non') {
-    html.push(`<div><strong>Mode Topping:</strong> Non Topping</div>`);
-    html.push(`<div><strong>Non Topping:</strong> Polosan</div>`);
+    lines.push(`<div><strong>Mode Topping:</strong> Non Topping</div>`);
+    lines.push(`<div><strong>Non Topping:</strong> Polosan</div>`);
+    lines.push(`<div><strong>Taburan:</strong> -</div>`);
   }
 
   else if (order.mode === 'single') {
-    html.push(`<div><strong>Mode Topping:</strong> Single Topping</div>`);
-    html.push(`<div><strong>Topping:</strong> ${escapeHtml(order.single.join(', ') || '-')}</div>`);
+    lines.push(`<div><strong>Mode Topping:</strong> Single Topping</div>`);
+    const toppingText = (order.single && order.single.length) ? escapeHtml(order.single.join(', ')) : '-';
+    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
+    const tabText = (order.taburan && order.taburan.length) ? escapeHtml(order.taburan.join(', ')) : '-';
+    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
   }
 
   else if (order.mode === 'double') {
-    html.push(`<div><strong>Mode Topping:</strong> Double Topping</div>`);
+    lines.push(`<div><strong>Mode Topping:</strong> Double Topping</div>`);
 
-    // Topping double (yang di bagian atas)
-    html.push(`<div><strong>Topping:</strong> ${escapeHtml(order.double.join(', ') || '-')}</div>`);
+    let toppingsForDisplay = [];
+    if (order.single && order.single.length) {
+      toppingsForDisplay = order.single;
+    } else if (order.double && order.double.length) {
+      toppingsForDisplay = order.double.filter(v => SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === String(v).toLowerCase()));
+    }
+    const toppingText = toppingsForDisplay.length ? escapeHtml(toppingsForDisplay.join(', ')) : '-';
+    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
 
-    // Taburan khusus double mode
-    html.push(`<div><strong>Taburan:</strong> ${escapeHtml(order.taburan.join(', ') || '-')}</div>`);
+    let tabForDisplay = [];
+    if (order.taburan && order.taburan.length) {
+      tabForDisplay = order.taburan;
+    } else if (order.double && order.double.length) {
+      tabForDisplay = order.double.filter(v => !SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === String(v).toLowerCase()));
+    }
+    const tabText = tabForDisplay.length ? escapeHtml(tabForDisplay.join(', ')) : '-';
+    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
   }
 
-  html.push('<hr>');
+  lines.push('<hr>');
+  lines.push(`<div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>`);
+  lines.push(`<div><strong>Diskon:</strong> ${order.discount ? formatRp(order.discount) : '-'}</div>`);
+  lines.push(`<div style="font-weight:800;margin-top:6px;"><strong>TOTAL:</strong> ${formatRp(order.total)}</div>`);
+  lines.push('<br>');
+  lines.push('<div>Mohon validasi nomor invoice dan total. Terima kasih.</div>');
 
-  // ==========================
-  // HARGA
-  // ==========================
-  html.push(`<div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>`);
-  html.push(`<div><strong>Diskon:</strong> ${order.discount ? formatRp(order.discount) : '-'}</div>`);
-  html.push(`<div style="font-weight:800;margin-top:6px;">
-<strong>Total:</strong> ${formatRp(order.total)}
-</div>`);
-
-  html.push('<hr>');
-
-  // ==========================
-  // CATATAN AKHIR (WAJIB ADA)
-  // ==========================
-  html.push(`<div>Mohon validasi nomor invoice dan total. Terima kasih.</div>`);
-
-  return html.join('');
+  if (order.note) lines.push(`<hr><div><strong>Catatan:</strong> ${escapeHtml(order.note)}</div>`);
+  return lines.join('');
 }
 
   // ----------------------------
