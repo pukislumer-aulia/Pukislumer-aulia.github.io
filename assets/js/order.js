@@ -226,6 +226,23 @@
     const modeRaw = getRadioValue('ultraToppingMode') || 'non';
     const modeKey = (modeRaw === 'single') ? 'single' : (modeRaw === 'double' ? 'double' : 'non');
 
+     // Ambil semua nilai checkbox untuk sebuah nama
+function getCheckedValuesByName(name) {
+  return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(i => i.value);
+}
+
+// Ambil union dari beberapa nama kandidat (robust jika HTML menggunakan nama yang berbeda)
+function getCheckedValuesByAny(namesArray) {
+  const set = new Set();
+  namesArray.forEach(n => {
+    getCheckedValuesByName(n).forEach(v => set.add(v));
+  });
+  return Array.from(set);
+}
+
+// Daftar 5 topping single (untuk membedakan taburan)
+const SINGLE_TOPPING_MASTER = ['Coklat','coklat','Tiramisu','tiramisu','Vanilla','vanilla','Stroberi','stroberi','Cappucino','cappucino'];
+     
     if (!BASE_PRICE[jenisKey] || !BASE_PRICE[jenisKey][isiVal]) return 0;
     const priceObj = BASE_PRICE[jenisKey][isiVal];
     return priceObj[modeKey] || priceObj['non'] || 0;
@@ -471,8 +488,71 @@ function renderNota(order) {
       ev.preventDefault();
       const order = buildOrderObject();
       if (!order) return;
-      const html = renderNota(order);
-      showNota(html);
+      function renderNota(order) {
+  if (!order) return '<div>Error membuat nota.</div>';
+  const lines = [];
+
+  lines.push(`<div><strong>INVOICE:</strong> ${escapeHtml(order.invoice)}</div>`);
+  lines.push(`<div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>`);
+  lines.push(`<div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>`);
+  lines.push(`<div><strong>Jenis:</strong> ${escapeHtml(order.jenis)}</div>`);
+  lines.push(`<div><strong>Isi per box:</strong> ${escapeHtml(order.isi)}</div>`);
+  lines.push(`<div><strong>Jumlah box:</strong> ${order.jumlah}</div>`);
+  lines.push('<hr>');
+
+  // Mode label & content
+  if (order.mode === 'non' || order.mode === 'Non' || order.mode === '') {
+    lines.push(`<div><strong>Mode Topping:</strong> Non Topping</div>`);
+    lines.push(`<div><strong>Non Topping:</strong> Polosan</div>`);
+    // Taburan none
+    lines.push(`<div><strong>Taburan:</strong> -</div>`);
+  } else if (order.mode === 'single') {
+    lines.push(`<div><strong>Mode Topping:</strong> Single Topping</div>`);
+    const toppingText = (order.single && order.single.length) ? escapeHtml(order.single.join(', ')) : '-';
+    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
+    const tabText = (order.taburan && order.taburan.length) ? escapeHtml(order.taburan.join(', ')) : '-';
+    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
+  } else if (order.mode === 'double') {
+    lines.push(`<div><strong>Mode Topping:</strong> Double Topping</div>`);
+
+    // Show toppings (prefer single list if user selected them; otherwise try to extract from double list)
+    let toppingsForDisplay = [];
+    if (order.single && order.single.length) {
+      toppingsForDisplay = order.single;
+    } else if (order.double && order.double.length) {
+      // pick items from double list that match single master names (case-insensitive)
+      toppingsForDisplay = order.double.filter(v => SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === String(v).toLowerCase()));
+    }
+    const toppingText = (toppingsForDisplay.length) ? escapeHtml(toppingsForDisplay.join(', ')) : '-';
+    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
+
+    // Taburan: prefer explicit taburan array; if empty, try to extract remaining items from double list
+    let tabForDisplay = [];
+    if (order.taburan && order.taburan.length) {
+      tabForDisplay = order.taburan;
+    } else if (order.double && order.double.length) {
+      tabForDisplay = order.double.filter(v => !SINGLE_TOPPING_MASTER.some(s => s.toLowerCase() === String(v).toLowerCase()));
+    }
+    const tabText = (tabForDisplay.length) ? escapeHtml(tabForDisplay.join(', ')) : '-';
+    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
+  } else {
+    // fallback
+    const toppingText = (order.single && order.single.length) ? escapeHtml(order.single.join(', ')) : '-';
+    lines.push(`<div><strong>Topping:</strong> ${toppingText}</div>`);
+    const tabText = (order.taburan && order.taburan.length) ? escapeHtml(order.taburan.join(', ')) : '-';
+    lines.push(`<div><strong>Taburan:</strong> ${tabText}</div>`);
+  }
+
+  lines.push('<hr>');
+  lines.push(`<div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>`);
+  lines.push(`<div><strong>Diskon:</strong> ${order.discount ? formatRp(order.discount) : '-'}</div>`);
+  lines.push(`<div style="font-weight:800;margin-top:6px;"><strong>TOTAL:</strong> ${formatRp(order.total)}</div>`);
+  lines.push('<br>');
+  lines.push('<div>Mohon validasi nomor invoice dan total. Terima kasih.</div>');
+
+  if (order.note) lines.push(`<hr><div><strong>Catatan:</strong> ${escapeHtml(order.note)}</div>`);
+  return lines.join('');
+}
     });
   }
 
@@ -488,8 +568,56 @@ function renderNota(order) {
   // ----------------------------
   if (notaConfirm) {
     notaConfirm.addEventListener('click', function() {
-      const order = buildOrderObject();
-      if (!order) return;
+      function buildOrderObject() {
+  if (!validateOrder()) return null;
+
+  const namaVal = elNama.value.trim();
+  const waRaw = elWA.value.trim().replace(/\s+/g, '').replace('+', '');
+  const wa = waRaw.startsWith('0') ? '62' + waRaw.slice(1) : (waRaw.startsWith('62') ? waRaw : waRaw);
+  const jumlah = Number(elJumlah.value || 1);
+  const note = elNote ? elNote.value.trim() : '';
+
+  const jenis = getRadioValue('ultraJenis') || 'Original';
+  const isi = $('#ultraIsi') ? $('#ultraIsi').value : '5';
+  const mode = getRadioValue('ultraToppingMode') || 'non';
+
+  // Ambil pilihan single — coba beberapa nama yang mungkin dipakai di HTML
+  const singleChosen = getCheckedValuesByAny(['toppingSingle','single_topping','topping','topping_single']);
+  // Ambil pilihan double (could include single names if HTML duplicated them inside double group)
+  const doubleChosen = getCheckedValuesByAny(['toppingDouble','double_topping','toppingDoubleList','topping_double_1','topping_double_2']);
+  // Ambil taburan (checkboxes)
+  const taburanChosen = getCheckedValuesByAny(['taburan','topping_taburan','topping_tab']);
+
+  // Normalize capitalization: gunakan setiap nilai apa adanya, tapi saat grouping test gunakan insensitive compare
+  // Untuk tampilan, gunakan nilai asli yang dipilih.
+
+  // Compute price & totals (existing logic)
+  const pricePerBox = getPricePerBox();
+  const subtotal = pricePerBox * jumlah;
+  const discount = calcDiscount(jumlah, subtotal);
+  const total = subtotal - discount;
+  const invoice = genInvoice();
+
+  return {
+    invoice,
+    nama: namaVal,
+    wa,
+    jenis,
+    isi,
+    jumlah,
+    mode,
+    single: singleChosen,   // array
+    double: doubleChosen,   // array (may contain extra toppings)
+    taburan: taburanChosen, // array
+    note,
+    pricePerBox,
+    subtotal,
+    discount,
+    total,
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+}
 
       const ok = saveOrderLocal(order);
       if (!ok) { alert('Gagal menyimpan pesanan, coba lagi.'); return; }
