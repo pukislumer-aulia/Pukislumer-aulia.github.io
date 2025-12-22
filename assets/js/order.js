@@ -164,30 +164,7 @@
 
         elDoubleGroup.appendChild(container);
       }
-    }
 
-    // Taburan group (separate list) - only if empty
-    if (elTaburanGroup) {
-      if (elTaburanGroup.innerHTML.trim() === '') {
-        const title = document.createElement('div');
-        title.className = 'subtitle';
-        title.textContent = 'Taburan (opsional)';
-        elTaburanGroup.appendChild(title);
-        DOUBLE_ONLY_TOPPINGS.forEach(t => {
-          const lbl = document.createElement('label');
-          lbl.className = 'topping-option';
-          const inp = document.createElement('input');
-          inp.type = 'checkbox';
-          inp.name = 'taburan';
-          inp.value = t;
-          inp.className = 'taburan';
-          lbl.appendChild(inp);
-          lbl.appendChild(document.createTextNode(' ' + t));
-          elTaburanGroup.appendChild(lbl);
-        });
-      }
-    }
-  }
 
   // ------------ show/hide topping areas based on mode ------------
   function updateToppingVisibility() {
