@@ -1,27 +1,48 @@
-// assets/js/core/auth.js
-
 import { Storage } from "./storage.js";
 import { CONFIG } from "./config.js";
+
+const PIN_KEY = "admin_pin";
+const SESSION_KEY = "session";
+
+function isBase64(str) {
+  try {
+    return btoa(atob(str)) === str;
+  } catch {
+    return false;
+  }
+}
 
 export const Auth = {
   /**
    * Login admin
-   * - Jika PIN belum ada → buat PIN pertama
-   * - Jika sudah ada → validasi
+   * - Support PIN lama (plain)
+   * - Support PIN baru (base64)
    */
   login(pin) {
     if (!pin || pin.length < 4) return false;
 
-    const savedPin = Storage.get("admin_pin");
+    let savedPin = Storage.get(PIN_KEY);
 
-    // First time setup
+    // ===== FIRST TIME SETUP =====
     if (!savedPin) {
-      Storage.set("admin_pin", btoa(pin));
+      Storage.set(PIN_KEY, btoa(pin));
       this.startSession();
       return true;
     }
 
-    // Validate
+    // ===== MIGRATION SUPPORT =====
+    // Jika PIN lama masih plain text
+    if (!isBase64(savedPin)) {
+      if (savedPin === pin) {
+        // migrate ke base64
+        Storage.set(PIN_KEY, btoa(pin));
+        this.startSession();
+        return true;
+      }
+      return false;
+    }
+
+    // ===== NORMAL VALIDATION =====
     if (atob(savedPin) === pin) {
       this.startSession();
       return true;
@@ -34,7 +55,7 @@ export const Auth = {
    * Simpan session login
    */
   startSession() {
-    Storage.set("session", {
+    Storage.set(SESSION_KEY, {
       loginAt: Date.now()
     });
   },
@@ -43,7 +64,7 @@ export const Auth = {
    * Cek status login + timeout
    */
   isLoggedIn() {
-    const session = Storage.get("session");
+    const session = Storage.get(SESSION_KEY);
     if (!session || !session.loginAt) return false;
 
     const expired =
@@ -61,6 +82,6 @@ export const Auth = {
    * Logout bersih
    */
   logout() {
-    Storage.remove("session");
+    Storage.remove(SESSION_KEY);
   }
 };
