@@ -6,73 +6,136 @@
   <title>Admin Dashboard – Pukis Lumer Aulia</title>
 
   <meta name="api-base" content="/api">
-  <link rel="stylesheet" href="assets/css/Admin.css">
+
+  <!-- ADMIN STYLE -->
+  <link rel="stylesheet" href="assets/css/admin.css">
 </head>
 <body>
 
-  <!-- LOGIN -->
+  <!-- ================= LOGIN SCREEN ================= -->
   <div id="loginScreen" class="login-wrapper">
     <div class="login-box">
       <h2>Login Admin</h2>
-      <input type="password" id="pinInput" placeholder="Masukkan PIN Admin">
-      <button id="loginBtn" class="btn-primary">Login</button>
-      <p style="font-size:12px;color:#666;margin-top:8px;">(Jika backend tersedia, PIN akan diverifikasi ke server. Jika tidak, Anda akan diminta membuat PIN lokal sekali.)</p>
+
+      <input
+        type="password"
+        id="pinInput"
+        placeholder="Masukkan PIN Admin"
+        autocomplete="off"
+      >
+
+      <button id="loginBtn" class="btn-primary">
+        Login
+      </button>
+
+      <p style="font-size:12px;color:#666;margin-top:8px;">
+        (Jika ini login pertama, PIN akan disimpan secara lokal.)
+      </p>
     </div>
   </div>
 
-  <!-- ADMIN PANEL -->
+  <!-- ================= ADMIN PANEL ================= -->
   <div id="adminPanel" class="admin-wrapper" style="display:none;">
+
+    <!-- HEADER -->
     <div class="admin-header">
       <h1>Admin Dashboard</h1>
-      <div>
-        <button id="logoutBtn" class="btn-logout">Logout</button>
+      <button id="logoutBtn" class="btn-logout">
+        Logout
+      </button>
+    </div>
+
+    <!-- STATISTIK -->
+    <div class="stat-section" style="margin-top:18px;">
+      <div class="stat-card">
+        <div class="stat-number" id="totalOrders">0</div>
+        Total Orders
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="pendingOrders">0</div>
+        Pending
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="completedOrders">0</div>
+        Selesai
       </div>
     </div>
 
-    <div class="stat-section" style="margin-top:18px;">
-      <div class="stat-card"><div class="stat-number" id="totalOrders">0</div> Total Orders</div>
-      <div class="stat-card"><div class="stat-number" id="pendingOrders">0</div> Pending</div>
-      <div class="stat-card"><div class="stat-number" id="completedOrders">0</div> Selesai</div>
-    </div>
-
+    <!-- ORDER MANAGEMENT -->
     <div class="order-section">
       <h2>Order Management</h2>
+
       <div class="action-buttons" style="margin-bottom:12px;">
         <button id="filterAll" class="btn-primary">Semua</button>
         <button id="filterPending" class="btn-secondary">Pending</button>
         <button id="filterDone" class="btn-secondary">Selesai</button>
-        <button id="printLastInvoice" class="btn-primary">Cetak Nota Terakhir</button>
+        <button id="printLastInvoice" class="btn-primary">
+          Cetak Nota Terakhir
+        </button>
       </div>
 
       <table id="orderTable" style="width:100%;border-collapse:collapse;">
         <thead>
-          <tr><th>Invoice</th><th>Nama</th><th>Total</th><th>Status</th><th>Aksi</th></tr>
+          <tr>
+            <th>Invoice</th>
+            <th>Nama</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          <!-- diisi via JS -->
+        </tbody>
       </table>
     </div>
 
+    <!-- TESTIMONI -->
     <div style="margin-top:20px;">
-      <h2>Testimoni (import/export)</h2>
+      <h2>Testimoni (Import / Export)</h2>
       <div style="display:flex;gap:8px;">
-        <button id="exportTesti" class="btn-primary">Ekspor Testimoni</button>
-        <input id="importTestiInput" type="file" accept="application/json" style="display:inline-block;">
+        <button id="exportTesti" class="btn-primary">
+          Ekspor Testimoni
+        </button>
+        <input
+          id="importTestiInput"
+          type="file"
+          accept="application/json"
+        >
       </div>
     </div>
+
   </div>
 
-  <!-- Modal nota -->
-  <div id="notaModal" class="modal">
+  <!-- ================= MODAL NOTA ================= -->
+  <div id="notaModal" class="modal" style="display:none;">
     <div class="modal-box">
       <h3>Cetak Nota</h3>
-      <div id="notaContent">Memuat...</div>
+
+      <div id="notaContent">
+        Memuat...
+      </div>
+
       <br>
-      <button id="modalPrintBtn" class="btn-primary">Cetak Nota</button>
-      <button class="btn-secondary" onclick="document.getElementById('notaModal').style.display='none'">Tutup</button>
+
+      <button id="modalPrintBtn" class="btn-primary">
+        Cetak Nota
+      </button>
+      <button
+        class="btn-secondary"
+        onclick="document.getElementById('notaModal').style.display='none'"
+      >
+        Tutup
+      </button>
     </div>
   </div>
 
-  <script src="assets/js/script.js"></script>
-  <script src="assets/js/order.js"></script>
+  <!-- ================= JS LIB (PDF) ================= -->
+  <script src="assets/js/lib/jspdf.umd.min.js"></script>
+  <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- ================= ADMIN ENTRY POINT ================= -->
+  <script type="module" src="assets/js/admin.js"></script>
+
 </body>
 </html>
