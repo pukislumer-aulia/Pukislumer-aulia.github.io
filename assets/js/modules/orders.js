@@ -4,13 +4,23 @@ import { Storage } from "../core/storage.js";
 
 const ORDER_KEY = "orders";
 
-// ====== ELEMENTS ======
+// ===== ELEMENTS (SAFE) =====
 const tbody = document.querySelector("#orderTable tbody");
 const filterAllBtn = document.getElementById("filterAll");
 const filterPendingBtn = document.getElementById("filterPending");
 const filterDoneBtn = document.getElementById("filterDone");
 
-// ====== DATA ======
+const totalOrdersEl = document.getElementById("totalOrders");
+const pendingOrdersEl = document.getElementById("pendingOrders");
+const completedOrdersEl = document.getElementById("completedOrders");
+
+// Jika halaman bukan admin, hentikan
+if (!tbody) {
+  console.warn("orders.js: tbody tidak ditemukan (bukan halaman admin)");
+  return;
+}
+
+// ===== DATA =====
 function getOrders() {
   return Storage.get(ORDER_KEY) || [];
 }
@@ -19,7 +29,23 @@ function saveOrders(orders) {
   Storage.set(ORDER_KEY, orders);
 }
 
-// ====== RENDER ======
+// ===== STATISTICS =====
+function updateStats() {
+  const orders = getOrders();
+
+  if (totalOrdersEl)
+    totalOrdersEl.textContent = orders.length;
+
+  if (pendingOrdersEl)
+    pendingOrdersEl.textContent =
+      orders.filter(o => o.status === "pending").length;
+
+  if (completedOrdersEl)
+    completedOrdersEl.textContent =
+      orders.filter(o => o.status === "done").length;
+}
+
+// ===== RENDER TABLE =====
 function renderOrders(filter = "all") {
   const orders = getOrders();
   tbody.innerHTML = "";
@@ -32,10 +58,11 @@ function renderOrders(filter = "all") {
   if (filtered.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="5" style="text-align:center;padding:12px;">
+        <td colspan="5" style="text-align:center;padding:14px;">
           Belum ada order
         </td>
       </tr>`;
+    updateStats();
     return;
   }
 
@@ -45,7 +72,7 @@ function renderOrders(filter = "all") {
     tr.innerHTML = `
       <td>${order.invoice}</td>
       <td>${order.customerName}</td>
-      <td>Rp ${order.total.toLocaleString("id-ID")}</td>
+      <td>Rp ${Number(order.total).toLocaleString("id-ID")}</td>
       <td>
         <span class="status status-${order.status}">
           ${order.status}
@@ -54,7 +81,13 @@ function renderOrders(filter = "all") {
       <td>
         ${
           order.status === "pending"
-            ? `<button data-id="${order.id}" class="btn-done">Selesai</button>`
+            ? `
+              <button 
+                class="btn-small btn-status btn-done" 
+                data-id="${order.id}">
+                Selesai
+              </button>
+            `
             : "-"
         }
       </td>
@@ -62,9 +95,11 @@ function renderOrders(filter = "all") {
 
     tbody.appendChild(tr);
   });
+
+  updateStats();
 }
 
-// ====== UPDATE STATUS ======
+// ===== UPDATE STATUS =====
 function markAsDone(orderId) {
   const orders = getOrders();
   const idx = orders.findIndex(o => o.id === orderId);
@@ -74,19 +109,25 @@ function markAsDone(orderId) {
   orders[idx].updatedAt = Date.now();
 
   saveOrders(orders);
-  renderOrders();
+  renderOrders("all");
 }
 
-// ====== EVENTS ======
+// ===== EVENTS =====
 tbody.addEventListener("click", e => {
   if (e.target.classList.contains("btn-done")) {
-    markAsDone(e.target.dataset.id);
+    const id = e.target.dataset.id;
+    markAsDone(id);
   }
 });
 
-filterAllBtn.addEventListener("click", () => renderOrders("all"));
-filterPendingBtn.addEventListener("click", () => renderOrders("pending"));
-filterDoneBtn.addEventListener("click", () => renderOrders("done"));
+if (filterAllBtn)
+  filterAllBtn.addEventListener("click", () => renderOrders("all"));
 
-// ====== INIT ======
-renderOrders();
+if (filterPendingBtn)
+  filterPendingBtn.addEventListener("click", () => renderOrders("pending"));
+
+if (filterDoneBtn)
+  filterDoneBtn.addEventListener("click", () => renderOrders("done"));
+
+// ===== INIT =====
+renderOrders("all");
