@@ -1,7 +1,7 @@
 // assets/js/admin.js
 
 import { Auth } from "./core/auth.js";
-
+import "./modules/orders.js";
 // Elements
 const loginScreen = document.getElementById("loginScreen");
 const adminPanel = document.getElementById("adminPanel");
