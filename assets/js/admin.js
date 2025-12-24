@@ -2,6 +2,7 @@
 
 import { Auth } from "./core/auth.js";
 import "./modules/orders.js";
+import "./modules/nota.js";
 // Elements
 const loginScreen = document.getElementById("loginScreen");
 const adminPanel = document.getElementById("adminPanel");
