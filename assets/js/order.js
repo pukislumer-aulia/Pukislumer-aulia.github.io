@@ -86,127 +86,120 @@
     return Array.from(s);
   }
 
-  // master untuk membedakan topping single vs taburan (case-insensitive)
-  const SINGLE_TOPPING_MASTER = SINGLE_TOPPINGS.reduce((acc, v) => { acc.push(v.toLowerCase()); return acc; }, []);
+// master untuk membedakan topping single vs taburan (case-insensitive)
+const SINGLE_TOPPING_MASTER = SINGLE_TOPPINGS.map(v => v.toLowerCase());
 
-  // ------------ build UI for toppings (populates groups if empty) ------------
-  function buildToppingsUI() {
-    // SINGLE group: create checkboxes but be tolerant: use name 'toppingSingle' and also 'topping' for compatibility
-    if (elSingleGroup) {
-      if (elSingleGroup.innerHTML.trim() === '') {
-        const wrap = document.createElement('div');
-        wrap.className = 'topping-grid';
-        SINGLE_TOPPINGS.forEach(t => {
-          const lbl = document.createElement('label');
-          lbl.className = 'topping-option';
-          const inp = document.createElement('input');
-          inp.type = 'checkbox';
-          inp.name = 'toppingSingle'; // preferred name
-          inp.value = t;
-          inp.className = 'toppingSingle';
-          // also include compatibility name attribute 'topping' if some variants expect it:
-          // we won't add a duplicate input; instead we'll register that buildOrderObject checks multiple name candidates.
-          lbl.appendChild(inp);
-          lbl.appendChild(document.createTextNode(' ' + t));
-          wrap.appendChild(lbl);
-        });
-        elSingleGroup.appendChild(wrap);
-      }
-    }
+// ------------ build UI for toppings (populates groups if empty) ------------
+function buildToppingsUI() {
 
-    // DOUBLE group: include single list + double-only list
-    if (elDoubleGroup) {
-      if (elDoubleGroup.innerHTML.trim() === '') {
-        const container = document.createElement('div');
-        container.className = 'double-toppings-wrapper';
+  /* ======================
+     SINGLE GROUP
+     ====================== */
+  if (elSingleGroup && elSingleGroup.innerHTML.trim() === '') {
+    const wrap = document.createElement('div');
+    wrap.className = 'topping-grid';
 
-        // single list inside double (so double mode shows single options)
-        const singleWrap = document.createElement('div');
-        singleWrap.className = 'double-single-list';
-        const titleS = document.createElement('div');
-        titleS.className = 'subtitle';
-        titleS.textContent = 'Topping (Single)';
-        singleWrap.appendChild(titleS);
-        SINGLE_TOPPINGS.forEach(t => {
-          const lbl = document.createElement('label');
-          lbl.className = 'topping-option';
-          const inp = document.createElement('input');
-          inp.type = 'checkbox';
-          inp.name = 'toppingDouble'; // use distinct name in double list
-          inp.value = t;
-          inp.className = 'toppingDouble';
-          lbl.appendChild(inp);
-          lbl.appendChild(document.createTextNode(' ' + t));
-          singleWrap.appendChild(lbl);
-        });
-        container.appendChild(singleWrap);
+    SINGLE_TOPPINGS.forEach(t => {
+      const lbl = document.createElement('label');
+      lbl.className = 'topping-option';
 
-        // double-only (taburan) inside double group
-        const doubleWrap = document.createElement('div');
-        doubleWrap.className = 'double-only-list';
-        const titleD = document.createElement('div');
-        titleD.className = 'subtitle';
-        titleD.textContent = 'Topping Tambahan (Taburan)';
-        doubleWrap.appendChild(titleD);
-        DOUBLE_ONLY_TOPPINGS.forEach(t => {
-          const lbl = document.createElement('label');
-          lbl.className = 'topping-option';
-          const inp = document.createElement('input');
-          inp.type = 'checkbox';
-          inp.name = 'taburan';
-          inp.value = t;
-          inp.className = 'taburan';
-          lbl.appendChild(inp);
-          lbl.appendChild(document.createTextNode(' ' + t));
-          doubleWrap.appendChild(lbl);
-        });
-        container.appendChild(doubleWrap);
+      const inp = document.createElement('input');
+      inp.type = 'checkbox';
+      inp.name = 'toppingSingle';
+      inp.value = t;
+      inp.className = 'toppingSingle';
 
-        elDoubleGroup.appendChild(container);
-      }
+      lbl.appendChild(inp);
+      lbl.appendChild(document.createTextNode(' ' + t));
+      wrap.appendChild(lbl);
+    });
+
+    elSingleGroup.appendChild(wrap);
+  }
+
+  /* ======================
+     DOUBLE GROUP
+     (Single + Taburan)
+     ====================== */
+  if (elDoubleGroup && elDoubleGroup.innerHTML.trim() === '') {
+    const container = document.createElement('div');
+    container.className = 'double-toppings-wrapper';
+
+    // ---- Single toppings (inside double) ----
+    const singleWrap = document.createElement('div');
+    singleWrap.className = 'double-single-list';
+
+    const titleS = document.createElement('div');
+    titleS.className = 'subtitle';
+    titleS.textContent = 'Topping (Single)';
+    singleWrap.appendChild(titleS);
+
+    SINGLE_TOPPINGS.forEach(t => {
+      const lbl = document.createElement('label');
+      lbl.className = 'topping-option';
+
+      const inp = document.createElement('input');
+      inp.type = 'checkbox';
+      inp.name = 'toppingDouble';
+      inp.value = t;
+      inp.className = 'toppingDouble';
+
+      lbl.appendChild(inp);
+      lbl.appendChild(document.createTextNode(' ' + t));
+      singleWrap.appendChild(lbl);
+    });
+
+    container.appendChild(singleWrap);
+
+    // ---- Taburan (HANYA di double) ----
+    const taburanWrap = document.createElement('div');
+    taburanWrap.className = 'double-only-list';
+
+    const titleD = document.createElement('div');
+    titleD.className = 'subtitle';
+    titleD.textContent = 'Topping Tambahan (Taburan)';
+    taburanWrap.appendChild(titleD);
+
+    DOUBLE_ONLY_TOPPINGS.forEach(t => {
+      const lbl = document.createElement('label');
+      lbl.className = 'topping-option';
+
+      const inp = document.createElement('input');
+      inp.type = 'checkbox';
+      inp.name = 'taburan';
+      inp.value = t;
+      inp.className = 'taburan';
+
+      lbl.appendChild(inp);
+      lbl.appendChild(document.createTextNode(' ' + t));
+      taburanWrap.appendChild(lbl);
+    });
+
+    container.appendChild(taburanWrap);
+    elDoubleGroup.appendChild(container);
+  }
 }
 
-    // Taburan group (separate list) - only if empty
-    if (elTaburanGroup) {
-      if (elTaburanGroup.innerHTML.trim() === '') {
-        const title = document.createElement('div');
-        title.className = 'subtitle';
-        title.textContent = 'Taburan (opsional)';
-        elTaburanGroup.appendChild(title);
-        DOUBLE_ONLY_TOPPINGS.forEach(t => {
-          const lbl = document.createElement('label');
-          lbl.className = 'topping-option';
-          const inp = document.createElement('input');
-          inp.type = 'checkbox';
-          inp.name = 'taburan';
-          inp.value = t;
-          inp.className = 'taburan';
-          lbl.appendChild(inp);
-          lbl.appendChild(document.createTextNode(' ' + t));
-          elTaburanGroup.appendChild(lbl);
-        });
-      }
-    }
-  }
+/* ======================
+   SHOW / HIDE LOGIC
+   ====================== */
+function updateToppingVisibility() {
+  const mode = getRadioValue('ultraToppingMode') || 'non';
 
-  // ------------ show/hide topping areas based on mode ------------
-  function updateToppingVisibility() {
-    const mode = getRadioValue('ultraToppingMode') || 'non';
-    // hide all
-    if (elSingleGroup) elSingleGroup.classList.add('hidden');
-    if (elDoubleGroup) elDoubleGroup.classList.add('hidden');
-    if (elTaburanGroup) elTaburanGroup.classList.add('hidden');
+  // sembunyikan semua dulu
+  if (elSingleGroup) elSingleGroup.classList.add('hidden');
+  if (elDoubleGroup) elDoubleGroup.classList.add('hidden');
 
-    if (mode === 'single') {
-      if (elSingleGroup) elSingleGroup.classList.remove('hidden');
-      if (elTaburanGroup) elTaburanGroup.classList.remove('hidden'); // allow taburan if user wants separate
-    } else if (mode === 'double') {
-      if (elDoubleGroup) elDoubleGroup.classList.remove('hidden');
-      if (elTaburanGroup) elTaburanGroup.classList.remove('hidden');
-    } else {
-      // non: nothing shown
-    }
+  if (mode === 'single') {
+    // SINGLE → hanya topping single
+    if (elSingleGroup) elSingleGroup.classList.remove('hidden');
   }
+  else if (mode === 'double') {
+    // DOUBLE → single + taburan (dari elDoubleGroup)
+    if (elDoubleGroup) elDoubleGroup.classList.remove('hidden');
+  }
+  // mode lain → tidak tampil apa-apa
+}
 
   // ------------ pricing ------------
   function getPricePerBox() {
