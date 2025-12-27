@@ -1,49 +1,52 @@
+// assets/js/core/auth.js
+
 import { Storage } from "./storage.js";
 import { CONFIG } from "./config.js";
 
 const PIN_KEY = "admin_pin";
 const SESSION_KEY = "session";
 
-function normalizePin(value) {
-  if (!value) return null;
-  if (typeof value === "string") return value;
-  // jika object / number / lainnya
-  return String(value);
+function normalize(value) {
+  if (value === null || value === undefined) return null;
+  return String(value).replace(/^"+|"+$/g, "").trim();
 }
 
-function isBase64(str) {
+function encode(pin) {
+  return btoa(pin);
+}
+
+function decode(pin) {
   try {
-    return btoa(atob(str)) === str;
+    return atob(pin);
   } catch {
-    return false;
+    return null;
   }
 }
 
 export const Auth = {
-  login(pin) {
+  login(inputPin) {
+    const pin = normalize(inputPin);
     if (!pin || pin.length < 4) return false;
 
-    let savedPin = normalizePin(Storage.get(PIN_KEY));
+    let saved = normalize(Storage.get(PIN_KEY));
 
-    // ===== FIRST LOGIN =====
-    if (!savedPin) {
-      Storage.set(PIN_KEY, btoa(pin));
+    // === FIRST LOGIN ===
+    if (!saved) {
+      Storage.set(PIN_KEY, encode(pin));
       this.startSession();
       return true;
     }
 
-    // ===== MIGRATION (PLAIN → BASE64) =====
-    if (!isBase64(savedPin)) {
-      if (savedPin === pin) {
-        Storage.set(PIN_KEY, btoa(pin));
-        this.startSession();
-        return true;
-      }
-      return false;
+    // === TRY BASE64 ===
+    const decoded = decode(saved);
+    if (decoded && decoded === pin) {
+      this.startSession();
+      return true;
     }
 
-    // ===== NORMAL LOGIN =====
-    if (atob(savedPin) === pin) {
+    // === TRY LEGACY PLAIN ===
+    if (saved === pin) {
+      Storage.set(PIN_KEY, encode(pin)); // migrate
       this.startSession();
       return true;
     }
@@ -65,6 +68,7 @@ export const Auth = {
       this.logout();
       return false;
     }
+
     return true;
   },
 
