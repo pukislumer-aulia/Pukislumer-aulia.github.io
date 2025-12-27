@@ -4,6 +4,13 @@ import { CONFIG } from "./config.js";
 const PIN_KEY = "admin_pin";
 const SESSION_KEY = "session";
 
+function normalizePin(value) {
+  if (!value) return null;
+  if (typeof value === "string") return value;
+  // jika object / number / lainnya
+  return String(value);
+}
+
 function isBase64(str) {
   try {
     return btoa(atob(str)) === str;
@@ -13,28 +20,21 @@ function isBase64(str) {
 }
 
 export const Auth = {
-  /**
-   * Login admin
-   * - Support PIN lama (plain)
-   * - Support PIN baru (base64)
-   */
   login(pin) {
     if (!pin || pin.length < 4) return false;
 
-    let savedPin = Storage.get(PIN_KEY);
+    let savedPin = normalizePin(Storage.get(PIN_KEY));
 
-    // ===== FIRST TIME SETUP =====
+    // ===== FIRST LOGIN =====
     if (!savedPin) {
       Storage.set(PIN_KEY, btoa(pin));
       this.startSession();
       return true;
     }
 
-    // ===== MIGRATION SUPPORT =====
-    // Jika PIN lama masih plain text
+    // ===== MIGRATION (PLAIN → BASE64) =====
     if (!isBase64(savedPin)) {
       if (savedPin === pin) {
-        // migrate ke base64
         Storage.set(PIN_KEY, btoa(pin));
         this.startSession();
         return true;
@@ -42,7 +42,7 @@ export const Auth = {
       return false;
     }
 
-    // ===== NORMAL VALIDATION =====
+    // ===== NORMAL LOGIN =====
     if (atob(savedPin) === pin) {
       this.startSession();
       return true;
@@ -51,36 +51,23 @@ export const Auth = {
     return false;
   },
 
-  /**
-   * Simpan session login
-   */
   startSession() {
     Storage.set(SESSION_KEY, {
       loginAt: Date.now()
     });
   },
 
-  /**
-   * Cek status login + timeout
-   */
   isLoggedIn() {
     const session = Storage.get(SESSION_KEY);
     if (!session || !session.loginAt) return false;
 
-    const expired =
-      Date.now() - session.loginAt > CONFIG.SESSION_TIMEOUT;
-
-    if (expired) {
+    if (Date.now() - session.loginAt > CONFIG.SESSION_TIMEOUT) {
       this.logout();
       return false;
     }
-
     return true;
   },
 
-  /**
-   * Logout bersih
-   */
   logout() {
     Storage.remove(SESSION_KEY);
   }
