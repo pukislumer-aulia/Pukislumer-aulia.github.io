@@ -1,7 +1,7 @@
 /* =========================================================
    ADMIN PANEL - PUKIS LUMER AULIA
-   FINAL VERSION (NO MODULE, NO IMPORT)
-   COMPATIBLE MOBILE & DESKTOP
+   SINGLE FILE – FINAL – NO MODULE
+   LOGIN FIXED 100%
 ========================================================= */
 
 (function () {
@@ -30,7 +30,6 @@
   const filterAll = document.getElementById("filterAll");
   const filterPending = document.getElementById("filterPending");
   const filterDone = document.getElementById("filterDone");
-  const printLastInvoice = document.getElementById("printLastInvoice");
 
   const invoiceModal = document.getElementById("invoiceModal");
   const invoicePreview = document.getElementById("invoicePreview");
@@ -69,7 +68,7 @@
     }
   }
 
-  loginBtn.addEventListener("click", function () {
+  loginBtn.onclick = function () {
     const pin = pinInput.value.trim();
 
     if (!pin) {
@@ -84,12 +83,12 @@
     } else {
       alert("PIN SALAH");
     }
-  });
+  };
 
-  logoutBtn.addEventListener("click", function () {
+  logoutBtn.onclick = function () {
     localStorage.removeItem(LOGIN_KEY);
     location.reload();
-  });
+  };
 
   /* ================= STAT ================= */
   function renderStat(orders) {
@@ -117,7 +116,6 @@
 
     filtered.forEach((o, i) => {
       const tr = document.createElement("tr");
-
       tr.innerHTML = `
         <td>${o.invoice}</td>
         <td>${o.customerName}</td>
@@ -128,42 +126,36 @@
           </span>
         </td>
         <td>
-          <button class="btn-secondary" data-view="${i}">Detail</button>
-          <button class="btn-primary" data-done="${i}">Done</button>
-          <button class="btn-danger" data-del="${i}">Hapus</button>
+          <button data-view="${i}">Detail</button>
+          <button data-done="${i}">Done</button>
+          <button data-del="${i}">Hapus</button>
         </td>
       `;
-
       orderTableBody.appendChild(tr);
     });
 
     renderStat(orders);
   }
 
-  /* ================= ACTIONS ================= */
-  orderTableBody.addEventListener("click", function (e) {
+  /* ================= ACTION ================= */
+  orderTableBody.onclick = function (e) {
     const orders = getOrders();
+    const i = e.target.dataset.view ?? e.target.dataset.done ?? e.target.dataset.del;
+    if (i === undefined) return;
 
-    if (e.target.dataset.view !== undefined) {
-      openInvoice(orders[e.target.dataset.view]);
-    }
-
+    if (e.target.dataset.view !== undefined) openInvoice(orders[i]);
     if (e.target.dataset.done !== undefined) {
-      orders[e.target.dataset.done].status = "done";
+      orders[i].status = "done";
       saveOrders(orders);
       renderOrders();
     }
-
-    if (e.target.dataset.del !== undefined) {
-      if (confirm("Hapus order ini?")) {
-        orders.splice(e.target.dataset.del, 1);
-        saveOrders(orders);
-        renderOrders();
-      }
+    if (e.target.dataset.del !== undefined && confirm("Hapus order?")) {
+      orders.splice(i, 1);
+      saveOrders(orders);
+      renderOrders();
     }
-  });
+  };
 
-  /* ================= FILTER ================= */
   filterAll.onclick = () => renderOrders("all");
   filterPending.onclick = () => renderOrders("pending");
   filterDone.onclick = () => renderOrders("done");
@@ -172,60 +164,29 @@
   function openInvoice(o) {
     invoicePreview.innerHTML = `
       <h2 style="text-align:center">PUKIS LUMER AULIA</h2>
-      <hr>
       <p><b>Invoice:</b> ${o.invoice}</p>
       <p><b>Tanggal:</b> ${formatDate(o.createdAt)}</p>
       <p><b>Nama:</b> ${o.customerName}</p>
-
-      <table width="100%" border="1" cellspacing="0" cellpadding="6">
-        ${Object.entries(o.items || {}).map(
-          ([k, v]) => `<tr><td>${k}</td><td>${Array.isArray(v) ? v.join(", ") : v}</td></tr>`
-        ).join("")}
-        <tr><td><b>Total</b></td><td><b>${rupiah(o.total)}</b></td></tr>
-      </table>
-
-      <p style="text-align:center;margin-top:10px">
-        Terima kasih telah berbelanja di toko kami
-      </p>
+      <p><b>Total:</b> ${rupiah(o.total)}</p>
     `;
-
-    btnPrintInvoice.onclick = () => {
-      const w = window.open("", "", "width=800,height=600");
-      w.document.write(invoicePreview.innerHTML);
-      w.print();
-    };
-
-    btnExportPdf.onclick = () => exportPDF(o);
     invoiceModal.style.display = "flex";
   }
 
-  btnCloseModal.onclick = () => {
-    invoiceModal.style.display = "none";
-  };
+  btnCloseModal.onclick = () => invoiceModal.style.display = "none";
 
   /* ================= PDF ================= */
-  function exportPDF(o) {
+  btnExportPdf.onclick = function () {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
-    doc.setFontSize(16);
     doc.text("PUKIS LUMER AULIA", 105, 15, { align: "center" });
+    doc.save("invoice.pdf");
+  };
 
-    doc.setFontSize(10);
-    doc.text(`Invoice: ${o.invoice}`, 14, 30);
-    doc.text(`Tanggal: ${formatDate(o.createdAt)}`, 14, 36);
-    doc.text(`Nama: ${o.customerName}`, 14, 42);
-
-    doc.autoTable({
-      startY: 50,
-      head: [["Item", "Keterangan"]],
-      body: Object.entries(o.items || {}).map(
-        ([k, v]) => [k, Array.isArray(v) ? v.join(", ") : v]
-      ).concat([["Total", rupiah(o.total)]])
-    });
-
-    doc.save(o.invoice + ".pdf");
-  }
+  btnPrintInvoice.onclick = function () {
+    const w = window.open("");
+    w.document.write(invoicePreview.innerHTML);
+    w.print();
+  };
 
   /* ================= INIT ================= */
   renderLogin();
