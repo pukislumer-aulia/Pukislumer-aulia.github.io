@@ -9,7 +9,7 @@
 
   // ------------ CONFIG ------------
   const ADMIN_WA = '6281296668670';
-  const STORAGE_KEY = 'pukis_orders';
+  const STORAGE_KEY = 'orders';
   const SINGLE_TOPPINGS = ['Coklat', 'Tiramisu', 'Vanilla', 'Stroberi', 'Cappucino'];
   const DOUBLE_ONLY_TOPPINGS = ['Meses', 'Keju', 'Kacang', 'Choco Chip', 'Oreo'];
   const BASE_PRICE = {
@@ -292,25 +292,31 @@ function updateToppingVisibility() {
     const total = subtotal - discount;
     const invoice = genInvoice();
 
-    return {
-      invoice,
-      nama: namaVal,
-      wa,
-      jenis,
-      isi,
-      jumlah,
-      mode,
-      single: singleChosen,
-      double: doubleChosen,
-      taburan: taburanChosen,
-      note,
-      pricePerBox,
-      subtotal,
-      discount,
-      total,
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    };
+return {
+  id: invoice,
+  invoice: invoice,
+  customerName: namaVal,
+  wa: wa,
+  note: note,
+
+  items: {
+    jenis: jenis,
+    isiBox: isi,
+    mode: mode,
+    topping: singleChosen.length ? singleChosen : doubleChosen,
+    taburan: taburanChosen,
+    jumlahBox: jumlah,
+    hargaSatuan: pricePerBox,
+    subtotal: subtotal,
+    diskon: discount,
+    total: total
+  },
+
+  total: total,
+  status: 'pending',
+  createdAt: Date.now(),
+  updatedAt: Date.now()
+};
   }
 
   // ------------ render nota (matches your example format) ------------
