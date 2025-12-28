@@ -1,141 +1,81 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Dashboard – Pukis Lumer Aulia</title>
-
-  <meta name="api-base" content="/api">
-
-  <!-- ADMIN STYLE -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin — Pukis Lumer Aulia</title>
   <link rel="stylesheet" href="assets/css/admin.css">
 </head>
 <body>
 
-  <!-- ================= LOGIN SCREEN ================= -->
-  <div id="loginScreen" class="login-wrapper">
-    <div class="login-box">
-      <h2>Login Admin</h2>
+<!-- LOGIN -->
+<div id="loginScreen" class="login-wrapper">
+  <div class="login-box">
+    <h2>Login Admin</h2>
+    <input type="password" id="pinInput" placeholder="PIN Admin">
+    <button id="loginBtn" class="btn-primary">Login</button>
+  </div>
+</div>
 
-      <input
-        type="password"
-        id="pinInput"
-        placeholder="Masukkan PIN Admin"
-        autocomplete="off"
-      >
+<!-- ADMIN -->
+<div id="adminPanel" class="admin-wrapper" style="display:none">
 
-      <button id="loginBtn" class="btn-primary">
-        Login
-      </button>
+  <header class="admin-header">
+    <h1>Dashboard Admin</h1>
+    <button id="logoutBtn" class="btn-logout">Logout</button>
+  </header>
 
-      <p style="font-size:12px;color:#666;margin-top:8px;">
-        (Jika ini login pertama, PIN akan disimpan secara lokal.)
-      </p>
+  <!-- STATS -->
+  <div class="stat-section">
+    <div class="stat-card">
+      <div id="totalOrders" class="stat-number">0</div>Total
+    </div>
+    <div class="stat-card">
+      <div id="pendingOrders" class="stat-number">0</div>Pending
+    </div>
+    <div class="stat-card">
+      <div id="completedOrders" class="stat-number">0</div>Selesai
     </div>
   </div>
 
-  <!-- ================= ADMIN PANEL ================= -->
-  <div id="adminPanel" class="admin-wrapper" style="display:none;">
-
-    <!-- HEADER -->
-    <div class="admin-header">
-      <h1>Admin Dashboard</h1>
-      <button id="logoutBtn" class="btn-logout">
-        Logout
-      </button>
-    </div>
-
-    <!-- STATISTIK -->
-    <div class="stat-section" style="margin-top:18px;">
-      <div class="stat-card">
-        <div class="stat-number" id="totalOrders">0</div>
-        Total Orders
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="pendingOrders">0</div>
-        Pending
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="completedOrders">0</div>
-        Selesai
-      </div>
-    </div>
-
-    <!-- ORDER MANAGEMENT -->
-    <div class="order-section">
-      <h2>Order Management</h2>
-
-      <div class="action-buttons" style="margin-bottom:12px;">
-        <button id="filterAll" class="btn-primary">Semua</button>
-        <button id="filterPending" class="btn-secondary">Pending</button>
-        <button id="filterDone" class="btn-secondary">Selesai</button>
-        <button id="printLastInvoice" class="btn-primary">
-          Cetak Nota Terakhir
-        </button>
-      </div>
-
-      <table id="orderTable" style="width:100%;border-collapse:collapse;">
-        <thead>
-          <tr>
-            <th>Invoice</th>
-            <th>Nama</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- diisi via JS -->
-        </tbody>
-      </table>
-    </div>
-
-    <!-- TESTIMONI -->
-    <div style="margin-top:20px;">
-      <h2>Testimoni (Import / Export)</h2>
-      <div style="display:flex;gap:8px;">
-        <button id="exportTesti" class="btn-primary">
-          Ekspor Testimoni
-        </button>
-        <input
-          id="importTestiInput"
-          type="file"
-          accept="application/json"
-        >
-      </div>
-    </div>
-
+  <!-- FILTER -->
+  <div class="action-buttons">
+    <button data-filter="all" class="btn-primary">Semua</button>
+    <button data-filter="pending" class="btn-secondary">Pending</button>
+    <button data-filter="done" class="btn-secondary">Selesai</button>
   </div>
 
-  <!-- ================= MODAL NOTA ================= -->
-  <div id="notaModal" class="modal" style="display:none;">
-    <div class="modal-box">
-      <h3>Cetak Nota</h3>
+  <!-- TABLE -->
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>Invoice</th>
+        <th>Nama</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="orderBody"></tbody>
+  </table>
+</div>
 
-      <div id="notaContent">
-        Memuat...
-      </div>
-
-      <br>
-
-      <button id="modalPrintBtn" class="btn-primary">
-        Cetak Nota
-      </button>
-      <button
-        class="btn-secondary"
-        onclick="document.getElementById('notaModal').style.display='none'"
-      >
-        Tutup
-      </button>
-    </div>
+<!-- MODAL DETAIL -->
+<div id="orderModal" class="modal">
+  <div class="modal-actions">
+  <button id="printNotaBtn" class="btn-primary">Cetak Nota</button>
+  <button id="pdfNotaBtn" class="btn-secondary">Download PDF</button>
+  <button id="markDoneBtn" class="btn-primary">Selesaikan</button>
+  <button id="deleteBtn" class="btn-danger">Hapus</button>
+  <button onclick="closeModal()" class="btn-secondary">Tutup</button>
+    
+  <div class="modal-box">
+    <h3>Detail Pesanan</h3>
+    <div id="modalContent"></div>
   </div>
+    
 
-  <!-- ================= JS LIB (PDF) ================= -->
-  <script src="assets/js/lib/jspdf.umd.min.js"></script>
-  <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
-
-  <!-- ================= ADMIN ENTRY POINT ================= -->
-  <script type="module" src="assets/js/admin.js"></script>
-
+<script src="assets/js/admin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
