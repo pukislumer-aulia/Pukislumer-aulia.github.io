@@ -191,7 +191,87 @@ a {
     background: #1e324b;
     color: #fff;
     padding: 8px;
-    border-radius: 6px;
+/* =====================================================
+   TOPPING SYSTEM — FINAL LOCKED
+   Sinkron dengan order.js
+===================================================== */
+
+/* Container utama topping */
+.topping-wrap {
+  display: none;               /* default SEMBUNYI */
+  margin-top: 8px;
+  padding: 10px;
+  background: #102033;
+  border-radius: 8px;
+}
+
+/* Ditampilkan oleh JS */
+.topping-wrap.show {
+  display: block;
+}
+
+/* Grid topping */
+.topping-wrap .topping-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Label checkbox */
+.topping-wrap label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #1b314c;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+/* Checkbox */
+.topping-wrap input[type="checkbox"] {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+/* Hover */
+.topping-wrap label:hover {
+  background: #244a70;
+}
+
+/* Checked state (ditambah oleh JS) */
+.topping-wrap label.checked {
+  background: #2d6cdf;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Subtitle / judul kecil */
+.topping-subtitle {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #aad4ff;
+  font-size: 13px;
+}
+
+/* Mode radio (Non / Single / Double) */
+.topping-mode-container {
+  margin-top: 12px;
+  color: #fff;
+}
+
+.mode-label {
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.mode-label input {
+  margin-right: 4px;
+}    border-radius: 6px;
     border: 1px solid #294766;
 }
 
@@ -216,67 +296,7 @@ a {
 ===================================== */
 
 /* Default tampil */
-.topping-wrap {
-    display: block;
-    margin-top: 8px;
-    padding: 10px;
-    background: #102033;
-    border-radius: 8px;
-}
 
-/* Disembunyikan oleh JS */
-.topping-wrap.hidden {
-    display: none !important;
-}
-
-/* Ditampilkan oleh JS */
-.topping-wrap.active {
-    display: block !important;
-}
-
-/* Input & Select */
-.topping-wrap select,
-.topping-wrap .order-input {
-    margin-bottom: 8px;
-    background: #1b314c;
-    border: 1px solid #2a4a6b;
-    padding: 8px;
-    color: #fff;
-    width: 100%;
-    border-radius: 6px;
-}
-
-/* Label */
-.topping-wrap label {
-    color: #fff;
-    font-size: 14px;
-    display: block;
-    margin-bottom: 5px;
-}
-
-/* Flexible container */
-.topping-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.topping-option {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.topping-option input[type="checkbox"] {
-    transform: scale(1.1);
-}
-
-/* Subtitle */
-.topping-wrap .subtitle {
-    margin-top: 6px;
-    font-weight: 600;
-    color: #aad4ff;
-}
 
 /* =====================================
    PRICE SUMMARY
