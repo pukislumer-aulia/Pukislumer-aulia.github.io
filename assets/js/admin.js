@@ -215,6 +215,127 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ================= INIT ================= */
     renderLogin();
+/* =========================================================
+   assets/js/admin.js
+   FINAL — ADMIN DASHBOARD
+   NON MODULE | REALTIME POLLING | PDF
+========================================================= */
+(function () {
+  "use strict";
 
+  const PIN = "1234"; // GANTI PIN DI SINI
+  const STORAGE_KEY = "orders";
+
+  const $ = s => document.querySelector(s);
+  const formatRp = n => "Rp " + Number(n || 0).toLocaleString("id-ID");
+
+  /* ===== LOGIN ===== */
+  const loginScreen = $("#loginScreen");
+  const adminPanel = $("#adminPanel");
+
+  $("#loginBtn")?.addEventListener("click", () => {
+    const pin = $("#pinInput").value;
+    if (pin === PIN) {
+      loginScreen.style.display = "none";
+      adminPanel.style.display = "block";
+      loadOrders();
+    } else {
+      alert("PIN SALAH");
+    }
+  });
+
+  $("#logoutBtn")?.addEventListener("click", () => {
+    location.reload();
+  });
+
+  /* ===== ORDER RENDER ===== */
+  function loadOrders() {
+    const orders = OrderStore.getAll();
+    const tbody = $("#orderTable tbody");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    orders.forEach((o, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${o.invoice}</td>
+        <td>${o.customerName || "-"}</td>
+        <td>${formatRp(o.total)}</td>
+        <td>
+          <select data-i="${i}">
+            <option ${o.status === "pending" ? "selected" : ""}>pending</option>
+            <option ${o.status === "done" ? "selected" : ""}>done</option>
+          </select>
+        </td>
+        <td>
+          <button data-pdf="${i}">PDF</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    bindEvents();
+    updateStat();
+  }
+
+  function bindEvents() {
+    $$("select[data-i]").forEach(sel => {
+      sel.onchange = () => {
+        const idx = sel.dataset.i;
+        const orders = OrderStore.getAll();
+        orders[idx].status = sel.value;
+        OrderStore.saveAll(orders);
+        updateStat();
+      };
+    });
+
+    $$("button[data-pdf]").forEach(btn => {
+      btn.onclick = () => {
+        const o = OrderStore.getAll()[btn.dataset.pdf];
+        printPDF(o);
+      };
+    });
+  }
+
+  /* ===== STAT ===== */
+  function updateStat() {
+    const orders = OrderStore.getAll();
+    $("#statTotalOrder").textContent = orders.length;
+    $("#statPending").textContent = orders.filter(o => o.status === "pending").length;
+    $("#statDone").textContent = orders.filter(o => o.status === "done").length;
+    $("#statRevenue").textContent = formatRp(
+      orders.reduce((a, b) => a + (b.total || 0), 0)
+    );
+  }
+
+  /* ===== PDF ===== */
+  function printPDF(order) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: "mm", format: [58, 200] });
+
+    let y = 8;
+    doc.setFontSize(10);
+    doc.text("PUKIS LUMER AULIA", 29, y, { align: "center" });
+    y += 6;
+
+    doc.setFontSize(8);
+    doc.text(`Invoice: ${order.invoice}`, 2, y); y += 4;
+    doc.text(`Nama: ${order.customerName || "-"}`, 2, y); y += 4;
+    doc.text(`Total: ${formatRp(order.total)}`, 2, y);
+
+    doc.text("Terima kasih 🙏", 29, y + 10, { align: "center" });
+    doc.autoPrint();
+    window.open(doc.output("bloburl"), "_blank");
+  }
+
+  /* ===== REALTIME (POLLING) ===== */
+  setInterval(() => {
+    if (adminPanel.style.display === "block") {
+      loadOrders();
+    }
+  }, 3000);
+
+})();
   })();
 });
