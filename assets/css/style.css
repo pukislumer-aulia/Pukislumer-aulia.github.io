@@ -262,5 +262,85 @@ label {
 button:active {
   transform: scale(0.97);
 }
+/* ===== FLOATING BUTTONS ===== */
+.toggle-float-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #ff5e9c;
+  color: #fff;
+  font-size: 28px;
+  border: none;
+  z-index: 99990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-icons-container {
+  position: fixed;
+  bottom: 85px;
+  right: 20px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 99980;
+}
+
+.floating-icons-container.show {
+  display: flex;
+}
+
+.floating-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 22px;
+}
+
+.floating-icon.whatsapp { background:#25D366 }
+.floating-icon.shopee { background:#EE4D2D }
+.floating-icon.grab { background:#00B14F }
+
+/* ===== TOPPING SYSTEM (FINAL BENAR) ===== */
+.topping-wrap {
+  display: none;
+  margin-top: 8px;
+  padding: 10px;
+  background: #102033;
+  border-radius: 8px;
+}
+
+.topping-wrap.show {
+  display: block;
+}
+
+.topping-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.topping-wrap label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #1b314c;
+  cursor: pointer;
+}
+
+.topping-wrap label.checked {
+  background: #2d6cdf;
+  font-weight: 600;
+}
 
 /* END OF FILE — FINAL LOCKED */
