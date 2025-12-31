@@ -1,204 +1,98 @@
-/* =====================================
+/* =====================================================
    RESET & BASE
-===================================== */
+===================================================== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html, body {
-    font-family: 'Poppins', sans-serif;
-    background: #111;
-    color: #eee;
-    line-height: 1.5;
-    width: 100%;
-    overflow-x: hidden;
+  font-family: 'Poppins', sans-serif;
+  background: #111;
+  color: #eee;
+  width: 100%;
+  overflow-x: hidden;
+  line-height: 1.5;
 }
 
 img {
-    max-width: 100%;
-    display: block;
+  max-width: 100%;
+  display: block;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
-/* =====================================
-   LOADER
-===================================== */
-.site-loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #111;
-    color: #fff;
-    z-index: 99999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    letter-spacing: 0.4px;
-}
-
-/* =====================================
-   CONTAINER
-===================================== */
-.container {
-    max-width: 960px;
-    margin: auto;
-    padding: 15px;
-}
-
-/* =====================================
-   HERO SECTION
-===================================== */
-.hero-section {
-    margin-bottom: 35px;
-}
-
-.header-inline {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.hero-text p {
-    margin-bottom: 6px;
-    font-size: 14.5px;
-}
-
-/* Warna teks */
-.text-green-bold { color: #00ff91; font-weight: 700; }
-.text-black-bold { color: #f2f2f2; font-weight: 700; }
-.text-blue-dark-bold { color: #80c3ff; font-weight: 700; }
-.text-purple-dark-bold { color: #d09bff; font-weight: 700; }
-.text-maroon-bold { color: #ff7b7b; font-weight: 700; }
-.text-green-dark-big { color: #00ffa7; font-size: 20px; font-weight: 900; }
-.text-brown-dark-bold { color: #ffcf95; font-weight: 700; }
-.text-pink-bold { color: #ff9bd4; font-weight: 700; }
-.text-blue-bold { color: #92baff; font-weight: 700; }
-.text-black { color: #f1f1f1; }
-.text-pink { color: #ffafd9; }
-
-/* =====================================
-   SECTION TITLE
-===================================== */
-.section {
-    margin-bottom: 40px;
-}
-
-.section-title {
-    font-size: 22px;
-    color: #fff;
-    font-weight: 700;
-    margin-bottom: 12px;
-    text-shadow: 0 0 6px rgba(255,255,255,0.3);
-}
-
-/* =====================================
-   FACTS LIST
-===================================== */
-.facts-list {
-    padding-left: 18px;
-    color: #ddd;
-    margin-top: 6px;
-}
-
-.facts-list li {
-    margin-bottom: 5px;
-}
-
-/* =====================================
-   GALLERY
-===================================== */
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}
-
-.gallery-img {
-    border-radius: 8px;
-}
-
-/* =====================================
-   TESTIMONI
-===================================== */
-.testimonials-list {
-    list-style: none;
-    margin-top: 10px;
-}
-
-.testimonials-list li {
-    margin-bottom: 10px;
-    padding: 10px;
-    background: #1a1a1a;
-    border-radius: 8px;
-    color: #ccc;
-}
-
-/* =====================================
-   TESTIMONI FORM
-===================================== */
-.testimonial-form .input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    border: none;
-    background: #222;
-    color: #fff;
-}
-
-.btn-primary {
-    background: #ff5e9c;
-    padding: 10px 15px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    color: #fff;
-    font-weight: 600;
-    width: 100%;
-}
-
-.btn-primary:hover {
-    opacity: .85;
-}
-
-/* =====================================
-   ORDER BOX
-===================================== */
-.order-box {
-    background: #102033;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 40px;
-}
-
-.order-table label {
-    color: #fff;
-    font-size: 14px;
-}
-
-.order-input {
-    width: 100%;
-    background: #1e324b;
-    color: #fff;
-    padding: 8px;
 /* =====================================================
-   TOPPING SYSTEM — FINAL LOCKED
-   Sinkron dengan order.js
+   CONTAINER
+===================================================== */
+.container {
+  max-width: 960px;
+  margin: auto;
+  padding: 15px;
+}
+
+/* =====================================================
+   ORDER BOX
+===================================================== */
+.order-box {
+  background: #102033;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+
+.order-input,
+select {
+  width: 100%;
+  background: #1e324b;
+  color: #fff;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #294766;
+  margin-bottom: 8px;
+}
+
+.order-input:focus,
+select:focus {
+  outline: none;
+  border-color: #5ab0ff;
+  background: #253d59;
+}
+
+label {
+  color: #fff;
+  font-size: 14px;
+}
+
+/* =====================================================
+   MODE TOPPING (RADIO)
+===================================================== */
+.topping-mode-container {
+  margin-top: 12px;
+  color: #fff;
+}
+
+.mode-label {
+  margin-right: 14px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.mode-label input {
+  margin-right: 4px;
+}
+
+/* =====================================================
+   TOPPING SYSTEM — FINAL (SYNC ORDER.JS)
 ===================================================== */
 
-/* Container utama topping */
+/* Wrapper topping — default HIDDEN */
 .topping-wrap {
-  display: none;               /* default SEMBUNYI */
+  display: none;
   margin-top: 8px;
   padding: 10px;
   background: #102033;
@@ -210,8 +104,16 @@ a {
   display: block;
 }
 
-/* Grid topping */
-.topping-wrap .topping-grid {
+/* Subtitle */
+.topping-subtitle {
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #aad4ff;
+}
+
+/* Grid */
+.topping-grid {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -225,11 +127,15 @@ a {
   padding: 6px 8px;
   border-radius: 6px;
   background: #1b314c;
-  color: #fff;
   font-size: 14px;
   cursor: pointer;
   user-select: none;
   transition: background 0.2s ease;
+}
+
+/* Hover */
+.topping-wrap label:hover {
+  background: #244a70;
 }
 
 /* Checkbox */
@@ -238,340 +144,123 @@ a {
   cursor: pointer;
 }
 
-/* Hover */
-.topping-wrap label:hover {
-  background: #244a70;
-}
-
-/* Checked state (ditambah oleh JS) */
+/* Checked (ditambah JS) */
 .topping-wrap label.checked {
   background: #2d6cdf;
-  color: #fff;
   font-weight: 600;
 }
 
-/* Subtitle / judul kecil */
-.topping-subtitle {
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #aad4ff;
-  font-size: 13px;
-}
-
-/* Mode radio (Non / Single / Double) */
-.topping-mode-container {
-  margin-top: 12px;
-  color: #fff;
-}
-
-.mode-label {
-  margin-right: 12px;
-  cursor: pointer;
-}
-
-.mode-label input {
-  margin-right: 4px;
-}    border-radius: 6px;
-    border: 1px solid #294766;
-}
-
-.label-inline {
-    color: #fff;
-    margin-right: 10px;
-}
-
-.order-row-inline {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.mode-label {
-    margin-right: 10px;
-    color: #fff;
-}
-
-
-/* =====================================
+/* =====================================================
    PRICE SUMMARY
-===================================== */
+===================================================== */
 .price-summary {
-    padding: 10px;
-    border-radius: 6px;
-    font-size: 15px;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  background: #1b314c;
+  font-size: 14px;
 }
 
-/* =====================================
+.price-summary div {
+  margin-bottom: 4px;
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+.btn-primary {
+  background: #ff5e9c;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}
+
+/* =====================================================
    NOTA POPUP
-===================================== */
+===================================================== */
 .nota-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.78);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 999999;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.78);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999; tu
 }
 
 .nota-overlay.show {
-    display: flex !important;
+  display: flex;
 }
 
 .nota-card {
-    background: #fff;
-    width: 92%;
-    max-width: 380px;
-    border-radius: 10px;
-    padding: 15px;
-    color: #333;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  background: #fff;
+  width: 92%;
+  max-width: 380px;
+  border-radius: 10px;
+  padding: 15px;
+  color: #333;
 }
 
 .nota-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .btn-close {
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .btn-confirm {
-    background: #28c76f;
-    padding: 10px;
-    width: 100%;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    margin-top: 10px;
+  background: #28c76f;
+  padding: 10px;
+  width: 100%;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
 }
 
 .btn-print {
-    background: #7367f0;
-    padding: 10px;
-    width: 100%;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    margin-top: 10px;
+  background: #7367f0;
+  padding: 10px;
+  width: 100%;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
 }
 
-/* =====================================
-   FLOATING SHARE BUTTONS
-===================================== */
-.toggle-float-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #ff5e9c;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    border: none;
-    color: #fff;
-    font-size: 28px;
-    cursor: pointer;
-    z-index: 99990;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.floating-icons-container {
-    position: fixed;
-    bottom: 85px;
-    right: 20px;
-    display: none;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 99980;
-}
-
-.floating-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 22px;
-}
-
-.floating-icon.whatsapp { background: #25D366; }
-.floating-icon.shopee { background: #EE4D2D; }
-.floating-icon.gofood { background: #D50000; }
-.floating-icon.grab { background: #00B14F; }
-.floating-icon.maxim { background: #FFCC00; color: #000; }
-.floating-icon.kombi { background: #00B14F; }
-
-/* =====================================
-   ADMIN FLOATING BUTTON
-===================================== */
-.admin-float-btn {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: #ff5e9c;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    z-index: 99990;
-}
-
-/* =====================================
+/* =====================================================
    RESPONSIVE
-===================================== */
-@media (min-width: 600px) {
-    .header-inline {
-        flex-direction: row;
-        align-items: flex-start;
-    }
-
-    .hero-text p {
-        font-size: 15px;
-    }
+===================================================== */
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
 }
 
-@media (max-width: 420px) {
-    .toggle-float-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 26px;
-    }
-
-    .floating-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 20px;
-    }
-
-    .admin-float-btn {
-        width: 45px;
-        height: 45px;
-    }
-}
-
-/* =====================================
-   MISC FIXES (SAMA SEPERTI VERSI ASLI)
-===================================== */
-button:active { transform: scale(0.96); }
-
-.bottom-nav { display: none !important; visibility: hidden !important; }
-
-html { scroll-behavior: smooth; }
-
-.floating-icons-container,
-.header-inline,
-.order-row-inline {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-}
-
-img { -ms-interpolation-mode: bicubic; }
-
+/* =====================================================
+   UTIL
+===================================================== */
 .text-center { text-align: center; }
 .mb-10 { margin-bottom: 10px; }
 .mb-15 { margin-bottom: 15px; }
 .mb-20 { margin-bottom: 20px; }
 
-.admin-container {
-    max-width: 480px;
-    margin: auto;
-    background: #111927;
-    padding: 20px;
-    border-radius: 10px;
-    color: #fff;
+button:active {
+  transform: scale(0.97);
 }
 
-.admin-input {
-    width: 100%;
-    padding: 10px;
-    background: #1c2b3e;
-    border: 1px solid #324b69;
-    border-radius: 6px;
-    color: #fff;
-    margin-bottom: 12px;
-}
-
-.admin-btn {
-    width: 100%;
-    padding: 10px;
-    background: #ff5e9c;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.admin-btn:hover {
-    opacity: .85;
-}
-
-.ie11-flex {
-    display: -ms-flexbox !important;
-    display: flex !important;
-}
-
-.ie11-hide {
-    display: none !important;
-}
-
-footer.site-footer {
-    text-align: center;
-    color: #777;
-    font-size: 13px;
-    margin-top: 50px;
-    margin-bottom: 20px;
-    padding-bottom: calc(20px + var(--safe-bottom));
-    opacity: 0.75;
-}
-
-/* Safe Areas */
-:root {
-    --safe-top: env(safe-area-inset-top);
-    --safe-bottom: env(safe-area-inset-bottom);
-    --safe-left: env(safe-area-inset-left);
-    --safe-right: env(safe-area-inset-right);
-    color-scheme: only light;
-}
-
-body {
-    padding-bottom: var(--safe-bottom);
-    padding-left: var(--safe-left);
-    padding-right: var(--safe-right);
-}
-
-.hidden { display: none !important; }
-
-.no-select {
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-a:hover { opacity: 0.85; }
-
-.order-input:focus,
-.admin-input:focus,
-.testimonial-form .input:focus {
-    outline: none;
-    border: 1px solid #5ab0ff;
-    background: #253d59;
-}
-
-/* END FILE */
+/* END OF FILE — FINAL LOCKED */
