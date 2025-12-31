@@ -342,5 +342,26 @@ button:active {
   background: #2d6cdf;
   font-weight: 600;
 }
+/* ================================
+   RESTORE TEXT COLORS (FINAL)
+   Mengembalikan warna yang hilang
+================================ */
 
+/* Warna teks umum */
+.text-green-bold { color: #00ff91 !important; font-weight: 700; }
+.text-black-bold { color: #f2f2f2 !important; font-weight: 700; }
+.text-blue-dark-bold { color: #80c3ff !important; font-weight: 700; }
+.text-purple-dark-bold { color: #d09bff !important; font-weight: 700; }
+.text-maroon-bold { color: #ff7b7b !important; font-weight: 700; }
+.text-green-dark-big { color: #00ffa7 !important; font-size: 20px; font-weight: 900; }
+.text-brown-dark-bold { color: #ffcf95 !important; font-weight: 700; }
+.text-pink-bold { color: #ff9bd4 !important; font-weight: 700; }
+.text-blue-bold { color: #92baff !important; font-weight: 700; }
+.text-black { color: #f1f1f1 !important; }
+.text-pink { color: #ffafd9 !important; }
+
+/* Jangan rampas warna di topping */
+.topping-wrap label span {
+  color: inherit !important;
+}
 /* END OF FILE — FINAL LOCKED */
