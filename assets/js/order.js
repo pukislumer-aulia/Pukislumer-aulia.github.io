@@ -318,21 +318,38 @@
 ‎  async function onNotaPrint(e){ e.preventDefault(); const last = getLastOrder(); if (!last){ alert('Data nota belum tersedia. Silakan buat nota terlebih dahulu.'); return; } if (typeof window.generatePdf !== 'function'){ if (window.makeGeneratePdf && (window.jspdf || window.jsPDF)){ window.generatePdf = window.makeGeneratePdf(window.jspdf || window.jsPDF); } }
 ‎    if (typeof window.generatePdf === 'function'){ await window.generatePdf(last); } else { alert('PDF generator belum siap. Pastikan library jsPDF dimuat.'); } }
 ‎
-‎  // ---------------- TOPPING VISIBILITY ----------------
-‎  function updateToppingVisibility(){
-‎    const mode = getSelectedToppingMode();
-‎    const singleGroup = $('#ultraSingleGroup');
-‎    const doubleGroup = $('#ultraDoubleGroup');
-‎    if (!singleGroup || !doubleGroup) return;
-‎    if (mode === 'non'){
-‎      singleGroup.style.display = 'none'; doubleGroup.style.display = 'none';
-‎      $$('input[name="topping"]:checked').forEach(i => { i.checked = false; i.closest('label')?.classList.remove('checked'); });
-‎      $$('input[name="taburan"]:checked').forEach(i => { i.checked = false; i.closest('label')?.classList.remove('checked'); });
-‎    } else if (mode === 'single'){
-‎      singleGroup.style.display = 'flex'; doubleGroup.style.display = 'none';
-‎    } else if (mode === 'double'){
-‎      singleGroup.style.display = 'flex'; doubleGroup.style.display = 'flex';
-‎    }
+‎// ---------------- TOPPING VISIBILITY (FINAL) ----------------
+function updateToppingVisibility() {
+  const mode = getSelectedToppingMode();
+  const singleGroup = $('#ultraSingleGroup');
+  const doubleGroup = $('#ultraDoubleGroup');
+
+  if (!singleGroup || !doubleGroup) return;
+
+  // reset
+  singleGroup.classList.remove('show');
+  doubleGroup.classList.remove('show');
+
+  if (mode === 'non') {
+    $$('input[name="topping"]:checked').forEach(i => {
+      i.checked = false;
+      i.closest('label')?.classList.remove('checked');
+    });
+    $$('input[name="taburan"]:checked').forEach(i => {
+      i.checked = false;
+      i.closest('label')?.classList.remove('checked');
+    });
+  }
+
+  if (mode === 'single') {
+    singleGroup.classList.add('show');
+  }
+
+  if (mode === 'double') {
+    singleGroup.classList.add('show');
+    doubleGroup.classList.add('show');
+  }
+}
 ‎  }
 ‎
 ‎  // ---------------- PDF FACTORY ----------------
