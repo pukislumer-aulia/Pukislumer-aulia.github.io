@@ -188,22 +188,22 @@
         <!-- Mode Topping -->
 <div style="margin-top:12px;color:#fff" class="topping-mode-container">
   <span style="font-weight:700;display:block;margin-bottom:6px">Mode Topping</span>
-  <label class="mode-label"><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
-  <label class="mode-label"><input type="radio" name="ultraToppingMode" value="single"> Single</label>
-  <label class="mode-label"><input type="radio" name="ultraToppingMode" value="double"> Double</label>
+  <label class="mode-label">
+    <input type="radio" name="ultraToppingMode" value="non" checked> Non
+  </label>
+  <label class="mode-label">
+    <input type="radio" name="ultraToppingMode" value="single"> Single
+  </label>
+  <label class="mode-label">
+    <input type="radio" name="ultraToppingMode" value="double"> Double
+  </label>
 </div>
 
-<!-- SINGLE TOPPING (kosong – akan diisi oleh JavaScript) -->
-<div id="ultraSingleGroup" class="topping-wrap hidden" style="margin-top:10px;">
-</div>
+<!-- SINGLE TOPPING (diisi & dikontrol oleh JavaScript) -->
+<div id="ultraSingleGroup" class="topping-wrap" style="margin-top:10px;"></div>
 
-<!-- DOUBLE TOPPING (kosong – akan diisi oleh JavaScript) -->
-<div id="ultraDoubleGroup" class="topping-wrap hidden" style="margin-top:6px;">
-</div>
-
-<!-- TABURAN (dipisah – akan diisi otomatis oleh JS) -->
-<div id="ultraTaburanGroup" class="topping-wrap hidden" style="margin-top:6px;">
-</div>
+<!-- DOUBLE + TABURAN (diisi & dikontrol oleh JavaScript) -->
+<div id="ultraDoubleGroup" class="topping-wrap" style="margin-top:6px;"></div>
         <!-- Price summary -->
         <div class="price-summary" style="margin-top:12px;background:rgba(255,255,255,0.06);color:#fff">
           <div style="display:flex;justify-content:space-between"><span>Harga / Box</span><span id="ultraPricePerBox">Rp0</span></div>
