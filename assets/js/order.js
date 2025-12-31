@@ -1,19 +1,17 @@
 /* =========================================================
-   assets/js/order.js  (FINAL – NON MODULE)
+   assets/js/order.js
+   FINAL TERKUNCI — JANGAN DIEDIT LAGI
    Dipakai oleh: index.html & admin.html
-   Fitur:
-   - Hitung harga otomatis
-   - Simpan order (localStorage)
-   - Sinkron admin & index
-   - Cetak nota PDF (jsPDF)
 ========================================================= */
-
 (function () {
   "use strict";
 
-  /* ================== KONFIGURASI ================== */
+  /* ================= KONFIG ================= */
   const STORAGE_KEY = "PUKIS_ORDERS";
   const ADMIN_WA = "6281296668670";
+
+  const SINGLE_TOPPINGS = ["Coklat","Tiramisu","Vanilla","Stroberi","Cappucino"];
+  const TABURAN = ["Meses","Keju","Kacang","Choco Chip","Oreo"];
 
   const BASE_PRICE = {
     Original: {
@@ -26,163 +24,164 @@
     }
   };
 
-  /* ================== UTIL ================== */
-  const $ = s => document.querySelector(s);
+  /* ================= UTIL ================= */
+  const $  = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
+  const rp = n => "Rp " + Number(n||0).toLocaleString("id-ID");
 
-  function formatRp(n) {
-    return "Rp " + Number(n || 0).toLocaleString("id-ID");
-  }
+  const getRadio = n => document.querySelector(`input[name="${n}"]:checked`)?.value || "";
+  const getChecked = n => $$(`input[name="${n}"]:checked`).map(i => i.value);
 
-  function genInvoice() {
+  function genInvoice(){
     const d = new Date();
-    return (
-      "INV-" +
-      d.getFullYear() +
-      String(d.getMonth() + 1).padStart(2, "0") +
-      String(d.getDate()).padStart(2, "0") +
-      "-" +
-      Math.random().toString(36).slice(2, 6).toUpperCase()
-    );
+    return `INV-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
   }
 
-  function getOrders() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    } catch {
-      return [];
-    }
+  /* ================= STORAGE ================= */
+  function getOrders(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch { return []; }
   }
-
-  function saveOrders(arr) {
+  function saveOrder(o){
+    const arr = getOrders();
+    arr.push(o);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
   }
 
-  /* ================== HITUNG HARGA ================== */
-  function getPricePerBox() {
-    const jenis = $('input[name="ultraJenis"]:checked')?.value || "Original";
-    const isi = Number($('#ultraIsi')?.value || 5);
-    const mode = $('input[name="ultraToppingMode"]:checked')?.value || "non";
+  /* ================= HARGA ================= */
+  function pricePerBox(){
+    const jenis = getRadio("ultraJenis") || "Original";
+    const isi   = Number($("#ultraIsi")?.value || 5);
+    const mode  = getRadio("ultraToppingMode") || "non";
     return BASE_PRICE[jenis][isi][mode];
   }
 
-  function updatePriceUI() {
-    const jumlah = Number($('#ultraJumlah')?.value || 1);
-    const harga = getPricePerBox();
-    const subtotal = harga * jumlah;
+  function updatePrice(){
+    const qty = Number($("#ultraJumlah")?.value || 1);
+    const p   = pricePerBox();
+    const sub = p * qty;
+    let disc = 0;
+    if (qty >= 10) disc = 1000;
+    else if (qty >= 5) disc = Math.round(sub * 0.01);
+    const total = sub - disc;
 
-    let diskon = 0;
-    if (jumlah >= 10) diskon = 1000;
-    else if (jumlah >= 5) diskon = Math.round(subtotal * 0.01);
+    $("#ultraPricePerBox") && ($("#ultraPricePerBox").textContent = rp(p));
+    $("#ultraSubtotal") && ($("#ultraSubtotal").textContent = rp(sub));
+    $("#ultraDiscount") && ($("#ultraDiscount").textContent = disc ? "-" + rp(disc) : "-");
+    $("#ultraGrandTotal") && ($("#ultraGrandTotal").textContent = rp(total));
 
-    const total = subtotal - diskon;
-
-    $('#ultraPricePerBox') && ($('#ultraPricePerBox').textContent = formatRp(harga));
-    $('#ultraSubtotal') && ($('#ultraSubtotal').textContent = formatRp(subtotal));
-    $('#ultraDiscount') && ($('#ultraDiscount').textContent = diskon ? '-' + formatRp(diskon) : '-');
-    $('#ultraGrandTotal') && ($('#ultraGrandTotal').textContent = formatRp(total));
-
-    return { harga, subtotal, diskon, total };
+    return { p, sub, disc, total };
   }
 
-  /* ================== ORDER ================== */
-  function buildOrder() {
-    const nama = $('#ultraNama')?.value.trim();
-    const waRaw = $('#ultraWA')?.value.trim();
+  /* ================= TOPPING LOCK ================= */
+  function resetAllTopping(){
+    $$('input[name="topping"], input[name="taburan"]').forEach(c=>{
+      c.checked = false;
+      c.disabled = true;
+    });
+  }
 
+  function applyMode(){
+    const mode = getRadio("ultraToppingMode");
+
+    resetAllTopping();
+
+    if (mode === "single"){
+      $$('input[name="topping"]').forEach(c=>c.disabled=false);
+    }
+
+    if (mode === "double"){
+      $$('input[name="topping"], input[name="taburan"]').forEach(c=>c.disabled=false);
+    }
+  }
+
+  /* ================= BUILD ORDER (AMAN) ================= */
+  function buildOrder(){
+    const nama = $("#ultraNama")?.value.trim();
+    const waRaw = $("#ultraWA")?.value.trim();
     if (!nama || !waRaw) {
       alert("Nama & WhatsApp wajib diisi");
       return null;
     }
 
-    let wa = waRaw.replace(/\D/g, "");
+    let wa = waRaw.replace(/\D/g,"");
     if (wa.startsWith("0")) wa = "62" + wa.slice(1);
 
-    const jenis = $('input[name="ultraJenis"]:checked')?.value;
-    const isi = $('#ultraIsi')?.value;
-    const mode = $('input[name="ultraToppingMode"]:checked')?.value;
-    const jumlah = Number($('#ultraJumlah')?.value || 1);
+    const mode = getRadio("ultraToppingMode") || "non";
 
-    const price = updatePriceUI();
+    let topping = [];
+    let taburan = [];
+
+    if (mode === "single"){
+      topping = getChecked("topping").slice(0,5);
+    }
+
+    if (mode === "double"){
+      topping = getChecked("topping").slice(0,5);
+      taburan = getChecked("taburan").slice(0,5);
+    }
+
+    const harga = updatePrice();
 
     return {
       invoice: genInvoice(),
-      tanggal: new Date().toISOString(),
-      nama,
-      wa,
-      jenis,
-      isi,
+      nama, wa,
+      jenis: getRadio("ultraJenis"),
+      isi: $("#ultraIsi")?.value,
       mode,
-      jumlah,
-      harga: price.harga,
-      subtotal: price.subtotal,
-      diskon: price.diskon,
-      total: price.total,
-      status: "BARU"
+      topping,
+      taburan,
+      jumlah: Number($("#ultraJumlah")?.value || 1),
+      hargaSatuan: harga.p,
+      subtotal: harga.sub,
+      diskon: harga.disc,
+      total: harga.total,
+      status: "BARU",
+      waktu: Date.now()
     };
   }
 
-  /* ================== SIMPAN & WA ================== */
-  function saveOrder(order) {
-    const orders = getOrders();
-    orders.push(order);
-    saveOrders(orders);
+  /* ================= WA ================= */
+  function sendWA(order){
+    const text = `Pesanan Baru\nInvoice: ${order.invoice}\nNama: ${order.nama}\nTotal: ${rp(order.total)}`;
+    window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(text)}`,"_blank");
   }
 
-  function sendWAAdmin(order) {
-    const text = `Pesanan Baru\n\nInvoice: ${order.invoice}\nNama: ${order.nama}\nTotal: ${formatRp(order.total)}`;
-    window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(text)}`, '_blank');
-  }
-
-  /* ================== PDF ================== */
-  function cetakPDF(order) {
-    if (typeof window.jspdf === 'undefined') {
-      alert('jsPDF belum dimuat');
-      return;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-
-    pdf.setFontSize(12);
-    pdf.text('NOTA PEMESANAN', 20, 20);
-    pdf.text(`Invoice : ${order.invoice}`, 20, 30);
-    pdf.text(`Nama    : ${order.nama}`, 20, 38);
-    pdf.text(`WhatsApp: ${order.wa}`, 20, 46);
-    pdf.text(`Total   : ${formatRp(order.total)}`, 20, 60);
-
-    pdf.save(order.invoice + '.pdf');
-  }
-
-  /* ================== EVENT ================== */
-  function init() {
-    $$('input, select').forEach(el => el.addEventListener('change', updatePriceUI));
-
-    $('#formUltra')?.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const order = buildOrder();
-      if (!order) return;
-
-      saveOrder(order);
-      sendWAAdmin(order);
-      cetakPDF(order);
-
-      alert('Pesanan berhasil disimpan');
-      this.reset();
-      updatePriceUI();
+  /* ================= EVENT ================= */
+  function init(){
+    $$('input[name="ultraToppingMode"]').forEach(r=>{
+      r.addEventListener("change", ()=>{
+        applyMode();
+        updatePrice();
+      });
     });
 
-    updatePriceUI();
+    $$("input,select").forEach(el=>el.addEventListener("change", updatePrice));
+
+    $("#formUltra")?.addEventListener("submit", e=>{
+      e.preventDefault();
+      const o = buildOrder();
+      if (!o) return;
+      saveOrder(o);
+      sendWA(o);
+      alert("Pesanan tersimpan");
+      e.target.reset();
+      applyMode();
+      updatePrice();
+    });
+
+    applyMode();
+    updatePrice();
   }
 
-  document.readyState === 'loading'
-    ? document.addEventListener('DOMContentLoaded', init)
+  document.readyState === "loading"
+    ? document.addEventListener("DOMContentLoaded", init)
     : init();
 
-  /* ================== GLOBAL UNTUK ADMIN ================== */
+  /* ================= EXPOSE ADMIN ================= */
   window.OrderStore = {
     getAll: getOrders,
-    saveAll: saveOrders,
-    formatRp
+    saveAll: arr => localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)),
+    rp
   };
 })();
