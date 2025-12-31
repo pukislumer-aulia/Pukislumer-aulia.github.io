@@ -265,9 +265,7 @@
     © 2025 Pukis Lumer Aulia — Hak Cipta Dilindungi Undang-Undang
   </footer>
 
-  <!-- Scripts (order logic) -->
-  <script src="assets/js/order.js"></script>
-  <script>
+<script>
     // small inline to handle share toggle & floating icon behavior (keamanan: tidak memodifikasi order.js)
     (function(){
       const toggle = document.getElementById('shareToggleBtn');
@@ -333,7 +331,12 @@
       });
     })();
   </script>
+<!-- jsPDF -->
+<script src="assets/js/lib/jspdf.umd.min.js"></script>
+<script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
 
+<!-- ORDER SYSTEM -->
+<script src="assets/js/order.js"></script>
   
 </body>
 </html>
