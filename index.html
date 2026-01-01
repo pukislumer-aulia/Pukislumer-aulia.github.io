@@ -282,57 +282,52 @@
         icons.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
       });
 
-      // ensure only CEK PESANAN triggers popup via order.js — map UI: ultraSubmit click to trigger same behavior
-      document.addEventListener('DOMContentLoaded', function(){
-        const submitBtn = document.getElementById('ultraSubmit');
-        if (submitBtn){
-          submitBtn.addEventListener('click', function(e){
-            e.preventDefault();
-            // order.js already expects to be called — in our order.js we used buildOrderObjectForSave() on click of #ultraSubmit
-            // if order.js isn't loaded yet, fallback to alert
-            if (typeof window.buildOrderObjectForSave === 'function'){
-              const order = window.buildOrderObjectForSave();
-              if (!order) return;
-              const html = (typeof window.renderNotaHtml === 'function') ? window.renderNotaHtml(order) : `
-                <div><strong>Invoice:</strong> ${order.invoice}</div>
-                <div><strong>Nama:</strong> ${order.nama}</div>
-                <div><strong>Total:</strong> Rp ${order.total}</div>`;
-              // show popup using notaContainer expected by prior order.js
-              const notaContainer = document.getElementById('notaContainer');
-              const notaContent = document.getElementById('notaContent');
-              if (notaContainer && notaContent){
-                notaContent.innerHTML = html;
-                notaContainer.style.display = 'flex';
-                notaContainer.setAttribute('aria-hidden','false');
-              } else {
-                // fallback using earlier nota popup
-                const nc = document.getElementById('notaContent');
-                if (nc){
-                  nc.innerHTML = html;
-                  const ncont = document.getElementById('notaContainer');
-                  if (ncont) { ncont.style.display = 'flex'; ncont.setAttribute('aria-hidden','false'); }
-                }
-              }
-            } else {
-              // if order.js implements its own handler, it will also run; this is purely defensive
-              try { submitBtn.dispatchEvent(new Event('click')); }catch(err){ /* ignore */ }
-            }
-          });
-        }
+      <!-- ================= SCRIPT BANTUAN UI (TIDAK SENTUH ORDER.JS) ================= -->
+<script>
+  (function () {
+    // Toggle floating share icons
+    const toggle = document.getElementById('shareToggleBtn');
+    const icons = document.getElementById('floatingIcons');
 
-        // close nota close button (if present)
-        const notaClose = document.getElementById('notaClose');
-        if (notaClose){
-          notaClose.addEventListener('click', function(){ 
-            const notaContainer = document.getElementById('notaContainer');
-            if (notaContainer) { notaContainer.style.display = 'none'; notaContainer.setAttribute('aria-hidden','true'); }
-          });
-      
-  <!-- jsPDF -->
-  <script src="assets/js/lib/jspdf.umd.min.js"></script>
-  <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
+    if (toggle && icons) {
+      toggle.addEventListener('click', function () {
+        const isHidden =
+          icons.getAttribute('aria-hidden') === 'true' ||
+          icons.style.display === 'none';
 
-  <!-- ORDER SYSTEM -->
-  <script src="assets/js/order.js"></script>
+        icons.style.display = isHidden ? 'flex' : 'none';
+        icons.style.flexDirection = 'column';
+        icons.style.position = 'fixed';
+        icons.style.right = '18px';
+        icons.style.bottom = '78px';
+        icons.style.zIndex = 9999;
+        icons.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
+      });
+    }
+
+    // Nota close button (popup ditangani order.js, ini hanya close)
+    document.addEventListener('DOMContentLoaded', function () {
+      const notaClose = document.getElementById('notaClose');
+      if (notaClose) {
+        notaClose.addEventListener('click', function () {
+          const notaContainer = document.getElementById('notaContainer');
+          if (notaContainer) {
+            notaContainer.style.display = 'none';
+            notaContainer.setAttribute('aria-hidden', 'true');
+            notaContainer.classList.remove('show');
+          }
+        });
+      }
+    });
+  })();
+</script>
+
+<!-- ================= LIBRARY ================= -->
+<script src="assets/js/lib/jspdf.umd.min.js"></script>
+<script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
+
+<!-- ================= ORDER SYSTEM (UTAMA) ================= -->
+<script src="assets/js/order.js"></script>
+
 </body>
 </html>
