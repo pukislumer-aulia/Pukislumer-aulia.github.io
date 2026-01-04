@@ -137,74 +137,103 @@
       </form>
     </section>
 
-    <!-- FORM PEMESANAN -->
-    <section id="form-order-wrapper" class="order-box">
-      <h2 style="margin:0 0 12px 0;color:#fff">Form Pemesanan</h2>
-
-      <form id="formUltra">
-
-        <table class="order-table" role="presentation" style="width:100%;">
-          <tbody>
-            <tr>
-              <td style="width:32%"><label for="ultraNama" class="label-white">Nama</label></td>
-              <td><input type="text" id="ultraNama" class="order-input" placeholder="Nama lengkap" required></td>
-            </tr>
-
-            <tr>
-              <td><label for="ultraWA" class="label-white">No. WA</label></td>
-              <td><input type="tel" id="ultraWA" class="order-input" placeholder="0812xxxx" required></td>
-            </tr>
-
-            <tr>
-              <td><label for="ultraJumlah" class="label-white">Jumlah Box</label></td>
-              <td><input type="number" id="ultraJumlah" class="order-input" value="1" min="1" required></td>
-            </tr>
-
-            <tr>
-              <td><label for="ultraNote" class="label-white">Catatan</label></td>
-              <td><textarea id="ultraNote" class="order-input" rows="2" placeholder="Catatan (opsional)"></textarea></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="order-row-inline" style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
-          <div>
-            <div style="font-weight:700;color:#fff;margin-bottom:6px">Jenis Pukis</div>
-            <label class="label-inline"><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
-            <label class="label-inline"><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
-          </div>
-
-          <div>
-            <div style="font-weight:700;color:#fff;margin-bottom:6px">Isi per Box</div>
-            <select id="ultraIsi" class="order-input" style="width:160px;padding:8px;">
-              <option value="5">5 pcs</option>
-              <option value="10">10 pcs</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="margin-top:12px;color:#fff" class="topping-mode-container">
-          <span style="font-weight:700;display:block;margin-bottom:6px">Mode Topping</span>
-          <label class="mode-label"><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
-          <label class="mode-label"><input type="radio" name="ultraToppingMode" value="single"> Single</label>
-          <label class="mode-label"><input type="radio" name="ultraToppingMode" value="double"> Double</label>
-        </div>
-
-        <div id="ultraSingleGroup" class="topping-wrap" style="margin-top:10px;"></div>
-        <div id="ultraDoubleGroup" class="topping-wrap" style="margin-top:6px;"></div>
-
-        <div class="price-summary" style="margin-top:12px;background:rgba(255,255,255,0.06);color:#fff">
-          <div style="display:flex;justify-content:space-between"><span>Harga / Box</span><span id="ultraPricePerBox">Rp0</span></div>
-          <div style="display:flex;justify-content:space-between"><span>Subtotal</span><span id="ultraSubtotal">Rp0</span></div>
-          <div style="display:flex;justify-content:space-between"><span>Diskon</span><span id="ultraDiscount">-</span></div>
-          <div style="display:flex;justify-content:space-between;font-weight:800"><span>Total Bayar</span><span id="ultraGrandTotal">Rp0</span></div>
-        </div>
-
-        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-          <button type="button" id="ultraSubmit" class="btn-primary">Cek Pesanan</button>
-        </div>
-      </form>
-    </section>
+   <!-- ================= FORM PEMESANAN (dalam tabel / box biru tua) ================= -->
+‎    <section id="form-order-wrapper" class="order-box">
+‎      <h2 style="margin:0 0 12px 0;color:#fff">Form Pemesanan</h2>
+‎
+‎      <form id="formUltra">
+‎
+‎        <table class="order-table" role="presentation" style="width:100%;">
+‎          <tbody>
+‎            <tr>
+‎              <td style="width:32%"><label for="ultraNama" class="label-white">Nama</label></td>
+‎              <td><input type="text" id="ultraNama" class="order-input" placeholder="Nama lengkap" required></td>
+‎            </tr>
+‎
+‎            <tr>
+‎              <td><label for="ultraWA" class="label-white">No. WA</label></td>
+‎              <td><input type="tel" id="ultraWA" class="order-input" placeholder="0812xxxx" required></td>
+‎            </tr>
+‎
+‎            <tr>
+‎              <td><label for="ultraJumlah" class="label-white">Jumlah Box</label></td>
+‎              <td><input type="number" id="ultraJumlah" class="order-input" value="1" min="1" required></td>
+‎            </tr>
+‎
+‎            <tr>
+‎              <td><label for="ultraNote" class="label-white">Catatan</label></td>
+‎              <td><textarea id="ultraNote" class="order-input" rows="2" placeholder="Catatan (opsional)"></textarea></td>
+‎            </tr>
+‎          </tbody>
+‎        </table>
+‎
+‎        <!-- Pilih jenis & isi -->
+‎        <div class="order-row-inline" style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
+‎          <div>
+‎            <div style="font-weight:700;color:#fff;margin-bottom:6px">Jenis Pukis</div>
+‎            <label class="label-inline"><input type="radio" name="ultraJenis" value="Original" checked> Original</label>
+‎            <label class="label-inline"><input type="radio" name="ultraJenis" value="Pandan"> Pandan</label>
+‎          </div>
+‎
+‎          <div>
+‎            <div style="font-weight:700;color:#fff;margin-bottom:6px">Isi per Box</div>
+‎            <select id="ultraIsi" class="order-input" style="width:160px;padding:8px;">
+‎              <option value="5">5 pcs</option>
+‎              <option value="10">10 pcs</option>
+‎            </select>
+‎          </div>
+‎        </div>
+‎
+‎        <!-- Mode Topping -->
+‎        <div style="margin-top:12px;color:#fff" class="topping-mode-container">
+‎          <span style="font-weight:700;display:block;margin-bottom:6px">Mode Topping</span>
+‎          <label class="mode-label"><input type="radio" name="ultraToppingMode" value="non" checked> Non</label>
+‎          <label class="mode-label"><input type="radio" name="ultraToppingMode" value="single"> Single</label>
+‎          <label class="mode-label"><input type="radio" name="ultraToppingMode" value="double"> Double</label>
+‎        </div>
+‎
+‎        <!-- SINGLE TOPPING -->
+‎<div id="ultraSingleGroup" class="topping-wrap hidden" style="margin-top:10px;">
+‎
+‎  <label><input type="checkbox" name="toppingSingle" value="coklat"> Coklat</label>
+‎  <label><input type="checkbox" name="toppingSingle" value="tiramisu"> Tiramisu</label>
+‎  <label><input type="checkbox" name="toppingSingle" value="vanilla"> Vanilla</label>
+‎  <label><input type="checkbox" name="toppingSingle" value="stroberi"> Stroberi</label>
+‎  <label><input type="checkbox" name="toppingSingle" value="cappucino"> Cappucino</label>
+‎
+‎</div>
+‎
+‎<!-- DOUBLE TOPPING -->
+‎<div id="ultraDoubleGroup" class="topping-wrap hidden" style="margin-top:6px;">
+‎
+‎  <!-- Topping single tetap muncul juga -->
+‎  <label><input type="checkbox" name="toppingDouble" value="coklat"> Coklat</label>
+‎  <label><input type="checkbox" name="toppingDouble" value="tiramisu"> Tiramisu</label>
+‎  <label><input type="checkbox" name="toppingDouble" value="vanilla"> Vanilla</label>
+‎  <label><input type="checkbox" name="toppingDouble" value="stroberi"> Stroberi</label>
+‎  <label><input type="checkbox" name="toppingDouble" value="cappucino"> Cappucino</label>
+‎
+‎  <!-- Tambahan untuk mode DOUBLE (TABURAN) -->
+‎  <label><input type="checkbox" name="taburan" value="meses"> Meses</label>
+‎  <label><input type="checkbox" name="taburan" value="keju"> Keju</label>
+‎  <label><input type="checkbox" name="taburan" value="kacang"> Kacang</label>
+‎  <label><input type="checkbox" name="taburan" value="choco chip"> Choco Chip</label>
+‎  <label><input type="checkbox" name="taburan" value="oreo"> Oreo</label>
+‎
+‎</div>
+‎        <!-- Price summary -->
+‎        <div class="price-summary" style="margin-top:12px;background:rgba(255,255,255,0.06);color:#fff">
+‎          <div style="display:flex;justify-content:space-between"><span>Harga / Box</span><span id="ultraPricePerBox">Rp0</span></div>
+‎          <div style="display:flex;justify-content:space-between"><span>Subtotal</span><span id="ultraSubtotal">Rp0</span></div>
+‎          <div style="display:flex;justify-content:space-between"><span>Diskon</span><span id="ultraDiscount">-</span></div>
+‎          <div style="display:flex;justify-content:space-between;font-weight:800"><span>Total Bayar</span><span id="ultraGrandTotal">Rp0</span></div>
+‎        </div>
+‎
+‎        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+‎          <button type="button" id="ultraSubmit" class="btn-primary">Cek Pesanan</button>
+‎        </div>
+‎      </form>
+‎    </section>
 
     <!-- Nota Popup -->
     <div id="notaContainer" class="nota-overlay" aria-hidden="true" style="display:none;">
