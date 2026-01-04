@@ -1,10 +1,20 @@
 // assets/js/order.js
+// ORDER.JS — FINAL CLEAN & STABLE VERSION
+// - 1 tombol CEK PESANAN
+// - Harga otomatis (BASE_PRICE TIDAK DIUBAH)
+// - Topping single & double valid
+// - Nota popup + simpan localStorage
+// - Kirim WA admin otomatis
+
 (function () {
   'use strict';
 
   /* ================= CONFIG ================= */
   const ADMIN_WA = '6281296668670';
   const STORAGE_KEY = 'pukis_orders';
+
+  const SINGLE_TOPPINGS = ['Coklat', 'Tiramisu', 'Vanilla', 'Stroberi', 'Cappucino'];
+  const DOUBLE_TOPPINGS = ['Meses', 'Keju', 'Kacang', 'Choco Chip', 'Oreo'];
 
   const BASE_PRICE = {
     Original: {
@@ -17,203 +27,173 @@
     }
   };
 
-  /* ================= SELECTORS ================= */
-  const $ = s => document.querySelector(s);
-  const $$ = s => Array.from(document.querySelectorAll(s));
-
-  const elNama = $('#ultraNama');
-  const elWA = $('#ultraWA');
-  const elJumlah = $('#ultraJumlah');
-  const elNote = $('#ultraNote');
-  const elIsi = $('#ultraIsi');
-
-  const singleGroup = $('#ultraSingleGroup');
-  const doubleGroup = $('#ultraDoubleGroup');
-
-  const elPriceBox = $('#ultraPricePerBox');
-  const elSubtotal = $('#ultraSubtotal');
-  const elDiscount = $('#ultraDiscount');
-  const elTotal = $('#ultraGrandTotal');
-
-  const btnCek = $('#ultraSubmit');
-  const notaContainer = $('#notaContainer');
-  const notaContent = $('#notaContent');
-  const notaClose = $('#notaClose');
-  const notaConfirm = $('#notaConfirm');
-
-  if (!elNama || !elWA || !elJumlah || !btnCek) {
-    console.error('order.js: Elemen penting tidak ditemukan');
-    return;
-  }
-
   /* ================= HELPERS ================= */
-  function rp(n) {
-    return 'Rp' + Number(n || 0).toLocaleString('id-ID');
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+
+  const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+
+  const radioVal = name =>
+    (document.querySelector(`input[name="${name}"]:checked`) || {}).value || '';
+
+  const checkedVals = name =>
+    $$(`input[name="${name}"]:checked`).map(i => i.value);
+
+  const invoiceGen = () =>
+    'INV-' + Date.now().toString(36).toUpperCase();
+
+  /* ================= ELEMENT ================= */
+  const el = {
+    nama: $('#ultraNama'),
+    wa: $('#ultraWA'),
+    jumlah: $('#ultraJumlah'),
+    note: $('#ultraNote'),
+    isi: $('#ultraIsi'),
+    singleWrap: $('#ultraSingleGroup'),
+    doubleWrap: $('#ultraDoubleGroup'),
+    btn: $('#ultraSubmit'),
+    priceBox: $('#ultraPricePerBox'),
+    subtotal: $('#ultraSubtotal'),
+    discount: $('#ultraDiscount'),
+    total: $('#ultraGrandTotal'),
+    notaWrap: $('#notaContainer'),
+    notaBody: $('#notaContent'),
+    notaClose: $('#notaClose'),
+    notaConfirm: $('#notaConfirm')
+  };
+
+  /* ================= TOPPING UI ================= */
+  function buildToppings() {
+    el.singleWrap.innerHTML = '';
+    SINGLE_TOPPINGS.forEach(t => {
+      el.singleWrap.innerHTML += `
+        <label class="topping-check">
+          <input type="radio" name="singleTopping" value="${t}"> ${t}
+        </label>`;
+    });
+
+    el.doubleWrap.innerHTML = '<div class="double-cols"></div>';
+    const col = el.doubleWrap.querySelector('.double-cols');
+
+    DOUBLE_TOPPINGS.forEach(t => {
+      col.innerHTML += `
+        <label class="topping-check">
+          <input type="checkbox" name="doubleTopping" value="${t}"> ${t}
+        </label>`;
+    });
   }
 
-  function radioVal(name) {
-    const el = document.querySelector(`input[name="${name}"]:checked`);
-    return el ? el.value : '';
-  }
-
-  function checkedValues(name) {
-    return $$(`input[name="${name}"]:checked`).map(e => e.value);
-  }
-
-  function hideAllToppings() {
-    singleGroup.classList.add('hidden');
-    doubleGroup.classList.add('hidden');
-    $$('input[name="toppingSingle"],input[name="toppingDouble"],input[name="taburan"]')
-      .forEach(i => i.checked = false);
-  }
-
-  /* ================= TOPPING MODE ================= */
-  function updateToppingVisibility() {
-    hideAllToppings();
+  function toggleTopping() {
     const mode = radioVal('ultraToppingMode');
-    if (mode === 'single') singleGroup.classList.remove('hidden');
-    if (mode === 'double') doubleGroup.classList.remove('hidden');
-    updatePrice();
+    el.singleWrap.classList.toggle('hidden', mode !== 'single');
+    el.doubleWrap.classList.toggle('hidden', mode !== 'double');
   }
 
   /* ================= PRICE ================= */
   function pricePerBox() {
-    const jenis = radioVal('ultraJenis') || 'Original';
-    const isi = elIsi.value || '5';
+    const jenis = radioVal('ultraJenis');
+    const isi = el.isi.value;
     const mode = radioVal('ultraToppingMode') || 'non';
     return BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
   }
 
-  function discount(jumlah, subtotal) {
-    if (jumlah >= 10) return 1000;
-    if (jumlah >= 5) return Math.round(subtotal * 0.01);
-    return 0;
+  function calc() {
+    const qty = Number(el.jumlah.value || 1);
+    const price = pricePerBox();
+    const sub = qty * price;
+    const disc = qty >= 10 ? 1000 : qty >= 5 ? Math.round(sub * 0.01) : 0;
+    const tot = sub - disc;
+
+    el.priceBox.textContent = rp(price);
+    el.subtotal.textContent = rp(sub);
+    el.discount.textContent = disc ? '-' + rp(disc) : '-';
+    el.total.textContent = rp(tot);
+
+    return { qty, price, sub, disc, tot };
   }
 
-  function updatePrice() {
-    const qty = Number(elJumlah.value || 1);
-    const pBox = pricePerBox();
-    const sub = pBox * qty;
-    const disc = discount(qty, sub);
-    const total = sub - disc;
-
-    elPriceBox.textContent = rp(pBox);
-    elSubtotal.textContent = rp(sub);
-    elDiscount.textContent = disc ? '-' + rp(disc) : '-';
-    elTotal.textContent = rp(total);
-  }
-
-  /* ================= VALIDATION ================= */
-  function validate() {
-    if (!elNama.value.trim()) return alert('Nama wajib diisi'), false;
-    if (!elWA.value.trim()) return alert('No WA wajib diisi'), false;
-    if (Number(elJumlah.value) < 1) return alert('Jumlah minimal 1'), false;
-
-    const mode = radioVal('ultraToppingMode');
-    if (mode === 'single' && !checkedValues('toppingSingle').length)
-      return alert('Pilih topping single'), false;
-
-    if (mode === 'double' && !checkedValues('toppingDouble').length)
-      return alert('Pilih topping double'), false;
-
-    return true;
-  }
-
-  /* ================= ORDER OBJECT ================= */
+  /* ================= ORDER ================= */
   function buildOrder() {
-    if (!validate()) return null;
+    const mode = radioVal('ultraToppingMode');
+    if (mode === 'single' && !radioVal('singleTopping')) {
+      alert('Pilih topping single'); return null;
+    }
+    if (mode === 'double' && checkedVals('doubleTopping').length < 2) {
+      alert('Minimal 2 topping double'); return null;
+    }
 
-    const qty = Number(elJumlah.value);
-    const pBox = pricePerBox();
-    const sub = pBox * qty;
-    const disc = discount(qty, sub);
-
+    const p = calc();
     return {
-      invoice: 'INV-' + Date.now(),
-      nama: elNama.value.trim(),
-      wa: elWA.value.trim().replace(/^0/, '62'),
+      invoice: invoiceGen(),
+      nama: el.nama.value.trim(),
+      wa: el.wa.value.trim().replace(/^0/, '62'),
       jenis: radioVal('ultraJenis'),
-      isi: elIsi.value,
-      mode: radioVal('ultraToppingMode'),
-      toppingSingle: checkedValues('toppingSingle'),
-      toppingDouble: checkedValues('toppingDouble'),
-      taburan: checkedValues('taburan'),
-      note: elNote.value.trim(),
-      pricePerBox: pBox,
-      subtotal: sub,
-      discount: disc,
-      total: sub - disc,
-      time: new Date().toISOString()
+      isi: el.isi.value,
+      jumlah: p.qty,
+      mode,
+      single: radioVal('singleTopping'),
+      double: checkedVals('doubleTopping'),
+      note: el.note.value.trim(),
+      total: p.tot,
+      created: new Date().toISOString()
     };
   }
 
   /* ================= NOTA ================= */
-  function renderNota(o) {
-    return `
-      <strong>Nama:</strong> ${o.nama}<br>
-      <strong>WA:</strong> ${o.wa}<br>
-      <strong>Jenis:</strong> ${o.jenis}<br>
-      <strong>Isi:</strong> ${o.isi}<br>
-      <strong>Jumlah:</strong> ${elJumlah.value} box<br>
-      <hr>
-      <strong>Mode:</strong> ${o.mode}<br>
-      <strong>Topping:</strong> ${[...o.toppingSingle, ...o.toppingDouble].join(', ') || '-'}<br>
-      <strong>Taburan:</strong> ${o.taburan.join(', ') || '-'}<br>
-      <hr>
-      <strong>Total:</strong> ${rp(o.total)}
-    `;
+  function showNota(o) {
+    el.notaBody.innerHTML = `
+      <div><b>Invoice:</b> ${o.invoice}</div>
+      <div><b>Nama:</b> ${o.nama}</div>
+      <div><b>Jenis:</b> ${o.jenis}</div>
+      <div><b>Isi:</b> ${o.isi} pcs</div>
+      <div><b>Jumlah:</b> ${o.jumlah} box</div>
+      <div><b>Total:</b> ${rp(o.total)}</div>`;
+    el.notaWrap.style.display = 'flex';
   }
 
-  function showNota(html) {
-    notaContent.innerHTML = html;
-    notaContainer.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+  function save(o) {
+    const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    arr.unshift(o);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
   }
 
-  function hideNota() {
-    notaContainer.style.display = 'none';
-    document.body.style.overflow = '';
+  function sendWA(o) {
+    const msg = encodeURIComponent(
+      `INVOICE ${o.invoice}\nNama: ${o.nama}\nTotal: ${rp(o.total)}`
+    );
+    window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
   }
 
   /* ================= EVENTS ================= */
-  btnCek.addEventListener('click', e => {
+  el.btn.onclick = e => {
     e.preventDefault();
-    const order = buildOrder();
-    if (!order) return;
-    showNota(renderNota(order));
-  });
+    const o = buildOrder();
+    if (o) showNota(o);
+  };
 
-  if (notaClose) notaClose.addEventListener('click', hideNota);
-  if (notaContainer) notaContainer.addEventListener('click', e => {
-    if (e.target === notaContainer) hideNota();
-  });
-
-  if (notaConfirm) notaConfirm.addEventListener('click', () => {
-    const order = buildOrder();
-    if (!order) return;
-
-    const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    list.unshift(order);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-
-    const msg = encodeURIComponent(`Invoice ${order.invoice}\nTotal ${rp(order.total)}`);
-    window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
-
-    hideNota();
+  el.notaConfirm.onclick = () => {
+    const o = buildOrder();
+    if (!o) return;
+    save(o);
+    sendWA(o);
+    el.notaWrap.style.display = 'none';
+    alert('Pesanan dikirim ke admin');
     $('#formUltra').reset();
-    hideAllToppings();
-    updatePrice();
-  });
+    calc();
+  };
 
-  /* ================= BINDINGS ================= */
-  $$('input[name="ultraToppingMode"]').forEach(i => i.addEventListener('change', updateToppingVisibility));
-  $$('input[name="ultraJenis"]').forEach(i => i.addEventListener('change', updatePrice));
-  $$('input[name="toppingSingle"],input[name="toppingDouble"],input[name="taburan"]').forEach(i => i.addEventListener('change', updatePrice));
-  elIsi.addEventListener('change', updatePrice);
-  elJumlah.addEventListener('input', updatePrice);
+  el.notaClose.onclick = () => el.notaWrap.style.display = 'none';
+
+  $$('input,select').forEach(i =>
+    i.addEventListener('change', () => {
+      toggleTopping();
+      calc();
+    })
+  );
 
   /* ================= INIT ================= */
-  hideAllToppings();
-  updatePrice();
+  buildToppings();
+  toggleTopping();
+  calc();
 
 })();
