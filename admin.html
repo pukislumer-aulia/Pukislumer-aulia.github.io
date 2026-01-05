@@ -2,126 +2,186 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <title>Admin Panel — Pukis Lumer Aulia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - Pukis Lumer Aulia</title>
 
-  <!-- CSS ADMIN -->
-  <link rel="stylesheet" href="assets/css/admin.css">
+  <style>
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      background:#f4f6f8;
+      margin:0;
+      padding:0;
+      color:#222;
+    }
 
-  <!-- FONT AWESOME -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
+    h1,h2{
+      margin:0 0 10px 0;
+    }
+
+    /* ================= LOGIN ================= */
+    #login{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .login-box{
+      background:#fff;
+      padding:30px;
+      width:320px;
+      border-radius:8px;
+      box-shadow:0 4px 15px rgba(0,0,0,.15);
+      text-align:center;
+    }
+
+    .login-box input{
+      width:100%;
+      padding:10px;
+      font-size:16px;
+      margin-top:10px;
+      box-sizing:border-box;
+    }
+
+    .login-box button{
+      width:100%;
+      margin-top:15px;
+      padding:10px;
+      font-size:16px;
+      cursor:pointer;
+      background:#2c7be5;
+      color:#fff;
+      border:none;
+      border-radius:4px;
+    }
+
+    /* ================= ADMIN ================= */
+    #admin{
+      display:none;
+      padding:20px;
+    }
+
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-bottom:15px;
+    }
+
+    .stats{
+      background:#fff;
+      padding:15px;
+      border-radius:6px;
+      margin-bottom:15px;
+      line-height:1.6;
+      box-shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+
+    /* ================= TABLE (EXCEL LOOK) ================= */
+    .table-wrapper{
+      background:#fff;
+      border-radius:6px;
+      overflow:auto;
+      box-shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+
+    table{
+      border-collapse:collapse;
+      width:100%;
+      min-width:800px;
+      font-size:14px;
+    }
+
+    thead th{
+      position:sticky;
+      top:0;
+      background:#e9ecef;
+      border:1px solid #ccc;
+      padding:8px;
+      text-align:left;
+      font-weight:bold;
+      z-index:2;
+    }
+
+    tbody td{
+      border:1px solid #ddd;
+      padding:6px 8px;
+      vertical-align:middle;
+    }
+
+    tbody tr:nth-child(even){
+      background:#fafafa;
+    }
+
+    tbody tr:hover{
+      background:#f1f7ff;
+    }
+
+    select{
+      padding:4px;
+    }
+
+    button{
+      padding:4px 8px;
+      cursor:pointer;
+    }
+
+    .footer-note{
+      margin-top:10px;
+      font-size:12px;
+      color:#666;
+    }
+  </style>
 </head>
+
 <body>
 
 <!-- ================= LOGIN ================= -->
-<div id="loginScreen" class="login-wrapper">
+<div id="login">
   <div class="login-box">
-    <h2>Login Admin</h2>
-
-    <input
-      type="password"
-      id="pinInput"
-      placeholder="Masukkan PIN Admin"
-      inputmode="numeric"
-      autocomplete="off"
-    >
-
-    <button id="loginBtn" class="btn-primary" type="button">
-      Login
-    </button>
-
-    <p class="login-note">
-      PIN disimpan secara lokal di perangkat ini
-    </p>
+    <h2>Admin Login</h2>
+    <p>Masukkan PIN Admin</p>
+    <input type="password" id="pin" placeholder="PIN">
+    <button id="btnLogin">Masuk</button>
   </div>
 </div>
 
 <!-- ================= ADMIN PANEL ================= -->
-<div id="adminPanel" class="admin-wrapper" style="display:none;">
+<div id="admin">
 
-  <!-- HEADER -->
-  <header class="admin-header">
-    <h1>Admin Dashboard</h1>
-    <button id="logoutBtn" class="btn-logout" type="button">
-      <i class="fa-solid fa-right-from-bracket"></i> Logout
-    </button>
-  </header>
+  <div class="header">
+    <h1>Admin Panel — Pukis Lumer Aulia</h1>
+  </div>
 
   <!-- STATISTIK -->
-  <section class="stat-section">
-    <div class="stat-card">
-      <div class="stat-number" id="statTotalOrder">0</div>
-      Total Order
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="statPending">0</div>
-      Pending
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="statDone">0</div>
-      Selesai
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="statRevenue">Rp 0</div>
-      Omzet
-    </div>
-  </section>
-
-  <!-- ORDER -->
-  <section class="order-section">
-    <h2>Manajemen Order</h2>
-
-    <div class="action-buttons">
-      <button id="filterAll" class="btn-primary" type="button">Semua</button>
-      <button id="filterPending" class="btn-secondary" type="button">Pending</button>
-      <button id="filterDone" class="btn-secondary" type="button">Selesai</button>
-      <button id="printLastInvoice" class="btn-primary" type="button">
-        <i class="fa-solid fa-print"></i> Cetak Nota Terakhir
-      </button>
-    </div>
-
-    <div class="table-wrapper">
-      <table id="orderTable">
-        <thead>
-          <tr>
-            <th>Invoice</th>
-            <th>Nama</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- di-render admin.js -->
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-</div>
-
-<!-- ================= MODAL INVOICE ================= -->
-<div id="invoiceModal" class="modal" style="display:none;">
-  <div class="modal-box">
-
-    <div id="invoicePreview"></div>
-
-    <div class="modal-actions">
-      <button id="btnPrintInvoice" class="btn-primary" type="button">
-        <i class="fa-solid fa-print"></i> Cetak
-      </button>
-      <button id="btnExportPdf" class="btn-secondary" type="button">
-        <i class="fa-solid fa-file-pdf"></i> Export PDF
-      </button>
-      <button id="btnCloseModal" class="btn-danger" type="button">
-        Tutup
-      </button>
-    </div>
-
+  <div class="stats" id="stats">
+    <!-- diisi oleh admin.js -->
   </div>
+
+  <!-- TABEL ORDER -->
+  <div class="table-wrapper">
+    <table id="orderTable">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Invoice</th>
+          <th>Nama</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>PDF</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- diisi oleh admin.js -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-note">
+    * Status <strong>selesai</strong> akan dihitung sebagai pendapatan.
+  </div>
+
 </div>
 
 <!-- ================= JS ================= -->
