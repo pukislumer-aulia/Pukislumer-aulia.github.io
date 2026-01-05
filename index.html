@@ -278,7 +278,7 @@
     © 2025 Pukis Lumer Aulia — Hak Cipta Dilindungi Undang-Undang
   </footer>
 
-  <!-- SCRIPT BERSIH (FIX ERROR, TIDAK SENTUH order.js) -->
+<!-- ================= SCRIPT INLINE (UI SAJA, TIDAK SENTUH order.js) ================= -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const toggle = document.getElementById('shareToggleBtn');
@@ -295,30 +295,27 @@
           icons.style.position = 'fixed';
           icons.style.right = '18px';
           icons.style.bottom = '78px';
-          icons.style.zIndex = 9999;
+          icons.style.zIndex = '9999';
           icons.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
-        });
-      }
-
-      const notaClose = document.getElementById('notaClose');
-      if (notaClose) {
-        notaClose.addEventListener('click', function () {
-          const nota = document.getElementById('notaContainer');
-          if (nota) {
-            nota.style.display = 'none';
-            nota.setAttribute('aria-hidden', 'true');
-            nota.classList.remove('show');
-          }
         });
       }
     });
   </script>
 
-  <!-- LIBRARY -->
+  <!-- ================= NOTA POPUP (HTML MURNI) ================= -->
+  <div id="notaContainer" style="display:none" aria-hidden="true">
+    <div class="nota-box">
+      <button id="notaClose" type="button" aria-label="Tutup Nota">✕</button>
+      <div id="notaContent"></div>
+      <button id="notaPrint" type="button">Cetak PDF</button>
+    </div>
+  </div>
+
+  <!-- ================= LIBRARY ================= -->
   <script src="assets/js/lib/jspdf.umd.min.js"></script>
   <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
 
-  <!-- ORDER SYSTEM -->
+  <!-- ================= ORDER SYSTEM ================= -->
   <script src="assets/js/order.js"></script>
 
 </body>
