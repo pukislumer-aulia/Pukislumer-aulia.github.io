@@ -220,195 +220,173 @@
 ‎  }
 ‎  function getLastOrder(){ try{ return JSON.parse(localStorage.getItem(STORAGE_LAST_ORDER_KEY) || 'null'); } catch(e){ return null; } }
 ‎
-‎  // ---------------- RENDER NOTA ----------------
-‎  function renderNotaOnScreen(order){
-‎    if (!order) return;
-‎    const c = $('#notaContent'); if (!c) return;
-‎    const toppingText = order.topping && order.topping.length ? order.topping.join(', ') : '-';
-‎    const taburanText = order.taburan && order.taburan.length ? order.taburan.join(', ') : '-';
-‎    c.innerHTML = `
-‎      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-‎        <div style="flex:1;min-width:200px">
-‎          <div style="font-weight:800;color:#5f0000;font-size:14px;margin-bottom:6px;">INVOICE PEMESANAN</div>
-‎          <div><strong>Invoice:</strong> ${escapeHtml(order.invoice)}</div>
-‎          <div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>
-‎          <div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>
-‎          <div><strong>Tanggal:</strong> ${escapeHtml(order.tgl)}</div>
-‎        </div>
-‎      </div>
-‎      <hr style="margin:8px 0">
-‎      <div>
-‎        <div><strong>Jenis:</strong> ${escapeHtml(order.jenis)} — ${escapeHtml(String(order.isi))} pcs</div>
-‎        <div><strong>Mode:</strong> ${escapeHtml(order.mode)}</div>
-‎        <div><strong>Topping:</strong> ${escapeHtml(toppingText)}</div>
-‎        <div><strong>Taburan:</strong> ${escapeHtml(taburanText)}</div>
-‎        <div><strong>Jumlah:</strong> ${escapeHtml(String(order.jumlah))} box</div>
-‎        <div><strong>Harga Satuan:</strong> ${formatRp(order.pricePerBox)}</div>
-‎        <div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>
-‎        <div><strong>Diskon:</strong> ${order.discount>0 ? '-' + formatRp(order.discount) : '-'}</div>
-‎        <div style="font-weight:800;margin-top:6px;"><strong>Total Bayar:</strong> ${formatRp(order.total)}</div>
-‎        <p style="margin-top:10px;font-style:italic">Terima kasih telah berbelanja di Pukis Lumer Aulia.</p>
-‎      </div>
-‎    `;
-‎    const container = $('#notaContainer'); if (container){ container.classList.add('show'); container.style.display='flex'; }
-‎    try{ localStorage.setItem(STORAGE_LAST_ORDER_KEY, JSON.stringify(order)); }catch(e){}
-‎    window._lastNota = order;
-‎  }
-‎
-‎  // ---------------- SEND TO ADMIN WA ----------------
-‎  function sendOrderToAdminViaWA(order){
-‎    if (!order) return;
-‎    const lines = [
-‎      "Assalamu'alaikum Admin 🙏",
-‎      'Ada pesanan baru:', '',
-‎      `Invoice : ${order.invoice}`,
-‎      `Nama    : ${order.nama}`,
-‎      `WA      : ${order.wa}`,
-‎      `Jenis   : ${order.jenis}`,
-‎      `Isi     : ${order.isi} pcs`,
-‎      `Mode    : ${order.mode}`,
-‎      `Topping : ${order.topping && order.topping.length ? order.topping.join(', ') : '-'}`,
-‎      `Taburan : ${order.taburan && order.taburan.length ? order.taburan.join(', ') : '-'}`,
-‎      `Jumlah  : ${order.jumlah} box`,
-‎      `Catatan : ${order.note || '-'}`, '',
-‎      `Total Bayar: ${formatRp(order.total)}`, '',
-‎      'Mohon bantu cetak invoice. Terima kasih 😊'
-‎    ];
-‎    const admin = ( $('#adminNumber') && $('#adminNumber').value ) || ADMIN_WA || '';
-‎    if (!admin){ alert('Nomor admin tidak tersedia.'); return; }
-‎    window.open(`https://wa.me/${admin}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
-‎  }
-‎
-‎  // ---------------- ATTACH LISTENERS ----------------
-‎  function attachFormListeners(){
-‎    buildToppingUI();
-‎    updateToppingVisibility();
-‎
-‎    $$('input[name="ultraToppingMode"]').forEach(r => { r.removeEventListener('change', onToppingModeChange); r.addEventListener('change', onToppingModeChange); });
-‎    $$('input[name="ultraJenis"]').forEach(r=>{ r.removeEventListener('change', updatePriceUI); r.addEventListener('change', updatePriceUI); });
-‎
-‎    $('#ultraIsi')?.removeEventListener('change', updatePriceUI);
-‎    $('#ultraIsi')?.addEventListener('change', updatePriceUI);
-‎
-‎    $('#ultraJumlah')?.removeEventListener('input', updatePriceUI);
-‎    $('#ultraJumlah')?.addEventListener('input', updatePriceUI);
-‎
-‎    const form = $('#formUltra');
-‎    if (form){ form.removeEventListener('submit', onFormSubmit); form.addEventListener('submit', onFormSubmit); }
-‎
-‎    const sendBtn = $('#ultraSendAdmin');
-‎    if (sendBtn){ sendBtn.removeEventListener('click', onSendAdminClick); sendBtn.addEventListener('click', onSendAdminClick); }
-‎
-‎    const notaClose = $('#notaClose');
-‎    if (notaClose){ notaClose.removeEventListener('click', hideNota); notaClose.addEventListener('click', hideNota); }
-‎
-‎    const printBtn = $('#notaPrint');
-‎    if (printBtn){ printBtn.removeEventListener('click', onNotaPrint); printBtn.addEventListener('click', onNotaPrint); }
-‎
-‎    // testimonials form (simple)
-‎    const tform = $('#testimonialForm');
-‎    if (tform){ tform.removeEventListener('submit', onTestimonialSubmit); tform.addEventListener('submit', onTestimonialSubmit); }
-‎  }
-‎
-‎  function onToppingModeChange(){ updateToppingVisibility(); updatePriceUI(); }
-‎  function onFormSubmit(e){ e.preventDefault(); const order = buildOrderObject(); if (!order) return; saveOrderLocal(order); renderNotaOnScreen(order); }
-‎  function onSendAdminClick(e){ e.preventDefault(); const order = buildOrderObject(); if (!order) return; saveOrderLocal(order); sendOrderToAdminViaWA(order); alert('Permintaan WA ke admin terbuka di jendela baru.'); }
-‎  function hideNota(){ const nc = $('#notaContainer'); if (nc){ nc.classList.remove('show'); nc.style.display='none'; } }
-‎
-‎  async function onNotaPrint(e){ e.preventDefault(); const last = getLastOrder(); if (!last){ alert('Data nota belum tersedia. Silakan buat nota terlebih dahulu.'); return; } if (typeof window.generatePdf !== 'function'){ if (window.makeGeneratePdf && (window.jspdf || window.jsPDF)){ window.generatePdf = window.makeGeneratePdf(window.jspdf || window.jsPDF); } }
-‎    if (typeof window.generatePdf === 'function'){ await window.generatePdf(last); } else { alert('PDF generator belum siap. Pastikan library jsPDF dimuat.'); } }
-‎
-‎  // ---------------- TOPPING VISIBILITY ----------------
-‎  function updateToppingVisibility(){
-‎    const mode = getSelectedToppingMode();
-‎    const singleGroup = $('#ultraSingleGroup');
-‎    const doubleGroup = $('#ultraDoubleGroup');
-‎    if (!singleGroup || !doubleGroup) return;
-‎    if (mode === 'non'){
-‎      singleGroup.style.display = 'none'; doubleGroup.style.display = 'none';
-‎      $$('input[name="topping"]:checked').forEach(i => { i.checked = false; i.closest('label')?.classList.remove('checked'); });
-‎      $$('input[name="taburan"]:checked').forEach(i => { i.checked = false; i.closest('label')?.classList.remove('checked'); });
-‎    } else if (mode === 'single'){
-‎      singleGroup.style.display = 'flex'; doubleGroup.style.display = 'none';
-‎    } else if (mode === 'double'){
-‎      singleGroup.style.display = 'flex'; doubleGroup.style.display = 'flex';
-‎    }
-‎  }
-‎
-‎  // ---------------- PDF FACTORY ----------------
-‎  function loadImageAsDataURL(path, timeoutMs = 4000){
-‎    return new Promise((resolve) => {
-‎      if (!path) return resolve(null);
-‎      const img = new Image(); let settled = false; img.crossOrigin = 'anonymous';
-‎      const timer = setTimeout(()=>{ if (!settled){ settled = true; resolve(null); } }, timeoutMs);
-‎      img.onload = () => { if (settled) return; try{ const canvas = document.createElement('canvas'); canvas.width = img.naturalWidth; canvas.height = img.naturalHeight; const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0); const data = canvas.toDataURL('image/png'); settled=true; clearTimeout(timer); resolve(data); } catch(e){ settled=true; clearTimeout(timer); resolve(null);} };
-‎      img.onerror = () => { if (!settled){ settled = true; clearTimeout(timer); resolve(null); } };
-‎      img.src = path;
-‎    });
-‎  }
-‎
-‎  function makeGeneratePdf(JS){
-‎    let jsPDFCtor = null;
-‎    if (!JS){ if (window.jspdf && window.jspdf.jsPDF) jsPDFCtor = window.jspdf.jsPDF; else if (window.jsPDF) jsPDFCtor = window.jsPDF; }
-‎    else { jsPDFCtor = JS.jsPDF ? JS.jsPDF : JS; }
-‎    if (!jsPDFCtor){ return async function(){ throw new Error('jsPDF tidak tersedia'); }; }
-‎
-‎    return async function generatePdf(order){
-‎      try{
-‎        if (!order) throw new Error('Order tidak diberikan ke generatePdf');
-‎        const doc = new jsPDFCtor({ unit: 'mm', format: 'a4' });
-‎        const W = doc.internal.pageSize.getWidth(); const H = doc.internal.pageSize.getHeight();
-‎        const qrisPath = ASSET_PREFIX + QRIS_FILE; const ttdPath = ASSET_PREFIX + TTD_FILE;
-‎        const [qrisData, ttdData] = await Promise.all([ loadImageAsDataURL(qrisPath).catch(()=>null), loadImageAsDataURL(ttdPath).catch(()=>null) ]);
-‎
-‎        doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.setTextColor(0,0,0); doc.text('PUKIS LUMER AULIA', W/2, 15, { align: 'center' });
-‎        doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.text('Invoice Pemesanan', 14, 25);
-‎        let y = 34; doc.setFontSize(10);
-‎        doc.text(`Order ID: ${order.orderID || order.invoice || '-'}`, 14, y);
-‎        doc.text(`Tanggal: ${order.tgl || new Date().toLocaleString('id-ID')}`, W-14, y, { align: 'right' }); y+=7;
-‎        doc.text(`Nama: ${order.nama || '-'}`, 14, y); y+=7;
-‎        doc.setFont('helvetica','italic'); doc.text(`Catatan: ${order.note || '-'}`, 14, y); doc.setFont('helvetica','normal'); y+=10;
-‎
-‎        const toppingTxt = order.topping && order.topping.length ? order.topping.join(', ') : '-';
-‎        const taburanTxt = order.taburan && order.taburan.length ? order.taburan.join(', ') : '-';
-‎        const rows = [ ['Jenis', order.jenis || '-'], ['Isi Box', (order.isi || '-') + ' pcs'], ['Mode', order.mode || '-'], ['Topping', toppingTxt], ['Taburan', taburanTxt], ['Jumlah Box', (order.jumlah || order.jumlahBox || 0) + ' box'], ['Harga Satuan', formatRp(order.pricePerBox || 0)], ['Subtotal', formatRp(order.subtotal || 0)], ['Diskon', order.discount>0 ? '-' + formatRp(order.discount) : '-'], ['Total Bayar', formatRp(order.total || 0)] ];
-‎
-‎        if (typeof doc.autoTable === 'function'){
-‎          doc.autoTable({ startY: y, head: [['Item','Keterangan']], body: rows, styles: { fontSize: 10, textColor: 0 }, headStyles: { fillColor: [255,105,180], textColor: 255 }, alternateRowStyles: { fillColor: [245,245,245] }, columnStyles: { 0: { cellWidth: 45 }, 1: { cellWidth: W - 45 - 28 } } });
-‎        } else {
-‎          let ty = y; rows.forEach(r=>{ doc.text(`${r[0]}: ${r[1]}`, 14, ty); ty+=6; });
-‎        }
-‎
-‎        const endTableY = doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : (y + (rows.length*6) + 8);
-‎        if (qrisData){ try{ doc.addImage(qrisData, 'PNG', 14, endTableY + 8, 40, 50); doc.setFontSize(9); doc.text('Scan QRIS untuk pembayaran', 14+46, endTableY + 30); }catch(e){} }
-‎
-‎        const sigX = W - 14 - 50; let sigY = Math.max(endTableY + 8, 120); doc.setFontSize(10); doc.text('Hormat Kami,', sigX + 8, sigY); sigY+=6;
-‎        if (ttdData){ try{ doc.addImage(ttdData, 'PNG', sigX, sigY, 40, 30); sigY += 36; }catch(e){ sigY += 30; } } else { sigY += 30; }
-‎        doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.text('Pukis Lumer Aulia', sigX + 8, sigY);
-‎
-‎        try{ doc.setTextColor(150,150,150); doc.setFont('helvetica','bold'); doc.setFontSize(48); doc.text('Pukis Lumer Aulia', W/2, H/2, { align: 'center' }); doc.setTextColor(0,0,0); }catch(e){ doc.setTextColor(0,0,0); }
-‎
-‎        doc.setFontSize(13); doc.setFont('helvetica','bold'); doc.text('Terima kasih telah berbelanja di toko Kami', W/2, H - 15, { align: 'center' });
-‎
-‎        const safeName = (order.nama || 'Pelanggan').replace(/\s+/g,'_').replace(/[^\w\-_.]/g,'');
-‎        const fileName = `Invoice_${safeName}_${order.orderID || order.invoice || Date.now()}.pdf`;
-‎        doc.save(fileName);
-‎        return true;
-‎      }catch(err){ console.error('generatePdf error', err); alert('Gagal membuat PDF: ' + (err && err.message ? err.message : err)); return false; }
-‎    };
-‎  }
-‎
-‎  // expose factory
-‎  window.makeGeneratePdf = makeGeneratePdf;
-‎  (function tryAttachNow(){ const lib = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf : (window.jsPDF ? window.jsPDF : null); if (lib){ try{ window.generatePdf = makeGeneratePdf(lib); }catch(e){} } })();
-‎  window._attachGeneratePdfWhenReady = async function(timeoutMs = 7000){ const start = Date.now(); return new Promise((resolve)=>{ const id = setInterval(()=>{ const lib = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf : (window.jsPDF ? window.jsPDF : null); if (lib){ try{ window.generatePdf = makeGeneratePdf(lib); clearInterval(id); resolve(true); return; }catch(e){} } if (Date.now() - start > timeoutMs){ clearInterval(id); resolve(false); } },200); }); };
-‎
-‎  // ---------------- INIT ----------------
-‎  function init(){ attachFormListeners(); updatePriceUI(); }
-‎  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-‎
-‎  // debug exposure
-‎  window._orderjs_final = { buildToppingUI, updateToppingVisibility, updatePriceUI, buildOrderObject, saveOrderLocal, getLastOrder, sendOrderToAdminViaWA, renderNotaOnScreen };
-‎
-‎})();
-‎
+/* ===============================
+   GLOBAL STATE ORDER
+================================ */
+let currentOrder = null;
+
+/* ===============================
+   RENDER NOTA
+================================ */
+function renderNotaOnScreen(order){
+  if (!order) return;
+  const c = $('#notaContent'); if (!c) return;
+
+  const toppingText = order.topping && order.topping.length ? order.topping.join(', ') : '-';
+  const taburanText = order.taburan && order.taburan.length ? order.taburan.join(', ') : '-';
+
+  c.innerHTML = `
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div style="font-weight:800;color:#5f0000;font-size:14px;margin-bottom:6px;">INVOICE PEMESANAN</div>
+        <div><strong>Invoice:</strong> ${escapeHtml(order.invoice)}</div>
+        <div><strong>Nama:</strong> ${escapeHtml(order.nama)}</div>
+        <div><strong>WA:</strong> ${escapeHtml(order.wa)}</div>
+        <div><strong>Tanggal:</strong> ${escapeHtml(order.tgl)}</div>
+      </div>
+    </div>
+    <hr style="margin:8px 0">
+    <div>
+      <div><strong>Jenis:</strong> ${escapeHtml(order.jenis)} — ${escapeHtml(String(order.isi))} pcs</div>
+      <div><strong>Mode:</strong> ${escapeHtml(order.mode)}</div>
+      <div><strong>Topping:</strong> ${escapeHtml(toppingText)}</div>
+      <div><strong>Taburan:</strong> ${escapeHtml(taburanText)}</div>
+      <div><strong>Jumlah:</strong> ${escapeHtml(String(order.jumlah))} box</div>
+      <div><strong>Harga Satuan:</strong> ${formatRp(order.pricePerBox)}</div>
+      <div><strong>Subtotal:</strong> ${formatRp(order.subtotal)}</div>
+      <div><strong>Diskon:</strong> ${order.discount > 0 ? '-' + formatRp(order.discount) : '-'}</div>
+      <div style="font-weight:800;margin-top:6px;"><strong>Total Bayar:</strong> ${formatRp(order.total)}</div>
+      <p style="margin-top:10px;font-style:italic">Terima kasih telah berbelanja di Pukis Lumer Aulia.</p>
+    </div>
+  `;
+
+  const container = $('#notaContainer');
+  if (container){
+    container.classList.add('show');
+    container.style.display = 'flex';
+  }
+
+  window._lastNota = order;
+}
+
+/* ===============================
+   SEND TO ADMIN VIA WA
+================================ */
+function sendOrderToAdminViaWA(order){
+  if (!order) return;
+
+  const lines = [
+    "Assalamu'alaikum Admin 🙏",
+    'Ada pesanan baru:', '',
+    `Invoice : ${order.invoice}`,
+    `Nama    : ${order.nama}`,
+    `WA      : ${order.wa}`,
+    `Jenis   : ${order.jenis}`,
+    `Isi     : ${order.isi} pcs`,
+    `Mode    : ${order.mode}`,
+    `Topping : ${order.topping && order.topping.length ? order.topping.join(', ') : '-'}`,
+    `Taburan : ${order.taburan && order.taburan.length ? order.taburan.join(', ') : '-'}`,
+    `Jumlah  : ${order.jumlah} box`,
+    `Catatan : ${order.note || '-'}`, '',
+    `Total Bayar: ${formatRp(order.total)}`, '',
+    'Mohon bantu cetak invoice. Terima kasih 😊'
+  ];
+
+  const admin = ($('#adminNumber') && $('#adminNumber').value) || ADMIN_WA || '';
+  if (!admin){
+    alert('Nomor admin tidak tersedia.');
+    return;
+  }
+
+  window.open(`https://wa.me/${admin}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
+}
+
+/* ===============================
+   TOPPING MODE CHANGE
+================================ */
+function onToppingModeChange(){
+  updateToppingVisibility();
+  updatePriceUI();
+}
+
+/* ===============================
+   SUBMIT FORM → NOTA POPUP
+================================ */
+function onFormSubmit(e){
+  e.preventDefault();
+
+  const order = buildOrderObject();
+  if (!order) return;
+
+  order.status = 'pending';
+  currentOrder = order;
+
+  renderNotaOnScreen(order);
+}
+
+/* ===============================
+   KIRIM KE ADMIN (FINAL)
+================================ */
+async function onSendAdminClick(e){
+  e.preventDefault();
+
+  if (!currentOrder){
+    alert('Data pesanan belum tersedia.');
+    return;
+  }
+
+  const pdfBase64 = await generateAndStorePdf(currentOrder);
+  if (pdfBase64) currentOrder.pdfBase64 = pdfBase64;
+
+  saveOrderLocal(currentOrder);
+  sendOrderToAdminViaWA(currentOrder);
+
+  alert('Pesanan terkirim. Admin akan memproses.');
+  hideNota();
+  document.getElementById('formUltra')?.reset();
+
+  currentOrder = null;
+}
+
+/* ===============================
+   GENERATE PDF (SILENT)
+================================ */
+async function generateAndStorePdf(order){
+  if (typeof window.generatePdf !== 'function') return null;
+  return await window.generatePdf(order, true);
+}
+
+/* ===============================
+   CETAK PDF DARI NOTA
+================================ */
+async function onNotaPrint(e){
+  e.preventDefault();
+
+  if (!currentOrder){
+    alert('Data nota belum tersedia.');
+    return;
+  }
+
+  if (typeof window.generatePdf !== 'function'){
+    if (window.makeGeneratePdf && (window.jspdf || window.jsPDF)){
+      window.generatePdf = window.makeGeneratePdf(window.jspdf || window.jsPDF);
+    }
+  }
+
+  if (typeof window.generatePdf === 'function'){
+    await window.generatePdf(currentOrder, false);
+  } else {
+    alert('PDF generator belum siap. Pastikan jsPDF dimuat.');
+  }
+}
+
+/* ===============================
+   TUTUP NOTA
+================================ */
+function hideNota(){
+  const nc = $('#notaContainer');
+  if (nc){
+    nc.classList.remove('show');
+    nc.style.display = 'none';
+  }
+}‎
