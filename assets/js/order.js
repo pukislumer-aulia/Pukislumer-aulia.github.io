@@ -216,7 +216,6 @@
   // ---------------- INIT ----------------
   document.addEventListener('DOMContentLoaded', function(){
 
-    buildToppingUI(); // aman (kosong)
 
     $$('input[name="ultraJenis"]').forEach(r=>r.addEventListener('change',updatePriceUI));
     $$('input[name="ultraToppingMode"]').forEach(r=>r.addEventListener('change',updatePriceUI));
