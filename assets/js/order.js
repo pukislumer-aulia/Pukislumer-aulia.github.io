@@ -46,9 +46,9 @@
   function syncTopping() {
     const mode = getRadio('ultraToppingMode');
     if ($('ultraSingleGroup'))
-      $('ultraSingleGroup').style.display = mode === 'single' ? 'flex' : 'none';
+      $('ultraSingleGroup').style.display = mode === 'single' ? 'block' : 'none';
     if ($('ultraDoubleGroup'))
-      $('ultraDoubleGroup').style.display = mode === 'double' ? 'flex' : 'none';
+      $('ultraDoubleGroup').style.display = mode === 'double' ? 'block' : 'none';
   }
 
   /* ================= PRICE ================= */
@@ -66,10 +66,10 @@
 
     const total = subtotal - discount;
 
-    if ($('ultraPricePerBox')) $('ultraPricePerBox').textContent = rp(perBox);
-    if ($('ultraSubtotal')) $('ultraSubtotal').textContent = rp(subtotal);
-    if ($('ultraDiscount')) $('ultraDiscount').textContent = discount ? '-' + rp(discount) : '-';
-    if ($('ultraGrandTotal')) $('ultraGrandTotal').textContent = rp(total);
+    $('ultraPricePerBox') && ($('ultraPricePerBox').textContent = rp(perBox));
+    $('ultraSubtotal') && ($('ultraSubtotal').textContent = rp(subtotal));
+    $('ultraDiscount') && ($('ultraDiscount').textContent = discount ? '-' + rp(discount) : '-');
+    $('ultraGrandTotal') && ($('ultraGrandTotal').textContent = rp(total));
 
     return { total, qty };
   }
@@ -143,62 +143,43 @@
     if (!$('notaContent') || !$('notaContainer')) return;
 
     $('notaContent').innerHTML = `
-      <b>Invoice:</b> ${o.invoice}<br>
-      <b>Nama:</b> ${o.nama}<br>
-      <b>WA:</b> ${o.wa}<br>
-      <b>Jenis:</b> ${o.mode.toUpperCase()}<br>
-      <b>Jumlah:</b> ${o.qty} Box<br>
-      <b>Total:</b> ${rp(o.total)}<br><br>
-      <button id="sendToAdmin" class="btn-primary">Kirim WhatsApp</button>
-      <button id="printPDF" class="btn-primary">Cetak PDF</button>
+      <b>Invoice :</b> ${o.invoice}<br>
+      <b>Nama :</b> ${o.nama}<br>
+      <b>WA :</b> ${o.wa}<br>
+      <b>Jenis :</b> ${o.mode.toUpperCase()}<br>
+      <b>Jumlah :</b> ${o.qty} Box<br>
+      <b>Pesan :</b> ${o.catatan}<br>
+      <b>Total :</b> ${rp(o.total)}<br><br>
+      <button id="sendToAdmin" class="btn-primary">Kirim Pesan WA</button>
     `;
 
     $('notaContainer').style.display = 'flex';
-
     $('sendToAdmin').onclick = sendWA;
-    $('printPDF').onclick = printPDF;
   }
 
   function hideNota() {
-    if ($('notaContainer')) $('notaContainer').style.display = 'none';
+    $('notaContainer') && ($('notaContainer').style.display = 'none');
   }
 
-  /* ================= PDF ================= */
-  async function printPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+  /* ================= SEND WA ================= */
+  function sendWA() {
+    if (!currentOrder) return;
 
-    doc.setFontSize(14);
-    doc.text('PUKIS LUMER AULIA', 105, 15, { align: 'center' });
+    saveOrderToAdmin(currentOrder);
 
-    doc.setTextColor(200);
-    doc.text('PUKIS LUMER AULIA', 105, 140, { angle: 45, align: 'center' });
-    doc.setTextColor(0);
+    const msg =
+      `Invoice : ${currentOrder.invoice}\n` +
+      `Nama : ${currentOrder.nama}\n` +
+      `WA : ${currentOrder.wa}\n` +
+      `Jenis : ${currentOrder.mode.toUpperCase()}\n` +
+      `Jumlah : ${currentOrder.qty} Box\n` +
+      `Pesan : ${currentOrder.catatan}\n` +
+      `Total : ${rp(currentOrder.total)}`;
 
-    doc.autoTable({
-      startY: 25,
-      head: [['Keterangan', 'Detail']],
-      body: [
-        ['Invoice', currentOrder.invoice],
-        ['Nama', currentOrder.nama],
-        ['No WA', currentOrder.wa],
-        ['Jenis Pesanan', currentOrder.mode],
-        ['Topping', currentOrder.single.join(', ') || currentOrder.double.join(', ') || '-'],
-        ['Taburan', currentOrder.taburan.join(', ') || '-'],
-        ['Catatan', currentOrder.catatan],
-        ['Jumlah', currentOrder.qty + ' Box'],
-        ['Total', rp(currentOrder.total)]
-      ]
-    });
-
-    doc.text(
-      'Terimakasih sudah berkunjung ke Pukis Lumer Aulia',
-      105,
-      285,
-      { align: 'center' }
+    window.open(
+      `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`,
+      '_blank'
     );
-
-    doc.save(currentOrder.invoice + '.pdf');
   }
 
   /* ================= EVENTS ================= */
@@ -213,27 +194,10 @@
       return;
     }
 
-    saveOrderToAdmin(o);
     currentOrder = o;
     showNota(o);
 
-    setTimeout(() => {
-      __LOCK_SUBMIT = false;
-    }, 1000);
-  }
-
-  function sendWA() {
-    if (!currentOrder) return;
-
-    const msg =
-      `Invoice: ${currentOrder.invoice}\n` +
-      `Nama: ${currentOrder.nama}\n` +
-      `Total: ${rp(currentOrder.total)}`;
-
-    window.open(
-      `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`,
-      '_blank'
-    );
+    setTimeout(() => (__LOCK_SUBMIT = false), 800);
   }
 
   /* ================= INIT ================= */
@@ -247,7 +211,7 @@
     $$('input, select').forEach(i => i.onchange = updatePrice);
 
     $('formUltra').onsubmit = submitForm;
-    if ($('notaClose')) $('notaClose').onclick = hideNota;
+    $('notaClose') && ($('notaClose').onclick = hideNota);
   });
 
 })();
