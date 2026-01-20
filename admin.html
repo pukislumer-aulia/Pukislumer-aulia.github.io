@@ -2,13 +2,17 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+
+  <!-- 🔒 CACHE CONTROL (ANTI DATA LAMA) -->
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+
   <title>Admin Panel — Pukis Lumer Aulia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    /* ================= BASE ================= */
     body{
       font-family: Arial, Helvetica, sans-serif;
       background:#f4f6f8;
@@ -81,7 +85,7 @@
       box-shadow:0 2px 8px rgba(0,0,0,.08);
     }
 
-    /* ================= TABLE (EXCEL LOOK) ================= */
+    /* ================= TABLE ================= */
     .table-wrapper{
       background:#fff;
       border-radius:6px;
@@ -157,12 +161,12 @@
     <h1>Admin Panel — Pukis Lumer Aulia</h1>
   </div>
 
-  <!-- STATISTIK -->
+  <!-- ================= STATISTIK ================= -->
   <div class="stats" id="stats">
-    <!-- diisi oleh admin.js -->
+    <!-- diisi otomatis oleh admin.js -->
   </div>
 
-  <!-- TABEL ORDER -->
+  <!-- ================= TABEL ORDER ================= -->
   <div class="table-wrapper">
     <table id="orderTable">
       <thead>
@@ -176,27 +180,29 @@
         </tr>
       </thead>
       <tbody>
-        <!-- diisi oleh admin.js -->
+        <!-- diisi otomatis oleh admin.js -->
       </tbody>
     </table>
   </div>
 
   <div class="footer-note">
     * Status <strong>selesai</strong> akan dihitung sebagai pendapatan.
+    <br>
+    * PDF hanya bisa dicetak oleh admin.
   </div>
 
 </div>
 
 <!-- ================= JS ================= -->
 
-<!-- jsPDF -->
+<!-- jsPDF (ADMIN ONLY) -->
 <script src="assets/js/lib/jspdf.umd.min.js"></script>
 <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
 
-<!-- LOGIC ORDER (SHARED INDEX + ADMIN) -->
+<!-- ORDER LOGIC (READ ONLY FOR ADMIN) -->
 <script src="assets/js/order.js"></script>
 
-<!-- LOGIC ADMIN -->
+<!-- ADMIN LOGIC -->
 <script src="assets/js/admin.js"></script>
 
 </body>
