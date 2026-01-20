@@ -87,33 +87,28 @@ label {
 }
 
 /* =====================================================
-   TOPPING SYSTEM (SYNC ORDER.JS – LOCKED)
+   TOPPING SYSTEM (FINAL • LOCKED • VERTICAL SAFE)
 ===================================================== */
 
 /* Wrapper topping – DEFAULT HIDDEN */
 .topping-wrap {
   display: none;
-  margin-top: 8px;
+  margin-top: 10px;
   padding: 10px;
   background: #102033;
   border-radius: 8px;
 }
 
-/* Grid layout */
-.topping-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-/* Checkbox label */
+/* PAKSA SEMUA CHECKBOX KE BAWAH */
 .topping-wrap label {
-  display: flex;
+  display: flex;              /* bukan inline */
   align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: 6px;
+  gap: 10px;
+  width: 100%;                /* full lebar */
+  margin-bottom: 6px;
+  padding: 8px 10px;
   background: #1b314c;
+  border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
   user-select: none;
@@ -127,11 +122,12 @@ label {
 
 /* Checkbox */
 .topping-wrap input[type="checkbox"] {
-  transform: scale(1.1);
+  flex-shrink: 0;             /* anti gepeng */
+  transform: scale(1.15);
   cursor: pointer;
 }
 
-/* Checked visual (optional – jika ditambahkan JS) */
+/* Checked visual (opsional jika JS menambah class) */
 .topping-wrap label.checked {
   background: #2d6cdf;
   font-weight: 600;
@@ -249,8 +245,8 @@ button:active {
 }
 
 .floating-icon.whatsapp { background:#25D366 }
-.floating-icon.shopee { background:#EE4D2D }
-.floating-icon.grab { background:#00B14F }
+.floating-icon.shopee   { background:#EE4D2D }
+.floating-icon.grab     { background:#00B14F }
 
 /* =====================================================
    RESPONSIVE
@@ -284,4 +280,4 @@ button:active {
 .text-black { color: #f1f1f1 !important; }
 .text-pink { color: #ffafd9 !important; }
 
-/* END OF FILE — FINAL LOCKED */
+/* END OF FILE — FINAL • LOCKED • PRODUCTION SAFE */
