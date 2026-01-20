@@ -2,8 +2,6 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-
-  <!-- 🔒 CACHE CONTROL (ANTI DATA LAMA) -->
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -12,7 +10,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    /* ================= BASE ================= */
     body{
       font-family: Arial, Helvetica, sans-serif;
       background:#f4f6f8;
@@ -21,11 +18,9 @@
       color:#222;
     }
 
-    h1,h2{
-      margin:0 0 10px 0;
-    }
+    h1,h2{ margin:0 0 10px }
 
-    /* ================= LOGIN ================= */
+    /* LOGIN */
     #login{
       min-height:100vh;
       display:flex;
@@ -47,7 +42,6 @@
       padding:10px;
       font-size:16px;
       margin-top:10px;
-      box-sizing:border-box;
     }
 
     .login-box button{
@@ -55,25 +49,17 @@
       margin-top:15px;
       padding:10px;
       font-size:16px;
-      cursor:pointer;
       background:#2c7be5;
       color:#fff;
       border:none;
       border-radius:4px;
+      cursor:pointer;
     }
 
-    /* ================= ADMIN ================= */
+    /* ADMIN */
     #admin{
       display:none;
       padding:20px;
-    }
-
-    .header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-bottom:15px;
     }
 
     .stats{
@@ -81,11 +67,10 @@
       padding:15px;
       border-radius:6px;
       margin-bottom:15px;
-      line-height:1.6;
       box-shadow:0 2px 8px rgba(0,0,0,.08);
+      line-height:1.6;
     }
 
-    /* ================= TABLE ================= */
     .table-wrapper{
       background:#fff;
       border-radius:6px;
@@ -94,45 +79,30 @@
     }
 
     table{
-      border-collapse:collapse;
       width:100%;
-      min-width:800px;
+      min-width:1100px;
+      border-collapse:collapse;
       font-size:14px;
     }
 
-    thead th{
-      position:sticky;
-      top:0;
-      background:#e9ecef;
-      border:1px solid #ccc;
+    th,td{
+      border:1px solid #ddd;
       padding:8px;
       text-align:left;
-      font-weight:bold;
-      z-index:2;
-    }
-
-    tbody td{
-      border:1px solid #ddd;
-      padding:6px 8px;
       vertical-align:middle;
     }
 
-    tbody tr:nth-child(even){
-      background:#fafafa;
+    th{
+      background:#e9ecef;
+      position:sticky;
+      top:0;
+      z-index:1;
     }
 
-    tbody tr:hover{
-      background:#f1f7ff;
-    }
+    tr:nth-child(even){ background:#fafafa }
+    tr:hover{ background:#f1f7ff }
 
-    select{
-      padding:4px;
-    }
-
-    button{
-      padding:4px 8px;
-      cursor:pointer;
-    }
+    select{ padding:4px }
 
     .footer-note{
       margin-top:10px;
@@ -144,29 +114,22 @@
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- LOGIN -->
 <div id="login">
   <div class="login-box">
     <h2>Admin Login</h2>
-    <p>Masukkan PIN Admin</p>
-    <input type="password" id="pin" placeholder="PIN">
+    <input type="password" id="pin" placeholder="PIN Admin">
     <button id="btnLogin">Masuk</button>
   </div>
 </div>
 
-<!-- ================= ADMIN PANEL ================= -->
+<!-- ADMIN -->
 <div id="admin">
 
-  <div class="header">
-    <h1>Admin Panel — Pukis Lumer Aulia</h1>
-  </div>
+  <h1>Admin Panel — Pukis Lumer Aulia</h1>
 
-  <!-- ================= STATISTIK ================= -->
-  <div class="stats" id="stats">
-    <!-- diisi otomatis oleh admin.js -->
-  </div>
+  <div class="stats" id="stats"></div>
 
-  <!-- ================= TABEL ORDER ================= -->
   <div class="table-wrapper">
     <table id="orderTable">
       <thead>
@@ -174,33 +137,27 @@
           <th>Tanggal</th>
           <th>Invoice</th>
           <th>Nama</th>
+          <th>No. WA</th>
+          <th>Jenis</th>
+          <th>Jumlah</th>
           <th>Total</th>
           <th>Status</th>
           <th>PDF</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- diisi otomatis oleh admin.js -->
-      </tbody>
+      <tbody></tbody>
     </table>
   </div>
 
   <div class="footer-note">
-    * Status <strong>selesai</strong> akan dihitung sebagai pendapatan.
-    <br>
-    * PDF hanya bisa dicetak oleh admin.
+    * Status <b>selesai</b> dihitung sebagai pendapatan
   </div>
 
 </div>
 
-<!-- ================= JS ================= -->
-
-<!-- jsPDF (ADMIN ONLY) -->
+<!-- PDF LIB -->
 <script src="assets/js/lib/jspdf.umd.min.js"></script>
 <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
-
-<!-- ORDER LOGIC (READ ONLY FOR ADMIN) -->
-<script src="assets/js/order.js"></script>
 
 <!-- ADMIN LOGIC -->
 <script src="assets/js/admin.js"></script>
