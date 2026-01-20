@@ -87,10 +87,10 @@ label {
 }
 
 /* =====================================================
-   TOPPING SYSTEM — FINAL (SYNC ORDER.JS)
+   TOPPING SYSTEM (SYNC ORDER.JS – LOCKED)
 ===================================================== */
 
-/* Wrapper topping — default HIDDEN */
+/* Wrapper topping – DEFAULT HIDDEN */
 .topping-wrap {
   display: none;
   margin-top: 8px;
@@ -99,27 +99,14 @@ label {
   border-radius: 8px;
 }
 
-/* Ditampilkan oleh JS */
-.topping-wrap.show {
-  display: block;
-}
-
-/* Subtitle */
-.topping-subtitle {
-  margin-bottom: 6px;
-  font-weight: 600;
-  font-size: 13px;
-  color: #aad4ff;
-}
-
-/* Grid */
+/* Grid layout */
 .topping-grid {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* Label checkbox */
+/* Checkbox label */
 .topping-wrap label {
   display: flex;
   align-items: center;
@@ -144,7 +131,7 @@ label {
   cursor: pointer;
 }
 
-/* Checked (ditambah JS) */
+/* Checked visual (optional – jika ditambahkan JS) */
 .topping-wrap label.checked {
   background: #2d6cdf;
   font-weight: 600;
@@ -183,86 +170,46 @@ label {
   opacity: 0.85;
 }
 
+button:active {
+  transform: scale(0.97);
+}
+
 /* =====================================================
-   NOTA POPUP
+   NOTA POPUP (SYNC HTML)
 ===================================================== */
-.nota-overlay {
+#notaContainer {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.78);
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 99999; tu
+  z-index: 99999;
 }
 
-.nota-overlay.show {
-  display: flex;
-}
-
-.nota-card {
+.nota-box {
   background: #fff;
   width: 92%;
-  max-width: 380px;
+  max-width: 420px;
   border-radius: 10px;
   padding: 15px;
   color: #333;
+  position: relative;
 }
 
-.nota-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.btn-close {
+#notaClose {
+  position: absolute;
+  top: 8px;
+  right: 10px;
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
   cursor: pointer;
 }
 
-.btn-confirm {
-  background: #28c76f;
-  padding: 10px;
-  width: 100%;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  margin-top: 10px;
-}
-
-.btn-print {
-  background: #7367f0;
-  padding: 10px;
-  width: 100%;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  margin-top: 10px;
-}
-
 /* =====================================================
-   RESPONSIVE
+   FLOATING BUTTONS
 ===================================================== */
-@media (max-width: 480px) {
-  .container {
-    padding: 12px;
-  }
-}
-
-/* =====================================================
-   UTIL
-===================================================== */
-.text-center { text-align: center; }
-.mb-10 { margin-bottom: 10px; }
-.mb-15 { margin-bottom: 15px; }
-.mb-20 { margin-bottom: 20px; }
-
-button:active {
-  transform: scale(0.97);
-}
-/* ===== FLOATING BUTTONS ===== */
 .toggle-float-btn {
   position: fixed;
   bottom: 20px;
@@ -290,10 +237,6 @@ button:active {
   z-index: 99980;
 }
 
-.floating-icons-container.show {
-  display: flex;
-}
-
 .floating-icon {
   width: 48px;
   height: 48px;
@@ -309,45 +252,26 @@ button:active {
 .floating-icon.shopee { background:#EE4D2D }
 .floating-icon.grab { background:#00B14F }
 
-/* ===== TOPPING SYSTEM (FINAL BENAR) ===== */
-.topping-wrap {
-  display: none;
-  margin-top: 8px;
-  padding: 10px;
-  background: #102033;
-  border-radius: 8px;
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
 }
 
-.topping-wrap.show {
-  display: block;
-}
+/* =====================================================
+   UTIL
+===================================================== */
+.text-center { text-align: center; }
+.mb-10 { margin-bottom: 10px; }
+.mb-15 { margin-bottom: 15px; }
+.mb-20 { margin-bottom: 20px; }
 
-.topping-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.topping-wrap label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: 6px;
-  background: #1b314c;
-  cursor: pointer;
-}
-
-.topping-wrap label.checked {
-  background: #2d6cdf;
-  font-weight: 600;
-}
-/* ================================
-   RESTORE TEXT COLORS (FINAL)
-   Mengembalikan warna yang hilang
-================================ */
-
-/* Warna teks umum */
+/* =====================================================
+   TEXT COLOR RESTORE (FINAL)
+===================================================== */
 .text-green-bold { color: #00ff91 !important; font-weight: 700; }
 .text-black-bold { color: #f2f2f2 !important; font-weight: 700; }
 .text-blue-dark-bold { color: #80c3ff !important; font-weight: 700; }
@@ -360,8 +284,4 @@ button:active {
 .text-black { color: #f1f1f1 !important; }
 .text-pink { color: #ffafd9 !important; }
 
-/* Jangan rampas warna di topping */
-.topping-wrap label span {
-  color: inherit !important;
-}
 /* END OF FILE — FINAL LOCKED */
