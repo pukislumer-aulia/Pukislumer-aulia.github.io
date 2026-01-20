@@ -95,7 +95,38 @@
       total: price.total
     };
   }
+/* ===============================
+     SAVE ORDER TO ADMIN STORAGE
+     (AUTO CONNECT ADMIN PANEL)
+     ⚠️ FINAL LOCK — JANGAN DIUBAH
+  =============================== */
+  function saveOrderToAdmin(order) {
+    try {
+      const STORAGE_KEY = 'pukisOrders';
+      const orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
+      orders.push({
+        tgl: new Date().toISOString(),
+        invoice: order.invoice,
+        nama: order.nama,
+        wa: order.wa,
+        jenis: order.jenis,
+        mode: order.mode,
+        toppingSingle: order.single || [],
+        toppingDouble: order.double || [],
+        taburan: order.taburan || [],
+        catatan: order.catatan,
+        qty: order.qty,
+        total: order.total,
+        status: 'pending',
+        pdfBase64: null
+      });
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+    } catch (e) {
+      console.warn('Gagal simpan order admin:', e);
+    }
+  }
   /* ================= NOTA ================= */
   let currentOrder = null;
 
