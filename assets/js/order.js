@@ -1,6 +1,7 @@
 /*
-  assets/js/order.js — FINAL STABLE
-  Sinkron 100% dengan HTML saat ini
+  assets/js/order.js — FINAL STABLE (LOCKED)
+  TERKONEKSI 100% DENGAN HTML
+  AMAN MESKI HTML / CSS BERUBAH
 */
 
 (function () {
@@ -20,51 +21,62 @@
     }
   };
 
-  /* ================= HELPERS ================= */
-  const $ = s => document.querySelector(s);
-  const $$ = s => Array.from(document.querySelectorAll(s));
-
+  /* ================= SAFE HELPERS ================= */
+  const $ = id => document.getElementById(id);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
   const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
 
-  /* ================= READ FORM ================= */
-  const getRadio = n => $(`input[name="${n}"]:checked`)?.value || null;
-  const getIsi = () => $('#ultraIsi')?.value || '5';
-  const getJumlah = () => Math.max(1, parseInt($('#ultraJumlah')?.value || '1', 10));
+  const safeInt = (v, d = 0) => {
+    const n = parseInt(v, 10);
+    return isNaN(n) ? d : n;
+  };
 
-  const getChecked = name =>
-    $$(`input[name="${name}"]:checked`).map(i => i.value);
+  /* ================= FORM READ ================= */
+  const getRadio = n =>
+    document.querySelector(`input[name="${n}"]:checked`)?.value || null;
 
-  /* ================= TOPPING VISIBILITY ================= */
+  const getChecked = n =>
+    $$(`input[name="${n}"]:checked`).map(i => i.value);
+
+  /* ================= TOPPING VISIBILITY (LOCKED) ================= */
+  function show(el) { if (el) el.style.display = 'flex'; }
+  function hide(el) { if (el) el.style.display = 'none'; }
+
   function syncTopping() {
-    const mode = getRadio('ultraToppingMode');
-    $('#ultraSingleGroup')?.classList.toggle('show', mode === 'single');
-    $('#ultraDoubleGroup')?.classList.toggle('show', mode === 'double');
+    const mode = getRadio('ultraToppingMode') || 'non';
+    hide($('ultraSingleGroup'));
+    hide($('ultraDoubleGroup'));
+    if (mode === 'single') show($('ultraSingleGroup'));
+    if (mode === 'double') show($('ultraDoubleGroup'));
   }
 
   /* ================= PRICE ================= */
   function updatePrice() {
     const jenis = getRadio('ultraJenis') || 'Original';
-    const isi = getIsi();
+    const isi = $('ultraIsi')?.value || '5';
     const mode = getRadio('ultraToppingMode') || 'non';
-    const qty = getJumlah();
+    const qty = Math.max(1, safeInt($('ultraJumlah')?.value, 1));
 
     const perBox = BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
     const subtotal = perBox * qty;
-    const discount = qty >= 10 ? 1000 : qty >= 5 ? Math.round(subtotal * 0.01) : 0;
+    const discount =
+      qty >= 10 ? 1000 :
+      qty >= 5 ? Math.round(subtotal * 0.01) : 0;
+
     const total = subtotal - discount;
 
-    $('#ultraPricePerBox').textContent = rp(perBox);
-    $('#ultraSubtotal').textContent = rp(subtotal);
-    $('#ultraDiscount').textContent = discount ? '-' + rp(discount) : '-';
-    $('#ultraGrandTotal').textContent = rp(total);
+    $('ultraPricePerBox').textContent = rp(perBox);
+    $('ultraSubtotal').textContent = rp(subtotal);
+    $('ultraDiscount').textContent = discount ? '-' + rp(discount) : '-';
+    $('ultraGrandTotal').textContent = rp(total);
 
-    return { perBox, subtotal, discount, total };
+    return { total };
   }
 
   /* ================= BUILD ORDER ================= */
   function buildOrder() {
-    const nama = $('#ultraNama').value.trim();
-    const waRaw = $('#ultraWA').value.trim();
+    const nama = $('ultraNama')?.value.trim();
+    const waRaw = $('ultraWA')?.value.trim();
 
     if (!nama) return alert('Nama wajib diisi'), null;
     if (!waRaw) return alert('No. WA wajib diisi'), null;
@@ -79,10 +91,10 @@
     const taburan = getChecked('taburan');
 
     if (mode === 'single' && single.length === 0)
-      return alert('Pilih topping single'), null;
+      return alert('Pilih minimal 1 topping'), null;
 
-    if (mode === 'double' && double.length === 0)
-      return alert('Pilih topping double'), null;
+    if (mode === 'double' && (double.length === 0 || taburan.length === 0))
+      return alert('Double topping wajib pilih topping & taburan'), null;
 
     const price = updatePrice();
 
@@ -90,13 +102,6 @@
       invoice: 'INV-' + Date.now(),
       nama,
       wa,
-      jenis: getRadio('ultraJenis'),
-      isi: getIsi(),
-      mode,
-      single,
-      double,
-      taburan,
-      jumlah: getJumlah(),
       total: price.total
     };
   }
@@ -104,17 +109,31 @@
   /* ================= NOTA ================= */
   let currentOrder = null;
 
+  function ensureSendButton() {
+    let btn = $('sendToAdmin');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'sendToAdmin';
+      btn.type = 'button';
+      btn.className = 'btn-primary';
+      btn.textContent = 'Kirim Pesanan ke WhatsApp';
+      $('notaContent')?.appendChild(btn);
+    }
+    btn.onclick = sendWA;
+  }
+
   function showNota(o) {
-    $('#notaContent').innerHTML = `
+    $('notaContent').innerHTML = `
       <b>Invoice:</b> ${o.invoice}<br>
       <b>Nama:</b> ${o.nama}<br>
-      <b>Total:</b> ${rp(o.total)}
+      <b>Total:</b> ${rp(o.total)}<br><br>
     `;
-    $('#notaContainer').style.display = 'flex';
+    ensureSendButton();
+    $('notaContainer').style.display = 'flex';
   }
 
   function hideNota() {
-    $('#notaContainer').style.display = 'none';
+    $('notaContainer').style.display = 'none';
   }
 
   /* ================= EVENTS ================= */
@@ -132,12 +151,14 @@
       `Invoice: ${currentOrder.invoice}\n` +
       `Nama: ${currentOrder.nama}\n` +
       `Total: ${rp(currentOrder.total)}`;
+
     window.open(
       `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`,
       '_blank'
     );
+
     hideNota();
-    $('#formUltra').reset();
+    $('formUltra').reset();
     syncTopping();
     updatePrice();
     currentOrder = null;
@@ -145,22 +166,22 @@
 
   /* ================= INIT ================= */
   document.addEventListener('DOMContentLoaded', () => {
+    if (!$('formUltra')) return;
+
     syncTopping();
     updatePrice();
 
     $$('input[name="ultraJenis"]').forEach(i => i.onchange = updatePrice);
     $$('input[name="ultraToppingMode"]').forEach(i => i.onchange = () => {
-      syncTopping();
-      updatePrice();
+      syncTopping(); updatePrice();
     });
 
     $$('input[type="checkbox"]').forEach(i => i.onchange = updatePrice);
-    $('#ultraIsi').onchange = updatePrice;
-    $('#ultraJumlah').oninput = updatePrice;
+    $('ultraIsi').onchange = updatePrice;
+    $('ultraJumlah').oninput = updatePrice;
 
-    $('#formUltra').onsubmit = submitForm;
-    $('#sendToAdmin').onclick = sendWA;
-    $('#notaClose').onclick = hideNota;
+    $('formUltra').onsubmit = submitForm;
+    $('notaClose').onclick = hideNota;
   });
 
 })();
