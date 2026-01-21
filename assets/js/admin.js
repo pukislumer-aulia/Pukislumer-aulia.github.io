@@ -1,93 +1,215 @@
-/* =========================================
-   ADMIN PDF TEMPLATE — FINAL LOCKED
-   BRANDING MEWAH | KHUSUS ADMIN
-========================================= */
-async function generateAdminPDF(order) {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF('p', 'mm', 'a4');
+/* ==================================================
+   ADMIN PANEL — FINAL LOCK (THERMAL)
+   PUKIS LUMER AULIA
+   ✔ PDF Thermal 58mm / 80mm
+   ✔ CAP STATUS: LUNAS / PENDING / BATAL
+   ✔ QRIS + TTD + FOOTER
+   ⚠️ JANGAN DIUBAH TANPA AUDIT
+================================================== */
+(() => {
+  'use strict';
 
-  /* ===== HEADER ===== */
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.text('PUKIS LUMER AULIA', 105, 18, { align: 'center' });
+  /* ================= CONFIG ================= */
+  const ADMIN_PIN = '030419';
+  const STORAGE_KEY = 'pukisOrders';
 
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Invoice Resmi Pemesanan', 105, 24, { align: 'center' });
+  /* THERMAL SETTING */
+  const PAPER_WIDTH = 80; // 80 = thermal 80mm | ubah ke 58 jika printer 58mm
 
-  /* ===== WATERMARK ===== */
-  doc.setTextColor(230);
-  doc.setFontSize(40);
-  doc.text('PUKIS LUMER AULIA', 105, 150, {
-    align: 'center',
-    angle: 45
-  });
-  doc.setTextColor(0);
+  const $ = id => document.getElementById(id);
+  const rp = n => (Number(n) || 0).toLocaleString('id-ID');
 
-  /* ===== TABLE ===== */
-  doc.autoTable({
-    startY: 35,
-    theme: 'grid',
-    headStyles: {
-      fillColor: [22, 54, 92],
-      textColor: 255,
-      fontStyle: 'bold'
-    },
-    styles: {
-      fontSize: 10,
-      cellPadding: 4
-    },
-    head: [['Keterangan', 'Detail']],
-    body: [
-      ['Invoice', order.invoice],
-      ['Tanggal', new Date(order.tgl).toLocaleString('id-ID')],
-      ['Nama Pemesan', order.nama],
-      ['No. WhatsApp', order.wa],
-      ['Jenis Pesanan', order.mode.toUpperCase()],
-      [
-        'Topping',
-        order.mode === 'single'
-          ? order.single.join(', ')
-          : order.double.join(', ')
-      ],
-      ['Taburan', order.taburan.join(', ') || '-'],
-      ['Catatan', order.catatan],
-      ['Jumlah', order.qty + ' Box'],
-      ['Total', 'Rp ' + Number(order.total).toLocaleString('id-ID')]
-    ]
-  });
+  /* ================= LOGIN ================= */
+  function loginAdmin() {
+    const pin = $('pin')?.value || '';
+    if (pin !== ADMIN_PIN) {
+      alert('PIN salah');
+      $('pin').value = '';
+      return;
+    }
+    $('login').style.display = 'none';
+    $('admin').style.display = 'block';
+    loadAdmin();
+  }
 
-  const finalY = doc.lastAutoTable.finalY || 120;
+  /* ================= STORAGE ================= */
+  function getOrders() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch {
+      return [];
+    }
+  }
 
-  /* ===== LOAD IMAGE HELPER ===== */
-  const loadImg = src =>
-    new Promise(res => {
-      const img = new Image();
-      img.onload = () => res(img);
-      img.src = src;
+  function saveOrders(o) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(o));
+  }
+
+  /* ================= LOAD TABLE ================= */
+  function loadAdmin() {
+    const orders = getOrders();
+    const tbody = document.querySelector('#orderTable tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    orders.forEach((o, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${new Date(o.tgl).toLocaleString()}</td>
+        <td>${o.invoice}</td>
+        <td>${o.nama}</td>
+        <td>${o.wa}</td>
+        <td>${o.mode}</td>
+        <td>${o.qty}</td>
+        <td>Rp ${rp(o.total)}</td>
+        <td>
+          <select onchange="updateStatus(${i}, this.value)">
+            <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>pending</option>
+            <option value="selesai" ${o.status === 'selesai' ? 'selected' : ''}>selesai</option>
+            <option value="dibatalkan" ${o.status === 'dibatalkan' ? 'selected' : ''}>dibatalkan</option>
+          </select>
+        </td>
+        <td>
+          <button onclick="printPdf(${i})">PDF</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
     });
 
-  /* ===== QRIS (KIRI BAWAH) ===== */
-  try {
-    const qris = await loadImg('assets/images/qris-pukis.jpg');
-    doc.addImage(qris, 'JPEG', 15, 245, 40, 40);
-  } catch (e) {}
+    renderStats(orders);
+  }
 
-  /* ===== TTD (KANAN BAWAH) ===== */
-  try {
-    const ttd = await loadImg('assets/images/ttd.png');
-    doc.addImage(ttd, 'PNG', 150, 248, 40, 20);
-  } catch (e) {}
+  /* ================= STATUS ================= */
+  window.updateStatus = function (i, status) {
+    const orders = getOrders();
+    if (!orders[i]) return;
+    orders[i].status = status;
+    saveOrders(orders);
+    loadAdmin();
+  };
 
-  /* ===== FOOTER TEXT (TENGAH) ===== */
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'italic');
-  doc.text(
-    'Terimakasih sudah belanja\nKami tunggu kunjungan selanjutnya',
-    105,
-    280,
-    { align: 'center' }
-  );
+  /* ================= PDF THERMAL ================= */
+  window.printPdf = async function (i) {
+    const o = getOrders()[i];
+    if (!o) return alert('Data tidak ditemukan');
 
-  return doc;
-}
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: [PAPER_WIDTH, 200]
+    });
+
+    /* HEADER */
+    doc.setFontSize(12);
+    doc.text('PUKIS LUMER AULIA', PAPER_WIDTH / 2, 8, { align: 'center' });
+    doc.setFontSize(8);
+    doc.text('Invoice: ' + o.invoice, 4, 14);
+
+    /* TABLE */
+    doc.autoTable({
+      startY: 16,
+      theme: 'plain',
+      styles: { fontSize: 8, cellPadding: 1 },
+      columnStyles: {
+        0: { cellWidth: 28 },
+        1: { cellWidth: PAPER_WIDTH - 32 }
+      },
+      body: [
+        ['Nama', o.nama],
+        ['WA', o.wa],
+        ['Jenis', o.mode.toUpperCase()],
+        ['Jumlah', o.qty + ' Box'],
+        ['Pesan', o.catatan || '-'],
+        ['Total', 'Rp ' + rp(o.total)]
+      ]
+    });
+
+    /* CAP STATUS */
+    let capText = 'PENDING';
+    let capColor = [255, 165, 0];
+
+    if (o.status === 'selesai') {
+      capText = 'LUNAS';
+      capColor = [0, 160, 80];
+    }
+    if (o.status === 'dibatalkan') {
+      capText = 'BATAL';
+      capColor = [200, 0, 0];
+    }
+
+    doc.setFontSize(26);
+    doc.setTextColor(...capColor);
+    doc.text(
+      capText,
+      PAPER_WIDTH / 2,
+      doc.lastAutoTable.finalY / 1.2,
+      { align: 'center', angle: -15 }
+    );
+    doc.setTextColor(0);
+
+    /* IMAGES */
+    const loadImg = src =>
+      new Promise(res => {
+        const img = new Image();
+        img.onload = () => res(img);
+        img.src = src;
+      });
+
+    try {
+      const qris = await loadImg('assets/images/qris-pukis.jpg');
+      const ttd = await loadImg('assets/images/ttd.png');
+
+      doc.addImage(qris, 'JPEG', 4, doc.lastAutoTable.finalY + 6, 20, 20);
+      doc.addImage(
+        ttd,
+        'PNG',
+        PAPER_WIDTH - 24,
+        doc.lastAutoTable.finalY + 8,
+        20,
+        10
+      );
+    } catch {}
+
+    /* FOOTER */
+    doc.setFontSize(8);
+    doc.text(
+      'Terimakasih sudah belanja\nKami tunggu kunjungan selanjutnya',
+      PAPER_WIDTH / 2,
+      doc.lastAutoTable.finalY + 32,
+      { align: 'center' }
+    );
+
+    doc.save(o.invoice + '.pdf');
+  };
+
+  /* ================= STATS ================= */
+  function renderStats(orders) {
+    const now = new Date();
+    let totalBulanan = 0;
+
+    orders.forEach(o => {
+      if (o.status === 'selesai') {
+        const d = new Date(o.tgl);
+        if (
+          d.getMonth() === now.getMonth() &&
+          d.getFullYear() === now.getFullYear()
+        ) {
+          totalBulanan += Number(o.total || 0);
+        }
+      }
+    });
+
+    $('stats').innerHTML = `
+      <b>Total Pendapatan Bulan Ini:</b>
+      Rp ${rp(totalBulanan)}
+    `;
+  }
+
+  /* ================= INIT ================= */
+  document.addEventListener('DOMContentLoaded', () => {
+    $('btnLogin').onclick = loginAdmin;
+  });
+
+})();
