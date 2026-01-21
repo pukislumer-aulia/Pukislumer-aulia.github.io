@@ -2,9 +2,9 @@
   assets/js/order.js — FINAL PRODUCTION (LOCKED)
   PUKIS LUMER AULIA
   ✔ Anti double submit
-  ✔ Popup Invoice
-  ✔ Simpan ke Admin Panel
-  ✔ PDF Profesional (AutoTable + QRIS + TTD)
+  ✔ Popup Invoice (1 tombol WA)
+  ✔ Save ke Admin Panel (1x)
+  ✔ PDF HANYA ADMIN
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
 
@@ -12,7 +12,7 @@
   'use strict';
 
   /* ===============================
-     SUBMIT LOCK (ANTI DOUBLE ORDER)
+     SUBMIT LOCK
   =============================== */
   let __LOCK_SUBMIT = false;
 
@@ -45,10 +45,12 @@
   /* ================= TOPPING VISIBILITY ================= */
   function syncTopping() {
     const mode = getRadio('ultraToppingMode');
+
     if ($('ultraSingleGroup'))
-      $('ultraSingleGroup').style.display = mode === 'single' ? 'block' : 'none';
+      $('ultraSingleGroup').style.display = mode === 'single' ? 'flex' : 'none';
+
     if ($('ultraDoubleGroup'))
-      $('ultraDoubleGroup').style.display = mode === 'double' ? 'block' : 'none';
+      $('ultraDoubleGroup').style.display = mode === 'double' ? 'flex' : 'none';
   }
 
   /* ================= PRICE ================= */
@@ -60,6 +62,7 @@
 
     const perBox = BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
     const subtotal = perBox * qty;
+
     const discount =
       qty >= 10 ? 1000 :
       qty >= 5 ? Math.round(subtotal * 0.01) : 0;
@@ -99,7 +102,7 @@
     }
 
     if (mode === 'double' && (double.length === 0 || taburan.length === 0)) {
-      alert('Double topping wajib pilih topping & taburan');
+      alert('Double wajib topping dan taburan');
       return null;
     }
 
@@ -121,27 +124,17 @@
     };
   }
 
-  /* ================= SAVE TO ADMIN ================= */
+  /* ================= SAVE ADMIN (ONCE) ================= */
   function saveOrderToAdmin(order) {
-    try {
-      const orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      orders.push({
-        ...order,
-        status: 'pending',
-        pdfBase64: null
-      });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-    } catch (e) {
-      console.warn('Gagal simpan order:', e);
-    }
+    const orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    orders.push({ ...order, status: 'pending', pdfBase64: null });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
   }
 
   /* ================= NOTA POPUP ================= */
   let currentOrder = null;
 
   function showNota(o) {
-    if (!$('notaContent') || !$('notaContainer')) return;
-
     $('notaContent').innerHTML = `
       <b>Invoice :</b> ${o.invoice}<br>
       <b>Nama :</b> ${o.nama}<br>
@@ -150,23 +143,20 @@
       <b>Jumlah :</b> ${o.qty} Box<br>
       <b>Pesan :</b> ${o.catatan}<br>
       <b>Total :</b> ${rp(o.total)}<br><br>
-      <button id="sendToAdmin" class="btn-primary">Kirim Pesan WA</button>
+      <button id="sendToAdmin" class="btn-primary">
+        Kirim pesan ke WhatsApp
+      </button>
     `;
-
     $('notaContainer').style.display = 'flex';
     $('sendToAdmin').onclick = sendWA;
   }
 
   function hideNota() {
-    $('notaContainer') && ($('notaContainer').style.display = 'none');
+    $('notaContainer').style.display = 'none';
   }
 
   /* ================= SEND WA ================= */
   function sendWA() {
-    if (!currentOrder) return;
-
-    saveOrderToAdmin(currentOrder);
-
     const msg =
       `Invoice : ${currentOrder.invoice}\n` +
       `Nama : ${currentOrder.nama}\n` +
@@ -189,28 +179,24 @@
     __LOCK_SUBMIT = true;
 
     const o = buildOrder();
-    if (!o) {
-      __LOCK_SUBMIT = false;
-      return;
-    }
+    if (!o) { __LOCK_SUBMIT = false; return; }
 
+    saveOrderToAdmin(o);
     currentOrder = o;
     showNota(o);
 
-    setTimeout(() => (__LOCK_SUBMIT = false), 800);
+    setTimeout(() => __LOCK_SUBMIT = false, 800);
   }
 
   /* ================= INIT ================= */
   document.addEventListener('DOMContentLoaded', () => {
-    if (!$('formUltra')) return;
-
     syncTopping();
     updatePrice();
 
     $$('input[name="ultraToppingMode"]').forEach(i => i.onchange = syncTopping);
     $$('input, select').forEach(i => i.onchange = updatePrice);
 
-    $('formUltra').onsubmit = submitForm;
+    $('formUltra') && ($('formUltra').onsubmit = submitForm);
     $('notaClose') && ($('notaClose').onclick = hideNota);
   });
 
