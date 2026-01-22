@@ -2,11 +2,11 @@
   ADMIN PANEL — FINAL LOCK (A4)
   PUKIS LUMER AULIA
 
+  ✔ NOMOR ANTRIAN 0001
+  ✔ TOPPING + TABURAN BENAR
+  ✔ QRIS + TTD + HORMAT KAMI
+  ✔ WATERMARK LUNAS / PENDING
   ✔ RESET SEMUA PESANAN
-  ✔ WATERMARK: LUNAS / PENDING
-  ✔ PDF A4 RAPI
-  ✔ TOPPING + TABURAN AMAN
-  ✔ NON / SINGLE / DOUBLE AMAN
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
 
@@ -18,44 +18,43 @@
 
   const $  = id => document.getElementById(id);
   const rp = n => (Number(n)||0).toLocaleString('id-ID');
+  const pad4 = n => String(n).padStart(4,'0');
 
-  /* ================= LOGIN ================= */
-  function loginAdmin() {
+  /* LOGIN */
+  function loginAdmin(){
     if ($('pin').value !== ADMIN_PIN) {
       alert('PIN salah');
-      $('pin').value = '';
+      $('pin').value='';
       return;
     }
-    $('login').style.display = 'none';
-    $('admin').style.display = 'block';
+    $('login').style.display='none';
+    $('admin').style.display='block';
     loadAdmin();
   }
 
-  /* ================= STORAGE ================= */
-  function getOrders() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  }
+  /* STORAGE */
+  const getOrders = () =>
+    JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
-  function saveOrders(o) {
+  const saveOrders = o =>
     localStorage.setItem(STORAGE_KEY, JSON.stringify(o));
-  }
 
-  /* ================= RESET SEMUA ================= */
-  function resetAllOrders() {
-    if (!confirm('Yakin hapus SEMUA pesanan?')) return;
+  /* RESET */
+  function resetAllOrders(){
+    if(!confirm('Yakin hapus SEMUA pesanan?')) return;
     localStorage.removeItem(STORAGE_KEY);
     loadAdmin();
-    alert('Semua pesanan berhasil dihapus');
+    alert('Semua pesanan dihapus');
   }
 
-  /* ================= LOAD ADMIN ================= */
-  function loadAdmin() {
+  /* LOAD TABLE */
+  function loadAdmin(){
     const orders = getOrders();
-    const tbody  = document.querySelector('#orderTable tbody');
-    tbody.innerHTML = '';
+    const tbody = document.querySelector('#orderTable tbody');
+    tbody.innerHTML='';
 
     orders.forEach((o,i)=>{
-      tbody.innerHTML += `
+      tbody.innerHTML+=`
         <tr>
           <td>${new Date(o.tgl).toLocaleString('id-ID')}</td>
           <td>${o.invoice}</td>
@@ -77,97 +76,98 @@
     renderStats(orders);
   }
 
-  window.updateStatus = function(i,s){
+  window.updateStatus=(i,s)=>{
     const o=getOrders();
     o[i].status=s;
     saveOrders(o);
     loadAdmin();
   };
 
-  /* ================= PDF A4 ================= */
+  /* PDF A4 */
   window.printPdf = function(i){
-    const o=getOrders()[i];
-    if(!o) return;
-
+    const o = getOrders()[i];
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p','mm','a4');
 
-    /* NORMALISASI DATA */
-    const topping = (o.mode!=='non' && o.single && o.single.length)
-      ? o.single.join(', ')
-      : '-';
-
-    const taburan = (o.mode==='double' && o.taburan && o.taburan.length)
-      ? o.taburan.join(', ')
-      : '-';
+    const antrian = pad4(i+1);
 
     /* HEADER */
     doc.setFontSize(16);
     doc.text('PUKIS LUMER AULIA',105,15,{align:'center'});
 
     doc.setFontSize(10);
-    doc.text(`Invoice : ${o.invoice}`,15,30);
-    doc.text(`Nama    : ${o.nama}`,15,36);
-    doc.text(`No. WA  : ${o.wa}`,15,42);
+    doc.text(`Invoice : ${o.invoice}`,14,25);
+    doc.text(`Nama    : ${o.nama}`,14,31);
+    doc.text(`WA      : ${o.wa}`,14,37);
 
-    doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString('id-ID')}`,140,30);
-    doc.text(`Status  : ${(o.status||'pending').toUpperCase()}`,140,36);
+    doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString('id-ID')}`,140,25);
+    doc.text(`No Antri: ${antrian}`,140,31);
+
+    /* TOPPING & TABURAN (FIX BUG) */
+    const topping =
+      o.mode==='single' ? (o.single||[]) :
+      o.mode==='double' ? (o.double||[]) : [];
+
+    const taburan =
+      o.mode==='double' ? (o.taburan||[]) : [];
 
     /* TABLE */
     doc.autoTable({
-      startY:50,
+      startY:45,
       theme:'grid',
       styles:{fontSize:10,cellPadding:3},
-      columnStyles:{0:{cellWidth:60},1:{cellWidth:110}},
+      columnStyles:{0:{cellWidth:60}},
       body:[
-        ['Nama Toko','Pukis Lumer Aulia'],
-        ['Jenis Pesanan',o.mode.toUpperCase()],
-        ['Topping',topping],
-        ['Taburan',taburan],
-        ['Jumlah',o.qty+' Box'],
-        ['Catatan',o.catatan||'-'],
-        ['Total','Rp '+rp(o.total)]
+        ['Jenis Pesanan', o.mode.toUpperCase()],
+        ['Topping', topping.length ? topping.join(', ') : '-'],
+        ['Taburan', taburan.length ? taburan.join(', ') : '-'],
+        ['Jumlah', o.qty+' Box'],
+        ['Catatan', o.catatan||'-'],
+        ['Total', 'Rp '+rp(o.total)]
       ]
     });
 
+    let y = doc.lastAutoTable.finalY + 10;
+
+    /* QRIS */
+    doc.addImage('assets/images/qris-pukis.jpg','JPEG',14,y,40,40);
+
+    /* HORMAT KAMI + TTD */
+    doc.setFontSize(10);
+    doc.text('Hormat Kami',170,y+10,{align:'right'});
+    doc.addImage('assets/images/ttd.png','PNG',130,y+14,40,20);
+
     /* WATERMARK */
     const wm = o.status==='selesai' ? 'LUNAS' : 'PENDING';
-    doc.setFontSize(48);
     doc.setTextColor(220,220,220);
-    doc.text(wm,105,170,{align:'center',angle:30});
+    doc.setFontSize(60);
+    doc.text(wm,105,160,{align:'center',angle:45});
     doc.setTextColor(0);
 
     /* FOOTER */
-    doc.setFontSize(11);
-    doc.text('Terimakasih sudah Belanja di Dapur Aulia',105,270,{align:'center'});
-    doc.text('Kami Tunggu Kunjungan Selanjutnya',105,276,{align:'center'});
+    doc.setFontSize(10);
+    doc.text(
+      'Terimakasih sudah Belanja di Dapur Aulia\nKami Tunggu Kunjungan Selanjutnya',
+      105,285,{align:'center'}
+    );
 
     doc.save(o.invoice+'.pdf');
   };
 
-  /* ================= STATS ================= */
+  /* STATS */
   function renderStats(o){
-    let t=0;
-    const n=new Date();
+    let t=0,n=new Date();
     o.forEach(x=>{
       const d=new Date(x.tgl);
       if(x.status==='selesai'&&d.getMonth()===n.getMonth())
         t+=Number(x.total||0);
     });
-
-    $('stats').innerHTML =
-      `<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(t)}
-       <br>
-       <button id="btnResetAll"
-         style="margin-top:8px;padding:6px 12px;background:#c0392b;color:#fff;border:none;border-radius:4px;cursor:pointer">
-         Reset Semua Pesanan
-       </button>`;
-
-    $('btnResetAll').onclick = resetAllOrders;
+    $('stats').innerHTML=`<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(t)}`;
   }
 
   document.addEventListener('DOMContentLoaded',()=>{
     $('btnLogin').onclick=loginAdmin;
+    $('btnResetAll') && ($('btnResetAll').onclick=resetAllOrders);
   });
 
 })();
