@@ -2,7 +2,7 @@
   ADMIN PANEL — FINAL LOCK (A4 STABLE)
   PUKIS LUMER AULIA
 
-  ✔ TAMBAH PESANAN MANUAL
+  ✔ TAMBAH PESANAN MANUAL (FORM)
   ✔ JENIS PUKIS: ORIGINAL / PANDAN (AUTO & MANUAL)
   ✔ BLOK BIRU: KETERANGAN | DETAIL
   ✔ TOPPING & TABURAN PASTI MUNCUL
@@ -49,27 +49,25 @@
     alert('Semua pesanan berhasil dihapus');
   }
 
-  /* ================= TAMBAH MANUAL ================= */
+  /* ================= TAMBAH MANUAL (FORM) ================= */
   window.addManualOrder = function () {
-    const nama  = prompt('Nama pemesan?');
-    if (!nama) return;
+    const nama = $('mNama').value.trim();
+    const waRaw = $('mWa').value.trim();
+    if (!nama || !waRaw) {
+      alert('Nama & WhatsApp wajib diisi');
+      return;
+    }
 
-    const wa    = prompt('No WhatsApp?');
-    if (!wa) return;
+    let wa = waRaw.replace(/\D/g, '');
+    if (wa.startsWith('0')) wa = '62' + wa.slice(1);
+    if (wa.startsWith('8')) wa = '62' + wa;
 
-    const jenisPukis = prompt('Jenis pukis? (Original / Pandan)', 'Original') || 'Original';
-    const mode = prompt('Jenis pesanan? (non / single / double)', 'non') || 'non';
+    const jenisPukis =
+      document.querySelector('input[name="mJenisPukis"]:checked')?.value || 'Original';
 
-    const topping = mode !== 'non'
-      ? (prompt('Topping (pisahkan koma)', '') || '').split(',').map(x=>x.trim()).filter(Boolean)
-      : [];
-
-    const taburan = mode === 'double'
-      ? (prompt('Taburan (pisahkan koma)', '') || '').split(',').map(x=>x.trim()).filter(Boolean)
-      : [];
-
-    const qty = parseInt(prompt('Jumlah box?', '1'), 10) || 1;
-    const total = parseInt(prompt('Total harga?', '0'), 10) || 0;
+    const mode = $('mMode').value;
+    const qty = Math.max(1, parseInt($('mQty').value || '1', 10));
+    const total = parseInt($('mTotal').value || '0', 10);
 
     const orders = getOrders();
     orders.push({
@@ -79,16 +77,23 @@
       wa,
       jenis_pukis: jenisPukis,
       mode,
-      single: mode === 'single' ? topping : [],
-      double: mode === 'double' ? topping : [],
-      taburan,
+      single: [],
+      double: [],
+      taburan: [],
       qty,
       total,
-      catatan: '-',
+      catatan: $('mCatatan').value || '-',
       status: 'pending'
     });
 
     saveOrders(orders);
+
+    $('mNama').value = '';
+    $('mWa').value = '';
+    $('mQty').value = 1;
+    $('mTotal').value = '';
+    $('mCatatan').value = '';
+
     loadAdmin();
   };
 
