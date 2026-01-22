@@ -1,11 +1,16 @@
 /*
   assets/js/order.js — FINAL LOCKED (PRODUCTION)
   PUKIS LUMER AULIA
-  ✔ Checkbox tampil sesuai mode
-  ✔ Harga & validasi aman
-  ✔ Popup invoice (1 tombol WA)
+
+  ✔ Non / Single / Double tampil BENAR
+  ✔ Single  → topping muncul
+  ✔ Double  → topping + taburan muncul
+  ✔ Harga otomatis STABIL
+  ✔ Popup invoice 1 tombol WA
   ✔ Anti double submit
-  ✔ PDF hanya ADMIN
+  ✔ PDF HANYA ADMIN
+  ✔ Aman Android low-end
+
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
 
@@ -35,30 +40,34 @@
   /* ================= HELPERS ================= */
   const $ = id => document.getElementById(id);
   const $$ = sel => Array.from(document.querySelectorAll(sel));
-  const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+  const rp = n => 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
 
-  const getRadio = n =>
-    document.querySelector(`input[name="${n}"]:checked`)?.value || 'non';
+  const getRadio = name => {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : null;
+  };
 
-  const getChecked = n =>
-    $$(`input[name="${n}"]:checked`).map(i => i.value);
+  const getChecked = name =>
+    $$(`input[name="${name}"]:checked`).map(i => i.value);
 
   /* ================= TOPPING VISIBILITY ================= */
   function syncTopping() {
-    const mode = getRadio('ultraToppingMode');
+    const mode = getRadio('ultraToppingMode') || 'non';
 
-    if ($('ultraSingleGroup'))
-      $('ultraSingleGroup').style.display = mode === 'single' ? 'block' : 'none';
+    const single = $('ultraSingleGroup');
+    const double = $('ultraDoubleGroup');
 
-    if ($('ultraDoubleGroup'))
-      $('ultraDoubleGroup').style.display = mode === 'double' ? 'block' : 'none';
+    if (single) single.style.display = (mode === 'single') ? 'block' : 'none';
+    if (double) double.style.display = (mode === 'double') ? 'block' : 'none';
   }
 
   /* ================= PRICE ================= */
   function updatePrice() {
-    const jenis = getRadio('ultraJenis');
-    const isi = $('ultraIsi')?.value || '5';
-    const mode = getRadio('ultraToppingMode');
+    const jenisEl = document.querySelector('input[name="ultraJenis"]:checked');
+    const jenis = jenisEl ? jenisEl.value : 'Original';
+
+    const isi = $('ultraIsi') ? $('ultraIsi').value : '5';
+    const mode = getRadio('ultraToppingMode') || 'non';
     const qty = Math.max(1, parseInt($('ultraJumlah')?.value || '1', 10));
 
     const perBox = BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
@@ -66,16 +75,16 @@
 
     const discount =
       qty >= 10 ? 1000 :
-      qty >= 5 ? Math.round(subtotal * 0.01) : 0;
+      qty >= 5  ? Math.round(subtotal * 0.01) : 0;
 
     const total = subtotal - discount;
 
-    $('ultraPricePerBox') && ($('ultraPricePerBox').textContent = rp(perBox));
-    $('ultraSubtotal') && ($('ultraSubtotal').textContent = rp(subtotal));
-    $('ultraDiscount') && ($('ultraDiscount').textContent = discount ? '-' + rp(discount) : '-');
-    $('ultraGrandTotal') && ($('ultraGrandTotal').textContent = rp(total));
+    if ($('ultraPricePerBox')) $('ultraPricePerBox').textContent = rp(perBox);
+    if ($('ultraSubtotal')) $('ultraSubtotal').textContent = rp(subtotal);
+    if ($('ultraDiscount')) $('ultraDiscount').textContent = discount ? '-' + rp(discount) : '-';
+    if ($('ultraGrandTotal')) $('ultraGrandTotal').textContent = rp(total);
 
-    return { total, qty };
+    return { qty, total };
   }
 
   /* ================= BUILD ORDER ================= */
@@ -92,7 +101,7 @@
     if (wa.startsWith('0')) wa = '62' + wa.slice(1);
     if (wa.startsWith('8')) wa = '62' + wa;
 
-    const mode = getRadio('ultraToppingMode');
+    const mode = getRadio('ultraToppingMode') || 'non';
     const single = getChecked('toppingSingle');
     const double = getChecked('toppingDouble');
     const taburan = getChecked('taburan');
@@ -114,7 +123,7 @@
       tgl: new Date().toISOString(),
       nama,
       wa,
-      jenis: getRadio('ultraJenis'),
+      jenis: getRadio('ultraJenis') || 'Original',
       mode,
       single,
       double,
@@ -153,11 +162,13 @@
   }
 
   function hideNota() {
-    $('notaContainer').style.display = 'none';
+    if ($('notaContainer')) $('notaContainer').style.display = 'none';
   }
 
   /* ================= SEND WA ================= */
   function sendWA() {
+    if (!currentOrder) return;
+
     const msg =
       `Invoice : ${currentOrder.invoice}\n` +
       `Nama : ${currentOrder.nama}\n` +
@@ -173,35 +184,43 @@
     );
   }
 
-  /* ================= EVENTS ================= */
+  /* ================= SUBMIT ================= */
   function submitForm(e) {
     e.preventDefault();
     if (__LOCK_SUBMIT) return;
     __LOCK_SUBMIT = true;
 
-    const o = buildOrder();
-    if (!o) { __LOCK_SUBMIT = false; return; }
+    const order = buildOrder();
+    if (!order) {
+      __LOCK_SUBMIT = false;
+      return;
+    }
 
-    saveOrderToAdmin(o);
-    currentOrder = o;
-    showNota(o);
+    saveOrderToAdmin(order);
+    currentOrder = order;
+    showNota(order);
 
-    setTimeout(() => __LOCK_SUBMIT = false, 800);
+    setTimeout(() => { __LOCK_SUBMIT = false; }, 800);
   }
 
-/* ================= INIT ================= */
-document.addEventListener('DOMContentLoaded', () => {
-  syncTopping();
-  updatePrice();
+  /* ================= INIT ================= */
+  document.addEventListener('DOMContentLoaded', () => {
+    syncTopping();
+    updatePrice();
 
-  $$('input[name="ultraToppingMode"]').forEach(i => {
-    i.addEventListener('change', syncTopping);
+    $$('input[name="ultraToppingMode"]').forEach(el => {
+      el.addEventListener('change', () => {
+        syncTopping();
+        updatePrice();
+      });
+    });
+
+    $$('input:not([name="ultraToppingMode"]), select').forEach(el => {
+      el.addEventListener('change', updatePrice);
+    });
+
+    if ($('formUltra')) $('formUltra').addEventListener('submit', submitForm);
+    if ($('notaClose')) $('notaClose').addEventListener('click', hideNota);
   });
 
-  $$('input, select').forEach(i => {
-    i.addEventListener('change', updatePrice);
-  });
-
-  $('formUltra') && ($('formUltra').onsubmit = submitForm);
-  $('notaClose') && ($('notaClose').onclick = hideNota);
-});
+})();
