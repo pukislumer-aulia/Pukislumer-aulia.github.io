@@ -129,15 +129,14 @@
       },
       head: [['Keterangan', 'Detail']],
       body: [
-        ['Nama Toko', 'PUKIS LUMER AULIA'],
-        ['Jenis Pesanan', o.mode.toUpperCase()],
-        ['Topping', o.single?.join(', ') || '-'],
-        ['Taburan', o.taburan?.join(', ') || '-'],
-        ['Jumlah', o.qty + ' Box'],
-        ['Catatan', o.catatan || '-'],
-        ['Total', 'Rp ' + rp(o.total)]
-      ]
-    });
+  ['Nama Toko', 'PUKIS LUMER AULIA'],
+  ['Jenis Pesanan', o.mode.toUpperCase()],
+  ['Topping', o.topping?.length ? o.topping.join(', ') : '-'],
+  ['Taburan', o.taburan?.length ? o.taburan.join(', ') : '-'],
+  ['Jumlah', o.qty + ' Box'],
+  ['Catatan', o.catatan || '-'],
+  ['Total', 'Rp ' + rp(o.total)]
+]
 
     const yFooter = doc.lastAutoTable.finalY + 15;
 
