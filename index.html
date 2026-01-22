@@ -290,30 +290,30 @@
     </div>
 
     <!-- ================= SCRIPT INLINE (UI SAJA, TIDAK SENTUH order.js) ================= -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggle = document.getElementById('shareToggleBtn');
-            const icons = document.getElementById('floatingIcons');
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.getElementById('shareToggleBtn');
+    const icons = document.getElementById('floatingIcons');
 
-            if (toggle && icons) {
-                toggle.addEventListener('click', function() {
-                    const isHidden =
-                        icons.getAttribute('aria-hidden') === 'true' ||
-                        icons.style.display === 'none';
+    if (toggle && icons) {
+      toggle.addEventListener('click', function () {
+        const isHidden =
+          icons.getAttribute('aria-hidden') === 'true' ||
+          icons.style.display === 'none';
 
-                    icons.style.display = isHidden ? 'flex' : 'none';
-                    icons.style.flexDirection = 'column';
-                    icons.style.position = 'fixed';
-                    icons.style.right = '18px';
-                    icons.style.bottom = '78px';
-                    icons.style.zIndex = '9999';
-                    icons.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
-                });
-            }
-        });
-    </script>
+        icons.style.display = isHidden ? 'flex' : 'none';
+        icons.style.flexDirection = 'column';
+        icons.style.position = 'fixed';
+        icons.style.right = '18px';
+        icons.style.bottom = '78px';
+        icons.style.zIndex = '9999';
+        icons.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
+      });
+    }
+  });
+</script>
 
-    <!-- ================= NOTA POPUP (FINAL) ================= -->
+<!-- ================= NOTA POPUP (FINAL) ================= -->
 <div id="notaContainer" style="display:none" aria-hidden="true">
   <div class="nota-box">
     <button id="notaClose" type="button" aria-label="Tutup Nota">✕</button>
@@ -321,12 +321,12 @@
   </div>
 </div>
 
-    <!-- ================= LIBRARY ================= -->
-    <script src="assets/js/lib/jspdf.umd.min.js"></script>
-    <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
+<!-- ================= LIBRARY ================= -->
+<script src="assets/js/lib/jspdf.umd.min.js"></script>
+<script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
 
-    <!-- ================= ORDER SYSTEM ================= -->
-    <script src="assets/js/order.js"></script>
+<!-- ================= ORDER SYSTEM ================= -->
+<script src="assets/js/order.js"></script>
 
 <!-- ================= LOADER 3 DETIK (FINAL • WAJIB DI SINI) ================= -->
 <script>
@@ -344,6 +344,8 @@
 
     }, 3000); // ⏱️ 3 detik
   });
+</script>
+
 </body>
 
 </html>
