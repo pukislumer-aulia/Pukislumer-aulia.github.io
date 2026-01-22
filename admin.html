@@ -2,242 +2,126 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
   <title>Admin Panel — Pukis Lumer Aulia</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
   <style>
-    body{
-      font-family: Arial, Helvetica, sans-serif;
-      background:#f4f6f8;
-      margin:0;
-      padding:0;
-      color:#222;
+    body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0 }
+    h2 { margin-top:0 }
+    .wrap { max-width:1100px; margin:auto; padding:15px }
+    .card { background:#fff; padding:15px; border-radius:8px; margin-bottom:15px }
+    label { font-weight:bold; display:block; margin-top:10px }
+    input, select, textarea, button {
+      width:100%; padding:8px; margin-top:5px; box-sizing:border-box
     }
-
-    h1,h2,h3{ margin:0 0 10px }
-
-    /* LOGIN */
-    #login{
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-    }
-
-    .login-box{
-      background:#fff;
-      padding:30px;
-      width:320px;
-      border-radius:8px;
-      box-shadow:0 4px 15px rgba(0,0,0,.15);
-      text-align:center;
-    }
-
-    .login-box input{
-      width:100%;
-      padding:10px;
-      font-size:16px;
-      margin-top:10px;
-    }
-
-    .login-box button{
-      width:100%;
-      margin-top:15px;
-      padding:10px;
-      font-size:16px;
-      background:#2c7be5;
-      color:#fff;
-      border:none;
-      border-radius:4px;
-      cursor:pointer;
-    }
-
-    /* ADMIN */
-    #admin{
-      display:none;
-      padding:20px;
-    }
-
-    .stats{
-      background:#fff;
-      padding:15px;
-      border-radius:6px;
-      margin-bottom:15px;
-      box-shadow:0 2px 8px rgba(0,0,0,.08);
-      line-height:1.6;
-    }
-
-    .admin-actions{
-      margin-bottom:15px;
-    }
-
-    .btn-reset{
-      padding:8px 14px;
-      background:#c0392b;
-      color:#fff;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:14px;
-    }
-
-    /* FORM MANUAL */
-    .manual-box{
-      background:#fff;
-      padding:15px;
-      border-radius:6px;
-      margin-bottom:15px;
-      box-shadow:0 2px 8px rgba(0,0,0,.08);
-    }
-
-    .manual-box label{
-      display:block;
-      font-size:13px;
-      margin-top:8px;
-    }
-
-    .manual-box input,
-    .manual-box select,
-    .manual-box textarea{
-      width:100%;
-      padding:8px;
-      margin-top:4px;
-      font-size:14px;
-    }
-
-    .radio-group{
-      display:flex;
-      gap:15px;
-      margin-top:5px;
-    }
-
-    .btn-add{
-      margin-top:12px;
-      padding:10px;
-      background:#27ae60;
-      color:#fff;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:14px;
-    }
-
-    .table-wrapper{
-      background:#fff;
-      border-radius:6px;
-      overflow:auto;
-      box-shadow:0 2px 8px rgba(0,0,0,.08);
-    }
-
-    table{
-      width:100%;
-      min-width:1100px;
-      border-collapse:collapse;
-      font-size:14px;
-    }
-
-    th,td{
-      border:1px solid #ddd;
-      padding:8px;
-      text-align:left;
-      vertical-align:middle;
-    }
-
-    th{
-      background:#e9ecef;
-      position:sticky;
-      top:0;
-      z-index:1;
-    }
-
-    tr:nth-child(even){ background:#fafafa }
-    tr:hover{ background:#f1f7ff }
-
-    .footer-note{
-      margin-top:10px;
-      font-size:12px;
-      color:#666;
-    }
+    textarea { resize:vertical }
+    button { cursor:pointer; font-weight:bold }
+    .btn { background:#1f2937; color:#fff; border:none; border-radius:6px }
+    .btn-red { background:#b91c1c; color:#fff }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:10px }
+    table { width:100%; border-collapse:collapse; margin-top:10px }
+    th, td { border:1px solid #ddd; padding:6px; font-size:14px }
+    th { background:#1f2937; color:#fff }
+    #admin { display:none }
   </style>
 </head>
-
 <body>
 
 <!-- ================= LOGIN ================= -->
-<div id="login">
-  <div class="login-box">
-    <h2>Admin Login</h2>
-    <input type="password" id="pin" placeholder="PIN Admin">
-    <button id="btnLogin">Masuk</button>
+<div id="login" class="wrap">
+  <div class="card">
+    <h2>Login Admin</h2>
+    <input id="pin" type="password" placeholder="Masukkan PIN">
+    <button id="btnLogin" class="btn">Masuk</button>
   </div>
 </div>
 
 <!-- ================= ADMIN ================= -->
-<div id="admin">
+<div id="admin" class="wrap">
 
-  <h1>Admin Panel — Pukis Lumer Aulia</h1>
-
-  <div class="stats" id="stats"></div>
-
-  <!-- RESET -->
-  <div class="admin-actions">
-    <button id="btnResetAll" class="btn-reset">
-      Reset Semua Pesanan
+  <!-- STATS -->
+  <div class="card">
+    <div id="stats">Total Pendapatan:</div>
+    <button id="btnResetAll" class="btn-red" style="margin-top:10px">
+      RESET SEMUA PESANAN
     </button>
   </div>
 
-  <!-- ================= FORM MANUAL ================= -->
-  <div class="manual-box">
-    <h3>Tambah Pesanan Manual</h3>
+  <!-- ================= MANUAL ORDER ================= -->
+  <div class="card">
+    <h2>Tambah Pesanan Manual</h2>
 
     <label>Nama Pemesan</label>
-    <input id="mNama" placeholder="Nama pelanggan">
+    <input id="mNama">
 
-    <label>No. WhatsApp</label>
-    <input id="mWa" placeholder="08xxxxxxxxxx">
+    <label>No WhatsApp</label>
+    <input id="mWa">
 
     <label>Jenis Pukis</label>
-    <div class="radio-group">
+    <div class="row">
       <label><input type="radio" name="mJenisPukis" value="Original" checked> Original</label>
       <label><input type="radio" name="mJenisPukis" value="Pandan"> Pandan</label>
     </div>
 
-    <label>Jenis Pesanan</label>
-    <select id="mMode">
-      <option value="non">Non</option>
-      <option value="single">Single</option>
-      <option value="double">Double</option>
-    </select>
+    <div class="row">
+      <div>
+        <label>Isi per Box</label>
+        <select id="mIsi">
+          <option value="5">5 pcs / box</option>
+          <option value="10">10 pcs / box</option>
+        </select>
+      </div>
+      <div>
+        <label>Mode</label>
+        <select id="mMode">
+          <option value="non">Non Topping</option>
+          <option value="single">Single Topping</option>
+          <option value="double">Double Topping</option>
+        </select>
+      </div>
+    </div>
 
-    <label>Jumlah Box</label>
-    <input type="number" id="mQty" value="1" min="1">
+    <label>Topping (pisahkan dengan koma)</label>
+    <textarea id="mTopping" placeholder="coklat, keju"></textarea>
 
-    <label>Total Harga</label>
-    <input type="number" id="mTotal" placeholder="Contoh: 25000">
+    <label>Taburan (khusus double)</label>
+    <textarea id="mTaburan" placeholder="meses, kacang"></textarea>
+
+    <div class="row">
+      <div>
+        <label>Jumlah Box</label>
+        <input id="mQty" type="number" value="1" min="1">
+      </div>
+      <div>
+        <label>Total Harga</label>
+        <input id="mTotal" type="number" placeholder="contoh: 28000">
+      </div>
+    </div>
 
     <label>Catatan</label>
-    <textarea id="mCatatan" rows="2"></textarea>
+    <textarea id="mCatatan"></textarea>
 
-    <button class="btn-add" onclick="addManualOrder()">
-      Simpan Pesanan Manual
+    <button onclick="addManualOrder()" class="btn" style="margin-top:10px">
+      TAMBAH PESANAN
     </button>
   </div>
 
   <!-- ================= TABLE ================= -->
-  <div class="table-wrapper">
+  <div class="card">
+    <h2>Daftar Pesanan</h2>
     <table id="orderTable">
       <thead>
         <tr>
           <th>Tanggal</th>
           <th>Invoice</th>
           <th>Nama</th>
-          <th>No. WA</th>
-          <th>Jenis</th>
-          <th>Jumlah</th>
+          <th>WA</th>
+          <th>Detail</th>
+          <th>Qty</th>
           <th>Total</th>
           <th>Status</th>
           <th>PDF</th>
@@ -247,18 +131,9 @@
     </table>
   </div>
 
-  <div class="footer-note">
-    * Status <b>selesai</b> dihitung sebagai pendapatan<br>
-    * Jenis pukis: <b>Original / Pandan</b>
-  </div>
-
 </div>
 
-<!-- ================= LIB ================= -->
-<script src="assets/js/lib/jspdf.umd.min.js"></script>
-<script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
-
-<!-- ================= LOGIC ================= -->
+<!-- ================= JS ================= -->
 <script src="assets/js/admin.js"></script>
 
 </body>
