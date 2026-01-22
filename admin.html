@@ -18,7 +18,7 @@
       color:#222;
     }
 
-    h1,h2{ margin:0 0 10px }
+    h1,h2,h3{ margin:0 0 10px }
 
     /* LOGIN */
     #login{
@@ -85,8 +85,45 @@
       font-size:14px;
     }
 
-    .btn-reset:hover{
-      opacity:.9;
+    /* FORM MANUAL */
+    .manual-box{
+      background:#fff;
+      padding:15px;
+      border-radius:6px;
+      margin-bottom:15px;
+      box-shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .manual-box label{
+      display:block;
+      font-size:13px;
+      margin-top:8px;
+    }
+
+    .manual-box input,
+    .manual-box select,
+    .manual-box textarea{
+      width:100%;
+      padding:8px;
+      margin-top:4px;
+      font-size:14px;
+    }
+
+    .radio-group{
+      display:flex;
+      gap:15px;
+      margin-top:5px;
+    }
+
+    .btn-add{
+      margin-top:12px;
+      padding:10px;
+      background:#27ae60;
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:14px;
     }
 
     .table-wrapper{
@@ -120,8 +157,6 @@
     tr:nth-child(even){ background:#fafafa }
     tr:hover{ background:#f1f7ff }
 
-    select{ padding:4px }
-
     .footer-note{
       margin-top:10px;
       font-size:12px;
@@ -132,7 +167,7 @@
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- LOGIN -->
 <div id="login">
   <div class="login-box">
     <h2>Admin Login</h2>
@@ -141,22 +176,58 @@
   </div>
 </div>
 
-<!-- ================= ADMIN PANEL ================= -->
+<!-- ADMIN -->
 <div id="admin">
 
   <h1>Admin Panel — Pukis Lumer Aulia</h1>
 
-  <!-- STAT -->
   <div class="stats" id="stats"></div>
 
-  <!-- ACTIONS -->
+  <!-- RESET -->
   <div class="admin-actions">
     <button id="btnResetAll" class="btn-reset">
       Reset Semua Pesanan
     </button>
   </div>
 
-  <!-- TABLE -->
+  <!-- ================= FORM MANUAL ================= -->
+  <div class="manual-box">
+    <h3>Tambah Pesanan Manual</h3>
+
+    <label>Nama Pemesan</label>
+    <input id="mNama" placeholder="Nama pelanggan">
+
+    <label>No. WhatsApp</label>
+    <input id="mWa" placeholder="08xxxxxxxxxx">
+
+    <label>Jenis Pukis</label>
+    <div class="radio-group">
+      <label><input type="radio" name="mJenisPukis" value="Original" checked> Original</label>
+      <label><input type="radio" name="mJenisPukis" value="Pandan"> Pandan</label>
+    </div>
+
+    <label>Jenis Pesanan</label>
+    <select id="mMode">
+      <option value="non">Non</option>
+      <option value="single">Single</option>
+      <option value="double">Double</option>
+    </select>
+
+    <label>Jumlah Box</label>
+    <input type="number" id="mQty" value="1" min="1">
+
+    <label>Total Harga</label>
+    <input type="number" id="mTotal" placeholder="Contoh: 25000">
+
+    <label>Catatan</label>
+    <textarea id="mCatatan" rows="2"></textarea>
+
+    <button class="btn-add" onclick="addManualOrder()">
+      Simpan Pesanan Manual
+    </button>
+  </div>
+
+  <!-- ================= TABLE ================= -->
   <div class="table-wrapper">
     <table id="orderTable">
       <thead>
@@ -178,16 +249,16 @@
 
   <div class="footer-note">
     * Status <b>selesai</b> dihitung sebagai pendapatan<br>
-    * Watermark PDF hanya: <b>LUNAS</b> / <b>PENDING</b>
+    * Jenis pukis: <b>Original / Pandan</b>
   </div>
 
 </div>
 
-<!-- ================= PDF LIB ================= -->
+<!-- LIB -->
 <script src="assets/js/lib/jspdf.umd.min.js"></script>
 <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
 
-<!-- ================= ADMIN LOGIC ================= -->
+<!-- LOGIC -->
 <script src="assets/js/admin.js"></script>
 
 </body>
