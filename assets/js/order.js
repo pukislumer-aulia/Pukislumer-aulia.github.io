@@ -1,10 +1,11 @@
 /*
-  assets/js/order.js — FINAL PRODUCTION (LOCKED)
+  assets/js/order.js — FINAL LOCKED (PRODUCTION)
   PUKIS LUMER AULIA
+  ✔ Checkbox tampil sesuai mode
+  ✔ Harga & validasi aman
+  ✔ Popup invoice (1 tombol WA)
   ✔ Anti double submit
-  ✔ Popup Invoice (1 tombol WA)
-  ✔ Save ke Admin Panel (1x)
-  ✔ PDF HANYA ADMIN
+  ✔ PDF hanya ADMIN
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
 
@@ -47,10 +48,10 @@
     const mode = getRadio('ultraToppingMode');
 
     if ($('ultraSingleGroup'))
-      $('ultraSingleGroup').style.display = mode === 'single' ? 'flex' : 'none';
+      $('ultraSingleGroup').style.display = mode === 'single' ? 'block' : 'none';
 
     if ($('ultraDoubleGroup'))
-      $('ultraDoubleGroup').style.display = mode === 'double' ? 'flex' : 'none';
+      $('ultraDoubleGroup').style.display = mode === 'double' ? 'block' : 'none';
   }
 
   /* ================= PRICE ================= */
@@ -124,7 +125,7 @@
     };
   }
 
-  /* ================= SAVE ADMIN (ONCE) ================= */
+  /* ================= SAVE ADMIN ================= */
   function saveOrderToAdmin(order) {
     const orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     orders.push({ ...order, status: 'pending', pdfBase64: null });
