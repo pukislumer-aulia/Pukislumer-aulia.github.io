@@ -1,14 +1,15 @@
 /*
-  ADMIN PANEL — FINAL LOCK (A4 STABLE)
+  assets/js/admin.js — FINAL LOCK (MANUAL SYNC)
   PUKIS LUMER AULIA
 
-  ✔ TAMBAH PESANAN MANUAL (FORM)
-  ✔ JENIS PUKIS: ORIGINAL / PANDAN (AUTO & MANUAL)
-  ✔ BLOK BIRU: KETERANGAN | DETAIL
-  ✔ TOPPING & TABURAN PASTI MUNCUL
-  ✔ NOMOR ANTRIAN 0001
-  ✔ QRIS + TTD FIX
-  ✔ RESET SEMUA PESANAN
+  ✔ Manual order lengkap
+  ✔ Isi per box 5 / 10
+  ✔ Original / Pandan
+  ✔ Non / Single / Double
+  ✔ Topping & Taburan FIX
+  ✔ PDF & Tabel sinkron order.js
+  ✔ Reset aman
+
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
 
@@ -46,56 +47,67 @@
     if (!confirm('Yakin hapus SEMUA pesanan?')) return;
     localStorage.removeItem(STORAGE_KEY);
     loadAdmin();
-    alert('Semua pesanan berhasil dihapus');
+    alert('Semua pesanan dihapus');
   }
 
-  /* ================= TAMBAH MANUAL (FORM) ================= */
+  /* ================= MANUAL FORM ================= */
   window.addManualOrder = function () {
     const nama = $('mNama').value.trim();
-    const waRaw = $('mWa').value.trim();
-    if (!nama || !waRaw) {
-      alert('Nama & WhatsApp wajib diisi');
-      return;
-    }
+    const wa   = $('mWa').value.trim();
+    if (!nama || !wa) return alert('Nama & WA wajib');
 
-    let wa = waRaw.replace(/\D/g, '');
-    if (wa.startsWith('0')) wa = '62' + wa.slice(1);
-    if (wa.startsWith('8')) wa = '62' + wa;
-
-    const jenisPukis =
+    const jenis_pukis =
       document.querySelector('input[name="mJenisPukis"]:checked')?.value || 'Original';
 
+    const isi_per_box = $('mIsi')?.value || '5';
     const mode = $('mMode').value;
+
     const qty = Math.max(1, parseInt($('mQty').value || '1', 10));
     const total = parseInt($('mTotal').value || '0', 10);
 
+    const toppingRaw = $('mTopping')?.value || '';
+    const taburanRaw = $('mTaburan')?.value || '';
+
+    const single  = mode === 'single'
+      ? toppingRaw.split(',').map(x => x.trim()).filter(Boolean)
+      : [];
+
+    const double  = mode === 'double'
+      ? toppingRaw.split(',').map(x => x.trim()).filter(Boolean)
+      : [];
+
+    const taburan = mode === 'double'
+      ? taburanRaw.split(',').map(x => x.trim()).filter(Boolean)
+      : [];
+
     const orders = getOrders();
+
     orders.push({
       invoice: 'INV-' + Date.now(),
       tgl: new Date().toISOString(),
       nama,
       wa,
-      jenis_pukis: jenisPukis,
+      jenis_pukis,
+      isi_per_box,
       mode,
-      single: [],
-      double: [],
-      taburan: [],
+      single,
+      double,
+      taburan,
       qty,
       total,
-      catatan: $('mCatatan').value || '-',
+      catatan: $('mCatatan')?.value || '-',
       status: 'pending'
     });
 
     saveOrders(orders);
-
-    $('mNama').value = '';
-    $('mWa').value = '';
-    $('mQty').value = 1;
-    $('mTotal').value = '';
-    $('mCatatan').value = '';
-
+    clearManualForm();
     loadAdmin();
   };
+
+  function clearManualForm() {
+    ['mNama','mWa','mQty','mTotal','mCatatan','mTopping','mTaburan']
+      .forEach(id => $(id) && ($(id).value = ''));
+  }
 
   /* ================= LOAD TABLE ================= */
   function loadAdmin() {
@@ -110,7 +122,11 @@
           <td>${o.invoice}</td>
           <td>${o.nama}</td>
           <td>${o.wa}</td>
-          <td>${(o.jenis_pukis || 'Original')} / ${o.mode}</td>
+          <td>
+            ${o.jenis_pukis}<br>
+            ${o.isi_per_box} pcs / box<br>
+            ${o.mode}
+          </td>
           <td>${o.qty}</td>
           <td>Rp ${rp(o.total)}</td>
           <td>
@@ -119,7 +135,9 @@
               <option value="selesai"${o.status === 'selesai' ? ' selected' : ''}>selesai</option>
             </select>
           </td>
-          <td><button onclick="printPdf(${i})">PDF</button></td>
+          <td>
+            <button onclick="printPdf(${i})">PDF</button>
+          </td>
         </tr>`;
     });
 
@@ -140,21 +158,7 @@
     const doc = new jsPDF('p', 'mm', 'a4');
 
     const antrian = pad4(i + 1);
-    const jenisPukis = o.jenis_pukis || 'Original';
 
-    const topping =
-      o.mode === 'single'
-        ? (o.single || [])
-        : o.mode === 'double'
-          ? (o.double || [])
-          : [];
-
-    const taburan =
-      o.mode === 'double'
-        ? (o.taburan || [])
-        : [];
-
-    /* HEADER */
     doc.setFontSize(16);
     doc.text('PUKIS LUMER AULIA', 105, 15, { align: 'center' });
 
@@ -166,34 +170,43 @@
     doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString('id-ID')}`, 140, 25);
     doc.text(`No Antri: ${antrian}`, 140, 31);
 
-    /* TABLE */
     doc.autoTable({
       startY: 45,
       theme: 'grid',
       head: [['KETERANGAN', 'DETAIL']],
       body: [
-        ['Jenis Pesanan', o.mode.toUpperCase()],
-        ['Jenis Pukis', jenisPukis],
-        ['Topping', topping.length ? topping.join(', ') : '-'],
-        ['Taburan', taburan.length ? taburan.join(', ') : '-'],
+        ['Jenis Pukis', o.jenis_pukis],
+        ['Isi per Box', o.isi_per_box + ' pcs'],
+        ['Mode', o.mode.toUpperCase()],
+        ['Topping',
+          o.mode !== 'non'
+            ? (o.single.concat(o.double).join(', ') || '-')
+            : '-'
+        ],
+        ['Taburan',
+          o.mode === 'double'
+            ? (o.taburan.join(', ') || '-')
+            : '-'
+        ],
         ['Jumlah', o.qty + ' Box'],
         ['Catatan', o.catatan || '-'],
         ['Total', 'Rp ' + rp(o.total)]
       ],
       styles: { fontSize: 10, cellPadding: 4 },
       headStyles: { fillColor: [16, 32, 51], textColor: 255, halign: 'center' },
-      columnStyles: { 0: { cellWidth: 60, fontStyle: 'bold' }, 1: { cellWidth: 110 } }
+      columnStyles: {
+        0: { cellWidth: 60, fontStyle: 'bold' },
+        1: { cellWidth: 110 }
+      }
     });
 
     const y = doc.lastAutoTable.finalY + 12;
-
     doc.addImage('assets/images/qris-pukis.jpg', 'JPEG', 14, y, 40, 40);
-    doc.text('Hormat Kami', 170, y + 10, { align: 'right' });
     doc.addImage('assets/images/ttd.png', 'PNG', 130, y + 14, 40, 20);
 
     doc.setFontSize(10);
     doc.text(
-      'Terimakasih sudah Belanja di Dapur Aulia\nKami Tunggu Kunjungan Selanjutnya',
+      'Terimakasih sudah berbelanja di Pukis Lumer Aulia',
       105, 285,
       { align: 'center' }
     );
@@ -203,15 +216,15 @@
 
   /* ================= STATS ================= */
   function renderStats(o) {
-    let t = 0;
-    const n = new Date();
+    let total = 0;
+    const now = new Date();
     o.forEach(x => {
       const d = new Date(x.tgl);
-      if (x.status === 'selesai' && d.getMonth() === n.getMonth())
-        t += Number(x.total || 0);
+      if (x.status === 'selesai' && d.getMonth() === now.getMonth())
+        total += Number(x.total || 0);
     });
     $('stats').innerHTML =
-      `<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(t)}`;
+      `<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(total)}`;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
