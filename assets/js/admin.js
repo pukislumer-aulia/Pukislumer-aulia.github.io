@@ -14,7 +14,7 @@
   const STORAGE_KEY = 'pukisOrders';
 
   /* THERMAL SETTING */
-  const PAPER_WIDTH = 80; // 80 = thermal 80mm | ubah ke 58 jika printer 58mm
+  const PAPER_WIDTH = 80; // 80mm | ubah ke 58 jika printer 58mm
 
   const $ = id => document.getElementById(id);
   const rp = n => (Number(n) || 0).toLocaleString('id-ID');
@@ -60,14 +60,14 @@
         <td>${o.invoice}</td>
         <td>${o.nama}</td>
         <td>${o.wa}</td>
-        <td>${o.mode}</td>
+        <td>${o.mode.toUpperCase()}</td>
         <td>${o.qty}</td>
         <td>Rp ${rp(o.total)}</td>
         <td>
           <select onchange="updateStatus(${i}, this.value)">
-            <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>pending</option>
-            <option value="selesai" ${o.status === 'selesai' ? 'selected' : ''}>selesai</option>
-            <option value="dibatalkan" ${o.status === 'dibatalkan' ? 'selected' : ''}>dibatalkan</option>
+            <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>PENDING</option>
+            <option value="selesai" ${o.status === 'selesai' ? 'selected' : ''}>LUNAS</option>
+            <option value="dibatalkan" ${o.status === 'dibatalkan' ? 'selected' : ''}>BATAL</option>
           </select>
         </td>
         <td>
@@ -98,18 +98,25 @@
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: [PAPER_WIDTH, 200]
+      format: [PAPER_WIDTH, 220]
     });
 
-    /* HEADER */
-    doc.setFontSize(12);
-    doc.text('PUKIS LUMER AULIA', PAPER_WIDTH / 2, 8, { align: 'center' });
-    doc.setFontSize(8);
-    doc.text('Invoice: ' + o.invoice, 4, 14);
+    let y = 6;
 
-    /* TABLE */
+    /* HEADER */
+    doc.setFontSize(11);
+    doc.text('PUKIS LUMER AULIA', PAPER_WIDTH / 2, y, { align: 'center' });
+    y += 6;
+
+    doc.setFontSize(8);
+    doc.text(`Invoice : ${o.invoice}`, 4, y); y += 4;
+    doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString('id-ID')}`, 4, y); y += 4;
+    doc.text(`Nama    : ${o.nama}`, 4, y); y += 4;
+    doc.text(`WA      : ${o.wa}`, 4, y); y += 4;
+
+    /* DATA TABLE */
     doc.autoTable({
-      startY: 16,
+      startY: y + 2,
       theme: 'plain',
       styles: { fontSize: 8, cellPadding: 1 },
       columnStyles: {
@@ -117,39 +124,38 @@
         1: { cellWidth: PAPER_WIDTH - 32 }
       },
       body: [
-        ['Nama', o.nama],
-        ['WA', o.wa],
         ['Jenis', o.mode.toUpperCase()],
+        ['Topping', (o.single || o.double || []).join(', ') || '-'],
+        ['Taburan', (o.taburan || []).join(', ') || '-'],
         ['Jumlah', o.qty + ' Box'],
-        ['Pesan', o.catatan || '-'],
+        ['Catatan', o.catatan || '-'],
         ['Total', 'Rp ' + rp(o.total)]
       ]
     });
 
+    const tableEnd = doc.lastAutoTable.finalY;
+
     /* CAP STATUS */
-    let capText = 'PENDING';
+    let cap = 'PENDING';
     let capColor = [255, 165, 0];
 
     if (o.status === 'selesai') {
-      capText = 'LUNAS';
+      cap = 'LUNAS';
       capColor = [0, 160, 80];
-    }
-    if (o.status === 'dibatalkan') {
-      capText = 'BATAL';
+    } else if (o.status === 'dibatalkan') {
+      cap = 'BATAL';
       capColor = [200, 0, 0];
     }
 
-    doc.setFontSize(26);
+    doc.setFontSize(24);
     doc.setTextColor(...capColor);
-    doc.text(
-      capText,
-      PAPER_WIDTH / 2,
-      doc.lastAutoTable.finalY / 1.2,
-      { align: 'center', angle: -15 }
-    );
+    doc.text(cap, PAPER_WIDTH / 2, tableEnd - 10, {
+      align: 'center',
+      angle: -12
+    });
     doc.setTextColor(0);
 
-    /* IMAGES */
+    /* LOAD IMAGE */
     const loadImg = src =>
       new Promise(res => {
         const img = new Image();
@@ -161,23 +167,17 @@
       const qris = await loadImg('assets/images/qris-pukis.jpg');
       const ttd = await loadImg('assets/images/ttd.png');
 
-      doc.addImage(qris, 'JPEG', 4, doc.lastAutoTable.finalY + 6, 20, 20);
-      doc.addImage(
-        ttd,
-        'PNG',
-        PAPER_WIDTH - 24,
-        doc.lastAutoTable.finalY + 8,
-        20,
-        10
-      );
+      doc.addImage(qris, 'JPEG', 4, tableEnd + 6, 22, 22);
+      doc.text('Hormat Kami', PAPER_WIDTH - 26, tableEnd + 6);
+      doc.addImage(ttd, 'PNG', PAPER_WIDTH - 28, tableEnd + 10, 22, 12);
     } catch {}
 
     /* FOOTER */
     doc.setFontSize(8);
     doc.text(
-      'Terimakasih sudah belanja\nKami tunggu kunjungan selanjutnya',
+      'Terimakasih sudah Belanja di Dapur Aulia\nKami Tunggu Kunjungan Selanjutnya',
       PAPER_WIDTH / 2,
-      doc.lastAutoTable.finalY + 32,
+      tableEnd + 40,
       { align: 'center' }
     );
 
@@ -187,7 +187,7 @@
   /* ================= STATS ================= */
   function renderStats(orders) {
     const now = new Date();
-    let totalBulanan = 0;
+    let total = 0;
 
     orders.forEach(o => {
       if (o.status === 'selesai') {
@@ -196,14 +196,14 @@
           d.getMonth() === now.getMonth() &&
           d.getFullYear() === now.getFullYear()
         ) {
-          totalBulanan += Number(o.total || 0);
+          total += Number(o.total || 0);
         }
       }
     });
 
     $('stats').innerHTML = `
       <b>Total Pendapatan Bulan Ini:</b>
-      Rp ${rp(totalBulanan)}
+      Rp ${rp(total)}
     `;
   }
 
