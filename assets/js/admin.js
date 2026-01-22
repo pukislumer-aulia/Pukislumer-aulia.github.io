@@ -1,215 +1,181 @@
 /*
-  ADMIN PANEL — FINAL LOCK (A4)
+  ADMIN PANEL — FINAL LOCK (A4 STANDARD)
   PUKIS LUMER AULIA
 
-  ✔ Login STABIL
-  ✔ PDF A4 RAPI
-  ✔ TABEL LENGKAP
-  ✔ TOPPING + TABURAN AMAN
+  ✔ PDF A4 Portrait (Printer Standar)
+  ✔ TABEL RAPI & TERKUNCI
   ✔ WATERMARK: LUNAS / PENDING
+  ✔ QRIS + TTD + FOOTER
   ✔ RESET SEMUA PESANAN
-  ✔ TANPA SYNTAX MODERN BERBAHAYA
-
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
 
-(function () {
+(() => {
   'use strict';
 
-  /* ================= CONFIG ================= */
-  var ADMIN_PIN = '030419';
-  var STORAGE_KEY = 'pukisOrders';
+  const ADMIN_PIN   = '030419';
+  const STORAGE_KEY = 'pukisOrders';
 
-  /* ================= UTIL ================= */
-  function $(id) {
-    return document.getElementById(id);
-  }
-
-  function rp(n) {
-    return 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
-  }
-
-  function getOrders() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function saveOrders(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }
+  const $  = id => document.getElementById(id);
+  const rp = n => (Number(n) || 0).toLocaleString('id-ID');
 
   /* ================= LOGIN ================= */
   function loginAdmin() {
-    var pin = $('pin').value;
-
-    if (pin !== ADMIN_PIN) {
+    if ($('pin').value !== ADMIN_PIN) {
       alert('PIN salah');
       $('pin').value = '';
       return;
     }
-
     $('login').style.display = 'none';
     $('admin').style.display = 'block';
     loadAdmin();
   }
 
+  /* ================= STORAGE ================= */
+  function getOrders() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  }
+
+  function saveOrders(o) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(o));
+  }
+
   /* ================= LOAD TABLE ================= */
   function loadAdmin() {
-    var orders = getOrders();
-    var tbody = document.querySelector('#orderTable tbody');
+    const orders = getOrders();
+    const tbody  = document.querySelector('#orderTable tbody');
     tbody.innerHTML = '';
 
-    for (var i = 0; i < orders.length; i++) {
-      var o = orders[i];
+    orders.forEach((o, i) => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${new Date(o.tgl).toLocaleString()}</td>
+          <td>${o.invoice}</td>
+          <td>${o.nama}</td>
+          <td>${o.wa}</td>
+          <td>${o.mode.toUpperCase()}</td>
+          <td>${o.qty}</td>
+          <td>Rp ${rp(o.total)}</td>
+          <td>
+            <select onchange="updateStatus(${i},this.value)">
+              <option value="pending"${o.status === 'pending' ? ' selected' : ''}>pending</option>
+              <option value="lunas"${o.status === 'lunas' ? ' selected' : ''}>lunas</option>
+            </select>
+          </td>
+          <td>
+            <button onclick="printPdf(${i})">PDF</button>
+          </td>
+        </tr>`;
+    });
 
-      var tr = document.createElement('tr');
-
-      tr.innerHTML =
-        '<td>' + new Date(o.tgl).toLocaleString('id-ID') + '</td>' +
-        '<td>' + o.invoice + '</td>' +
-        '<td>' + o.nama + '</td>' +
-        '<td>' + o.wa + '</td>' +
-        '<td>' + (o.mode || '-') + '</td>' +
-        '<td>' + o.qty + '</td>' +
-        '<td>' + rp(o.total) + '</td>' +
-        '<td>' +
-          '<select data-index="' + i + '">' +
-            '<option value="pending"' + (o.status === 'pending' ? ' selected' : '') + '>pending</option>' +
-            '<option value="selesai"' + (o.status === 'selesai' ? ' selected' : '') + '>selesai</option>' +
-          '</select>' +
-        '</td>' +
-        '<td><button data-pdf="' + i + '">PDF</button></td>';
-
-      tbody.appendChild(tr);
-    }
-
-    bindTableEvents();
     renderStats(orders);
   }
 
-  function bindTableEvents() {
-    var selects = document.querySelectorAll('select[data-index]');
-    for (var i = 0; i < selects.length; i++) {
-      selects[i].onchange = function () {
-        var idx = this.getAttribute('data-index');
-        var orders = getOrders();
-        orders[idx].status = this.value;
-        saveOrders(orders);
-        renderStats(orders);
-      };
-    }
+  window.updateStatus = function (i, s) {
+    const o = getOrders();
+    o[i].status = s;
+    saveOrders(o);
+    loadAdmin();
+  };
 
-    var pdfBtns = document.querySelectorAll('button[data-pdf]');
-    for (var j = 0; j < pdfBtns.length; j++) {
-      pdfBtns[j].onclick = function () {
-        var idx = this.getAttribute('data-pdf');
-        printPdf(idx);
-      };
-    }
-  }
-
-  /* ================= STATS ================= */
-  function renderStats(orders) {
-    var total = 0;
-    var now = new Date();
-
-    for (var i = 0; i < orders.length; i++) {
-      var o = orders[i];
-      var d = new Date(o.tgl);
-
-      if (
-        o.status === 'selesai' &&
-        d.getMonth() === now.getMonth() &&
-        d.getFullYear() === now.getFullYear()
-      ) {
-        total += Number(o.total || 0);
-      }
-    }
-
-    $('stats').innerHTML =
-      '<b>Total Pendapatan Bulan Ini:</b> ' + rp(total) +
-      '<br><button id="btnResetAll" style="margin-top:8px;padding:6px 10px;background:#c0392b;color:#fff;border:none;border-radius:4px;cursor:pointer">Reset Semua Pesanan</button>';
-
-    $('btnResetAll').onclick = resetAllOrders;
-  }
-
-  function resetAllOrders() {
-    if (!confirm('Yakin hapus SEMUA pesanan?')) return;
+  /* ================= RESET ================= */
+  window.resetAllOrders = function () {
+    if (!confirm('Yakin reset semua pesanan?')) return;
     localStorage.removeItem(STORAGE_KEY);
     loadAdmin();
-  }
+  };
 
   /* ================= PDF A4 ================= */
-  function printPdf(index) {
-    var orders = getOrders();
-    var o = orders[index];
-    if (!o) return;
+  window.printPdf = function (i) {
+    const o = getOrders()[i];
+    const { jsPDF } = window.jspdf;
 
-    /* NORMALISASI DATA LAMA */
-    var topping = o.topping || o.single || [];
-    var taburan = o.taburan || [];
-
-    var { jsPDF } = window.jspdf;
-    var doc = new jsPDF('p', 'mm', 'a4');
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
 
     /* HEADER */
     doc.setFontSize(16);
     doc.text('PUKIS LUMER AULIA', 105, 15, { align: 'center' });
 
     doc.setFontSize(10);
-    doc.text('Invoice : ' + o.invoice, 15, 25);
-    doc.text('Nama    : ' + o.nama, 15, 32);
-    doc.text('No. WA  : ' + o.wa, 15, 39);
+    doc.text(`Invoice : ${o.invoice}`, 14, 25);
+    doc.text(`Nama    : ${o.nama}`,    14, 31);
+    doc.text(`No. WA  : ${o.wa}`,      14, 37);
 
-    doc.text('Tanggal : ' + new Date(o.tgl).toLocaleString('id-ID'), 140, 25);
-    doc.text('Status  : ' + (o.status || 'pending').toUpperCase(), 140, 32);
+    doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString()}`, 140, 25);
+    doc.text(`Antrian : ${i + 1}`, 140, 31);
+
+    /* WATERMARK */
+    doc.setTextColor(230, 230, 230);
+    doc.setFontSize(50);
+    doc.text(
+      o.status === 'lunas' ? 'LUNAS' : 'PENDING',
+      105,
+      150,
+      { align: 'center', angle: 45 }
+    );
+    doc.setTextColor(0);
 
     /* TABLE */
     doc.autoTable({
-      startY: 48,
-      theme: 'grid',
-      styles: { fontSize: 10, cellPadding: 3 },
-      columnStyles: {
-        0: { cellWidth: 60 },
-        1: { cellWidth: 110 }
+      startY: 45,
+      margin: { left: 14, right: 14 },
+      styles: {
+        fontSize: 10,
+        cellPadding: 4
       },
+      head: [['Keterangan', 'Detail']],
       body: [
-        ['Jenis Pesanan', (o.mode || '').toUpperCase()],
-        ['Topping', topping.length ? topping.join(', ') : '-'],
-        ['Taburan', taburan.length ? taburan.join(', ') : '-'],
+        ['Nama Toko', 'PUKIS LUMER AULIA'],
+        ['Jenis Pesanan', o.mode.toUpperCase()],
+        ['Topping', o.single?.join(', ') || '-'],
+        ['Taburan', o.taburan?.join(', ') || '-'],
         ['Jumlah', o.qty + ' Box'],
         ['Catatan', o.catatan || '-'],
-        ['Total', rp(o.total)]
+        ['Total', 'Rp ' + rp(o.total)]
       ]
     });
 
-    var endY = doc.lastAutoTable.finalY + 15;
+    const yFooter = doc.lastAutoTable.finalY + 15;
 
-    /* WATERMARK */
-    doc.setFontSize(40);
-    doc.setTextColor(200, 200, 200);
-    doc.text(
-      (o.status === 'selesai' ? 'LUNAS' : 'PENDING'),
-      105,
-      160,
-      { align: 'center', angle: 30 }
-    );
+    /* QRIS */
+    doc.addImage('assets/images/qris-pukis.jpg', 'JPG', 14, yFooter, 40, 40);
 
-    doc.setTextColor(0, 0, 0);
+    /* TTD */
+    doc.setFontSize(10);
+    doc.text('Hormat Kami', 150, yFooter);
+    doc.addImage('assets/images/ttd.png', 'PNG', 145, yFooter + 5, 40, 20);
 
     /* FOOTER */
     doc.setFontSize(10);
-    doc.text('Terimakasih sudah Belanja di Dapur Aulia', 105, 270, { align: 'center' });
-    doc.text('Kami tunggu kunjungan selanjutnya', 105, 276, { align: 'center' });
+    doc.text(
+      'Terimakasih sudah Belanja di Dapur Aulia\nKami Tunggu Kunjungan Selanjutnya',
+      105,
+      285,
+      { align: 'center' }
+    );
 
     doc.save(o.invoice + '.pdf');
+  };
+
+  /* ================= STATS ================= */
+  function renderStats(o) {
+    let total = 0;
+    o.forEach(x => {
+      if (x.status === 'lunas') total += Number(x.total || 0);
+    });
+    $('stats').innerHTML =
+      `<b>Total Pendapatan (LUNAS):</b> Rp ${rp(total)}
+       <br><button onclick="resetAllOrders()" style="margin-top:8px;
+       background:#c0392b;color:#fff;border:none;padding:6px 10px;
+       border-radius:5px;cursor:pointer">
+       Reset Semua Pesanan</button>`;
   }
 
-  /* ================= INIT ================= */
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', () => {
     $('btnLogin').onclick = loginAdmin;
   });
 
