@@ -27,6 +27,29 @@ a {
 }
 
 /* =====================================================
+   LOADER (FINAL • LOCKED • WAJIB ADA)
+===================================================== */
+.site-loader {
+  position: fixed;
+  inset: 0;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+
+.site-loader img {
+  margin-bottom: 10px;
+}
+
+.site-loader p {
+  font-size: 14px;
+  color: #ffafd9;
+}
+
+/* =====================================================
    CONTAINER
 ===================================================== */
 .container {
@@ -89,8 +112,6 @@ label {
 /* =====================================================
    TOPPING SYSTEM (FINAL • LOCKED • VERTICAL SAFE)
 ===================================================== */
-
-/* Wrapper topping – DEFAULT HIDDEN */
 .topping-wrap {
   display: none;
   margin-top: 10px;
@@ -99,12 +120,11 @@ label {
   border-radius: 8px;
 }
 
-/* PAKSA SEMUA CHECKBOX KE BAWAH */
 .topping-wrap label {
-  display: flex;              /* bukan inline */
+  display: flex;
   align-items: center;
   gap: 10px;
-  width: 100%;                /* full lebar */
+  width: 100%;
   margin-bottom: 6px;
   padding: 8px 10px;
   background: #1b314c;
@@ -115,22 +135,14 @@ label {
   transition: background 0.2s ease;
 }
 
-/* Hover */
 .topping-wrap label:hover {
   background: #244a70;
 }
 
-/* Checkbox */
 .topping-wrap input[type="checkbox"] {
-  flex-shrink: 0;             /* anti gepeng */
+  flex-shrink: 0;
   transform: scale(1.15);
   cursor: pointer;
-}
-
-/* Checked visual (opsional jika JS menambah class) */
-.topping-wrap label.checked {
-  background: #2d6cdf;
-  font-weight: 600;
 }
 
 /* =====================================================
@@ -171,7 +183,7 @@ button:active {
 }
 
 /* =====================================================
-   NOTA POPUP (SYNC HTML)
+   NOTA POPUP (FINAL • 1 BUTTON ONLY)
 ===================================================== */
 #notaContainer {
   position: fixed;
@@ -258,15 +270,7 @@ button:active {
 }
 
 /* =====================================================
-   UTIL
-===================================================== */
-.text-center { text-align: center; }
-.mb-10 { margin-bottom: 10px; }
-.mb-15 { margin-bottom: 15px; }
-.mb-20 { margin-bottom: 20px; }
-
-/* =====================================================
-   TEXT COLOR RESTORE (FINAL)
+   TEXT COLOR RESTORE
 ===================================================== */
 .text-green-bold { color: #00ff91 !important; font-weight: 700; }
 .text-black-bold { color: #f2f2f2 !important; font-weight: 700; }
@@ -280,4 +284,7 @@ button:active {
 .text-black { color: #f1f1f1 !important; }
 .text-pink { color: #ffafd9 !important; }
 
-/* END OF FILE — FINAL • LOCKED • PRODUCTION SAFE */
+/* =====================================================
+   END OF FILE
+   FINAL • LOCKED • PRODUCTION SAFE
+===================================================== */
