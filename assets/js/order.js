@@ -167,22 +167,42 @@
 
   /* ================= SEND WA ================= */
   function sendWA() {
-    if (!currentOrder) return;
+  const toppingText =
+    currentOrder.mode === 'single'
+      ? currentOrder.single.join(', ')
+      : currentOrder.mode === 'double'
+      ? currentOrder.double.join(', ')
+      : '-';
 
-    const msg =
-      `Invoice : ${currentOrder.invoice}\n` +
-      `Nama : ${currentOrder.nama}\n` +
-      `WA : ${currentOrder.wa}\n` +
-      `Jenis : ${currentOrder.mode.toUpperCase()}\n` +
-      `Jumlah : ${currentOrder.qty} Box\n` +
-      `Pesan : ${currentOrder.catatan}\n` +
-      `Total : ${rp(currentOrder.total)}`;
+  const taburanText =
+    currentOrder.mode === 'double'
+      ? currentOrder.taburan.join(', ')
+      : '-';
 
-    window.open(
-      `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`,
-      '_blank'
-    );
-  }
+  const msg =
+`PUKIS LUMER AULIA
+
+Invoice : ${currentOrder.invoice}
+Nama    : ${currentOrder.nama}
+WA      : ${currentOrder.wa}
+Jenis   : ${currentOrder.mode.toUpperCase()}
+
+Topping :
+${toppingText}
+
+Taburan :
+${taburanText}
+
+Jumlah  : ${currentOrder.qty} Box
+Catatan : ${currentOrder.catatan}
+Total   : Rp ${Number(currentOrder.total).toLocaleString('id-ID')}
+`;
+
+  window.open(
+    `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`,
+    '_blank'
+  );
+}
 
   /* ================= SUBMIT ================= */
   function submitForm(e) {
