@@ -43,18 +43,18 @@
   const getChecked = name =>
     $$(`input[name="${name}"]:checked`).map(i => i.value);
 
-  /* ===== TOPPING VISIBILITY ===== */
+  /* ================= TOPPING VISIBILITY ================= */
   function syncTopping() {
     const mode = getRadio('ultraToppingMode');
 
-    $('ultraSingleGroup') &&
-      ($('ultraSingleGroup').style.display = mode === 'single' ? 'block' : 'none');
+    if ($('ultraSingleGroup'))
+      $('ultraSingleGroup').style.display = mode === 'single' ? 'block' : 'none';
 
-    $('ultraDoubleGroup') &&
-      ($('ultraDoubleGroup').style.display = mode === 'double' ? 'block' : 'none');
+    if ($('ultraDoubleGroup'))
+      $('ultraDoubleGroup').style.display = mode === 'double' ? 'block' : 'none';
   }
 
-  /* ===== PRICE ===== */
+  /* ================= PRICE ================= */
   function updatePrice() {
     const jenis = getRadio('ultraJenis') || 'Original';
     const isi = $('ultraIsi')?.value || '5';
@@ -78,11 +78,14 @@
     return { qty, total };
   }
 
-  /* ===== BUILD ORDER ===== */
+  /* ================= BUILD ORDER ================= */
   function buildOrder() {
     const nama = $('ultraNama')?.value.trim();
     const waRaw = $('ultraWA')?.value.trim();
-    if (!nama || !waRaw) return alert('Nama & WA wajib diisi'), null;
+    if (!nama || !waRaw) {
+      alert('Nama & WA wajib diisi');
+      return null;
+    }
 
     let wa = waRaw.replace(/\D/g, '');
     if (wa.startsWith('0')) wa = '62' + wa.slice(1);
@@ -117,37 +120,41 @@
     };
   }
 
-  /* ===== SAVE ADMIN ===== */
+  /* ================= SAVE ADMIN ================= */
   function saveOrderToAdmin(order) {
     const orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     orders.push({ ...order, status: 'pending' });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
   }
 
-  /* ===== POPUP ===== */
+  /* ================= POPUP ================= */
   let currentOrder = null;
 
   function showNota(o) {
-    const topping =
-      o.mode === 'single' || o.mode === 'double'
+    const toppingHTML =
+      o.mode === 'single'
         ? o.single.map(t => `- ${t}`).join('<br>')
+        : o.mode === 'double'
+        ? o.double.map(t => `- ${t}`).join('<br>')
         : '-';
 
-    const taburan =
+    const taburanHTML =
       o.mode === 'double'
         ? o.taburan.map(t => `- ${t}`).join('<br>')
         : '-';
 
     $('notaContent').innerHTML = `
-      <strong>PUKIS LUMER AULIA</strong><br><br>
+      <div style="font-weight:800;text-align:center;margin-bottom:10px">
+        PUKIS LUMER AULIA
+      </div>
 
       <b>Invoice :</b> ${o.invoice}<br>
       <b>Nama :</b> ${o.nama}<br>
       <b>WA :</b> ${o.wa}<br>
       <b>Jenis :</b> ${o.mode.toUpperCase()}<br><br>
 
-      <b>Topping :</b><br>${topping}<br><br>
-      <b>Taburan :</b><br>${taburan}<br><br>
+      <b>Topping :</b><br>${toppingHTML}<br><br>
+      <b>Taburan :</b><br>${taburanHTML}<br><br>
 
       <b>Jumlah :</b> ${o.qty} Box<br>
       <b>Catatan :</b> ${o.catatan}<br>
@@ -162,15 +169,18 @@
     $('sendToAdmin').onclick = sendWA;
   }
 
+  /* ================= SEND WA ================= */
   function sendWA() {
     const o = currentOrder;
 
-    const topping =
-      o.mode === 'single' || o.mode === 'double'
+    const toppingText =
+      o.mode === 'single'
         ? o.single.map(t => `- ${t}`).join('\n')
+        : o.mode === 'double'
+        ? o.double.map(t => `- ${t}`).join('\n')
         : '-';
 
-    const taburan =
+    const taburanText =
       o.mode === 'double'
         ? o.taburan.map(t => `- ${t}`).join('\n')
         : '-';
@@ -184,10 +194,10 @@ WA      : ${o.wa}
 Jenis   : ${o.mode.toUpperCase()}
 
 Topping :
-${topping}
+${toppingText}
 
 Taburan :
-${taburan}
+${taburanText}
 
 Jumlah  : ${o.qty} Box
 Catatan : ${o.catatan}
@@ -200,21 +210,26 @@ Total   : Rp ${Number(o.total).toLocaleString('id-ID')}
     );
   }
 
+  /* ================= SUBMIT ================= */
   function submitForm(e) {
     e.preventDefault();
     if (__LOCK_SUBMIT) return;
     __LOCK_SUBMIT = true;
 
     const order = buildOrder();
-    if (!order) return __LOCK_SUBMIT = false;
+    if (!order) {
+      __LOCK_SUBMIT = false;
+      return;
+    }
 
     saveOrderToAdmin(order);
     currentOrder = order;
     showNota(order);
 
-    setTimeout(() => __LOCK_SUBMIT = false, 800);
+    setTimeout(() => (__LOCK_SUBMIT = false), 800);
   }
 
+  /* ================= INIT ================= */
   document.addEventListener('DOMContentLoaded', () => {
     syncTopping();
     updatePrice();
