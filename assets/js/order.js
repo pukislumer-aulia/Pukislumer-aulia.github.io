@@ -22,19 +22,20 @@
   const ADMIN_WA = '6281296668670';
   const STORAGE_KEY = 'pukisOrders';
 
+  /* ================= PRICE CONFIG ================= */
   const BASE_PRICE = {
     Original: {
-      '5': { non: 10000, single: 13000, double: 15000 },
+      '5':  { non: 10000, single: 13000, double: 15000 },
       '10': { non: 18000, single: 25000, double: 28000 }
     },
     Pandan: {
-      '5': { non: 12000, single: 15000, double: 17000 },
+      '5':  { non: 12000, single: 15000, double: 17000 },
       '10': { non: 21000, single: 28000, double: 32000 }
     }
   };
 
-  const $ = id => document.getElementById(id);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const $  = id => document.getElementById(id);
+  const $$ = q => Array.from(document.querySelectorAll(q));
   const rp = n => 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
 
   const getRadio = name =>
@@ -57,22 +58,22 @@
   /* ================= PRICE ================= */
   function updatePrice() {
     const jenis = getRadio('ultraJenis') || 'Original';
-    const isi = $('ultraIsi')?.value || '5';
-    const mode = getRadio('ultraToppingMode');
-    const qty = Math.max(1, parseInt($('ultraJumlah')?.value || '1', 10));
+    const isi   = $('ultraIsi')?.value || '5';
+    const mode  = getRadio('ultraToppingMode');
+    const qty   = Math.max(1, parseInt($('ultraJumlah')?.value || '1', 10));
 
-    const perBox = BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
+    const perBox  = BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
     const subtotal = perBox * qty;
 
     const discount =
       qty >= 10 ? 1000 :
-      qty >= 5 ? Math.round(subtotal * 0.01) : 0;
+      qty >= 5  ? Math.round(subtotal * 0.01) : 0;
 
     const total = subtotal - discount;
 
     $('ultraPricePerBox') && ($('ultraPricePerBox').textContent = rp(perBox));
-    $('ultraSubtotal') && ($('ultraSubtotal').textContent = rp(subtotal));
-    $('ultraDiscount') && ($('ultraDiscount').textContent = discount ? '-' + rp(discount) : '-');
+    $('ultraSubtotal')   && ($('ultraSubtotal').textContent   = rp(subtotal));
+    $('ultraDiscount')   && ($('ultraDiscount').textContent   = discount ? '-' + rp(discount) : '-');
     $('ultraGrandTotal') && ($('ultraGrandTotal').textContent = rp(total));
 
     return { qty, total };
@@ -80,10 +81,11 @@
 
   /* ================= BUILD ORDER ================= */
   function buildOrder() {
-    const nama = $('ultraNama')?.value.trim();
+    const nama  = $('ultraNama')?.value.trim();
     const waRaw = $('ultraWA')?.value.trim();
+
     if (!nama || !waRaw) {
-      alert('Nama & WA wajib diisi');
+      alert('Nama & WhatsApp wajib diisi');
       return null;
     }
 
@@ -91,13 +93,14 @@
     if (wa.startsWith('0')) wa = '62' + wa.slice(1);
     if (wa.startsWith('8')) wa = '62' + wa;
 
-    const mode = getRadio('ultraToppingMode');
-    const single = getChecked('toppingSingle');
-    const double = getChecked('toppingDouble');
+    const jenis   = getRadio('ultraJenis') || 'Original';
+    const mode    = getRadio('ultraToppingMode');
+    const single  = getChecked('toppingSingle');
+    const double  = getChecked('toppingDouble');
     const taburan = getChecked('taburan');
 
     if (mode === 'single' && single.length === 0)
-      return alert('Pilih minimal 1 topping'), null;
+      return alert('Single wajib pilih topping'), null;
 
     if (mode === 'double' && (double.length === 0 || taburan.length === 0))
       return alert('Double wajib topping & taburan'), null;
@@ -109,21 +112,22 @@
       tgl: new Date().toISOString(),
       nama,
       wa,
-      jenis: getRadio('ultraJenis'),
+      jenis_pukis: jenis,
       mode,
       single,
       double,
       taburan,
-      catatan: $('ultraNote')?.value || '-',
       qty: price.qty,
-      total: price.total
+      total: price.total,
+      catatan: $('ultraNote')?.value || '-',
+      status: 'pending'
     };
   }
 
   /* ================= SAVE ADMIN ================= */
   function saveOrderToAdmin(order) {
     const orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    orders.push({ ...order, status: 'pending' });
+    orders.push(order);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
   }
 
@@ -151,7 +155,8 @@
       <b>Invoice :</b> ${o.invoice}<br>
       <b>Nama :</b> ${o.nama}<br>
       <b>WA :</b> ${o.wa}<br>
-      <b>Jenis :</b> ${o.mode.toUpperCase()}<br><br>
+      <b>Jenis :</b> ${o.jenis_pukis}<br>
+      <b>Mode :</b> ${o.mode.toUpperCase()}<br><br>
 
       <b>Topping :</b><br>${toppingHTML}<br><br>
       <b>Taburan :</b><br>${taburanHTML}<br><br>
@@ -161,7 +166,7 @@
       <b>Total :</b> ${rp(o.total)}<br><br>
 
       <button id="sendToAdmin" class="btn-primary">
-        Kirim pesan ke WhatsApp
+        Kirim ke WhatsApp Admin
       </button>
     `;
 
@@ -191,7 +196,8 @@
 Invoice : ${o.invoice}
 Nama    : ${o.nama}
 WA      : ${o.wa}
-Jenis   : ${o.mode.toUpperCase()}
+Jenis   : ${o.jenis_pukis}
+Mode    : ${o.mode.toUpperCase()}
 
 Topping :
 ${toppingText}
