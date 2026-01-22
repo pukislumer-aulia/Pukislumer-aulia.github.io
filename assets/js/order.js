@@ -189,16 +189,19 @@
     setTimeout(() => __LOCK_SUBMIT = false, 800);
   }
 
-  /* ================= INIT ================= */
-  document.addEventListener('DOMContentLoaded', () => {
-    syncTopping();
-    updatePrice();
+/* ================= INIT ================= */
+document.addEventListener('DOMContentLoaded', () => {
+  syncTopping();
+  updatePrice();
 
-    $$('input[name="ultraToppingMode"]').forEach(i => i.onchange = syncTopping);
-    $$('input, select').forEach(i => i.onchange = updatePrice);
-
-    $('formUltra') && ($('formUltra').onsubmit = submitForm);
-    $('notaClose') && ($('notaClose').onclick = hideNota);
+  $$('input[name="ultraToppingMode"]').forEach(i => {
+    i.addEventListener('change', syncTopping);
   });
 
-})();
+  $$('input, select').forEach(i => {
+    i.addEventListener('change', updatePrice);
+  });
+
+  $('formUltra') && ($('formUltra').onsubmit = submitForm);
+  $('notaClose') && ($('notaClose').onclick = hideNota);
+});
