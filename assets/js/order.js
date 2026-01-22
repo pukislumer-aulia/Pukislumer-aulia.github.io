@@ -7,9 +7,9 @@
   ✔ Double  → topping + taburan muncul
   ✔ Harga otomatis STABIL
   ✔ Popup invoice 1 tombol WA
+  ✔ Format WA RAPI (list)
   ✔ Anti double submit
   ✔ PDF HANYA ADMIN
-  ✔ Aman Android low-end
 
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
@@ -17,12 +17,8 @@
 (function () {
   'use strict';
 
-  /* ===============================
-     SUBMIT LOCK
-  =============================== */
   let __LOCK_SUBMIT = false;
 
-  /* ================= CONFIG ================= */
   const ADMIN_WA = '6281296668670';
   const STORAGE_KEY = 'pukisOrders';
 
@@ -37,37 +33,32 @@
     }
   };
 
-  /* ================= HELPERS ================= */
   const $ = id => document.getElementById(id);
   const $$ = sel => Array.from(document.querySelectorAll(sel));
   const rp = n => 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
 
-  const getRadio = name => {
-    const el = document.querySelector(`input[name="${name}"]:checked`);
-    return el ? el.value : null;
-  };
+  const getRadio = name =>
+    document.querySelector(`input[name="${name}"]:checked`)?.value || 'non';
 
   const getChecked = name =>
     $$(`input[name="${name}"]:checked`).map(i => i.value);
 
-  /* ================= TOPPING VISIBILITY ================= */
+  /* ===== TOPPING VISIBILITY ===== */
   function syncTopping() {
-    const mode = getRadio('ultraToppingMode') || 'non';
+    const mode = getRadio('ultraToppingMode');
 
-    const single = $('ultraSingleGroup');
-    const double = $('ultraDoubleGroup');
+    $('ultraSingleGroup') &&
+      ($('ultraSingleGroup').style.display = mode === 'single' ? 'block' : 'none');
 
-    if (single) single.style.display = (mode === 'single') ? 'block' : 'none';
-    if (double) double.style.display = (mode === 'double') ? 'block' : 'none';
+    $('ultraDoubleGroup') &&
+      ($('ultraDoubleGroup').style.display = mode === 'double' ? 'block' : 'none');
   }
 
-  /* ================= PRICE ================= */
+  /* ===== PRICE ===== */
   function updatePrice() {
-    const jenisEl = document.querySelector('input[name="ultraJenis"]:checked');
-    const jenis = jenisEl ? jenisEl.value : 'Original';
-
-    const isi = $('ultraIsi') ? $('ultraIsi').value : '5';
-    const mode = getRadio('ultraToppingMode') || 'non';
+    const jenis = getRadio('ultraJenis') || 'Original';
+    const isi = $('ultraIsi')?.value || '5';
+    const mode = getRadio('ultraToppingMode');
     const qty = Math.max(1, parseInt($('ultraJumlah')?.value || '1', 10));
 
     const perBox = BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
@@ -75,46 +66,38 @@
 
     const discount =
       qty >= 10 ? 1000 :
-      qty >= 5  ? Math.round(subtotal * 0.01) : 0;
+      qty >= 5 ? Math.round(subtotal * 0.01) : 0;
 
     const total = subtotal - discount;
 
-    if ($('ultraPricePerBox')) $('ultraPricePerBox').textContent = rp(perBox);
-    if ($('ultraSubtotal')) $('ultraSubtotal').textContent = rp(subtotal);
-    if ($('ultraDiscount')) $('ultraDiscount').textContent = discount ? '-' + rp(discount) : '-';
-    if ($('ultraGrandTotal')) $('ultraGrandTotal').textContent = rp(total);
+    $('ultraPricePerBox') && ($('ultraPricePerBox').textContent = rp(perBox));
+    $('ultraSubtotal') && ($('ultraSubtotal').textContent = rp(subtotal));
+    $('ultraDiscount') && ($('ultraDiscount').textContent = discount ? '-' + rp(discount) : '-');
+    $('ultraGrandTotal') && ($('ultraGrandTotal').textContent = rp(total));
 
     return { qty, total };
   }
 
-  /* ================= BUILD ORDER ================= */
+  /* ===== BUILD ORDER ===== */
   function buildOrder() {
     const nama = $('ultraNama')?.value.trim();
     const waRaw = $('ultraWA')?.value.trim();
-
-    if (!nama || !waRaw) {
-      alert('Nama dan Nomor WhatsApp wajib diisi');
-      return null;
-    }
+    if (!nama || !waRaw) return alert('Nama & WA wajib diisi'), null;
 
     let wa = waRaw.replace(/\D/g, '');
     if (wa.startsWith('0')) wa = '62' + wa.slice(1);
     if (wa.startsWith('8')) wa = '62' + wa;
 
-    const mode = getRadio('ultraToppingMode') || 'non';
+    const mode = getRadio('ultraToppingMode');
     const single = getChecked('toppingSingle');
     const double = getChecked('toppingDouble');
     const taburan = getChecked('taburan');
 
-    if (mode === 'single' && single.length === 0) {
-      alert('Pilih minimal 1 topping');
-      return null;
-    }
+    if (mode === 'single' && single.length === 0)
+      return alert('Pilih minimal 1 topping'), null;
 
-    if (mode === 'double' && (double.length === 0 || taburan.length === 0)) {
-      alert('Double wajib topping dan taburan');
-      return null;
-    }
+    if (mode === 'double' && (double.length === 0 || taburan.length === 0))
+      return alert('Double wajib topping & taburan'), null;
 
     const price = updatePrice();
 
@@ -123,7 +106,7 @@
       tgl: new Date().toISOString(),
       nama,
       wa,
-      jenis: getRadio('ultraJenis') || 'Original',
+      jenis: getRadio('ultraJenis'),
       mode,
       single,
       double,
@@ -134,113 +117,120 @@
     };
   }
 
-  /* ================= SAVE ADMIN ================= */
+  /* ===== SAVE ADMIN ===== */
   function saveOrderToAdmin(order) {
     const orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    orders.push({ ...order, status: 'pending', pdfBase64: null });
+    orders.push({ ...order, status: 'pending' });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
   }
 
-  /* ================= NOTA POPUP ================= */
+  /* ===== POPUP ===== */
   let currentOrder = null;
 
   function showNota(o) {
+    const topping =
+      o.mode === 'single' || o.mode === 'double'
+        ? o.single.map(t => `- ${t}`).join('<br>')
+        : '-';
+
+    const taburan =
+      o.mode === 'double'
+        ? o.taburan.map(t => `- ${t}`).join('<br>')
+        : '-';
+
     $('notaContent').innerHTML = `
+      <strong>PUKIS LUMER AULIA</strong><br><br>
+
       <b>Invoice :</b> ${o.invoice}<br>
       <b>Nama :</b> ${o.nama}<br>
       <b>WA :</b> ${o.wa}<br>
-      <b>Jenis :</b> ${o.mode.toUpperCase()}<br>
+      <b>Jenis :</b> ${o.mode.toUpperCase()}<br><br>
+
+      <b>Topping :</b><br>${topping}<br><br>
+      <b>Taburan :</b><br>${taburan}<br><br>
+
       <b>Jumlah :</b> ${o.qty} Box<br>
-      <b>Pesan :</b> ${o.catatan}<br>
+      <b>Catatan :</b> ${o.catatan}<br>
       <b>Total :</b> ${rp(o.total)}<br><br>
+
       <button id="sendToAdmin" class="btn-primary">
         Kirim pesan ke WhatsApp
       </button>
     `;
+
     $('notaContainer').style.display = 'flex';
     $('sendToAdmin').onclick = sendWA;
   }
 
-  function hideNota() {
-    if ($('notaContainer')) $('notaContainer').style.display = 'none';
-  }
-
-  /* ================= SEND WA ================= */
   function sendWA() {
-  const toppingText =
-    currentOrder.mode === 'single'
-      ? currentOrder.single.join(', ')
-      : currentOrder.mode === 'double'
-      ? currentOrder.double.join(', ')
-      : '-';
+    const o = currentOrder;
 
-  const taburanText =
-    currentOrder.mode === 'double'
-      ? currentOrder.taburan.join(', ')
-      : '-';
+    const topping =
+      o.mode === 'single' || o.mode === 'double'
+        ? o.single.map(t => `- ${t}`).join('\n')
+        : '-';
 
-  const msg =
+    const taburan =
+      o.mode === 'double'
+        ? o.taburan.map(t => `- ${t}`).join('\n')
+        : '-';
+
+    const msg =
 `PUKIS LUMER AULIA
 
-Invoice : ${currentOrder.invoice}
-Nama    : ${currentOrder.nama}
-WA      : ${currentOrder.wa}
-Jenis   : ${currentOrder.mode.toUpperCase()}
+Invoice : ${o.invoice}
+Nama    : ${o.nama}
+WA      : ${o.wa}
+Jenis   : ${o.mode.toUpperCase()}
 
 Topping :
-${toppingText}
+${topping}
 
 Taburan :
-${taburanText}
+${taburan}
 
-Jumlah  : ${currentOrder.qty} Box
-Catatan : ${currentOrder.catatan}
-Total   : Rp ${Number(currentOrder.total).toLocaleString('id-ID')}
+Jumlah  : ${o.qty} Box
+Catatan : ${o.catatan}
+Total   : Rp ${Number(o.total).toLocaleString('id-ID')}
 `;
 
-  window.open(
-    `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`,
-    '_blank'
-  );
-}
+    window.open(
+      'https://wa.me/' + ADMIN_WA + '?text=' + encodeURIComponent(msg),
+      '_blank'
+    );
+  }
 
-  /* ================= SUBMIT ================= */
   function submitForm(e) {
     e.preventDefault();
     if (__LOCK_SUBMIT) return;
     __LOCK_SUBMIT = true;
 
     const order = buildOrder();
-    if (!order) {
-      __LOCK_SUBMIT = false;
-      return;
-    }
+    if (!order) return __LOCK_SUBMIT = false;
 
     saveOrderToAdmin(order);
     currentOrder = order;
     showNota(order);
 
-    setTimeout(() => { __LOCK_SUBMIT = false; }, 800);
+    setTimeout(() => __LOCK_SUBMIT = false, 800);
   }
 
-  /* ================= INIT ================= */
   document.addEventListener('DOMContentLoaded', () => {
     syncTopping();
     updatePrice();
 
-    $$('input[name="ultraToppingMode"]').forEach(el => {
-      el.addEventListener('change', () => {
+    $$('input[name="ultraToppingMode"]').forEach(i =>
+      i.addEventListener('change', () => {
         syncTopping();
         updatePrice();
-      });
-    });
+      })
+    );
 
-    $$('input:not([name="ultraToppingMode"]), select').forEach(el => {
-      el.addEventListener('change', updatePrice);
-    });
+    $$('input, select').forEach(i =>
+      i.addEventListener('change', updatePrice)
+    );
 
-    if ($('formUltra')) $('formUltra').addEventListener('submit', submitForm);
-    if ($('notaClose')) $('notaClose').addEventListener('click', hideNota);
+    $('formUltra')?.addEventListener('submit', submitForm);
   });
 
 })();
