@@ -1,11 +1,12 @@
 /*
-  ADMIN PANEL — FINAL LOCK (THERMAL)
+  ADMIN PANEL — FINAL LOCK (A4 STANDARD)
   PUKIS LUMER AULIA
 
-  ✔ RESET SEMUA PESANAN
+  ✔ PDF A4 Portrait (Printer Standar)
+  ✔ TABEL RAPI & TERKUNCI
   ✔ WATERMARK: LUNAS / PENDING
-  ✔ PDF THERMAL 80mm
   ✔ QRIS + TTD + FOOTER
+  ✔ RESET SEMUA PESANAN
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
 
@@ -14,11 +15,9 @@
 
   const ADMIN_PIN   = '030419';
   const STORAGE_KEY = 'pukisOrders';
-  const PAPER_WIDTH = 80;
-  const PAGE_HEIGHT = 260;
 
   const $  = id => document.getElementById(id);
-  const rp = n => (Number(n)||0).toLocaleString('id-ID');
+  const rp = n => (Number(n) || 0).toLocaleString('id-ID');
 
   /* ================= LOGIN ================= */
   function loginAdmin() {
@@ -41,148 +40,143 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(o));
   }
 
-  /* ================= RESET SEMUA ================= */
-  function resetAllOrders() {
-    if (!confirm('Yakin hapus SEMUA pesanan?')) return;
-    localStorage.removeItem(STORAGE_KEY);
-    loadAdmin();
-    alert('Semua pesanan berhasil dihapus');
-  }
-
-  /* ================= LOAD ADMIN ================= */
+  /* ================= LOAD TABLE ================= */
   function loadAdmin() {
     const orders = getOrders();
     const tbody  = document.querySelector('#orderTable tbody');
     tbody.innerHTML = '';
 
-    orders.forEach((o,i)=>{
+    orders.forEach((o, i) => {
       tbody.innerHTML += `
         <tr>
-          <td>${new Date(o.tgl).toLocaleString('id-ID')}</td>
+          <td>${new Date(o.tgl).toLocaleString()}</td>
           <td>${o.invoice}</td>
           <td>${o.nama}</td>
           <td>${o.wa}</td>
-          <td>${o.mode}</td>
+          <td>${o.mode.toUpperCase()}</td>
           <td>${o.qty}</td>
           <td>Rp ${rp(o.total)}</td>
           <td>
             <select onchange="updateStatus(${i},this.value)">
-              <option value="pending"${o.status==='pending'?' selected':''}>pending</option>
-              <option value="selesai"${o.status==='selesai'?' selected':''}>selesai</option>
-              <option value="dibatalkan"${o.status==='dibatalkan'?' selected':''}>dibatalkan</option>
+              <option value="pending"${o.status === 'pending' ? ' selected' : ''}>pending</option>
+              <option value="lunas"${o.status === 'lunas' ? ' selected' : ''}>lunas</option>
             </select>
           </td>
-          <td><button onclick="printPdf(${i})">PDF</button></td>
+          <td>
+            <button onclick="printPdf(${i})">PDF</button>
+          </td>
         </tr>`;
     });
 
     renderStats(orders);
   }
 
-  window.updateStatus = function(i,s){
-    const o=getOrders();
-    o[i].status=s;
+  window.updateStatus = function (i, s) {
+    const o = getOrders();
+    o[i].status = s;
     saveOrders(o);
     loadAdmin();
   };
 
-  /* ================= PDF ================= */
-  window.printPdf = function(i){
-    const o=getOrders()[i];
-    const {jsPDF}=window.jspdf;
-    const doc=new jsPDF({unit:'mm',format:[PAPER_WIDTH,PAGE_HEIGHT]});
+  /* ================= RESET ================= */
+  window.resetAllOrders = function () {
+    if (!confirm('Yakin reset semua pesanan?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    loadAdmin();
+  };
 
-    let y=8;
+  /* ================= PDF A4 ================= */
+  window.printPdf = function (i) {
+    const o = getOrders()[i];
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
 
     /* HEADER */
-    doc.setFontSize(12);
-    doc.text('PUKIS LUMER AULIA',PAPER_WIDTH/2,y,{align:'center'});
-    y+=6;
+    doc.setFontSize(16);
+    doc.text('PUKIS LUMER AULIA', 105, 15, { align: 'center' });
 
-    doc.setFontSize(8);
-    doc.text(`Invoice : ${o.invoice}`,4,y);
-    doc.text(`Nama    : ${o.nama}`,4,y+4);
-    doc.text(`WA      : ${o.wa}`,4,y+8);
+    doc.setFontSize(10);
+    doc.text(`Invoice : ${o.invoice}`, 14, 25);
+    doc.text(`Nama    : ${o.nama}`,    14, 31);
+    doc.text(`No. WA  : ${o.wa}`,      14, 37);
 
+    doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString()}`, 140, 25);
+    doc.text(`Antrian : ${i + 1}`, 140, 31);
+
+    /* WATERMARK */
+    doc.setTextColor(230, 230, 230);
+    doc.setFontSize(50);
     doc.text(
-      `Tanggal : ${new Date().toLocaleString('id-ID')}`,
-      PAPER_WIDTH-4,y,{align:'right'}
+      o.status === 'lunas' ? 'LUNAS' : 'PENDING',
+      105,
+      150,
+      { align: 'center', angle: 45 }
     );
-
-    y+=14;
+    doc.setTextColor(0);
 
     /* TABLE */
-    const topping =
-      o.mode==='single'||o.mode==='double'
-        ? (o.single||[]).join(', ') : '-';
-
-    const taburan =
-      o.mode==='double'
-        ? (o.taburan||[]).join(', ') : '-';
-
     doc.autoTable({
-      startY:y,
-      theme:'grid',
-      styles:{fontSize:8,cellPadding:2},
-      columnStyles:{0:{cellWidth:28},1:{cellWidth:48}},
-      body:[
-        ['Nama Toko','Pukis Lumer Aulia'],
-        ['Invoice',o.invoice],
-        ['Nama Pemesan',o.nama],
-        ['No. WA',o.wa],
-        ['Jenis Pesanan',o.mode.toUpperCase()],
-        ['Topping',topping||'-'],
-        ['Taburan',taburan||'-'],
-        ['Jumlah',o.qty+' Box'],
-        ['Catatan',o.catatan||'-'],
-        ['Total','Rp '+rp(o.total)]
+      startY: 45,
+      margin: { left: 14, right: 14 },
+      styles: {
+        fontSize: 10,
+        cellPadding: 4
+      },
+      head: [['Keterangan', 'Detail']],
+      body: [
+        ['Nama Toko', 'PUKIS LUMER AULIA'],
+        ['Jenis Pesanan', o.mode.toUpperCase()],
+        ['Topping', o.single?.join(', ') || '-'],
+        ['Taburan', o.taburan?.join(', ') || '-'],
+        ['Jumlah', o.qty + ' Box'],
+        ['Catatan', o.catatan || '-'],
+        ['Total', 'Rp ' + rp(o.total)]
       ]
     });
 
-    y=doc.lastAutoTable.finalY+6;
+    const yFooter = doc.lastAutoTable.finalY + 15;
 
-    /* WATERMARK (HANYA LUNAS / PENDING) */
-    const wm = o.status==='selesai' ? 'LUNAS' : 'PENDING';
-    doc.setFontSize(32);
-    doc.setTextColor(220,220,220);
-    doc.text(wm,PAPER_WIDTH/2,y+30,{
-      align:'center',
-      angle:45
-    });
-    doc.setTextColor(0);
+    /* QRIS */
+    doc.addImage('assets/images/qris-pukis.jpg', 'JPG', 14, yFooter, 40, 40);
 
-    /* QRIS + TTD */
-    doc.addImage('assets/images/qris-pukis.jpg','JPEG',4,y,24,24);
-    doc.text('Hormat Kami',PAPER_WIDTH-4,y+6,{align:'right'});
-    doc.addImage('assets/images/ttd.png','PNG',PAPER_WIDTH-28,y+8,24,14);
-
-    y+=32;
+    /* TTD */
+    doc.setFontSize(10);
+    doc.text('Hormat Kami', 150, yFooter);
+    doc.addImage('assets/images/ttd.png', 'PNG', 145, yFooter + 5, 40, 20);
 
     /* FOOTER */
-    doc.setFontSize(8);
+    doc.setFontSize(10);
     doc.text(
       'Terimakasih sudah Belanja di Dapur Aulia\nKami Tunggu Kunjungan Selanjutnya',
-      PAPER_WIDTH/2,y,{align:'center'}
+      105,
+      285,
+      { align: 'center' }
     );
 
-    doc.save(o.invoice+'.pdf');
+    doc.save(o.invoice + '.pdf');
   };
 
   /* ================= STATS ================= */
-  function renderStats(o){
-    let t=0;
-    const n=new Date();
-    o.forEach(x=>{
-      const d=new Date(x.tgl);
-      if(x.status==='selesai'&&d.getMonth()===n.getMonth())
-        t+=Number(x.total||0);
+  function renderStats(o) {
+    let total = 0;
+    o.forEach(x => {
+      if (x.status === 'lunas') total += Number(x.total || 0);
     });
-    $('stats').innerHTML=`<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(t)}`;
+    $('stats').innerHTML =
+      `<b>Total Pendapatan (LUNAS):</b> Rp ${rp(total)}
+       <br><button onclick="resetAllOrders()" style="margin-top:8px;
+       background:#c0392b;color:#fff;border:none;padding:6px 10px;
+       border-radius:5px;cursor:pointer">
+       Reset Semua Pesanan</button>`;
   }
 
-  document.addEventListener('DOMContentLoaded',()=>{
-    $('btnLogin').onclick=loginAdmin;
-    $('btnResetAll') && ($('btnResetAll').onclick=resetAllOrders);
+  document.addEventListener('DOMContentLoaded', () => {
+    $('btnLogin').onclick = loginAdmin;
   });
 
 })();
