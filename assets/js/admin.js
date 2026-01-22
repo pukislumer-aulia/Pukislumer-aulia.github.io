@@ -1,11 +1,12 @@
 /*
-  ADMIN PANEL — FINAL LOCK (THERMAL)
+  ADMIN PANEL — FINAL LOCK (A4)
   PUKIS LUMER AULIA
 
   ✔ RESET SEMUA PESANAN
   ✔ WATERMARK: LUNAS / PENDING
-  ✔ PDF THERMAL 80mm
-  ✔ QRIS + TTD + FOOTER
+  ✔ PDF A4 RAPI
+  ✔ TOPPING + TABURAN AMAN
+  ✔ NON / SINGLE / DOUBLE AMAN
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
 
@@ -14,8 +15,6 @@
 
   const ADMIN_PIN   = '030419';
   const STORAGE_KEY = 'pukisOrders';
-  const PAPER_WIDTH = 80;
-  const PAGE_HEIGHT = 260;
 
   const $  = id => document.getElementById(id);
   const rp = n => (Number(n)||0).toLocaleString('id-ID');
@@ -69,7 +68,6 @@
             <select onchange="updateStatus(${i},this.value)">
               <option value="pending"${o.status==='pending'?' selected':''}>pending</option>
               <option value="selesai"${o.status==='selesai'?' selected':''}>selesai</option>
-              <option value="dibatalkan"${o.status==='dibatalkan'?' selected':''}>dibatalkan</option>
             </select>
           </td>
           <td><button onclick="printPdf(${i})">PDF</button></td>
@@ -86,84 +84,63 @@
     loadAdmin();
   };
 
-  /* ================= PDF ================= */
+  /* ================= PDF A4 ================= */
   window.printPdf = function(i){
     const o=getOrders()[i];
-    const {jsPDF}=window.jspdf;
-    const doc=new jsPDF({unit:'mm',format:[PAPER_WIDTH,PAGE_HEIGHT]});
+    if(!o) return;
 
-    let y=8;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p','mm','a4');
+
+    /* NORMALISASI DATA */
+    const topping = (o.mode!=='non' && o.single && o.single.length)
+      ? o.single.join(', ')
+      : '-';
+
+    const taburan = (o.mode==='double' && o.taburan && o.taburan.length)
+      ? o.taburan.join(', ')
+      : '-';
 
     /* HEADER */
-    doc.setFontSize(12);
-    doc.text('PUKIS LUMER AULIA',PAPER_WIDTH/2,y,{align:'center'});
-    y+=6;
+    doc.setFontSize(16);
+    doc.text('PUKIS LUMER AULIA',105,15,{align:'center'});
 
-    doc.setFontSize(8);
-    doc.text(`Invoice : ${o.invoice}`,4,y);
-    doc.text(`Nama    : ${o.nama}`,4,y+4);
-    doc.text(`WA      : ${o.wa}`,4,y+8);
+    doc.setFontSize(10);
+    doc.text(`Invoice : ${o.invoice}`,15,30);
+    doc.text(`Nama    : ${o.nama}`,15,36);
+    doc.text(`No. WA  : ${o.wa}`,15,42);
 
-    doc.text(
-      `Tanggal : ${new Date().toLocaleString('id-ID')}`,
-      PAPER_WIDTH-4,y,{align:'right'}
-    );
-
-    y+=14;
+    doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString('id-ID')}`,140,30);
+    doc.text(`Status  : ${(o.status||'pending').toUpperCase()}`,140,36);
 
     /* TABLE */
-    const topping =
-      o.mode==='single'||o.mode==='double'
-        ? (o.single||[]).join(', ') : '-';
-
-    const taburan =
-      o.mode==='double'
-        ? (o.taburan||[]).join(', ') : '-';
-
     doc.autoTable({
-      startY:y,
+      startY:50,
       theme:'grid',
-      styles:{fontSize:8,cellPadding:2},
-      columnStyles:{0:{cellWidth:28},1:{cellWidth:48}},
+      styles:{fontSize:10,cellPadding:3},
+      columnStyles:{0:{cellWidth:60},1:{cellWidth:110}},
       body:[
         ['Nama Toko','Pukis Lumer Aulia'],
-        ['Invoice',o.invoice],
-        ['Nama Pemesan',o.nama],
-        ['No. WA',o.wa],
         ['Jenis Pesanan',o.mode.toUpperCase()],
-        ['Topping',topping||'-'],
-        ['Taburan',taburan||'-'],
+        ['Topping',topping],
+        ['Taburan',taburan],
         ['Jumlah',o.qty+' Box'],
         ['Catatan',o.catatan||'-'],
         ['Total','Rp '+rp(o.total)]
       ]
     });
 
-    y=doc.lastAutoTable.finalY+6;
-
-    /* WATERMARK (HANYA LUNAS / PENDING) */
+    /* WATERMARK */
     const wm = o.status==='selesai' ? 'LUNAS' : 'PENDING';
-    doc.setFontSize(32);
+    doc.setFontSize(48);
     doc.setTextColor(220,220,220);
-    doc.text(wm,PAPER_WIDTH/2,y+30,{
-      align:'center',
-      angle:45
-    });
+    doc.text(wm,105,170,{align:'center',angle:30});
     doc.setTextColor(0);
 
-    /* QRIS + TTD */
-    doc.addImage('assets/images/qris-pukis.jpg','JPEG',4,y,24,24);
-    doc.text('Hormat Kami',PAPER_WIDTH-4,y+6,{align:'right'});
-    doc.addImage('assets/images/ttd.png','PNG',PAPER_WIDTH-28,y+8,24,14);
-
-    y+=32;
-
     /* FOOTER */
-    doc.setFontSize(8);
-    doc.text(
-      'Terimakasih sudah Belanja di Dapur Aulia\nKami Tunggu Kunjungan Selanjutnya',
-      PAPER_WIDTH/2,y,{align:'center'}
-    );
+    doc.setFontSize(11);
+    doc.text('Terimakasih sudah Belanja di Dapur Aulia',105,270,{align:'center'});
+    doc.text('Kami Tunggu Kunjungan Selanjutnya',105,276,{align:'center'});
 
     doc.save(o.invoice+'.pdf');
   };
@@ -177,12 +154,20 @@
       if(x.status==='selesai'&&d.getMonth()===n.getMonth())
         t+=Number(x.total||0);
     });
-    $('stats').innerHTML=`<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(t)}`;
+
+    $('stats').innerHTML =
+      `<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(t)}
+       <br>
+       <button id="btnResetAll"
+         style="margin-top:8px;padding:6px 12px;background:#c0392b;color:#fff;border:none;border-radius:4px;cursor:pointer">
+         Reset Semua Pesanan
+       </button>`;
+
+    $('btnResetAll').onclick = resetAllOrders;
   }
 
   document.addEventListener('DOMContentLoaded',()=>{
     $('btnLogin').onclick=loginAdmin;
-    $('btnResetAll') && ($('btnResetAll').onclick=resetAllOrders);
   });
 
 })();
