@@ -1,11 +1,10 @@
 /*
-  ADMIN PANEL — FINAL LOCK (A4 STANDARD)
+  ADMIN PANEL — FINAL LOCK (A4)
   PUKIS LUMER AULIA
 
-  ✔ PDF A4 Portrait (Printer Standar)
-  ✔ TABEL RAPI & TERKUNCI
+  ✔ PDF A4 RAPI
+  ✔ TABEL LENGKAP (TOPPING & TABURAN MUNCUL)
   ✔ WATERMARK: LUNAS / PENDING
-  ✔ QRIS + TTD + FOOTER
   ✔ RESET SEMUA PESANAN
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
@@ -17,7 +16,7 @@
   const STORAGE_KEY = 'pukisOrders';
 
   const $  = id => document.getElementById(id);
-  const rp = n => (Number(n) || 0).toLocaleString('id-ID');
+  const rp = n  => (Number(n) || 0).toLocaleString('id-ID');
 
   /* ================= LOGIN ================= */
   function loginAdmin() {
@@ -32,13 +31,11 @@
   }
 
   /* ================= STORAGE ================= */
-  function getOrders() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  }
+  const getOrders = () =>
+    JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
-  function saveOrders(o) {
+  const saveOrders = o =>
     localStorage.setItem(STORAGE_KEY, JSON.stringify(o));
-  }
 
   /* ================= LOAD TABLE ================= */
   function loadAdmin() {
@@ -58,19 +55,19 @@
           <td>Rp ${rp(o.total)}</td>
           <td>
             <select onchange="updateStatus(${i},this.value)">
-              <option value="pending"${o.status === 'pending' ? ' selected' : ''}>pending</option>
-              <option value="lunas"${o.status === 'lunas' ? ' selected' : ''}>lunas</option>
+              <option value="pending"${o.status==='pending'?' selected':''}>pending</option>
+              <option value="lunas"${o.status==='lunas'?' selected':''}>lunas</option>
+              <option value="batal"${o.status==='batal'?' selected':''}>batal</option>
             </select>
           </td>
-          <td>
-            <button onclick="printPdf(${i})">PDF</button>
-          </td>
+          <td><button onclick="printPdf(${i})">PDF</button></td>
         </tr>`;
     });
 
     renderStats(orders);
   }
 
+  /* ================= STATUS ================= */
   window.updateStatus = function (i, s) {
     const o = getOrders();
     o[i].status = s;
@@ -80,7 +77,7 @@
 
   /* ================= RESET ================= */
   window.resetAllOrders = function () {
-    if (!confirm('Yakin reset semua pesanan?')) return;
+    if (!confirm('Yakin hapus SEMUA pesanan?')) return;
     localStorage.removeItem(STORAGE_KEY);
     loadAdmin();
   };
@@ -89,71 +86,75 @@
   window.printPdf = function (i) {
     const o = getOrders()[i];
     const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
 
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4'
-    });
+    const pageW = 210;
+    let y = 20;
 
     /* HEADER */
     doc.setFontSize(16);
-    doc.text('PUKIS LUMER AULIA', 105, 15, { align: 'center' });
+    doc.text('PUKIS LUMER AULIA', pageW / 2, y, { align: 'center' });
 
     doc.setFontSize(10);
-    doc.text(`Invoice : ${o.invoice}`, 14, 25);
-    doc.text(`Nama    : ${o.nama}`,    14, 31);
-    doc.text(`No. WA  : ${o.wa}`,      14, 37);
+    y += 10;
+    doc.text(`Invoice : ${o.invoice}`, 14, y);
+    doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString()}`, 140, y);
 
-    doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString()}`, 140, 25);
-    doc.text(`Antrian : ${i + 1}`, 140, 31);
+    y += 6;
+    doc.text(`Nama : ${o.nama}`, 14, y);
+    doc.text(`WA : ${o.wa}`, 140, y);
 
     /* WATERMARK */
-    doc.setTextColor(230, 230, 230);
-    doc.setFontSize(50);
-    doc.text(
-      o.status === 'lunas' ? 'LUNAS' : 'PENDING',
-      105,
-      150,
-      { align: 'center', angle: 45 }
-    );
-    doc.setTextColor(0);
+    if (o.status === 'lunas' || o.status === 'pending') {
+      doc.setTextColor(200);
+      doc.setFontSize(60);
+      doc.text(
+        o.status.toUpperCase(),
+        pageW / 2,
+        150,
+        { align: 'center', angle: 45 }
+      );
+      doc.setTextColor(0);
+    }
 
     /* TABLE */
+    y += 10;
     doc.autoTable({
-      startY: 45,
-      margin: { left: 14, right: 14 },
-      styles: {
-        fontSize: 10,
-        cellPadding: 4
+      startY: y,
+      theme: 'grid',
+      styles: { fontSize: 10, cellPadding: 3 },
+      columnStyles: {
+        0: { cellWidth: 60 },
+        1: { cellWidth: 110 }
       },
-      head: [['Keterangan', 'Detail']],
       body: [
-  ['Nama Toko', 'PUKIS LUMER AULIA'],
-  ['Jenis Pesanan', o.mode.toUpperCase()],
-  ['Topping', o.topping?.length ? o.topping.join(', ') : '-'],
-  ['Taburan', o.taburan?.length ? o.taburan.join(', ') : '-'],
-  ['Jumlah', o.qty + ' Box'],
-  ['Catatan', o.catatan || '-'],
-  ['Total', 'Rp ' + rp(o.total)]
-]
+        ['Nama Toko', 'PUKIS LUMER AULIA'],
+        ['Jenis Pesanan', o.mode.toUpperCase()],
+        [
+          'Topping',
+          o.topping?.length ? o.topping.join(', ') : '-'
+        ],
+        [
+          'Taburan',
+          o.taburan?.length ? o.taburan.join(', ') : '-'
+        ],
+        ['Jumlah', o.qty + ' Box'],
+        ['Catatan', o.catatan || '-'],
+        ['Total', 'Rp ' + rp(o.total)]
+      ]
+    });
 
-    const yFooter = doc.lastAutoTable.finalY + 15;
-
-    /* QRIS */
-    doc.addImage('assets/images/qris-pukis.jpg', 'JPG', 14, yFooter, 40, 40);
-
-    /* TTD */
-    doc.setFontSize(10);
-    doc.text('Hormat Kami', 150, yFooter);
-    doc.addImage('assets/images/ttd.png', 'PNG', 145, yFooter + 5, 40, 20);
+    let endY = doc.lastAutoTable.finalY + 20;
 
     /* FOOTER */
+    doc.setFontSize(11);
+    doc.text('Hormat Kami', 150, endY);
+
     doc.setFontSize(10);
     doc.text(
-      'Terimakasih sudah Belanja di Dapur Aulia\nKami Tunggu Kunjungan Selanjutnya',
-      105,
-      285,
+      'Terimakasih sudah belanja di Dapur Aulia\nKami tunggu kunjungan selanjutnya',
+      pageW / 2,
+      endY + 20,
       { align: 'center' }
     );
 
@@ -163,15 +164,15 @@
   /* ================= STATS ================= */
   function renderStats(o) {
     let total = 0;
+    const now = new Date();
     o.forEach(x => {
-      if (x.status === 'lunas') total += Number(x.total || 0);
+      const d = new Date(x.tgl);
+      if (x.status === 'lunas' && d.getMonth() === now.getMonth())
+        total += Number(x.total || 0);
     });
     $('stats').innerHTML =
-      `<b>Total Pendapatan (LUNAS):</b> Rp ${rp(total)}
-       <br><button onclick="resetAllOrders()" style="margin-top:8px;
-       background:#c0392b;color:#fff;border:none;padding:6px 10px;
-       border-radius:5px;cursor:pointer">
-       Reset Semua Pesanan</button>`;
+      `<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(total)}
+       <br><button onclick="resetAllOrders()">Reset Semua Pesanan</button>`;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
