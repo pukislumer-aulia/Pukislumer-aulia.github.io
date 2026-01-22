@@ -71,6 +71,24 @@
       line-height:1.6;
     }
 
+    .admin-actions{
+      margin-bottom:15px;
+    }
+
+    .btn-reset{
+      padding:8px 14px;
+      background:#c0392b;
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .btn-reset:hover{
+      opacity:.9;
+    }
+
     .table-wrapper{
       background:#fff;
       border-radius:6px;
@@ -114,7 +132,7 @@
 
 <body>
 
-<!-- LOGIN -->
+<!-- ================= LOGIN ================= -->
 <div id="login">
   <div class="login-box">
     <h2>Admin Login</h2>
@@ -123,13 +141,22 @@
   </div>
 </div>
 
-<!-- ADMIN -->
+<!-- ================= ADMIN PANEL ================= -->
 <div id="admin">
 
   <h1>Admin Panel — Pukis Lumer Aulia</h1>
 
+  <!-- STAT -->
   <div class="stats" id="stats"></div>
 
+  <!-- ACTIONS -->
+  <div class="admin-actions">
+    <button id="btnResetAll" class="btn-reset">
+      Reset Semua Pesanan
+    </button>
+  </div>
+
+  <!-- TABLE -->
   <div class="table-wrapper">
     <table id="orderTable">
       <thead>
@@ -150,16 +177,17 @@
   </div>
 
   <div class="footer-note">
-    * Status <b>selesai</b> dihitung sebagai pendapatan
+    * Status <b>selesai</b> dihitung sebagai pendapatan<br>
+    * Watermark PDF hanya: <b>LUNAS</b> / <b>PENDING</b>
   </div>
 
 </div>
 
-<!-- PDF LIB -->
+<!-- ================= PDF LIB ================= -->
 <script src="assets/js/lib/jspdf.umd.min.js"></script>
 <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
 
-<!-- ADMIN LOGIC -->
+<!-- ================= ADMIN LOGIC ================= -->
 <script src="assets/js/admin.js"></script>
 
 </body>
