@@ -198,6 +198,10 @@ Total   : Rp ${o.total.toLocaleString('id-ID')}
     );
 
     $('formUltra')?.addEventListener('submit', submitForm);
+    window.PUKIS_PRICE = {
+  BASE_PRICE,
+  rp
+};
   });
 
 })();
