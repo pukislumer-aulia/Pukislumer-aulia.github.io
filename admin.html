@@ -27,6 +27,25 @@
     th, td { border:1px solid #ddd; padding:6px; font-size:14px }
     th { background:#1f2937; color:#fff }
     #admin { display:none }
+
+    /* ===== LOCK AUTO CALC ===== */
+    #mAutoCalc{
+      pointer-events:none;
+      user-select:none;
+      opacity:0.95;
+      background:#f8fafc;
+      padding:10px;
+      border-radius:6px;
+      border:1px dashed #cbd5e1;
+      margin-top:10px;
+    }
+
+    #mInfoHarga{
+      font-size:12px;
+      color:#555;
+      line-height:1.4;
+      margin-top:6px;
+    }
   </style>
 </head>
 <body>
@@ -61,46 +80,56 @@
     <label>No WhatsApp</label>
     <input id="mWa">
 
-    <label>Jenis Pukis</label>
-    <div class="row">
-      <label><input type="radio" name="mJenisPukis" value="Original" checked> Original</label>
-      <label><input type="radio" name="mJenisPukis" value="Pandan"> Pandan</label>
-    </div>
+    <!-- ================= AUTO CALC (LOCKED) ================= -->
+    <div id="mAutoCalc" aria-readonly="true">
 
-    <div class="row">
-      <div>
-        <label>Isi per Box</label>
-        <select id="mIsi">
-          <option value="5">5 pcs / box</option>
-          <option value="10">10 pcs / box</option>
-        </select>
+      <label>Jenis Pukis</label>
+      <div class="row">
+        <label><input type="radio" name="mJenisPukis" value="Original" checked> Original</label>
+        <label><input type="radio" name="mJenisPukis" value="Pandan"> Pandan</label>
       </div>
-      <div>
-        <label>Mode</label>
-        <select id="mMode">
-          <option value="non">Non Topping</option>
-          <option value="single">Single Topping</option>
-          <option value="double">Double Topping</option>
-        </select>
+
+      <div class="row">
+        <div>
+          <label>Isi per Box</label>
+          <select id="mIsi">
+            <option value="5">5 pcs / box</option>
+            <option value="10">10 pcs / box</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Mode</label>
+          <select id="mMode">
+            <option value="non">Non Topping</option>
+            <option value="single">Single Topping</option>
+            <option value="double">Double Topping</option>
+          </select>
+        </div>
       </div>
+
+      <div class="row">
+        <div>
+          <label>Jumlah Box</label>
+          <input id="mQty" type="number" value="1" min="1">
+        </div>
+
+        <div>
+          <label>Total Harga</label>
+          <input id="mTotal" type="number" readonly>
+        </div>
+      </div>
+
+      <div id="mInfoHarga"></div>
+
     </div>
+    <!-- ================= END AUTO CALC ================= -->
 
     <label>Topping (pisahkan dengan koma)</label>
     <textarea id="mTopping" placeholder="coklat, keju"></textarea>
 
     <label>Taburan (khusus double)</label>
     <textarea id="mTaburan" placeholder="meses, kacang"></textarea>
-
-    <div class="row">
-      <div>
-        <label>Jumlah Box</label>
-        <input id="mQty" type="number" value="1" min="1">
-      </div>
-      <div>
-        <label>Total Harga</label>
-        <input id="mTotal" type="number" placeholder="contoh: 28000">
-      </div>
-    </div>
 
     <label>Catatan</label>
     <textarea id="mCatatan"></textarea>
