@@ -1,36 +1,50 @@
 /*
-  assets/js/admin.js — FINAL LOCK (PRODUCTION)
+  assets/js/admin.js — FINAL LOCK (PRODUCTION + FIREBASE)
   PUKIS LUMER AULIA
-  ⚠️ PDF TIDAK DIUBAH
+  ⚠️ UI, FLOW, PDF TIDAK DIUBAH
 */
+import { db } from './firebase.js';
+import {
+  collection, addDoc, getDocs, onSnapshot,
+  updateDoc, deleteDoc, doc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
 (() => {
   'use strict';
 
   const ADMIN_PIN = '030419';
-  const STORAGE_KEY = 'pukisOrders';
+  const COL = 'orders';
 
   const $ = id => document.getElementById(id);
-  const $$ = q => Array.from(document.querySelectorAll(q));
   const rp = n => (Number(n) || 0).toLocaleString('id-ID');
   const pad4 = n => String(n).padStart(4, '0');
+
+  let ORDERS = []; // cache realtime
 
   /* ================= LOGIN ================= */
   function loginAdmin() {
     if ($('pin').value !== ADMIN_PIN) return alert('PIN salah');
     $('login').style.display = 'none';
     $('admin').style.display = 'block';
-    loadAdmin();
+    listenOrders();
   }
 
-  /* ================= STORAGE ================= */
-  const getOrders = () =>
-    JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-  const saveOrders = o =>
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(o));
+  /* ================= FIREBASE LISTENER ================= */
+  function listenOrders(){
+    const tbody = document.querySelector('#orderTable tbody');
+    onSnapshot(collection(db, COL), snap => {
+      ORDERS = [];
+      tbody.innerHTML = '';
+      snap.forEach(docu => {
+        ORDERS.push({ id: docu.id, ...docu.data() });
+      });
+      renderTable();
+      renderStats(ORDERS);
+    });
+  }
 
   /* ================= MANUAL ORDER ================= */
-  window.addManualOrder = function () {
+  window.addManualOrder = async function () {
     const nama = $('mNama').value.trim();
     const wa   = $('mWa').value.trim();
     if (!nama || !wa) return alert('Nama & WA wajib');
@@ -56,10 +70,10 @@
       ? taburanRaw.split(',').map(x => x.trim()).filter(Boolean)
       : [];
 
-    const orders = getOrders();
-    orders.push({
+    await addDoc(collection(db, COL), {
       invoice: 'INV-' + Date.now(),
       tgl: new Date().toISOString(),
+      createdAt: serverTimestamp(),
       nama, wa,
       jenis_pukis, isi_per_box, mode,
       single, double, taburan,
@@ -67,16 +81,13 @@
       catatan: $('mCatatan').value || '-',
       status: 'pending'
     });
-    saveOrders(orders);
-    loadAdmin();
   };
 
   /* ================= TABLE ================= */
-  function loadAdmin() {
-    const orders = getOrders();
+  function renderTable(){
     const tbody = document.querySelector('#orderTable tbody');
     tbody.innerHTML = '';
-    orders.forEach((o, i) => {
+    ORDERS.forEach((o, i) => {
       tbody.innerHTML += `
         <tr>
           <td>${new Date(o.tgl).toLocaleString('id-ID')}</td>
@@ -91,7 +102,7 @@
           <td>${o.qty}</td>
           <td>Rp ${rp(o.total)}</td>
           <td>
-            <select onchange="updateStatus(${i},this.value)">
+            <select onchange="updateStatus('${o.id}',this.value)">
               <option value="pending"${o.status==='pending'?' selected':''}>pending</option>
               <option value="selesai"${o.status==='selesai'?' selected':''}>selesai</option>
             </select>
@@ -99,19 +110,15 @@
           <td><button onclick="printPdf(${i})">PDF</button></td>
         </tr>`;
     });
-    renderStats(orders);
   }
 
-  window.updateStatus = (i, s) => {
-    const o = getOrders();
-    o[i].status = s;
-    saveOrders(o);
-    loadAdmin();
+  window.updateStatus = async (id, s) => {
+    await updateDoc(doc(db, COL, id), { status: s });
   };
 
-  /* ================= PDF ASLI (AUTO TABLE + QR + TTD) ================= */
+  /* ================= PDF (ASLI, TIDAK DIUBAH) ================= */
   window.printPdf = function (i) {
-    const o = getOrders()[i];
+    const o = ORDERS[i];
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p','mm','a4');
     const antrian = pad4(i + 1);
@@ -175,9 +182,9 @@
   document.addEventListener('DOMContentLoaded',()=>{
     $('btnLogin').onclick = loginAdmin;
     $('btnResetAll') && (
-      $('btnResetAll').onclick = () => {
-        localStorage.removeItem(STORAGE_KEY);
-        loadAdmin();
+      $('btnResetAll').onclick = async () => {
+        const snap = await getDocs(collection(db, COL));
+        snap.forEach(d => deleteDoc(d.ref));
       }
     );
   });
