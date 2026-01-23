@@ -1,56 +1,51 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel — Pukis Lumer Aulia</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Admin Panel — Pukis Lumer Aulia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+<!-- PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
-  <style>
-    body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0 }
-    h2 { margin-top:0 }
-    .wrap { max-width:1100px; margin:auto; padding:15px }
-    .card { background:#fff; padding:15px; border-radius:8px; margin-bottom:15px }
-    label { font-weight:bold; display:block; margin-top:10px }
-    input, select, textarea, button {
-      width:100%; padding:8px; margin-top:5px; box-sizing:border-box
-    }
-    textarea { resize:vertical }
-    button { cursor:pointer; font-weight:bold }
-    .btn { background:#1f2937; color:#fff; border:none; border-radius:6px }
-    .btn-red { background:#b91c1c; color:#fff }
-    .row { display:grid; grid-template-columns:1fr 1fr; gap:10px }
-    table { width:100%; border-collapse:collapse; margin-top:10px }
-    th, td { border:1px solid #ddd; padding:6px; font-size:14px }
-    th { background:#1f2937; color:#fff }
-    #admin { display:none }
+<style>
+body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0}
+.wrap{max-width:1100px;margin:auto;padding:15px}
+.card{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px}
+label{font-weight:bold;display:block;margin-top:10px}
+input,select,textarea,button{
+  width:100%;padding:8px;margin-top:5px;box-sizing:border-box
+}
+textarea{resize:vertical}
+button{cursor:pointer;font-weight:bold}
+.btn{background:#1f2937;color:#fff;border:none;border-radius:6px}
+.btn-red{background:#b91c1c;color:#fff}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #ddd;padding:6px;font-size:14px}
+th{background:#1f2937;color:#fff}
+#admin{display:none}
 
-    /* ===== AUTO CALC (LOCK UI, NOT EVENT) ===== */
-    #mAutoCalc{
-      background:#f8fafc;
-      padding:10px;
-      border-radius:6px;
-      border:1px dashed #cbd5e1;
-      margin-top:10px;
-    }
-    #mAutoCalc input[readonly]{
-      background:#e5e7eb;
-    }
+#mAutoCalc{
+  background:#f8fafc;
+  padding:10px;
+  border-radius:6px;
+  border:1px dashed #cbd5e1;
+  margin-top:10px;
+}
 
-    #mInfoHarga{
-      font-size:12px;
-      color:#555;
-      line-height:1.4;
-      margin-top:6px;
-    }
-  </style>
+#mInfoHarga{
+  font-size:12px;
+  color:#555;
+  margin-top:6px;
+}
+</style>
 </head>
+
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- LOGIN -->
 <div id="login" class="wrap">
   <div class="card">
     <h2>Login Admin</h2>
@@ -59,10 +54,9 @@
   </div>
 </div>
 
-<!-- ================= ADMIN ================= -->
+<!-- ADMIN -->
 <div id="admin" class="wrap">
 
-  <!-- STATS -->
   <div class="card">
     <div id="stats">Total Pendapatan:</div>
     <button id="btnResetAll" class="btn-red" style="margin-top:10px">
@@ -70,7 +64,7 @@
     </button>
   </div>
 
-  <!-- ================= MANUAL ORDER ================= -->
+  <!-- MANUAL ORDER -->
   <div class="card">
     <h2>Tambah Pesanan Manual</h2>
 
@@ -80,7 +74,7 @@
     <label>No WhatsApp</label>
     <input id="mWa">
 
-    <!-- ================= AUTO CALC ================= -->
+    <!-- AUTO CALC -->
     <div id="mAutoCalc">
 
       <label>Jenis Pukis</label>
@@ -97,7 +91,6 @@
             <option value="10">10 pcs / box</option>
           </select>
         </div>
-
         <div>
           <label>Mode</label>
           <select id="mMode">
@@ -111,20 +104,18 @@
       <div class="row">
         <div>
           <label>Jumlah Box</label>
-          <input id="mQty" type="number" value="1" min="1">
+          <input id="mQty" type="number" min="1" value="1">
         </div>
-
         <div>
           <label>Total Harga</label>
-          <input id="mTotal" type="number" readonly>
+          <input id="mTotal" readonly>
         </div>
       </div>
 
       <div id="mInfoHarga"></div>
-
     </div>
 
-    <label>Topping (pisahkan dengan koma)</label>
+    <label>Topping (pisahkan koma)</label>
     <textarea id="mTopping"></textarea>
 
     <label>Taburan (khusus double)</label>
@@ -133,12 +124,12 @@
     <label>Catatan</label>
     <textarea id="mCatatan"></textarea>
 
-    <button id="btnAddManual" class="btn" style="margin-top:10px">
+    <button onclick="addManualOrder()" class="btn" style="margin-top:10px">
       TAMBAH PESANAN
     </button>
   </div>
 
-  <!-- ================= TABLE ================= -->
+  <!-- TABLE -->
   <div class="card">
     <h2>Daftar Pesanan</h2>
     <table id="orderTable">
@@ -161,6 +152,46 @@
 
 </div>
 
+<!-- ================= SCRIPT ORDER (SUMBER HARGA) ================= -->
+<script src="assets/js/order.js"></script>
+
+<!-- ================= SCRIPT ADMIN ================= -->
 <script src="assets/js/admin.js"></script>
+
+<!-- ================= ADMIN AUTO CALC ================= -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  function calcManualPrice(){
+    if(!window.PUKIS_PRICE) return;
+
+    const jenis =
+      document.querySelector('input[name="mJenisPukis"]:checked')?.value;
+    const isi  = document.getElementById('mIsi').value;
+    const mode = document.getElementById('mMode').value;
+    const qty  = Math.max(1, Number(document.getElementById('mQty').value || 1));
+
+    const hargaBox =
+      PUKIS_PRICE.BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
+
+    const total = hargaBox * qty;
+
+    document.getElementById('mTotal').value = total;
+    document.getElementById('mInfoHarga').innerText =
+      `Harga / Box ${PUKIS_PRICE.rp(hargaBox)} × ${qty}`;
+  }
+
+  document
+    .querySelectorAll('input[name="mJenisPukis"]')
+    .forEach(r => r.addEventListener('change', calcManualPrice));
+
+  ['mIsi','mMode','mQty'].forEach(id =>
+    document.getElementById(id).addEventListener('input', calcManualPrice)
+  );
+
+  calcManualPrice(); // init
+});
+</script>
+
 </body>
 </html>
