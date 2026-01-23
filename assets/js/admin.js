@@ -42,6 +42,42 @@
   const saveOrders = o =>
     localStorage.setItem(STORAGE_KEY, JSON.stringify(o));
 
+  /* ================= HARGA OTOMATIS TERPISAH ================= */
+function getPricePerBox(jenis='Original', isi='5', mode='non') {
+  // Ambil harga dasar
+  return BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
+}
+
+function getSubtotal(jenis='Original', isi='5', mode='non', qty=1) {
+  const perBox = getPricePerBox(jenis, isi, mode);
+  return perBox * qty;
+}
+
+function getDiscount(qty=1, subtotal=0) {
+  if (qty >= 10) return 1000;
+  if (qty >= 5) return Math.round(subtotal * 0.01);
+  return 0;
+}
+
+function calcManualPrice() {
+  const jenis = $$('input[name="mJenisPukis"]:checked')[0]?.value || 'Original';
+  const isi   = $('mIsi')?.value || '5';
+  const mode  = $('mMode')?.value || 'non';
+  const qty   = Math.max(1, parseInt($('mQty')?.value || '1', 10));
+
+  const perBox   = getPricePerBox(jenis, isi, mode);
+  const subtotal = getSubtotal(jenis, isi, mode, qty);
+  const discount = getDiscount(qty, subtotal);
+  const total    = subtotal - discount;
+
+  $('mTotal').value = total;
+  $('mInfoHarga').innerHTML =
+    `Harga/Box: Rp ${rp(perBox)}<br>
+     Subtotal: Rp ${rp(subtotal)}<br>
+     Diskon: ${discount ? '-Rp ' + rp(discount) : '-'}`;
+
+  return total;
+}
   /* ================= RESET ================= */
   function resetAllOrders() {
     if (!confirm('Yakin hapus SEMUA pesanan?')) return;
