@@ -14,7 +14,7 @@
   const rp = n => (Number(n) || 0).toLocaleString('id-ID');
   const pad4 = n => String(n).padStart(4, '0');
 
-  /* LOGIN */
+  /* ================= LOGIN ================= */
   function loginAdmin() {
     if ($('pin').value !== ADMIN_PIN) return alert('PIN salah');
     $('login').style.display = 'none';
@@ -22,13 +22,14 @@
     loadAdmin();
   }
 
-  /* STORAGE */
+  /* ================= STORAGE ================= */
   const getOrders = () =>
     JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
   const saveOrders = o =>
     localStorage.setItem(STORAGE_KEY, JSON.stringify(o));
 
-  /* MANUAL ORDER */
+  /* ================= MANUAL ORDER ================= */
   window.addManualOrder = function () {
     const nama = $('mNama').value.trim();
     const wa   = $('mWa').value.trim();
@@ -70,7 +71,7 @@
     loadAdmin();
   };
 
-  /* TABLE */
+  /* ================= TABLE ================= */
   function loadAdmin() {
     const orders = getOrders();
     const tbody = document.querySelector('#orderTable tbody');
@@ -82,7 +83,11 @@
           <td>${o.invoice}</td>
           <td>${o.nama}</td>
           <td>${o.wa}</td>
-          <td>${o.jenis_pukis}<br>${o.isi_per_box} pcs<br>${o.mode}</td>
+          <td>
+            ${o.jenis_pukis}<br>
+            ${o.isi_per_box} pcs<br>
+            ${o.mode}
+          </td>
           <td>${o.qty}</td>
           <td>Rp ${rp(o.total)}</td>
           <td>
@@ -104,7 +109,7 @@
     loadAdmin();
   };
 
-  /* ===== PDF ASLI (TIDAK DIUBAH) ===== */
+  /* ================= PDF ASLI (AUTO TABLE + QR + TTD) ================= */
   window.printPdf = function (i) {
     const o = getOrders()[i];
     const { jsPDF } = window.jspdf;
@@ -128,13 +133,13 @@
       head:[['KETERANGAN','DETAIL']],
       body:[
         ['Jenis Pukis', o.jenis_pukis],
-        ['Isi per Box', o.isi_per_box+' pcs'],
+        ['Isi per Box', o.isi_per_box + ' pcs'],
         ['Mode', o.mode.toUpperCase()],
-        ['Topping', o.mode!=='non' ? (o.single.concat(o.double).join(', ')||'-'):'-'],
-        ['Taburan', o.mode==='double' ? (o.taburan.join(', ')||'-'):'-'],
-        ['Jumlah', o.qty+' Box'],
-        ['Catatan', o.catatan||'-'],
-        ['Total', 'Rp '+rp(o.total)]
+        ['Topping', o.mode !== 'non' ? (o.single.concat(o.double).join(', ') || '-') : '-'],
+        ['Taburan', o.mode === 'double' ? (o.taburan.join(', ') || '-') : '-'],
+        ['Jumlah', o.qty + ' Box'],
+        ['Catatan', o.catatan || '-'],
+        ['Total', 'Rp ' + rp(o.total)]
       ],
       styles:{fontSize:10,cellPadding:4},
       headStyles:{fillColor:[16,32,51],textColor:255,halign:'center'},
@@ -146,22 +151,35 @@
     doc.addImage('assets/images/ttd.png','PNG',130,y+14,40,20);
 
     doc.setFontSize(10);
-    doc.text('Terimakasih sudah berbelanja di Pukis Lumer Aulia',105,285,{align:'center'});
-    doc.save(o.invoice+'.pdf');
+    doc.text(
+      'Terimakasih sudah berbelanja di Pukis Lumer Aulia',
+      105,285,{align:'center'}
+    );
+
+    doc.save(o.invoice + '.pdf');
   };
 
+  /* ================= STATS ================= */
   function renderStats(o){
-    let total=0, now=new Date();
+    let total = 0, now = new Date();
     o.forEach(x=>{
-      const d=new Date(x.tgl);
-      if(x.status==='selesai' && d.getMonth()===now.getMonth())
-        total+=Number(x.total||0);
+      const d = new Date(x.tgl);
+      if(x.status === 'selesai' && d.getMonth() === now.getMonth())
+        total += Number(x.total || 0);
     });
-    $('stats').innerHTML=`<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(total)}`;
+    $('stats').innerHTML =
+      `<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(total)}`;
   }
 
+  /* ================= INIT ================= */
   document.addEventListener('DOMContentLoaded',()=>{
-    $('btnLogin').onclick=loginAdmin;
-    $('btnResetAll') && ($('btnResetAll').onclick=()=>{localStorage.removeItem(STORAGE_KEY);loadAdmin();});
+    $('btnLogin').onclick = loginAdmin;
+    $('btnResetAll') && (
+      $('btnResetAll').onclick = () => {
+        localStorage.removeItem(STORAGE_KEY);
+        loadAdmin();
+      }
+    );
   });
+
 })();
