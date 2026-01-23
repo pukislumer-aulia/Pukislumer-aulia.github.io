@@ -28,16 +28,16 @@
     th { background:#1f2937; color:#fff }
     #admin { display:none }
 
-    /* ===== LOCK AUTO CALC ===== */
+    /* ===== AUTO CALC (LOCK UI, NOT EVENT) ===== */
     #mAutoCalc{
-      pointer-events:none;
-      user-select:none;
-      opacity:0.95;
       background:#f8fafc;
       padding:10px;
       border-radius:6px;
       border:1px dashed #cbd5e1;
       margin-top:10px;
+    }
+    #mAutoCalc input[readonly]{
+      background:#e5e7eb;
     }
 
     #mInfoHarga{
@@ -62,7 +62,7 @@
 <!-- ================= ADMIN ================= -->
 <div id="admin" class="wrap">
 
-  <!-- ================= STATS ================= -->
+  <!-- STATS -->
   <div class="card">
     <div id="stats">Total Pendapatan:</div>
     <button id="btnResetAll" class="btn-red" style="margin-top:10px">
@@ -80,19 +80,13 @@
     <label>No WhatsApp</label>
     <input id="mWa">
 
-    <!-- ================= AUTO CALC (LOCKED) ================= -->
-    <div id="mAutoCalc" aria-readonly="true">
+    <!-- ================= AUTO CALC ================= -->
+    <div id="mAutoCalc">
 
       <label>Jenis Pukis</label>
       <div class="row">
-        <label>
-          <input type="radio" name="mJenisPukis" value="Original" checked>
-          Original
-        </label>
-        <label>
-          <input type="radio" name="mJenisPukis" value="Pandan">
-          Pandan
-        </label>
+        <label><input type="radio" name="mJenisPukis" value="Original" checked> Original</label>
+        <label><input type="radio" name="mJenisPukis" value="Pandan"> Pandan</label>
       </div>
 
       <div class="row">
@@ -129,18 +123,17 @@
       <div id="mInfoHarga"></div>
 
     </div>
-    <!-- ================= END AUTO CALC ================= -->
 
     <label>Topping (pisahkan dengan koma)</label>
-    <textarea id="mTopping" placeholder="coklat, keju"></textarea>
+    <textarea id="mTopping"></textarea>
 
     <label>Taburan (khusus double)</label>
-    <textarea id="mTaburan" placeholder="meses, kacang"></textarea>
+    <textarea id="mTaburan"></textarea>
 
     <label>Catatan</label>
     <textarea id="mCatatan"></textarea>
 
-    <button onclick="addManualOrder()" class="btn" style="margin-top:10px">
+    <button id="btnAddManual" class="btn" style="margin-top:10px">
       TAMBAH PESANAN
     </button>
   </div>
@@ -168,8 +161,6 @@
 
 </div>
 
-<!-- ================= JS ================= -->
 <script src="assets/js/admin.js"></script>
-
 </body>
 </html>
