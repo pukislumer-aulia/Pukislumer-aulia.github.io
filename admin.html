@@ -152,11 +152,14 @@ th{background:#1f2937;color:#fff}
 
 </div>
 
-<!-- ================= SCRIPT ORDER (SUMBER HARGA) ================= -->
+<!-- ================= ORDER.JS (SUMBER HARGA - TETAP) ================= -->
 <script src="assets/js/order.js"></script>
 
-<!-- ================= SCRIPT ADMIN ================= -->
-<script src="assets/js/admin.js"></script>
+<!-- ================= FIREBASE INIT ================= -->
+<script type="module" src="assets/js/firebase.js"></script>
+
+<!-- ================= ADMIN.JS (REALTIME READY) ================= -->
+<script type="module" src="assets/js/admin.js"></script>
 
 <!-- ================= ADMIN AUTO CALC ================= -->
 <script>
@@ -189,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById(id).addEventListener('input', calcManualPrice)
   );
 
-  calcManualPrice(); // init
+  calcManualPrice();
 });
 </script>
 
