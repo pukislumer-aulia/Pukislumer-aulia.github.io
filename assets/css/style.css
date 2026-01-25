@@ -1,5 +1,5 @@
 /* =====================================================
-   RESET & BASE
+   RESET & BASE (AUDITED)
 ===================================================== */
 * {
   margin: 0;
@@ -27,7 +27,7 @@ a {
 }
 
 /* =====================================================
-   LOADER (FINAL • LOCKED • WAJIB ADA)
+   LOADER (FINAL • AUDITED • JS-SAFE)
 ===================================================== */
 .site-loader {
   position: fixed;
@@ -37,7 +37,9 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 999999;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
 
 .site-loader img {
@@ -48,19 +50,12 @@ a {
   font-size: 14px;
   color: #ffafd9;
 }
-.site-loader {
-  position: fixed;
-  inset: 0;
-  background: #111;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 999999;
 
-  opacity: 1;
-  transition: opacity 0.4s ease;
+/* loader sudah invisible → JANGAN TANGKAP KLIK */
+.site-loader[style*="opacity: 0"] {
+  pointer-events: none;
 }
+
 /* =====================================================
    CONTAINER
 ===================================================== */
@@ -68,16 +63,19 @@ a {
   max-width: 960px;
   margin: auto;
   padding: 15px;
+  padding-bottom: 120px; /* mobile submit safe */
 }
 
 /* =====================================================
-   ORDER BOX
+   ORDER BOX (FORM SAFE LAYER)
 ===================================================== */
 .order-box {
   background: #102033;
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
 }
 
 .order-input,
@@ -108,7 +106,6 @@ label {
 ===================================================== */
 .topping-mode-container {
   margin-top: 12px;
-  color: #fff;
 }
 
 .mode-label {
@@ -122,10 +119,10 @@ label {
 }
 
 /* =====================================================
-   TOPPING SYSTEM (FINAL • LOCKED • VERTICAL SAFE)
+   TOPPING SYSTEM (SYNC DENGAN order.js)
 ===================================================== */
 .topping-wrap {
-  display: none;
+  display: none; /* dikontrol syncTopping() */
   margin-top: 10px;
   padding: 10px;
   background: #102033;
@@ -154,7 +151,6 @@ label {
 .topping-wrap input[type="checkbox"] {
   flex-shrink: 0;
   transform: scale(1.15);
-  cursor: pointer;
 }
 
 /* =====================================================
@@ -195,7 +191,7 @@ button:active {
 }
 
 /* =====================================================
-   NOTA POPUP (FINAL • 1 BUTTON ONLY)
+   NOTA POPUP (SYNC DENGAN showNota())
 ===================================================== */
 #notaContainer {
   position: fixed;
@@ -204,7 +200,12 @@ button:active {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 99999;
+  z-index: 900;
+  pointer-events: none;
+}
+
+#notaContainer[style*="display: flex"] {
+  pointer-events: auto;
 }
 
 .nota-box {
@@ -228,7 +229,7 @@ button:active {
 }
 
 /* =====================================================
-   FLOATING BUTTONS
+   FLOATING BUTTONS (FORM SAFE)
 ===================================================== */
 .toggle-float-btn {
   position: fixed;
@@ -241,7 +242,7 @@ button:active {
   color: #fff;
   font-size: 28px;
   border: none;
-  z-index: 99990;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -254,7 +255,7 @@ button:active {
   display: none;
   flex-direction: column;
   gap: 10px;
-  z-index: 99980;
+  z-index: 40;
 }
 
 .floating-icon {
@@ -278,11 +279,12 @@ button:active {
 @media (max-width: 480px) {
   .container {
     padding: 12px;
+    padding-bottom: 140px;
   }
 }
 
 /* =====================================================
-   TEXT COLOR RESTORE
+   TEXT COLOR RESTORE (NO LOGIC IMPACT)
 ===================================================== */
 .text-green-bold { color: #00ff91 !important; font-weight: 700; }
 .text-black-bold { color: #f2f2f2 !important; font-weight: 700; }
@@ -298,5 +300,5 @@ button:active {
 
 /* =====================================================
    END OF FILE
-   FINAL • LOCKED • PRODUCTION SAFE
+   FINAL • AUDITED • LOCKED • PRODUCTION SAFE
 ===================================================== */
