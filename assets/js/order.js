@@ -2,13 +2,12 @@
   assets/js/order.js — FINAL LOCKED (PRODUCTION + FIREBASE)
   PUKIS LUMER AULIA
 
-  ✔ Isi per box 5pcs / 10pcs
-  ✔ Harga ikut isi per box
-  ✔ Popup + WA lengkap
-  ✔ Sinkron admin.js (Firestore)
+  ✔ HTML MATCHED
+  ✔ Firebase Firestore
   ✔ Anti double submit
   ✔ LocalStorage backup
-  ✔ Realtime multi device
+  ✔ Popup nota + WA
+  ✔ Realtime ready
 
   ⚠️ JANGAN DIUBAH TANPA AUDIT
 */
@@ -20,16 +19,19 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-(function () {
+(() => {
   'use strict';
 
+  /* ================= STATE ================= */
   let __LOCK_SUBMIT = false;
+  let currentOrder = null;
 
+  /* ================= CONFIG ================= */
   const ADMIN_WA = '6281296668670';
   const STORAGE_KEY = 'pukisOrders';
   const FIRESTORE_COLLECTION = 'orders';
 
-  /* ================= PRICE ================= */
+  /* ================= PRICE MASTER ================= */
   const BASE_PRICE = {
     Original: {
       '5':  { non: 10000, single: 13000, double: 15000 },
@@ -41,9 +43,10 @@ import {
     }
   };
 
+  /* ================= HELPERS ================= */
   const $  = id => document.getElementById(id);
-  const $$ = q => Array.from(document.querySelectorAll(q));
-  const rp = n => 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
+  const $$ = q  => Array.from(document.querySelectorAll(q));
+  const rp = n  => 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
 
   const getRadio = name =>
     document.querySelector(`input[name="${name}"]:checked`)?.value || 'non';
@@ -51,15 +54,15 @@ import {
   const getChecked = name =>
     $$(`input[name="${name}"]:checked`).map(i => i.value);
 
-  /* ================= TOPPING ================= */
+  /* ================= TOPPING UI ================= */
   function syncTopping() {
     const mode = getRadio('ultraToppingMode');
 
-    $('ultraSingleGroup') &&
-      ($('ultraSingleGroup').style.display = mode === 'single' ? 'block' : 'none');
+    if ($('ultraSingleGroup'))
+      $('ultraSingleGroup').style.display = mode === 'single' ? 'block' : 'none';
 
-    $('ultraDoubleGroup') &&
-      ($('ultraDoubleGroup').style.display = mode === 'double' ? 'block' : 'none');
+    if ($('ultraDoubleGroup'))
+      $('ultraDoubleGroup').style.display = mode === 'double' ? 'block' : 'none';
   }
 
   /* ================= PRICE ================= */
@@ -90,7 +93,11 @@ import {
   function buildOrder() {
     const nama  = $('ultraNama')?.value.trim();
     const waRaw = $('ultraWA')?.value.trim();
-    if (!nama || !waRaw) return alert('Nama & WA wajib'), null;
+
+    if (!nama || !waRaw) {
+      alert('Nama & WA wajib diisi');
+      return null;
+    }
 
     let wa = waRaw.replace(/\D/g, '');
     if (wa.startsWith('0')) wa = '62' + wa.slice(1);
@@ -103,11 +110,15 @@ import {
     const double  = getChecked('toppingDouble');
     const taburan = getChecked('taburan');
 
-    if (mode === 'single' && single.length === 0)
-      return alert('Single wajib topping'), null;
+    if (mode === 'single' && single.length === 0) {
+      alert('Single wajib pilih topping');
+      return null;
+    }
 
-    if (mode === 'double' && (double.length === 0 || taburan.length === 0))
-      return alert('Double wajib topping & taburan'), null;
+    if (mode === 'double' && (double.length === 0 || taburan.length === 0)) {
+      alert('Double wajib topping & taburan');
+      return null;
+    }
 
     const price = updatePrice();
 
@@ -140,7 +151,7 @@ import {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
-  /* ================= SAVE FIREBASE ================= */
+  /* ================= SAVE FIRESTORE ================= */
   async function saveOrderFirebase(o) {
     try {
       await addDoc(collection(db, FIRESTORE_COLLECTION), o);
@@ -150,9 +161,7 @@ import {
     }
   }
 
-  /* ================= POPUP ================= */
-  let currentOrder = null;
-
+  /* ================= NOTA ================= */
   function showNota(o) {
     $('notaContent').innerHTML = `
       <b>PUKIS LUMER AULIA</b><br><br>
@@ -178,6 +187,8 @@ import {
 
   /* ================= WA ================= */
   function sendWA() {
+    if (!currentOrder) return;
+
     const o = currentOrder;
     const msg =
 `PUKIS LUMER AULIA
@@ -193,52 +204,55 @@ Jumlah  : ${o.qty} Box
 Total   : Rp ${o.total.toLocaleString('id-ID')}
 `;
 
-    window.open('https://wa.me/' + ADMIN_WA + '?text=' + encodeURIComponent(msg));
+    window.open(
+      'https://wa.me/' + ADMIN_WA + '?text=' + encodeURIComponent(msg),
+      '_blank'
+    );
   }
 
   /* ================= SUBMIT ================= */
-async function submitForm(e) {
-  e.preventDefault();
-  if (__LOCK_SUBMIT) return;
-  __LOCK_SUBMIT = true;
+  async function submitForm(e) {
+    e.preventDefault();
+    if (__LOCK_SUBMIT) return;
 
-  const o = buildOrder();
-  if (!o) {
-    __LOCK_SUBMIT = false;
-    return;
+    __LOCK_SUBMIT = true;
+
+    const o = buildOrder();
+    if (!o) {
+      __LOCK_SUBMIT = false;
+      return;
+    }
+
+    saveOrderLocal(o);
+    await saveOrderFirebase(o);
+
+    currentOrder = o;
+    showNota(o);
+
+    setTimeout(() => __LOCK_SUBMIT = false, 800);
   }
 
-  saveOrderLocal(o);
-  await saveOrderFirebase(o);
+  /* ================= INIT ================= */
+  document.addEventListener('DOMContentLoaded', () => {
+    syncTopping();
+    updatePrice();
 
-  currentOrder = o;
-  showNota(o);
+    $$('input,select').forEach(el =>
+      el.addEventListener('change', updatePrice)
+    );
 
-  setTimeout(() => __LOCK_SUBMIT = false, 800);
-}
+    $$('input[name="ultraToppingMode"]').forEach(el =>
+      el.addEventListener('change', syncTopping)
+    );
 
-document.addEventListener('DOMContentLoaded', () => {
-  syncTopping();
-  updatePrice();
+    $('formUltra')?.addEventListener('submit', submitForm);
 
-  $$('input,select').forEach(i =>
-    i.addEventListener('change', updatePrice)
-  );
+    $('notaClose')?.addEventListener('click', () => {
+      $('notaContainer').style.display = 'none';
+      currentOrder = null;
+    });
 
-  $$('input[name="ultraToppingMode"]').forEach(i =>
-    i.addEventListener('change', syncTopping)
-  );
-
-  /* === SUBMIT FORM === */
-  $('formUltra')?.addEventListener('submit', submitForm);
-
-  /* === CLOSE NOTA (INI YANG DITAMBAHKAN) === */
-  $('notaClose')?.addEventListener('click', () => {
-    $('notaContainer').style.display = 'none';
-    currentOrder = null; // reset state (AMAN)
+    window.PUKIS_PRICE = { BASE_PRICE, rp };
   });
 
-  window.PUKIS_PRICE = { BASE_PRICE, rp };
-});
-
-  })();
+})();
