@@ -197,35 +197,48 @@ Total   : Rp ${o.total.toLocaleString('id-ID')}
   }
 
   /* ================= SUBMIT ================= */
-  async function submitForm(e) {
-    e.preventDefault();
-    if (__LOCK_SUBMIT) return;
-    __LOCK_SUBMIT = true;
+async function submitForm(e) {
+  e.preventDefault();
+  if (__LOCK_SUBMIT) return;
+  __LOCK_SUBMIT = true;
 
-    const o = buildOrder();
-    if (!o) return __LOCK_SUBMIT = false;
-
-    saveOrderLocal(o);
-    await saveOrderFirebase(o);
-
-    currentOrder = o;
-    showNota(o);
-
-    setTimeout(() => __LOCK_SUBMIT = false, 800);
+  const o = buildOrder();
+  if (!o) {
+    __LOCK_SUBMIT = false;
+    return;
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    syncTopping();
-    updatePrice();
+  saveOrderLocal(o);
+  await saveOrderFirebase(o);
 
-    $$('input,select').forEach(i => i.addEventListener('change', updatePrice));
-    $$('input[name="ultraToppingMode"]').forEach(i =>
-      i.addEventListener('change', syncTopping)
-    );
+  currentOrder = o;
+  showNota(o);
 
-    $('formUltra')?.addEventListener('submit', submitForm);
+  setTimeout(() => __LOCK_SUBMIT = false, 800);
+}
 
-    window.PUKIS_PRICE = { BASE_PRICE, rp };
+document.addEventListener('DOMContentLoaded', () => {
+  syncTopping();
+  updatePrice();
+
+  $$('input,select').forEach(i =>
+    i.addEventListener('change', updatePrice)
+  );
+
+  $$('input[name="ultraToppingMode"]').forEach(i =>
+    i.addEventListener('change', syncTopping)
+  );
+
+  /* === SUBMIT FORM === */
+  $('formUltra')?.addEventListener('submit', submitForm);
+
+  /* === CLOSE NOTA (INI YANG DITAMBAHKAN) === */
+  $('notaClose')?.addEventListener('click', () => {
+    $('notaContainer').style.display = 'none';
+    currentOrder = null; // reset state (AMAN)
   });
 
-})();
+  window.PUKIS_PRICE = { BASE_PRICE, rp };
+});
+
+  })();
