@@ -306,24 +306,39 @@
       });  
     }  
   });  
-</script>  <!-- ================= NOTA POPUP (FINAL) ================= -->  <div id="notaContainer" style="display:none" aria-hidden="true">  
-  <div class="nota-box">  
-    <button id="notaClose" type="button" aria-label="Tutup Nota">✕</button>  
-    <div id="notaContent"></div>  
-  </div>  
-</div>  <!-- ================= LIBRARY ================= -->  <script src="assets/js/lib/jspdf.umd.min.js"></script>  <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>  <!-- ================= ORDER SYSTEM ================= -->  <script src="assets/js/order.js"></script>  <!-- ================= LOADER 3 DETIK (FINAL • WAJIB DI SINI) ================= -->  <script>  
-  document.addEventListener('DOMContentLoaded', function () {  
-    const loader = document.getElementById('site-loader');  
-    if (!loader) return;  
-  
-    setTimeout(() => {  
-      loader.style.opacity = '0';  
-      setTimeout(() => {  
-        loader.style.display = 'none';  
-      }, 400);  
-    }, 3000);  
-  });  
-</script> 
+</script>
+
+<!-- ================= NOTA POPUP ================= -->
+<div id="notaContainer" style="display: none;" aria-hidden="true">
+  <div class="nota-box">
+    <button id="notaClose" type="button" aria-label="Tutup Nota">✕</button>
+    <div id="notaContent"></div>
+  </div>
+</div>
+
+<!-- ================= LIBRARIES ================= -->
+<script src="assets/js/lib/jspdf.umd.min.js"></script>
+<script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
+
+<!-- ================= ORDER SYSTEM ================= -->
+<script type="module" src="assets/js/order.js"></script>
+
+<!-- ================= SITE LOADER (3 DETIK) ================= -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const loader = document.getElementById('site-loader');
+  if (!loader) return;
+
+  setTimeout(() => {
+    loader.style.opacity = '0';
+
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 400);
+
+  }, 3000);
+});
+</script>
   
 </body> 
 </html>
