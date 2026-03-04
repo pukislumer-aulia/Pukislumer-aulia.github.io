@@ -38,8 +38,8 @@ import {
       '10': { non: 18000, single: 25000, double: 28000 }
     },
     Pandan: {
-      '5':  { non: 12000, single: 15000, double: 17000 },
-      '10': { non: 21000, single: 28000, double: 32000 }
+      '5':  { non: 13000, single: 15000, double: 18000 },
+      '10': { non: 25000, single: 28000, double: 32000 }
     }
   };
 
@@ -123,10 +123,10 @@ import {
     const price = updatePrice();
 
     return {
-      invoice: 'INV-' + Date.now(),
-      createdAt: serverTimestamp(),
-      tgl_local: new Date().toLocaleString('id-ID'),
-
+  invoice: 'INV-' + Date.now(),
+  createdAt: new Date(),
+  tgl_local: new Date().toLocaleString('id-ID'),
+      
       nama,
       wa,
       jenis_pukis: jenis,
