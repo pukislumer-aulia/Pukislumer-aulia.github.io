@@ -226,12 +226,33 @@ Total   : Rp ${o.total.toLocaleString('id-ID')}
       return;
     }
 
-    saveOrderLocal(o);
+    async function submitForm(e) {
+  e.preventDefault();
+  if (__LOCK_SUBMIT) return;
+
+  __LOCK_SUBMIT = true;
+
+  const o = buildOrder();
+  if (!o) {
+    __LOCK_SUBMIT = false;
+    return;
+  }
+
+  saveOrderLocal(o);
+
+  // 🔥 Popup dimunculkan DULU
+  currentOrder = o;
+  showNota(o);
+
+  // 🔥 Firestore jalan di belakang
+  try {
     await saveOrderFirebase(o);
+  } catch (err) {
+    console.warn("Firestore gagal, tapi popup tetap muncul.");
+  }
 
-    currentOrder = o;
-    showNota(o);
-
+  setTimeout(() => __LOCK_SUBMIT = false, 800);
+}
     setTimeout(() => __LOCK_SUBMIT = false, 800);
   }
 
