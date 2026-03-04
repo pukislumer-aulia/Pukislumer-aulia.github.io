@@ -154,7 +154,10 @@ import {
   /* ================= SAVE FIRESTORE ================= */
   async function saveOrderFirebase(o) {
     try {
-      await addDoc(collection(db, FIRESTORE_COLLECTION), o);
+      await addDoc(collection(db, FIRESTORE_COLLECTION), {
+  ...o,
+  createdAt: serverTimestamp()
+});
     } catch (err) {
       console.error('Firebase error:', err);
       alert('Pesanan tersimpan lokal, gagal sync ke server.');
