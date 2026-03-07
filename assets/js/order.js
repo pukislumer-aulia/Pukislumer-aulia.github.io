@@ -124,8 +124,8 @@ import {
 
     return {
   invoice: 'INV-' + Date.now(),
+  tgl: new Date().toISOString(),
   createdAt: new Date(),
-  tgl_local: new Date().toLocaleString('id-ID'),
       
       nama,
       wa,
