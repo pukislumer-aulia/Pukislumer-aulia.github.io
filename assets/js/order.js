@@ -214,19 +214,7 @@ Total   : Rp ${o.total.toLocaleString('id-ID')}
   }
 
   /* ================= SUBMIT ================= */
-  async function submitForm(e) {
-    e.preventDefault();
-    if (__LOCK_SUBMIT) return;
-
-    __LOCK_SUBMIT = true;
-
-    const o = buildOrder();
-    if (!o) {
-      __LOCK_SUBMIT = false;
-      return;
-    }
-
-    async function submitForm(e) {
+async function submitForm(e) {
   e.preventDefault();
   if (__LOCK_SUBMIT) return;
 
@@ -238,24 +226,24 @@ Total   : Rp ${o.total.toLocaleString('id-ID')}
     return;
   }
 
+  // simpan lokal
   saveOrderLocal(o);
 
-  // 🔥 Popup dimunculkan DULU
+  // tampilkan popup nota
   currentOrder = o;
   showNota(o);
 
-  // 🔥 Firestore jalan di belakang
+  // kirim ke firestore di background
   try {
     await saveOrderFirebase(o);
   } catch (err) {
     console.warn("Firestore gagal, tapi popup tetap muncul.");
   }
 
-  setTimeout(() => __LOCK_SUBMIT = false, 800);
+  setTimeout(() => {
+    __LOCK_SUBMIT = false;
+  }, 800);
 }
-    setTimeout(() => __LOCK_SUBMIT = false, 800);
-  }
-
   /* ================= INIT ================= */
   document.addEventListener('DOMContentLoaded', () => {
     syncTopping();
