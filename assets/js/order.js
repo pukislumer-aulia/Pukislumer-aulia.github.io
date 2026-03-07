@@ -190,10 +190,23 @@ import {
 
   /* ================= WA ================= */
   function sendWA() {
-    if (!currentOrder) return;
+  if (!currentOrder) return;
 
-    const o = currentOrder;
-    const msg =
+  const o = currentOrder;
+
+  const topping =
+    o.mode === 'single'
+      ? o.single.join(', ')
+      : o.mode === 'double'
+      ? o.double.join(', ')
+      : '-';
+
+  const taburan =
+    o.mode === 'double'
+      ? (o.taburan.join(', ') || '-')
+      : '-';
+
+  const msg =
 `PUKIS LUMER AULIA
 Invoice : ${o.invoice}
 Nama    : ${o.nama}
@@ -203,15 +216,18 @@ Jenis   : ${o.jenis_pukis}
 Isi     : ${o.isi_per_box} pcs / box
 Mode    : ${o.mode.toUpperCase()}
 
+Topping : ${topping}
+Taburan : ${taburan}
+
 Jumlah  : ${o.qty} Box
 Total   : Rp ${o.total.toLocaleString('id-ID')}
 `;
 
-    window.open(
-      'https://wa.me/' + ADMIN_WA + '?text=' + encodeURIComponent(msg),
-      '_blank'
-    );
-  }
+  window.open(
+    'https://wa.me/' + ADMIN_WA + '?text=' + encodeURIComponent(msg),
+    '_blank'
+  );
+}
 
   /* ================= SUBMIT ================= */
 async function submitForm(e) {
