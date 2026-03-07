@@ -1,192 +1,382 @@
 /*
   assets/js/admin.js — FINAL LOCK (PRODUCTION + FIREBASE)
   PUKIS LUMER AULIA
-  ⚠️ UI, FLOW, PDF TIDAK DIUBAH
+  ✔ AUTO PRICE ADMIN
+  ✔ FIRESTORE ORDER SORTED
+  ✔ RESET PROTECTION
+  ✔ FULL STANDALONE (TIDAK BUTUH order.js)
 */
+
 import { db } from './firebase.js';
 import {
   collection, addDoc, getDocs, onSnapshot,
-  updateDoc, deleteDoc, doc, serverTimestamp
+  updateDoc, deleteDoc, doc, serverTimestamp,
+  query, orderBy
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 (() => {
-  'use strict';
+'use strict';
 
-  const ADMIN_PIN = '030419';
-  const COL = 'orders';
+const ADMIN_PIN = '030419';
+const COL = 'orders';
 
-  const $ = id => document.getElementById(id);
-  const rp = n => (Number(n) || 0).toLocaleString('id-ID');
-  const pad4 = n => String(n).padStart(4, '0');
+const $ = id => document.getElementById(id);
+const rp = n => (Number(n) || 0).toLocaleString('id-ID');
+const pad4 = n => String(n).padStart(4,'0');
 
-  let ORDERS = []; // cache realtime
+let ORDERS = [];
 
-  /* ================= LOGIN ================= */
-  function loginAdmin() {
-    if ($('pin').value !== ADMIN_PIN) return alert('PIN salah');
-    $('login').style.display = 'none';
-    $('admin').style.display = 'block';
-    listenOrders();
+/* ================= PRICE MASTER ================= */
+
+const BASE_PRICE = {
+  Original:{
+    '5':{non:10000,single:13000,double:15000},
+    '10':{non:18000,single:25000,double:28000}
+  },
+  Pandan:{
+    '5':{non:13000,single:15000,double:18000},
+    '10':{non:25000,single:28000,double:32000}
   }
+};
 
-  /* ================= FIREBASE LISTENER ================= */
-  function listenOrders(){
-    const tbody = document.querySelector('#orderTable tbody');
-    onSnapshot(collection(db, COL), snap => {
-      ORDERS = [];
-      tbody.innerHTML = '';
-      snap.forEach(docu => {
-        ORDERS.push({ id: docu.id, ...docu.data() });
-      });
-      renderTable();
-      renderStats(ORDERS);
-    });
-  }
+/* ================= LOGIN ================= */
 
-  /* ================= MANUAL ORDER ================= */
-  window.addManualOrder = async function () {
-    const nama = $('mNama').value.trim();
-    const wa   = $('mWa').value.trim();
-    if (!nama || !wa) return alert('Nama & WA wajib');
+function loginAdmin(){
+  if($('pin').value !== ADMIN_PIN) return alert('PIN salah');
 
-    const jenis_pukis =
-      document.querySelector('input[name="mJenisPukis"]:checked')?.value || 'Original';
-    const isi_per_box = $('mIsi').value;
-    const mode = $('mMode').value;
-    const qty = Math.max(1, Number($('mQty').value || 1));
-    const total = Number($('mTotal').value || 0);
-    if (total <= 0) return alert('Total tidak valid');
+  $('login').style.display='none';
+  $('admin').style.display='block';
 
-    const toppingRaw = $('mTopping').value || '';
-    const taburanRaw = $('mTaburan').value || '';
+  listenOrders();
+}
 
-    const single = mode === 'single'
-      ? toppingRaw.split(',').map(x => x.trim()).filter(Boolean)
-      : [];
-    const double = mode === 'double'
-      ? toppingRaw.split(',').map(x => x.trim()).filter(Boolean)
-      : [];
-    const taburan = mode === 'double'
-      ? taburanRaw.split(',').map(x => x.trim()).filter(Boolean)
-      : [];
+/* ================= FIRESTORE LISTENER ================= */
 
-    await addDoc(collection(db, COL), {
-      invoice: 'INV-' + Date.now(),
-      tgl: new Date().toISOString(),
-      createdAt: serverTimestamp(),
-      nama, wa,
-      jenis_pukis, isi_per_box, mode,
-      single, double, taburan,
-      qty, total,
-      catatan: $('mCatatan').value || '-',
-      status: 'pending'
-    });
-  };
+function listenOrders(){
 
-  /* ================= TABLE ================= */
-  function renderTable(){
-    const tbody = document.querySelector('#orderTable tbody');
-    tbody.innerHTML = '';
-    ORDERS.forEach((o, i) => {
-      tbody.innerHTML += `
-        <tr>
-          <td>${new Date(o.tgl).toLocaleString('id-ID')}</td>
-          <td>${o.invoice}</td>
-          <td>${o.nama}</td>
-          <td>${o.wa}</td>
-          <td>
-            ${o.jenis_pukis}<br>
-            ${o.isi_per_box} pcs<br>
-            ${o.mode}
-          </td>
-          <td>${o.qty}</td>
-          <td>Rp ${rp(o.total)}</td>
-          <td>
-            <select onchange="updateStatus('${o.id}',this.value)">
-              <option value="pending"${o.status==='pending'?' selected':''}>pending</option>
-              <option value="selesai"${o.status==='selesai'?' selected':''}>selesai</option>
-            </select>
-          </td>
-          <td><button onclick="printPdf(${i})">PDF</button></td>
-        </tr>`;
-    });
-  }
+  const tbody = document.querySelector('#orderTable tbody');
 
-  window.updateStatus = async (id, s) => {
-    await updateDoc(doc(db, COL, id), { status: s });
-  };
+  const q = query(
+    collection(db,COL),
+    orderBy("createdAt","desc")
+  );
 
-  /* ================= PDF (ASLI, TIDAK DIUBAH) ================= */
-  window.printPdf = function (i) {
-    const o = ORDERS[i];
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p','mm','a4');
-    const antrian = pad4(i + 1);
+  onSnapshot(q,snap=>{
 
-    doc.setFontSize(16);
-    doc.text('PUKIS LUMER AULIA',105,15,{align:'center'});
+    ORDERS=[];
+    tbody.innerHTML='';
 
-    doc.setFontSize(10);
-    doc.text(`Invoice : ${o.invoice}`,14,25);
-    doc.text(`Nama    : ${o.nama}`,14,31);
-    doc.text(`WA      : ${o.wa}`,14,37);
-
-    doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString('id-ID')}`,140,25);
-    doc.text(`No Antri: ${antrian}`,140,31);
-
-    doc.autoTable({
-      startY:45,
-      theme:'grid',
-      head:[['KETERANGAN','DETAIL']],
-      body:[
-        ['Jenis Pukis', o.jenis_pukis],
-        ['Isi per Box', o.isi_per_box + ' pcs'],
-        ['Mode', o.mode.toUpperCase()],
-        ['Topping', o.mode !== 'non' ? (o.single.concat(o.double).join(', ') || '-') : '-'],
-        ['Taburan', o.mode === 'double' ? (o.taburan.join(', ') || '-') : '-'],
-        ['Jumlah', o.qty + ' Box'],
-        ['Catatan', o.catatan || '-'],
-        ['Total', 'Rp ' + rp(o.total)]
-      ],
-      styles:{fontSize:10,cellPadding:4},
-      headStyles:{fillColor:[16,32,51],textColor:255,halign:'center'},
-      columnStyles:{0:{cellWidth:60,fontStyle:'bold'},1:{cellWidth:110}}
+    snap.forEach(docu=>{
+      ORDERS.push({id:docu.id,...docu.data()});
     });
 
-    const y = doc.lastAutoTable.finalY + 12;
-    doc.addImage('assets/images/qris-pukis.jpg','JPEG',14,y,40,40);
-    doc.addImage('assets/images/ttd.png','PNG',130,y+14,40,20);
+    renderTable();
+    renderStats(ORDERS);
 
-    doc.setFontSize(10);
-    doc.text(
-      'Terimakasih sudah berbelanja di Pukis Lumer Aulia',
-      105,285,{align:'center'}
-    );
-
-    doc.save(o.invoice + '.pdf');
-  };
-
-  /* ================= STATS ================= */
-  function renderStats(o){
-    let total = 0, now = new Date();
-    o.forEach(x=>{
-      const d = new Date(x.tgl);
-      if(x.status === 'selesai' && d.getMonth() === now.getMonth())
-        total += Number(x.total || 0);
-    });
-    $('stats').innerHTML =
-      `<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(total)}`;
-  }
-
-  /* ================= INIT ================= */
-  document.addEventListener('DOMContentLoaded',()=>{
-    $('btnLogin').onclick = loginAdmin;
-    $('btnResetAll') && (
-      $('btnResetAll').onclick = async () => {
-        const snap = await getDocs(collection(db, COL));
-        snap.forEach(d => deleteDoc(d.ref));
-      }
-    );
   });
+
+}
+
+/* ================= AUTO PRICE ADMIN ================= */
+
+function calcManualPrice(){
+
+  const jenis =
+  document.querySelector('input[name="mJenisPukis"]:checked')?.value || 'Original';
+
+  const isi = $('mIsi').value;
+  const mode = $('mMode').value;
+  const qty = Math.max(1,Number($('mQty').value || 1));
+
+  const hargaBox =
+  BASE_PRICE[jenis]?.[isi]?.[mode] || 0;
+
+  const total = hargaBox * qty;
+
+  $('mTotal').value = total;
+
+  if($('mInfoHarga')){
+    $('mInfoHarga').innerText =
+    `Harga / Box Rp ${rp(hargaBox)} × ${qty}`;
+  }
+
+}
+
+/* ================= MANUAL ORDER ================= */
+
+window.addManualOrder = async function(){
+
+const nama=$('mNama').value.trim();
+const wa=$('mWa').value.trim();
+
+if(!nama || !wa) return alert('Nama & WA wajib');
+
+const jenis_pukis =
+document.querySelector('input[name="mJenisPukis"]:checked')?.value || 'Original';
+
+const isi_per_box = $('mIsi').value;
+const mode = $('mMode').value;
+const qty = Math.max(1,Number($('mQty').value||1));
+
+const total = Number($('mTotal').value||0);
+
+if(total<=0) return alert('Total tidak valid');
+
+const toppingRaw = $('mTopping').value || '';
+const taburanRaw = $('mTaburan').value || '';
+
+const single =
+mode==='single'
+? toppingRaw.split(',').map(x=>x.trim()).filter(Boolean)
+: [];
+
+const double =
+mode==='double'
+? toppingRaw.split(',').map(x=>x.trim()).filter(Boolean)
+: [];
+
+const taburan =
+mode==='double'
+? taburanRaw.split(',').map(x=>x.trim()).filter(Boolean)
+: [];
+
+await addDoc(collection(db,COL),{
+
+invoice:'INV-'+Date.now(),
+tgl:new Date().toISOString(),
+createdAt:serverTimestamp(),
+
+nama,wa,
+
+jenis_pukis,
+isi_per_box,
+mode,
+
+single,
+double,
+taburan,
+
+qty,
+total,
+
+catatan:$('mCatatan').value || '-',
+
+status:'pending'
+
+});
+
+$('mNama').value='';
+$('mWa').value='';
+$('mTopping').value='';
+$('mTaburan').value='';
+$('mCatatan').value='';
+
+calcManualPrice();
+
+};
+
+/* ================= TABLE ================= */
+
+function renderTable(){
+
+const tbody=document.querySelector('#orderTable tbody');
+
+tbody.innerHTML='';
+
+ORDERS.forEach((o,i)=>{
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${new Date(o.tgl).toLocaleString('id-ID')}</td>
+
+<td>${o.invoice}</td>
+
+<td>${o.nama}</td>
+
+<td>${o.wa}</td>
+
+<td>
+${o.jenis_pukis}<br>
+${o.isi_per_box} pcs<br>
+${o.mode}
+</td>
+
+<td>${o.qty}</td>
+
+<td>Rp ${rp(o.total)}</td>
+
+<td>
+
+<select onchange="updateStatus('${o.id}',this.value)">
+
+<option value="pending"${o.status==='pending'?' selected':''}>pending</option>
+
+<option value="selesai"${o.status==='selesai'?' selected':''}>selesai</option>
+
+</select>
+
+</td>
+
+<td>
+<button onclick="printPdf(${i})">PDF</button>
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+/* ================= STATUS ================= */
+
+window.updateStatus = async (id,s)=>{
+
+await updateDoc(doc(db,COL,id),{status:s});
+
+};
+
+/* ================= PDF ================= */
+
+window.printPdf=function(i){
+
+const o=ORDERS[i];
+
+const {jsPDF}=window.jspdf;
+
+const doc=new jsPDF('p','mm','a4');
+
+const antrian=pad4(i+1);
+
+doc.setFontSize(16);
+doc.text('PUKIS LUMER AULIA',105,15,{align:'center'});
+
+doc.setFontSize(10);
+
+doc.text(`Invoice : ${o.invoice}`,14,25);
+doc.text(`Nama    : ${o.nama}`,14,31);
+doc.text(`WA      : ${o.wa}`,14,37);
+
+doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString('id-ID')}`,140,25);
+doc.text(`No Antri: ${antrian}`,140,31);
+
+doc.autoTable({
+
+startY:45,
+theme:'grid',
+
+head:[['KETERANGAN','DETAIL']],
+
+body:[
+
+['Jenis Pukis',o.jenis_pukis],
+['Isi per Box',o.isi_per_box+' pcs'],
+['Mode',o.mode.toUpperCase()],
+
+['Topping',
+o.mode!=='non'
+? (o.single.concat(o.double).join(', ') || '-')
+: '-'],
+
+['Taburan',
+o.mode==='double'
+? (o.taburan.join(', ') || '-')
+: '-'],
+
+['Jumlah',o.qty+' Box'],
+['Catatan',o.catatan || '-'],
+['Total','Rp '+rp(o.total)]
+
+],
+
+styles:{fontSize:10,cellPadding:4},
+
+headStyles:{
+fillColor:[16,32,51],
+textColor:255,
+halign:'center'
+},
+
+columnStyles:{
+0:{cellWidth:60,fontStyle:'bold'},
+1:{cellWidth:110}
+}
+
+});
+
+const y=doc.lastAutoTable.finalY+12;
+
+doc.addImage('assets/images/qris-pukis.jpg','JPEG',14,y,40,40);
+doc.addImage('assets/images/ttd.png','PNG',130,y+14,40,20);
+
+doc.setFontSize(10);
+
+doc.text(
+'Terimakasih sudah berbelanja di Pukis Lumer Aulia',
+105,285,
+{align:'center'}
+);
+
+doc.save(o.invoice+'.pdf');
+
+};
+
+/* ================= STATS ================= */
+
+function renderStats(o){
+
+let total=0;
+let now=new Date();
+
+o.forEach(x=>{
+
+const d=new Date(x.tgl);
+
+if(x.status==='selesai' && d.getMonth()===now.getMonth())
+
+total+=Number(x.total||0);
+
+});
+
+$('stats').innerHTML=
+`<b>Total Pendapatan Bulan Ini:</b> Rp ${rp(total)}`;
+
+}
+
+/* ================= INIT ================= */
+
+document.addEventListener('DOMContentLoaded',()=>{
+
+$('btnLogin').onclick=loginAdmin;
+
+document
+.querySelectorAll('input[name="mJenisPukis"]')
+.forEach(r=>r.addEventListener('change',calcManualPrice));
+
+['mIsi','mMode','mQty'].forEach(id=>{
+if($(id)) $(id).addEventListener('input',calcManualPrice);
+});
+
+calcManualPrice();
+
+$('btnResetAll') && (
+
+$('btnResetAll').onclick = async ()=>{
+
+if(!confirm("Yakin ingin menghapus SEMUA pesanan?"))
+return;
+
+const snap = await getDocs(collection(db,COL));
+
+snap.forEach(d=>deleteDoc(d.ref));
+
+}
+
+);
+
+});
 
 })();
