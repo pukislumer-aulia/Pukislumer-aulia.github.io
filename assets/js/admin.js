@@ -234,9 +234,7 @@ ${o.mode}
 /* ================= STATUS ================= */
 
 window.updateStatus = async (id,s)=>{
-
 await updateDoc(doc(db,COL,id),{status:s});
-
 };
 
 /* ================= PDF ================= */
@@ -251,8 +249,18 @@ const doc=new jsPDF('p','mm','a4');
 
 const antrian=pad4(i+1);
 
-doc.setFontSize(16);
+/* ===== JUDUL ===== */
+
+doc.setFontSize(22);
+doc.setTextColor(16,32,51);
+doc.setFont(undefined,'bold');
+
 doc.text('PUKIS LUMER AULIA',105,15,{align:'center'});
+
+doc.setTextColor(0,0,0);
+doc.setFont(undefined,'normal');
+
+/* ===== INFO ORDER ===== */
 
 doc.setFontSize(10);
 
@@ -262,6 +270,8 @@ doc.text(`WA      : ${o.wa}`,14,37);
 
 doc.text(`Tanggal : ${new Date(o.tgl).toLocaleString('id-ID')}`,140,25);
 doc.text(`No Antri: ${antrian}`,140,31);
+
+/* ===== TABEL ===== */
 
 doc.autoTable({
 
@@ -307,16 +317,25 @@ columnStyles:{
 
 });
 
+/* ===== QRIS + TTD ===== */
+
 const y=doc.lastAutoTable.finalY+12;
 
 doc.addImage('assets/images/qris-pukis.jpg','JPEG',14,y,40,40);
+
+doc.setFontSize(10);
+doc.text('Hormat Kami,',150,y+10,{align:'center'});
+
 doc.addImage('assets/images/ttd.png','PNG',130,y+14,40,20);
+
+/* ===== FOOTER ===== */
 
 doc.setFontSize(10);
 
 doc.text(
 'Terimakasih sudah berbelanja di Pukis Lumer Aulia',
-105,285,
+105,
+285,
 {align:'center'}
 );
 
