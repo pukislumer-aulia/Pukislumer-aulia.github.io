@@ -260,22 +260,65 @@
     </section>  
 
 
-    <!-- FLOATING ICONS -->  
-    <button id="shareToggleBtn" class="toggle-float-btn" aria-label="Tombol Share">+</button>  
-    <div class="floating-icons-container" id="floatingIcons" aria-hidden="true" style="display:none;">  
-        <a id="floatWA" href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank"><i  
-                class="fa-brands fa-whatsapp"></i></a>  
-        <a id="floatShopee" href="https://www.shopee.co.id" class="floating-icon shopee" target="_blank"><i  
-                class="fa-solid fa-store"></i></a>  
-        <a id="floatMaxim" href="https://food.maxim.com" class="floating-icon maxim" target="_blank"><i  
-                class="fa-solid fa-motorcycle"></i></a>  
-        <a id="floatGofood" href="https://www.gofood.link" class="floating-icon gofood" target="_blank"><i  
-                class="fa-solid fa-utensils"></i></a>  
-        <a id="floatGrab" href="https://www.grab.com/id/food" class="floating-icon grab" target="_blank"><i  
-                class="fa-solid fa-bolt"></i></a>  
-        <a id="floatKombi" href="https://www.grab.com/id/food" class="floating-icon kombi" target="_blank"><i  
-                class="fa-solid fa-box"></i></a>  
-    </div>  
+<!-- FLOATING ICONS -->  
+<button id="shareToggleBtn" class="toggle-float-btn" aria-label="Tombol Share">+</button>  
+<div class="floating-icons-container" id="floatingIcons" aria-hidden="true" style="display:none;">  
+    <a id="floatWA" href="https://wa.me/6281296668670" class="floating-icon whatsapp" target="_blank" rel="noopener" title="Chat Admin">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>  
+
+    <a id="floatShare" 
+       href="https://wa.me/?text=Coba%20deh%20Pukis%20Lumer%20Aulia%20ini%2C%20enak%20banget%21%20Order%20di%20sini%20%3A%20" 
+       class="floating-icon share" target="_blank" rel="noopener" title="Bagikan ke Teman"
+       onclick="gtag('event', 'click_share_wa', {event_category: 'Share', event_label: 'Floating Icon Share WA'});">
+        <i class="fa-solid fa-share-nodes"></i>
+    </a>
+
+    <a id="floatShopee" 
+       href="https://wa.me/6281296668670?text=Halo%20Pukis%20Lumer%20Aulia%2C%20saya%20mau%20order%20lewat%20ShopeeFood.%20Bisa%20kirim%20link%20tokonya%3F" 
+       class="floating-icon shopee" target="_blank" rel="noopener" title="Order via ShopeeFood WA"
+       onclick="gtag('event', 'click_shopee_wa', {event_category: 'Order', event_label: 'Floating Icon Shopee WA'});">
+        <i class="fa-solid fa-store"></i>
+    </a>  
+
+    <a id="floatMaxim" 
+       href="https://wa.me/6281296668670?text=Halo%20Pukis%20Lumer%20Aulia%2C%20saya%20mau%20order%20lewat%20Maxim%20Food.%20Tolong%20bantu%20prosesnya%20ya" 
+       class="floating-icon maxim" target="_blank" rel="noopener" title="Order via Maxim WA"
+       onclick="gtag('event', 'click_maxim_wa', {event_category: 'Order', event_label: 'Floating Icon Maxim WA'});">
+        <i class="fa-solid fa-motorcycle"></i>
+    </a>  
+
+    <a id="floatGofood" 
+       href="https://gofood.co.id/bukit-tinggi/restaurant/pukis-lumer-aulia-padang-panjang-pasar-kuliner-padang-panjang-6e332dc2-a57d-4d47-ac86-cff8e2f0963d" 
+       class="floating-icon gofood" target="_blank" rel="noopener" title="Order via GoFood"
+       onclick="gtag('event', 'click_gofood', {event_category: 'Order', event_label: 'Floating Icon Gofood'});">
+        <i class="fa-solid fa-utensils"></i>
+    </a>
+
+    <a id="floatGrab" 
+       href="https://wa.me/6281296668670?text=Halo%20Pukis%20Lumer%20Aulia%2C%20saya%20mau%20order%20lewat%20GrabFood.%20Ada%20link%20GrabFood-nya%3F" 
+       class="floating-icon grab" target="_blank" rel="noopener" title="Order via GrabFood WA"
+       onclick="gtag('event', 'click_grab_wa', {event_category: 'Order', event_label: 'Floating Icon Grab WA'});">
+        <i class="fa-solid fa-bolt"></i>
+    </a>  
+
+    <a id="floatKombi" 
+       href="https://wa.me/6281296668670?text=Halo%20Pukis%20Lumer%20Aulia%2C%20saya%20mau%20order%20lewat%20Kombi%2Fkurir%20Maxim.%20Bisa%20dibantu%3F" 
+       class="floating-icon kombi" target="_blank" rel="noopener" title="Order via Kombi WA"
+       onclick="gtag('event', 'click_kombi_wa', {event_category: 'Order', event_label: 'Floating Icon Kombi WA'});">
+        <i class="fa-solid fa-box"></i>
+    </a>  
+</div>
+
+<script>
+// Auto tambahin link website ke tombol share WA
+document.addEventListener('DOMContentLoaded', function() {
+    const shareBtn = document.getElementById('floatShare');
+    if(shareBtn) {
+        shareBtn.href += encodeURIComponent(window.location.href);
+    }
+});
+</script>
 
     <!-- ADMIN BUTTON -->  
     <a href="admin.html" class="admin-float-btn" title="Masuk Admin">  
