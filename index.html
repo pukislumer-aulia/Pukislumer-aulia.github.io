@@ -310,15 +310,6 @@
     </a>  
 </div>
 
-<script>
-// Auto tambahin link website ke tombol share WA
-document.addEventListener('DOMContentLoaded', function() {
-    const shareBtn = document.getElementById('floatShare');
-    if(shareBtn) {
-        shareBtn.href += encodeURIComponent(window.location.href);
-    }
-});
-</script>
 
     <!-- ADMIN BUTTON -->  
     <a href="admin.html" class="admin-float-btn" title="Masuk Admin">  
@@ -371,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div id="notaContent"></div>
   </div>
 </div>
-
+  
 <!-- ================= LIBRARIES ================= -->
 <script src="assets/js/lib/jspdf.umd.min.js"></script>
 <script src="assets/js/lib/jspdf.plugin.autotable.min.js"></script>
@@ -379,7 +370,16 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- ================= ORDER SYSTEM ================= -->
 <script type="module" src="assets/js/order.js"></script>
 
-<!-- ================= SITE LOADER (3 DETIK) ================= -->
+<script>
+// Auto tambahin link website ke tombol share WA
+document.addEventListener('DOMContentLoaded', function() {
+    const shareBtn = document.getElementById('floatShare');
+    if(shareBtn) {
+        shareBtn.href += encodeURIComponent(window.location.href);
+    }
+});
+</script>
+  <!-- ================= SITE LOADER (3 DETIK) ================= -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const loader = document.getElementById('site-loader');
